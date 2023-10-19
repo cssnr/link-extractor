@@ -13,12 +13,10 @@ document.getElementById('extract-some').addEventListener('click', (event) => {
     handler(true).then(() => window.close())
 })
 
-document
-    .getElementById('about-linkgopher')
-    .addEventListener('click', (event) => {
-        const { homepage_url } = chrome.runtime.getManifest()
-        openTab(homepage_url).then(() => window.close())
-    })
+document.getElementById('about').addEventListener('click', (event) => {
+    const { homepage_url } = chrome.runtime.getManifest()
+    openTab(homepage_url).then(() => window.close())
+})
 
 /**
  * @function handler
@@ -27,8 +25,6 @@ document
  */
 function handler(filtering = false, onlyDomains = false) {
     let tabId
-    console.log(`tabId: ${tabId}`)
-
     return getCurrentTab()
         .then((items) => {
             tabId = items[0].id
@@ -36,7 +32,7 @@ function handler(filtering = false, onlyDomains = false) {
         })
         .then((item) => {
             const url =
-                `${chrome.runtime.getURL('html/linkgopher.html')}?` +
+                `${chrome.runtime.getURL('../html/links.html')}?` +
                 `tabId=${tabId}&filtering=${filtering}&onlyDomains=${onlyDomains}`
             return openTab(url)
         })
@@ -79,7 +75,7 @@ function openTab(url) {
  * @param {number} tabId -- The ID of tab.
  * @param {string} file -- Pathname of script
  */
-function injectScript(tabId, file = '/content-script.js') {
+function injectScript(tabId, file = '/js/on-popup.js') {
     return new Promise((res, rej) => {
         chrome.scripting.executeScript(
             {

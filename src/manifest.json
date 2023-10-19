@@ -2,20 +2,15 @@
   "manifest_version": 3,
   "name": "Link Extractor",
   "version": "2.6.1",
-  "description": "__MSG_extensionDescription__",
-  "homepage_url": "https://sites.google.com/site/linkgopher/",
+  "description": "Extract Links",
+  "homepage_url": "https://github.com/cssnr/",
 
   "icons": {
-    "16": "assets/logo-black-16.png",
-    "48": "assets/logo-black-48.png",
-    "128": "assets/logo-black-128.png"
-  },
-
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "link-extractor@cssnr.com",
-      "strict_min_version": "109.0"
-    }
+    "16": "images/logo16.png",
+    "32": "images/logo32.png",
+    "48": "images/logo48.png",
+    "96": "images/logo96.png",
+    "128": "images/logo128.png"
   },
 
   "host_permissions":[
@@ -27,7 +22,7 @@
   ],
 
   "action": {
-    "default_icon": "assets/logo-black-128.png",
+    "default_icon": "images/logo128.png",
     "default_title": "Link Extractor",
     "default_popup": "html/popup.html"
   },

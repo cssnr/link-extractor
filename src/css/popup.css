@@ -5,16 +5,16 @@ body {
   shape-outside: border-box;
   outline-width: 5px;
 }
+
 .container {
   width: 250px;
   text-align: center;
   color: white;
-  margin-bottom: 0%;
-
+  margin-bottom: 0;
 }
 
 .header {
-  font-family: 'Rajdhani', sans-serif;
+  /*font-family: 'Rajdhani', sans-serif;*/
   display: flow;
   font-size: xx-large;
   font-weight: 500;
