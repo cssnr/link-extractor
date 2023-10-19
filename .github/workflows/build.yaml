@@ -1,0 +1,67 @@
+name: build
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+#      - name: "Setup Node 18"
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 18
+#
+#      - name: "Node Install"
+#        run: npm install
+
+      - name: "Parse Manifest"
+        id: manifest
+        run: |
+          echo "version=$(jq '.version' < manifest-firefox.json)" >> "$GITHUB_OUTPUT"
+
+      - name: "Build Firefox"
+        id: web-ext-build
+        uses: kewisch/action-web-ext@v1
+        with:
+          cmd: build
+          source: src
+          filename: "{name}-{version}.xpi"
+
+      - name: "Setup Chrome"
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: "1191187"
+
+      - name: "Build Chrome"
+        run: |
+          echo "${{ secrets.CHROME_PRIVATE_KEY }}" > .key
+          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+          ${{ steps.setup-chrome.outputs.chrome-path }} --version
+          ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
+          mv src.crx web-ext-artifacts/django_files-${{ steps.manifest.outputs.version }}.crx
+
+      - name: "Create ZIP Archive"
+        working-directory: "src"
+        run: |
+          ls -lAh .
+          zip "../web-ext-artifacts/chrome.zip" -r .
+
+      - name: "Archive Artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: web-ext-artifacts/
+
+      - name: "Debug"
+        run: |
+          ls -l web-ext-artifacts
