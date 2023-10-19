@@ -10,6 +10,8 @@ chrome.runtime.onMessage.addListener(onMessage)
  *  A function to call, at most once, to send a response to the message.
  */
 function onMessage(message, sender, sendResponse) {
+    console.log('onMessage')
+    console.log(message)
     if (message.action === 'extract') {
         sendResponse(extractLinks())
     } else {
@@ -23,11 +25,11 @@ function onMessage(message, sender, sendResponse) {
  * @function extractLinks
  */
 function extractLinks() {
+    console.log('extractLinks')
     const links = []
-
-    for (let index = 0; index < document.links.length; index++) {
-        links.push(decodeURI(document.links[index].href))
+    for (const element of document.links) {
+        links.push(decodeURI(element.href))
     }
-
-    return links.length ? links : null
+    console.log(links)
+    return links
 }

@@ -1,8 +1,11 @@
 'use strict'
+
+console.log(location)
+
 const containerLinks = document.getElementById('links')
 const containerDomains = document.getElementById('domains')
 const message = document.getElementById('message')
-const reBaseURL = /(^\w+:\/\/[^\/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
+const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
 const tabId = parseInt(location.search.replace(/.*tabId=(\d+).*/, '$1'))
 const filtering = location.search.replace(/.*filtering=(true|false).*/, '$1')
 const pattern =
@@ -12,8 +15,6 @@ const pattern =
 const filteringDomains =
     location.search.replace(/.*filteringDomains=(true|false).*/, '$1') ===
     'true'
-        ? true
-        : false
 const onlyDomains = location.search.replace(
     /.*onlyDomains=(true|false).*/,
     '$1'
@@ -30,6 +31,9 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  * @param onlyDomains
  */
 function handler(links, pattern, onlyDomains) {
+    console.log(links)
+    console.log(`pattern: ${pattern}`)
+    console.log(`onlyDomains: ${onlyDomains}`)
     if (chrome.runtime.lastError) {
         return window.alert(chrome.runtime.lastError)
     }
@@ -89,8 +93,7 @@ function addNodes(url, container, re, onlyDomains) {
  * @param {string} link
  */
 function getBaseURL(link) {
-    const result = link.match(reBaseURL)
-
+    const result = RegExp(reBaseURL).exec(link)
     if (!result) {
         return null
     } else if (result[1]) {

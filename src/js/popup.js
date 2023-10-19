@@ -1,17 +1,18 @@
 'use strict'
+
 document.getElementById('extract-all').addEventListener('click', (event) => {
-    handler(false).then(() => window.close())
+    handler(event)
+})
+
+document.getElementById('extract-some').addEventListener('click', (event) => {
+    handler(event)
 })
 
 document
     .getElementById('extract-domains')
     .addEventListener('click', (event) => {
-        handler(false, true).then(() => window.close())
+        handler(event)
     })
-
-document.getElementById('extract-some').addEventListener('click', (event) => {
-    handler(true).then(() => window.close())
-})
 
 document.getElementById('about').addEventListener('click', (event) => {
     const { homepage_url } = chrome.runtime.getManifest()
@@ -20,22 +21,26 @@ document.getElementById('about').addEventListener('click', (event) => {
 
 /**
  * @function handler
- * @param {boolean} filtering
- * @param {boolean} onlyDomains
+ * @param {MouseEvent} event
  */
-function handler(filtering = false, onlyDomains = false) {
+function handler(event) {
+    console.log(event)
+    const filterLinks = event.target.id === 'extract-some'
+    const onlyDomains = event.target.id === 'extract-domains'
     let tabId
-    return getCurrentTab()
+    getCurrentTab()
         .then((items) => {
             tabId = items[0].id
             return injectScript(tabId)
         })
-        .then((item) => {
+        .then(() => {
             const url =
                 `${chrome.runtime.getURL('../html/links.html')}?` +
-                `tabId=${tabId}&filtering=${filtering}&onlyDomains=${onlyDomains}`
-            return openTab(url)
+                `tabId=${tabId}&filtering=${filterLinks}&onlyDomains=${onlyDomains}`
+            console.log(`url: ${url}`)
+            return openTab(url).then()
         })
+        .then(window.close)
         .catch((error) => window.alert(error.message))
 }
 
@@ -50,7 +55,6 @@ function getCurrentTab() {
             active: true,
             currentWindow: true,
         }
-
         chrome.tabs.query(queryInfo, (items) => passNext(items, res, rej))
     })
 }
@@ -62,6 +66,7 @@ function getCurrentTab() {
  * @param {string} url
  */
 function openTab(url) {
+    console.log(`url: ${url}`)
     return new Promise((res, rej) => {
         const createProperties = { active: true, url }
         chrome.tabs.create(createProperties, (tab) => passNext(tab, res, rej))
@@ -75,7 +80,8 @@ function openTab(url) {
  * @param {number} tabId -- The ID of tab.
  * @param {string} file -- Pathname of script
  */
-function injectScript(tabId, file = '/js/on-popup.js') {
+function injectScript(tabId, file = '/js/inject.js') {
+    console.log(`tabId: ${tabId}`)
     return new Promise((res, rej) => {
         chrome.scripting.executeScript(
             {
@@ -94,6 +100,7 @@ function injectScript(tabId, file = '/js/on-popup.js') {
  * @param {function} reject
  */
 function passNext(result, fulfill, reject) {
+    // console.log(result)
     if (chrome.runtime.lastError) return reject(chrome.runtime.lastError)
     return fulfill(result)
 }
