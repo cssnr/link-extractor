@@ -5,6 +5,9 @@ on:
   release:
     types: [published]
 
+env:
+  PACKAGE_NAME: link_extractor
+
 jobs:
   build:
     name: "Build"
@@ -48,13 +51,13 @@ jobs:
           echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
           ${{ steps.setup-chrome.outputs.chrome-path }} --version
           ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
-          mv src.crx web-ext-artifacts/django_files-${{ steps.manifest.outputs.version }}.crx
+          mv src.crx web-ext-artifacts/${{ env.PACKAGE_NAME }}-${{ steps.manifest.outputs.version }}.crx
 
       - name: "Create ZIP Archive"
         working-directory: "src"
         run: |
           ls -lAh .
-          zip "../web-ext-artifacts/chrome.zip" -r .
+          zip "../web-ext-artifacts/${{ env.PACKAGE_NAME }}-${{ steps.manifest.outputs.version }}.zip" -r .
 
       - name: "Archive Artifacts"
         uses: actions/upload-artifact@v3
