@@ -1,27 +1,26 @@
 'use strict'
+
 chrome.runtime.onMessage.addListener(onMessage)
 
 /**
+ * Handle Messages
  * @function onMessage
  * @param {object} message
- * @param {runtime.MessageSender} sender
+ * @param {chrome.runtime.MessageSender} sender
  *  Representing the sender of the message.
  * @param {function} sendResponse
  *  A function to call, at most once, to send a response to the message.
  */
 function onMessage(message, sender, sendResponse) {
-    console.log('onMessage')
+    console.log(`onMessage: ${message.action}`)
     console.log(message)
     if (message.action === 'extract') {
         sendResponse(extractLinks())
-    } else {
-        throw new Error('Unknown type of message')
     }
 }
 
 /**
- * Extract links.
- *
+ * Extract links
  * @function extractLinks
  */
 function extractLinks() {

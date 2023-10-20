@@ -21,16 +21,17 @@ const onlyDomains = location.search.replace(
 )
 
 chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
-    handler(links, pattern, onlyDomains)
+    processLinks(links, pattern, onlyDomains)
 })
 
 /**
- * @function handler
+ * Process Links
+ * @function processLinks
  * @param links
  * @param {string} pattern -- Pattern for filtering.
  * @param onlyDomains
  */
-function handler(links, pattern, onlyDomains) {
+function processLinks(links, pattern, onlyDomains) {
     console.log(links)
     console.log(`pattern: ${pattern}`)
     console.log(`onlyDomains: ${onlyDomains}`)
@@ -60,8 +61,7 @@ function handler(links, pattern, onlyDomains) {
 }
 
 /**
- * Add nodes to container.
- *
+ * Add nodes to container
  * @function addNodes
  * @param url
  * @param {Node} container
@@ -87,8 +87,7 @@ function addNodes(url, container, re, onlyDomains) {
 }
 
 /**
- * Get base URL of link.
- *
+ * Get base URL of link
  * @function getBaseURL
  * @param {string} link
  */
