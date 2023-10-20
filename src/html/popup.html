@@ -2,18 +2,25 @@
 <html lang="en">
 <head>
     <title>Link Extractor</title>
-    <link rel="stylesheet" href="../css/popup.css">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/popup.css">
+    <script type="text/javascript" src="../js/theme.js"></script>
 </head>
 <body>
 
-<div class="container">
-    <button id="btn-all" type="button">All Links</button>
-    <button id="btn-filter" type="button">Links by Filter</button>
-    <button id="btn-domains" type="button">Only Domains</button>
-    <button id="btn-about" type="button">Visit Homepage</button>
+<div class="container-fluid p-3">
+    <div class="d-grid g-2">
+        <a id="btn-all" class="btn btn-outline-warning my-1" role="button">All Links</a>
+        <a id="btn-filter" class="btn btn-outline-info my-1" role="button">Links by Filter</a>
+        <a id="btn-domains" class="btn btn-outline-primary my-1" role="button">Only Domains</a>
+        <a id="btn-about" class="btn btn-outline-success my-1" role="button">Visit Homepage</a>
+    </div>
 </div>
 
-<script type='text/javascript' src="../js/popup.js" charset="utf-8"></script>
+<script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type='text/javascript' src="../js/popup.js"></script>
 
 </body>
 </html>

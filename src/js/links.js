@@ -1,4 +1,4 @@
-'use strict'
+// links.html
 
 const urlParams = new URLSearchParams(window.location.search)
 console.log(`urlParams: ${urlParams}`)

@@ -1,4 +1,4 @@
-'use strict'
+// Injected into current tab on popup open
 
 chrome.runtime.onMessage.addListener(onMessage)
 

@@ -1,0 +1,30 @@
+{
+  "name": "link-extractor",
+  "version": "0.0.1",
+  "author": "Shane",
+  "description": "Link Extractor - Extract Links.",
+  "homepage": "https://github.com/cssnr/link-extractor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cssnr/link-extractor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cssnr/link-extractor/issues"
+  },
+  "scripts": {
+    "postinstall": "npx gulp",
+    "lint": "npx eslint src/js --ignore-pattern *.min.js",
+    "build-firefox": "npx web-ext build -o -s src"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.2",
+    "clipboard": "^2.0.11",
+    "jquery": "^3.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "gulp": "^4.0.2",
+    "prettier": "^3.0.3",
+    "web-ext": "^7.8.0"
+  }
+}

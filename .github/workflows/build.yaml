@@ -15,18 +15,18 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
-#      - name: "Setup Node 18"
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 18
-#
-#      - name: "Node Install"
-#        run: npm install
+      - name: "Setup Node 18"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: "Node Install"
+        run: npm install
 
       - name: "Parse Manifest"
         id: manifest
         run: |
-          echo "version=$(jq '.version' < manifest-firefox.json)" >> "$GITHUB_OUTPUT"
+          echo "version=$(jq '.version' < src/manifest.json)" >> "$GITHUB_OUTPUT"
 
       - name: "Build Firefox"
         id: web-ext-build

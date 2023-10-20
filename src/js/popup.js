@@ -1,4 +1,6 @@
-'use strict'
+// popup.html
+
+jQuery('html').hide().fadeIn('slow')
 
 document.getElementById('btn-all').addEventListener('click', popClick)
 document.getElementById('btn-filter').addEventListener('click', popClick)
