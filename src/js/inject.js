@@ -7,9 +7,7 @@ chrome.runtime.onMessage.addListener(onMessage)
  * @function onMessage
  * @param {object} message
  * @param {chrome.runtime.MessageSender} sender
- *  Representing the sender of the message.
  * @param {function} sendResponse
- *  A function to call, at most once, to send a response to the message.
  */
 function onMessage(message, sender, sendResponse) {
     console.log(`onMessage: ${message.action}`)

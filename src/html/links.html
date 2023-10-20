@@ -11,15 +11,21 @@
 <div class="container-fluid p-3">
     <h1 id="message">Loading...</h1>
 
-    <h2 id="links-heading" style="display: none">Links</h2>
-    <table id="links" class="table table-sm table-striped table-hover">
-        <tbody></tbody>
-    </table>
+    <div id="links-div" style="display: none">
+        <h2>Links</h2>
+        <a id="links-clip" class="clip btn btn-sm btn-outline-warning mb-2" role="button" data-clipboard-text="">Copy Links</a>
+        <table id="links" class="table table-sm table-striped table-hover">
+            <tbody></tbody>
+        </table>
+    </div>
 
-    <h2 id="domains-heading" style="display: none">Domains</h2>
+    <div id="domains-div" style="display: none">
+    <h2>Domains</h2>
+        <a id="domains-clip" class="clip btn btn-sm btn-outline-primary mb-2" role="button" data-clipboard-text="">Copy Domains</a>
     <table id="domains" class="table table-sm table-striped table-hover">
         <tbody></tbody>
     </table>
+    </div>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>

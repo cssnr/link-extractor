@@ -1,5 +1,7 @@
 // JS for links.html
 
+new ClipboardJS('.clip')
+
 const urlParams = new URLSearchParams(window.location.search)
 console.log(`urlParams: ${urlParams}`)
 
@@ -21,10 +23,11 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  * Process Links
  * @function processLinks
  * @param links
- * @param {string} pattern -- Pattern for filtering.
+ * @param {string} pattern -- Pattern for filtering
  * @param onlyDomains
  */
 function processLinks(links, pattern, onlyDomains) {
+    // TODO: Cleanup this entire function...
     console.log(`pattern: ${pattern}`)
     console.log(`onlyDomains: ${onlyDomains}`)
     console.log(links)
@@ -47,6 +50,7 @@ function processLinks(links, pattern, onlyDomains) {
         items = items.filter((item) => item.match(re))
     }
 
+    // If no items, update message and return
     const messageEl = document.getElementById('message')
     if (!items.length) {
         messageEl.textContent = 'No matches'
@@ -54,16 +58,24 @@ function processLinks(links, pattern, onlyDomains) {
         return
     }
 
+    // Update links if onlyDomains is not set
     if (onlyDomains !== 'true') {
         console.log('updating links now...')
-        document.getElementById('links-heading').style.display = 'block'
+        document
+            .getElementById('links-clip')
+            .setAttribute('data-clipboard-text', items.join('\n'))
+        document.getElementById('links-div').style.display = 'block'
         updateTable(items, 'links')
     }
 
     // Extract domains from items and sort
+    console.log('updating domains now...')
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    document
+        .getElementById('domains-clip')
+        .setAttribute('data-clipboard-text', domains.join('\n'))
     if (domains.length) {
-        document.getElementById('domains-heading').style.display = 'block'
+        document.getElementById('domains-div').style.display = 'block'
         updateTable(domains, 'domains')
     }
 
@@ -81,13 +93,11 @@ function updateTable(data, elementId) {
         .getElementById(elementId)
         .getElementsByTagName('tbody')[0]
     data.forEach(function (url, i) {
-        let link = document.createElement('a')
+        const link = document.createElement('a')
         link.text = url
         link.href = url
         link.target = '_blank'
-        let row = tbody.insertRow()
-        let cell1 = row.insertCell()
-        cell1.appendChild(link)
+        tbody.insertRow().insertCell().appendChild(link)
     })
 }
 

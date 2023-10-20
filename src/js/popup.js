@@ -5,6 +5,7 @@ jQuery('html').hide().fadeIn('slow')
 document.getElementById('btn-all').addEventListener('click', popupClick)
 document.getElementById('btn-filter').addEventListener('click', popupClick)
 document.getElementById('btn-domains').addEventListener('click', popupClick)
+
 document.getElementById('btn-about').addEventListener('click', () => {
     const manifest = chrome.runtime.getManifest()
     console.log(`url: ${manifest.homepage_url}`)
