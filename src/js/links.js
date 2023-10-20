@@ -36,26 +36,45 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
 function processLinks(links, pattern, onlyDomains) {
     console.log(`pattern: ${pattern}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-
+    console.log(links)
     if (chrome.runtime.lastError) {
         return window.alert(chrome.runtime.lastError)
     }
 
-    // To filter links like: javascript:void(0)
-    const resLinks = links.filter((link) => link.lastIndexOf('://', 10) > 0)
-    // Remove duplicate, sorting of links.
-    const items = [...new Set(resLinks)].sort()
-    const re = pattern ? new RegExp(pattern, 'g') : null
-    const added = items.filter((link) =>
-        addNodes(link, linksEl, re, onlyDomains)
+    // LINKS
+    // Filter bad links like: javascript:void(0)
+    const filteredLinks = links.filter(
+        (link) => link.lastIndexOf('://', 10) > 0
     )
-
-    if (!added.length) {
-        messageEl.dataset.content = 'No matches'
+    // Remove duplicate and sort links
+    let items = [...new Set(filteredLinks)].sort()
+    // Filter links based on pattern.
+    const re = pattern ? new RegExp(pattern, 'g') : null
+    if (re) {
+        console.log(`Filtering Links by: ${re}`)
+        items = items.filter((item) => item.match(re))
+    }
+    console.log('items')
+    console.log(items)
+    if (!items.length) {
+        messageEl.textContent = 'No matches'
+        console.log('return')
         return
     }
+
+    // items.filter((link) => addNodes(link, linksEl))
+    const added = items.filter((link) => addNodes(link, linksEl))
+    // if (!added.length) {
+    //     messageEl.textContent = 'No matches'
+    //     console.log('return')
+    //     return
+    // }
+
+    // DOMAINS
     // Extract base URL from link, remove duplicate, sorting of domains.
-    const domains = [...new Set(added.map((link) => getBaseURL(link)))].sort()
+    const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    console.log('domains')
+    console.log(domains)
     const reDomains = filteringDomains ? re : null
     domains.forEach(
         (domain) => addNodes(domain, domainsEl, reDomains),
@@ -69,23 +88,14 @@ function processLinks(links, pattern, onlyDomains) {
  * @function addNodes
  * @param url
  * @param {Node} container
- * @param {object|null} re -- Regular Expression pattern.
- * @param onlyDomains
- * @return {boolean} -- Whether link added into document.
  */
-function addNodes(url, container, re, onlyDomains) {
-    if (re && !url.match(re)) return false
-    if (onlyDomains === 'true' && container === linksEl) {
-        return true
-    }
-
+function addNodes(url, container) {
     const br = document.createElement('br')
     const a = document.createElement('a')
     a.href = url
     a.innerText = url
     container.appendChild(a)
     container.appendChild(br)
-    return true
 }
 
 /**
