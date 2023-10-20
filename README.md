@@ -1,8 +1,13 @@
 [![Build](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 [![GitHub Release](https://img.shields.io/github/v/release/cssnr/link-extractor)](https://github.com/cssnr/link-extractor/releases/latest)
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 # Link Extractor
 
-Extract all links from a page or use a regex filter...
+Extract all links from a page or use a regex filter. Coming Soon...
+
+*   Firefox: https://addons.mozilla.org/addon/link-extractor
+*   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
 ## Table of Contents
 
@@ -26,8 +31,8 @@ Because a once good project **turned into bloatware**: https://github.com/az0/li
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
 Addon should now be installed.  
-You can optionally pin the Addon by clicking the `Puzzle Piece`  
-in the top right corner then clicking the `Pin` icon.
+You can optionally pin the Addon by clicking the `Puzzle Piece`.  
+in the top right corner then clicking the `Pin` icon.  
 
 ### Firefox Setup
 
@@ -39,8 +44,8 @@ in the top right corner then clicking the `Pin` icon.
 1.  Download (or clone) the repo: [link-extractor-master.zip](https://github.com/cssnr/link-extractor/archive/refs/heads/master.zip)
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
-1.  You may also load temporary from `about:debugging#/runtime/this-firefox`
+1.  You may also load temporary from: `about:debugging#/runtime/this-firefox`
 
 Addon should now be installed.  
-You can optionally pin the Addon by clicking the `Puzzle Piece`  
-in the top right corner then clicking the Settings wheel and then `Pin to Toolbar`.
+You can optionally pin the Addon by clicking the `Puzzle Piece`.  
+in the top right corner then clicking the Settings wheel and then `Pin to Toolbar`.  
