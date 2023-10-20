@@ -1,28 +1,30 @@
 'use strict'
 
-console.log(location)
+const urlParams = new URLSearchParams(window.location.search)
+console.log(`urlParams: ${urlParams}`)
 
-const containerLinks = document.getElementById('links')
-const containerDomains = document.getElementById('domains')
-const message = document.getElementById('message')
-const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
-const tabId = parseInt(location.search.replace(/.*tabId=(\d+).*/, '$1'))
-const filtering = location.search.replace(/.*filtering=(true|false).*/, '$1')
-const pattern =
-    filtering === 'true'
-        ? window.prompt(chrome.i18n.getMessage('askPattern'))
-        : null
-const filteringDomains =
-    location.search.replace(/.*filteringDomains=(true|false).*/, '$1') ===
-    'true'
-const onlyDomains = location.search.replace(
-    /.*onlyDomains=(true|false).*/,
-    '$1'
-)
+const tabId = parseInt(urlParams.get('tabId'))
+console.log(`tabId: ${tabId}`)
+const filtering = urlParams.get('filtering')
+console.log(`filtering: ${filtering}`)
+const onlyDomains = urlParams.get('onlyDomains')
+console.log(`onlyDomains: ${onlyDomains}`)
+const filteringDomains = urlParams.get('filteringDomains')
+console.log(`filteringDomains: ${filteringDomains}`)
+const pattern = filtering === 'true' ? window.prompt('Enter Filter:') : null
+console.log(`pattern: ${pattern}`)
+
+const messageEl = document.getElementById('message')
+const linksEl = document.getElementById('links')
+const domainsEl = document.getElementById('domains')
 
 chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
+    console.log('sendMessage')
+    console.log(links)
     processLinks(links, pattern, onlyDomains)
 })
+
+// TODO: Cleanup Below Functions
 
 /**
  * Process Links
@@ -32,9 +34,9 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  * @param onlyDomains
  */
 function processLinks(links, pattern, onlyDomains) {
-    console.log(links)
     console.log(`pattern: ${pattern}`)
     console.log(`onlyDomains: ${onlyDomains}`)
+
     if (chrome.runtime.lastError) {
         return window.alert(chrome.runtime.lastError)
     }
@@ -45,19 +47,21 @@ function processLinks(links, pattern, onlyDomains) {
     const items = [...new Set(resLinks)].sort()
     const re = pattern ? new RegExp(pattern, 'g') : null
     const added = items.filter((link) =>
-        addNodes(link, containerLinks, re, onlyDomains)
+        addNodes(link, linksEl, re, onlyDomains)
     )
 
     if (!added.length) {
-        return (message.dataset.content = chrome.i18n.getMessage('noMatches'))
+        messageEl.dataset.content = 'No matches'
+        return
     }
     // Extract base URL from link, remove duplicate, sorting of domains.
     const domains = [...new Set(added.map((link) => getBaseURL(link)))].sort()
     const reDomains = filteringDomains ? re : null
     domains.forEach(
-        (domain) => addNodes(domain, containerDomains, reDomains),
+        (domain) => addNodes(domain, domainsEl, reDomains),
         onlyDomains
     )
+    messageEl.style.display = 'None'
 }
 
 /**
@@ -71,8 +75,7 @@ function processLinks(links, pattern, onlyDomains) {
  */
 function addNodes(url, container, re, onlyDomains) {
     if (re && !url.match(re)) return false
-
-    if (onlyDomains === 'true' && container === containerLinks) {
+    if (onlyDomains === 'true' && container === linksEl) {
         return true
     }
 
@@ -82,7 +85,6 @@ function addNodes(url, container, re, onlyDomains) {
     a.innerText = url
     container.appendChild(a)
     container.appendChild(br)
-
     return true
 }
 
@@ -92,6 +94,7 @@ function addNodes(url, container, re, onlyDomains) {
  * @param {string} link
  */
 function getBaseURL(link) {
+    const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
     const result = RegExp(reBaseURL).exec(link)
     if (!result) {
         return null
