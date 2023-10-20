@@ -62,25 +62,50 @@ function processLinks(links, pattern, onlyDomains) {
         return
     }
 
-    // items.filter((link) => addNodes(link, linksEl))
-    const added = items.filter((link) => addNodes(link, linksEl))
-    // if (!added.length) {
-    //     messageEl.textContent = 'No matches'
-    //     console.log('return')
-    //     return
-    // }
+    let linksTable = document
+        .getElementById('links')
+        .getElementsByTagName('tbody')[0]
+    items.forEach(function (value, i) {
+        addUrl(linksTable, value)
+    })
 
-    // DOMAINS
-    // Extract base URL from link, remove duplicate, sorting of domains.
+    // Extract domains from items and sort
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
-    console.log('domains')
-    console.log(domains)
-    const reDomains = filteringDomains ? re : null
-    domains.forEach(
-        (domain) => addNodes(domain, domainsEl, reDomains),
-        onlyDomains
-    )
+
+    let domainsTable = document
+        .getElementById('domains')
+        .getElementsByTagName('tbody')[0]
+    domains.forEach(function (value, i) {
+        addUrl(domainsTable, value)
+    })
+    // console.log('domains')
+    // console.log(domains)
+    // const reDomains = filteringDomains ? re : null
+    // domains.forEach(
+    //     (domain) => addNodes(domain, domainsEl, reDomains),
+    //     onlyDomains
+    // )
     messageEl.style.display = 'None'
+}
+
+function addUrl(element, url) {
+    // let copyLink = document.createTextNode(i + 1)
+    // let copyLink = document.createElement('a')
+    // copyLink.text = 1 + i
+    // copyLink.title = name
+    // copyLink.href = value
+    // copyLink.target = '_blank'
+
+    let link = document.createElement('a')
+    link.text = url
+    link.href = url
+    link.target = '_blank'
+
+    let row = element.insertRow()
+    let cell1 = row.insertCell()
+    cell1.appendChild(link)
+    // let cell2 = row.insertCell()
+    // cell2.appendChild(fileLink)
 }
 
 /**
