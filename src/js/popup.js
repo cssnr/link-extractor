@@ -1,10 +1,10 @@
-// popup.html
+// JS for popup.html
 
 jQuery('html').hide().fadeIn('slow')
 
-document.getElementById('btn-all').addEventListener('click', popClick)
-document.getElementById('btn-filter').addEventListener('click', popClick)
-document.getElementById('btn-domains').addEventListener('click', popClick)
+document.getElementById('btn-all').addEventListener('click', popupClick)
+document.getElementById('btn-filter').addEventListener('click', popupClick)
+document.getElementById('btn-domains').addEventListener('click', popupClick)
 document.getElementById('btn-about').addEventListener('click', () => {
     const manifest = chrome.runtime.getManifest()
     console.log(`url: ${manifest.homepage_url}`)
@@ -13,10 +13,10 @@ document.getElementById('btn-about').addEventListener('click', () => {
 
 /**
  * Handle Popup Clicks
- * @function popClick
+ * @function popupClick
  * @param {MouseEvent} event
  */
-async function popClick(event) {
+async function popupClick(event) {
     console.log(event)
     const filterLinks = event.target.id === 'btn-filter'
     const onlyDomains = event.target.id === 'btn-domains'
@@ -28,9 +28,7 @@ async function popClick(event) {
         files: ['/js/inject.js'],
     })
     const linksUrl = chrome.runtime.getURL('../html/links.html')
-    const url =
-        `${linksUrl}?` +
-        `tabId=${tab.id}&filtering=${filterLinks}&onlyDomains=${onlyDomains}`
+    const url = `${linksUrl}?tabId=${tab.id}&filterLinks=${filterLinks}&onlyDomains=${onlyDomains}`
     console.log(`chrome.tabs.create: ${url}`)
     await chrome.tabs.create({ active: true, url })
 }

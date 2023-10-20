@@ -1,19 +1,14 @@
-// links.html
+// JS for links.html
 
 const urlParams = new URLSearchParams(window.location.search)
 console.log(`urlParams: ${urlParams}`)
 
 const tabId = parseInt(urlParams.get('tabId'))
-console.log(`tabId: ${tabId}`)
-const filtering = urlParams.get('filtering')
-console.log(`filtering: ${filtering}`)
 const onlyDomains = urlParams.get('onlyDomains')
-console.log(`onlyDomains: ${onlyDomains}`)
-const filteringDomains = urlParams.get('filteringDomains')
-console.log(`filteringDomains: ${filteringDomains}`)
+const filterLinks = urlParams.get('filterLinks')
 
-// Prompt for pattern if filtering is enabled
-const pattern = filtering === 'true' ? window.prompt('Enter Filter:') : null
+// TODO: Make a modal and function for this prompt
+const pattern = filterLinks === 'true' ? window.prompt('Enter Filter:') : null
 console.log(`pattern: ${pattern}`)
 
 chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
@@ -55,23 +50,22 @@ function processLinks(links, pattern, onlyDomains) {
     const messageEl = document.getElementById('message')
     if (!items.length) {
         messageEl.textContent = 'No matches'
-        console.log('return')
+        console.log('return: !items.length')
         return
     }
 
     if (onlyDomains !== 'true') {
         console.log('updating links now...')
+        document.getElementById('links-heading').style.display = 'block'
         updateTable(items, 'links')
-    } else {
-        document.getElementById('links-heading').style.display = 'None'
     }
 
     // Extract domains from items and sort
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
-    if (!domains.length) {
-        document.getElementById('links-heading').style.display = 'None'
+    if (domains.length) {
+        document.getElementById('domains-heading').style.display = 'block'
+        updateTable(domains, 'domains')
     }
-    updateTable(domains, 'domains')
 
     messageEl.style.display = 'None'
 }

@@ -4,12 +4,18 @@
   "homepage_url": "https://github.com/cssnr/link-extractor",
   "version": "0.0.1",
   "manifest_version": 3,
+  "permissions": [
+    "scripting",
+    "storage",
+    "clipboardWrite"
+  ],
   "host_permissions":[
     "*://*/*"
   ],
-  "permissions": [
-    "scripting"
-  ],
+  "options_ui": {
+    "page": "html/options.html",
+    "open_in_tab": true
+  },
   "action": {
     "default_popup": "html/popup.html",
     "default_icon": {
@@ -25,5 +31,10 @@
     "48": "images/logo48.png",
     "96": "images/logo96.png",
     "128": "images/logo128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "link-extractor@cssnr.com"
+    }
   }
 }

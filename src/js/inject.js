@@ -1,4 +1,4 @@
-// Injected into current tab on popup open
+// JS injected into active tab on popup
 
 chrome.runtime.onMessage.addListener(onMessage)
 
