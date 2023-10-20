@@ -22,8 +22,8 @@ async function initOptions() {
 async function saveOptions(event) {
     event.preventDefault()
     console.log('saveOptions')
-    let urlInput = document.getElementById('pattern')
-    let pattern = urlInput.value
+    const urlInput = document.getElementById('pattern')
+    const pattern = urlInput.value
     console.log(`pattern: ${pattern}`)
     await chrome.storage.sync.set({ pattern: pattern })
     showToast('Options Saved')
@@ -38,11 +38,8 @@ async function saveOptions(event) {
  */
 function showToast(message, bsClass = 'success') {
     // TODO: Remove jQuery Dependency
-    // let toastContainer = document.getElementById('toast-container')
-    let toastContainer = $('#toast-container')
-    console.log('toastContainer')
-    console.log(toastContainer)
-    let toastEl = $(
+    const toastContainer = $('#toast-container')
+    const toastEl = $(
         '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
             '    <div class="d-flex">\n' +
             '        <div class="toast-body">Options Saved</div>\n' +
@@ -53,6 +50,6 @@ function showToast(message, bsClass = 'success') {
     toastEl.find('.toast-body').text(message)
     toastEl.addClass('text-bg-' + bsClass)
     toastContainer.append(toastEl)
-    let toast = new bootstrap.Toast(toastEl)
+    const toast = new bootstrap.Toast(toastEl)
     toast.show()
 }

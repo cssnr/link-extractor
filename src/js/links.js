@@ -89,7 +89,7 @@ function processLinks(links, pattern, onlyDomains) {
  * @param {String} elementId
  */
 function updateTable(data, elementId) {
-    let tbody = document
+    const tbody = document
         .getElementById(elementId)
         .getElementsByTagName('tbody')[0]
     data.forEach(function (url, i) {

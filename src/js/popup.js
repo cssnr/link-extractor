@@ -5,11 +5,13 @@ jQuery('html').hide().fadeIn('slow')
 document.getElementById('btn-all').addEventListener('click', popupClick)
 document.getElementById('btn-filter').addEventListener('click', popupClick)
 document.getElementById('btn-domains').addEventListener('click', popupClick)
+document.getElementById('btn-options').addEventListener('click', popupClick)
 
 document.getElementById('btn-about').addEventListener('click', () => {
     const manifest = chrome.runtime.getManifest()
     console.log(`url: ${manifest.homepage_url}`)
     chrome.tabs.create({ active: true, url: manifest.homepage_url }).then()
+    window.close()
 })
 
 /**
@@ -19,6 +21,14 @@ document.getElementById('btn-about').addEventListener('click', () => {
  */
 async function popupClick(event) {
     console.log(event)
+    if (event.target.dataset.href) {
+        console.log(`href: ${event.target.dataset.href}`)
+        const url = chrome.runtime.getURL(event.target.dataset.href)
+        console.log(`url: ${url}`)
+        await chrome.tabs.create({ active: true, url })
+        window.close()
+        return
+    }
     const filterLinks = event.target.id === 'btn-filter'
     const onlyDomains = event.target.id === 'btn-domains'
     const queryOptions = { active: true, lastFocusedWindow: true }
@@ -32,4 +42,5 @@ async function popupClick(event) {
     const url = `${linksUrl}?tabId=${tab.id}&filterLinks=${filterLinks}&onlyDomains=${onlyDomains}`
     console.log(`chrome.tabs.create: ${url}`)
     await chrome.tabs.create({ active: true, url })
+    window.close()
 }
