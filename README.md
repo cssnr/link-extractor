@@ -20,8 +20,6 @@ Including automatic dark/light mode, copy all links or domains, striped tables, 
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/90f0725b-9197-42fb-ac3f-d78b864cc7d8)](https://github.com/cssnr/link-extractor)
-
 # Features
 
 *   Extract all Links and/or Domains
@@ -29,6 +27,8 @@ Including automatic dark/light mode, copy all links or domains, striped tables, 
 *   Quick Filter URLs with a regular expression
 *   Quick Filter links by a saved regular expression
 *   Automatic Dark/Light mode based on browser setting
+
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/90f0725b-9197-42fb-ac3f-d78b864cc7d8)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
