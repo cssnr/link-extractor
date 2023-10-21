@@ -5,20 +5,17 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=ncloc)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 # Link Extractor
 
+*   [Overview](#overview)
+*   [Features](#features)
+*   [Configuration](#configuration)
+*   [Development](#development)
+    -   [Chrome Setup](#chrome-setup)
+    -   [Firefox Setup](#firefox-setup)
+
 Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
 
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
-
-# Table of Contents
-
-*   [Overview](#overview)
-*   [Features](#features)
-*   [Development](#development)
-*   [Configuration](#configuration)
-    -   [Chrome Setup](#chrome-setup)
-    -   [Firefox Setup](#firefox-setup)
-    -   [Building](#building)
 
 # Overview
 
@@ -40,7 +37,11 @@ You can optionally pin the Addon by clicking the `Puzzle Piece`, then;
 
 # Development
 
-Instructions to run from source, build locally, or test/develop the extension.
+The extension is automatically built on every release which uploads the artifacts to that release.
+See [build.yaml](.github%2Fworkflows%2Fbuild.yaml) for more information.
+
+To build locally, clone the repository then run `npm install`.
+You can then run the addon from the [src](src) directory as normal.
 
 ## Chrome Setup
 
@@ -61,11 +62,3 @@ Instructions to run from source, build locally, or test/develop the extension.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
 1.  You may also load temporary from: `about:debugging#/runtime/this-firefox`
-
-## Building
-
-The extension is automatically built on every release which uploads the artifacts to that release.
-See [build.yaml](.github%2Fworkflows%2Fbuild.yaml) for more information.
-
-To build locally, clone the repository then run `npm install`.
-You can then run the addon from the [src](src) directory as normal.
