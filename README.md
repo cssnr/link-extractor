@@ -5,9 +5,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=ncloc)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 # Link Extractor
 
-Extract all links from a page or use a regex filter.
-
-_Coming Soon..._
+Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
 
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
@@ -24,7 +22,7 @@ _Coming Soon..._
 
 # Overview
 
-Easily extract links and/or domains from any site with an optional quick filter.
+Easily extract links and/or domains from any site with an optional filter including automatic dark/light mode.
 
 # Features
 
@@ -37,12 +35,12 @@ Easily extract links and/or domains from any site with an optional quick filter.
 # Configuration
 
 You can optionally pin the Addon by clicking the `Puzzle Piece`, then;  
-**Chrome** click the `Pin` icon.  
-**Firefox** click the `Settings Wheel` and `Pin to Toolbar`.  
+**Chrome**, click the `Pin` icon.  
+**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
 
 # Development
 
-Instructions to run from source, build locally, or test the extension.
+Instructions to run from source, build locally, or test/develop the extension.
 
 ## Chrome Setup
 
