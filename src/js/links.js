@@ -3,34 +3,27 @@
 new ClipboardJS('.clip')
 
 const urlParams = new URLSearchParams(window.location.search)
-console.log(`urlParams: ${urlParams}`)
-
-const tabId = parseInt(urlParams.get('tabId'))
-const onlyDomains = urlParams.get('onlyDomains')
-const filterLinks = urlParams.get('filterLinks')
-
-// TODO: Make a modal and function for this prompt
-const pattern = filterLinks === 'true' ? window.prompt('Enter Filter:') : null
-console.log(`pattern: ${pattern}`)
+const tabId = parseInt(urlParams.get('tab'))
 
 chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
     console.log('sendMessage')
     console.log(links)
-    processLinks(links, pattern, onlyDomains)
+    processLinks(links)
 })
 
 /**
  * Process Links
  * @function processLinks
  * @param links
- * @param {string} pattern -- Pattern for filtering
- * @param onlyDomains
  */
-function processLinks(links, pattern, onlyDomains) {
+function processLinks(links) {
     // TODO: Cleanup this entire function...
+    const pattern = urlParams.get('filter')
+    const onlyDomains = urlParams.has('domains')
     console.log(`pattern: ${pattern}`)
     console.log(`onlyDomains: ${onlyDomains}`)
     console.log(links)
+
     if (chrome.runtime.lastError) {
         return window.alert(chrome.runtime.lastError)
     }
@@ -59,7 +52,7 @@ function processLinks(links, pattern, onlyDomains) {
     }
 
     // Update links if onlyDomains is not set
-    if (onlyDomains !== 'true') {
+    if (!onlyDomains) {
         console.log('updating links now...')
         document
             .getElementById('links-clip')
