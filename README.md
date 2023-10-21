@@ -5,23 +5,22 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=ncloc)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 # Link Extractor
 
-Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
+Modern Chrome and Firefox Addon to easily extract all links/domains from a web page with optional filters.
+Including automatic dark/light mode, copy all links or domains, striped tables, and more...
 
-*   [Overview](#overview)
+*   [Download](#download)
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
 
-# Overview
-
-Easily extract links and/or domains from any site with an optional filter including automatic dark/light mode.
+# Download
 
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
-[![Screenshot of Links and Popup](https://raw.githubusercontent.com/cssnr/link-extractor-site/main/screenshots/links-popup_640x400.jpg)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/90f0725b-9197-42fb-ac3f-d78b864cc7d8)](https://github.com/cssnr/link-extractor)
 
 # Features
 
@@ -39,11 +38,11 @@ You can optionally pin the Addon by clicking the `Puzzle Piece`, then;
 
 # Development
 
-The extension is automatically built on every release which uploads the artifacts to that release.
-See [build.yaml](.github%2Fworkflows%2Fbuild.yaml) for more information.
-
 To build locally, clone the repository then run `npm install`.
 You can then run the addon from the [src](src) directory as normal.
+
+The extension is automatically built on every release which uploads the artifacts to that release.
+See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Chrome Setup
 
