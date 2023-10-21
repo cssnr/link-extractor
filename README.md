@@ -21,7 +21,7 @@ Easily extract links and/or domains from any site with an optional filter includ
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
-![Screenshot of Links and Popup](https://raw.githubusercontent.com/cssnr/link-extractor-site/main/screenshots/links-popup_640x400.jpg)
+[![Screenshot of Links and Popup](https://raw.githubusercontent.com/cssnr/link-extractor-site/main/screenshots/links-popup_640x400.jpg)](https://github.com/cssnr/link-extractor)
 
 # Features
 
