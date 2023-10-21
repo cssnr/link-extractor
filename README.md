@@ -5,17 +5,17 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=ncloc)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 # Link Extractor
 
+Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
+
+*   Firefox: https://addons.mozilla.org/addon/link-extractor
+*   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
+
 *   [Overview](#overview)
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
-
-Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
-
-*   Firefox: https://addons.mozilla.org/addon/link-extractor
-*   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
 # Overview
 
