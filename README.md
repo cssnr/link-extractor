@@ -7,9 +7,6 @@
 
 Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.
 
-*   Firefox: https://addons.mozilla.org/addon/link-extractor
-*   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
-
 *   [Overview](#overview)
 *   [Features](#features)
 *   [Configuration](#configuration)
@@ -20,6 +17,9 @@ Modern Chrome and Firefox Addon to extract all links from a web page with option
 # Overview
 
 Easily extract links and/or domains from any site with an optional filter including automatic dark/light mode.
+
+*   Firefox: https://addons.mozilla.org/addon/link-extractor
+*   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
 # Features
 
