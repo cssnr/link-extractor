@@ -1,8 +1,8 @@
 {
   "name": "Link Extractor",
-  "description": "Extract links from web pages with an optional filters.",
+  "description": "Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.",
   "homepage_url": "https://github.com/cssnr/link-extractor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 3,
   "permissions": [
     "scripting",

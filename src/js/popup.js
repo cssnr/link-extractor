@@ -2,12 +2,12 @@
 
 jQuery('html').hide().fadeIn('slow')
 
+const filterInput = document.getElementById('filter-input')
+filterInput.focus()
+
 const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 document.getElementById('filter-form').addEventListener('submit', popupClick)
-
-const filterInput = document.getElementById('filter-input')
-filterInput.focus()
 
 /**
  * Handle Popup Clicks

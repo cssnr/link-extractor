@@ -6,8 +6,6 @@ const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
 chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
-    console.log('sendMessage')
-    console.log(links)
     processLinks(links)
 })
 
@@ -17,10 +15,10 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  * @param links
  */
 function processLinks(links) {
-    // TODO: Cleanup this entire function...
-    const pattern = urlParams.get('filter')
+    // TODO: Cleanup this WHOLE function...
+    const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
-    console.log(`pattern: ${pattern}`)
+    console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
     console.log(links)
 
@@ -37,8 +35,8 @@ function processLinks(links) {
     let items = [...new Set(filteredLinks)].sort()
 
     // Filter links based on pattern
-    const re = pattern ? new RegExp(pattern, 'g') : null
-    if (re) {
+    if (urlFilter) {
+        const re = new RegExp(urlFilter, 'g')
         console.log(`Filtering Links by: ${re}`)
         items = items.filter((item) => item.match(re))
     }
@@ -47,13 +45,11 @@ function processLinks(links) {
     const messageEl = document.getElementById('message')
     if (!items.length) {
         messageEl.textContent = 'No matches'
-        console.log('return: !items.length')
-        return
+        return console.log('return: !items.length')
     }
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        console.log('updating links now...')
         document
             .getElementById('links-clip')
             .setAttribute('data-clipboard-text', items.join('\n'))
@@ -62,7 +58,6 @@ function processLinks(links) {
     }
 
     // Extract domains from items and sort
-    console.log('updating domains now...')
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
     document
         .getElementById('domains-clip')
