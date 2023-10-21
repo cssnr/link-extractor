@@ -12,29 +12,39 @@ _Coming Soon..._
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
-## Table of Contents
+# Table of Contents
 
 *   [Overview](#overview)
 *   [Features](#features)
 *   [Development](#development)
+*   [Configuration](#configuration)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
     -   [Building](#building)
 
-## Overview
+# Overview
 
 Easily extract links and/or domains from any site with an optional quick filter.
 
-## Features
+# Features
 
 *   Extract all Links and/or Domains
 *   Copy all URLs or Domains to the clipboard
 *   Quick Filter URLs with a regular expression
-*   Quick Filter links by a saved regular expression 
+*   Quick Filter links by a saved regular expression
+*   Automatic Dark/Light mode based on browser setting
 
-## Development
+# Configuration
 
-### Chrome Setup
+You can optionally pin the Addon by clicking the `Puzzle Piece`, then;  
+**Chrome** click the `Pin` icon.  
+**Firefox** click the `Settings Wheel` and `Pin to Toolbar`.  
+
+# Development
+
+Instructions to run from source, build locally, or test the extension.
+
+## Chrome Setup
 
 1.  Download (or clone) the repo: [link-extractor-master.zip](https://github.com/cssnr/link-extractor/archive/refs/heads/master.zip)
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -42,11 +52,7 @@ Easily extract links and/or domains from any site with an optional quick filter.
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-Addon should now be installed.  
-You can optionally pin the Addon by clicking the `Puzzle Piece`.  
-in the top right corner then clicking the `Pin` icon.  
-
-### Firefox Setup
+## Firefox Setup
 
 > **Note**
 >
@@ -58,14 +64,10 @@ in the top right corner then clicking the `Pin` icon.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
 1.  You may also load temporary from: `about:debugging#/runtime/this-firefox`
 
-Addon should now be installed.  
-You can optionally pin the Addon by clicking the `Puzzle Piece`.  
-in the top right corner then clicking the Settings wheel and then `Pin to Toolbar`.
+## Building
 
-### Building
-
-The extension is automatically built on a new release which then uploads the artifacts to the release.
+The extension is automatically built on every release which uploads the artifacts to that release.
 See [build.yaml](.github%2Fworkflows%2Fbuild.yaml) for more information.
 
 To build locally, clone the repository then run `npm install`.
-You can then run the addon from the `src` directory as normal.
+You can then run the addon from the [src](src) directory as normal.

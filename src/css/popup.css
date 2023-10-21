@@ -1,3 +1,7 @@
 body {
   width: 220px;
 }
+
+input::placeholder {
+  text-align: center;
+}
