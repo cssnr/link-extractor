@@ -28,7 +28,7 @@ Including automatic dark/light mode, copy all links or domains, striped tables, 
 *   Quick Filter links by a saved regular expression
 *   Automatic Dark/Light mode based on browser setting
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/90f0725b-9197-42fb-ac3f-d78b864cc7d8)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/c85ffb33-d06e-4012-9395-bf7403a63af8)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
