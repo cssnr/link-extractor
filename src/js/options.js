@@ -18,6 +18,8 @@ async function initOptions() {
     } else {
         createFilterInput('0', '')
     }
+    const manifest = chrome.runtime.getManifest()
+    document.getElementById('version').outerText = `v${manifest.version}`
 }
 
 /**

@@ -25,16 +25,20 @@ Including automatic dark/light mode, copy all links or domains, striped tables, 
 *   Extract all Links and/or Domains
 *   Copy all URLs or Domains to the clipboard
 *   Quick Filter URLs with a regular expression
-*   Quick Filter links by a saved regular expression
+*   Quick Filter links by a saved regular expressions
 *   Automatic Dark/Light mode based on browser setting
 
 [![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/c85ffb33-d06e-4012-9395-bf7403a63af8)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
-You can optionally pin the Addon by clicking the `Puzzle Piece`, then;  
-**Chrome**, click the `Pin` icon.  
+You can pin the Addon by clicking the `Puzzle Piece`, find the Link Extractor icon, then;  
 **Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
+**Chrome**, click the `Pin` icon.  
+
+To open the options, click on the icon (from above) then click `Open Options`.  
+Here you can add as many regular expressions as you would like for easy use later.  
+Make sure to click`Save Options` when finished. For more information on regex, see: https://regex101.com/  
 
 # Development
 
