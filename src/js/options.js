@@ -12,6 +12,8 @@ async function initOptions() {
     const { pattern } = await chrome.storage.sync.get(['pattern'])
     console.log(`pattern: ${pattern}`)
     document.getElementById('pattern').value = pattern || ''
+    const manifest = chrome.runtime.getManifest()
+    document.getElementById('version').outerText = `Version ${manifest.version}`
 }
 
 /**
