@@ -1,7 +1,8 @@
 // JS for options.html
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.querySelector('#submit').addEventListener('click', saveOptions)
+document.getElementById('filters-form').addEventListener('submit', saveOptions)
+document.getElementById('add-input').addEventListener('click', addInputFilter)
 
 /**
  * Options Page Init
@@ -9,11 +10,70 @@ document.querySelector('#submit').addEventListener('click', saveOptions)
  */
 async function initOptions() {
     console.log('initOptions')
-    const { pattern } = await chrome.storage.sync.get(['pattern'])
-    console.log(`pattern: ${pattern}`)
-    document.getElementById('pattern').value = pattern || ''
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (patterns?.length) {
+        patterns.forEach(function (value, i) {
+            createFilterInput(i.toString(), value)
+        })
+    } else {
+        createFilterInput('0', '')
+    }
     const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').outerText = `Version ${manifest.version}`
+    document.getElementById('version').outerText = `v${manifest.version}`
+}
+
+/**
+ * Delete Filter Click
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ */
+function deleteInputFilter(event) {
+    event.preventDefault()
+    console.log(event)
+    const inputs = document
+        .getElementById('filters-inputs')
+        .getElementsByTagName('input').length
+    console.log(`inputs: ${inputs}`)
+    if (inputs > 1) {
+        const input = document.getElementById(`filters-${this.dataset.id}`)
+        this.parentNode.removeChild(input)
+        this.parentNode.removeChild(this)
+    }
+}
+
+/**
+ * Delete Filter Click
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ */
+function addInputFilter(event) {
+    event.preventDefault()
+    console.log(event)
+    const el = document.getElementById('filters-inputs')
+    const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
+    createFilterInput(next)
+}
+
+/**
+ * Add Form Input for a Filter
+ * @function createFilterInput
+ * @param {String} number
+ * @param {String} value
+ */
+function createFilterInput(number, value = '') {
+    const el = document.getElementById('filters-inputs')
+    const input = document.createElement('input')
+    input.id = `filters-${number}`
+    input.value = value
+    input.classList.add('form-control')
+    el.appendChild(input)
+    const a = document.createElement('a')
+    // a.id = `filters-${number}-remove`
+    a.textContent = 'Remove'
+    a.href = '#'
+    a.dataset.id = number
+    a.addEventListener('click', deleteInputFilter)
+    el.appendChild(a)
 }
 
 /**
@@ -24,10 +84,14 @@ async function initOptions() {
 async function saveOptions(event) {
     event.preventDefault()
     console.log('saveOptions')
-    const urlInput = document.getElementById('pattern')
-    const pattern = urlInput.value
-    console.log(`pattern: ${pattern}`)
-    await chrome.storage.sync.set({ pattern: pattern })
+    const patterns = []
+    Array.from(event.target.elements).forEach((input) => {
+        if (input.type === 'text' && input.value) {
+            patterns.push(input.value)
+        }
+    })
+    console.log(patterns)
+    await chrome.storage.sync.set({ patterns: patterns })
     showToast('Options Saved')
 }
 
