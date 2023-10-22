@@ -11,7 +11,7 @@ document.getElementById('add-input').addEventListener('click', addInputFilter)
 async function initOptions() {
     console.log('initOptions')
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    if (patterns.length) {
+    if (patterns?.length) {
         patterns.forEach(function (value, i) {
             createFilterInput(i.toString(), value)
         })
