@@ -47,8 +47,7 @@ async function popupClick(event) {
         url.searchParams.set('filter', filterInput.value)
     }
 
-    const queryOptions = { active: true, lastFocusedWindow: true }
-    const [tab] = await chrome.tabs.query(queryOptions)
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     console.log(`tab.id: ${tab.id}`)
     url.searchParams.set('tab', tab.id.toString())
 
