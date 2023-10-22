@@ -9,6 +9,11 @@ const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 document.getElementById('filter-form').addEventListener('submit', popupClick)
 
+document.addEventListener('DOMContentLoaded', function () {
+    const manifest = chrome.runtime.getManifest()
+    document.getElementById('version').outerText = `v${manifest.version}`
+})
+
 /**
  * Handle Popup Clicks
  * @function popupClick
