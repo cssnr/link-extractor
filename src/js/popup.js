@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', initPopup)
 
 async function initPopup() {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    if (patterns.length) {
+    if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
             createFilterLink(i.toString(), value)
