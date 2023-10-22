@@ -1,7 +1,8 @@
 // JS for options.html
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.querySelector('#submit').addEventListener('click', saveOptions)
+document.getElementById('submit').addEventListener('click', saveOptions)
+document.getElementById('add-input').addEventListener('click', addInputFilter)
 
 /**
  * Options Page Init
@@ -11,9 +12,72 @@ async function initOptions() {
     console.log('initOptions')
     const { pattern } = await chrome.storage.sync.get(['pattern'])
     console.log(`pattern: ${pattern}`)
-    document.getElementById('pattern').value = pattern || ''
-    const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').outerText = `Version ${manifest.version}`
+
+    // TODO: loop through saved patterns and createInputFilter
+
+    // document.getElementById('pattern').value = pattern || ''
+    // const manifest = chrome.runtime.getManifest()
+    // document.getElementById('version').outerText = `Version ${manifest.version}`
+
+    // Array.from(form.elements).forEach((input) => {
+    //     console.log(input)
+    // })
+
+    createInputFilter('0', pattern || '')
+}
+
+/**
+ * Delete Filter Click
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ */
+function deleteInputFilter(event) {
+    event.preventDefault()
+    console.log(event)
+    const inputs = document
+        .getElementById('filters-inputs')
+        .getElementsByTagName('input').length
+    console.log(`inputs: ${inputs}`)
+    if (inputs > 1) {
+        const input = document.getElementById(`filters-${this.dataset.id}`)
+        this.parentNode.removeChild(input)
+        this.parentNode.removeChild(this)
+    }
+}
+
+/**
+ * Delete Filter Click
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ */
+function addInputFilter(event) {
+    event.preventDefault()
+    console.log(event)
+    const el = document.getElementById('filters-inputs')
+    const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
+    createInputFilter(next)
+}
+
+/**
+ * Add Form Input for a Filter
+ * @function createInputFilter
+ * @param {String} number
+ * @param {String} value
+ */
+function createInputFilter(number, value = '') {
+    const el = document.getElementById('filters-inputs')
+    const input = document.createElement('input')
+    input.id = `filters-${number}`
+    input.value = value
+    input.classList.add('form-control')
+    el.appendChild(input)
+    const a = document.createElement('a')
+    a.id = `filters-${number}-remove`
+    a.textContent = 'Remove'
+    a.href = '#'
+    a.dataset.id = number
+    a.addEventListener('click', deleteInputFilter)
+    el.appendChild(a)
 }
 
 /**
@@ -22,6 +86,7 @@ async function initOptions() {
  * @param {MouseEvent} event
  */
 async function saveOptions(event) {
+    // TODO: loop through inputs and save as array
     event.preventDefault()
     console.log('saveOptions')
     const urlInput = document.getElementById('pattern')

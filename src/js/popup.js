@@ -8,6 +8,7 @@ filterInput.focus()
 const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 document.getElementById('filter-form').addEventListener('submit', popupClick)
+// TODO: Add initPopup that generates saved filters for dropdown
 
 document.addEventListener('DOMContentLoaded', function () {
     const manifest = chrome.runtime.getManifest()

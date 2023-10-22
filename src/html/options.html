@@ -18,12 +18,15 @@
                     <img src="../images/logo128.png" class="img-fluid m-auto d-block" alt="Link Extractor" height="128" width="128">
                     <p class="text-center lead"><span id="version" class=""></span></p>
                     <div class="alert alert-danger text-center" role="alert"><strong>INOP:</strong> Options are not yet implemented!</div>
-                    <form>
-                        <div class="mb-3">
-                            <label for="pattern" class="form-label">Default Pattern</label>
-                            <input type="text" class="form-control" id="pattern" aria-describedby="patternText">
-                            <div id="patternText" class="form-text">Default regex pattern for link extraction.</div>
+                    <span id="add-input" class="badge text-bg-primary" role="button">Add Input</span>
+                    <form id="filters-form" class="">
+                        <div id="filters-inputs" class="my-2">
                         </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label for="pattern" class="form-label">Default Pattern</label>-->
+<!--                            <input type="text" class="form-control" id="pattern" aria-describedby="patternText">-->
+<!--                            <div id="patternText" class="form-text">Default regex pattern for link extraction.</div>-->
+<!--                        </div>-->
                         <button id="submit" type="submit" class="btn btn-success w-100">Save Options</button>
                     </form>
                 </div>

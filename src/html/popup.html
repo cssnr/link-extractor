@@ -10,7 +10,17 @@
 
 <div class="container-fluid p-3">
     <div class="d-grid g-2 gap-2">
-        <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links w/ Filter</button>
+<!--        <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links w/ Filter</button>-->
+        <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
+            <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links</button>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul class="dropdown-menu">
+                    <!-- TODO: Dynamiclly Generate from Saved Filters -->
+                    <li><a class="dropdown-item" href="#">Saved Filters</a></li>
+                </ul>
+            </div>
+        </div>
         <form id="filter-form" class="my-0">
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control" type="text" placeholder="Filter">
