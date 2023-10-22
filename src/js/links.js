@@ -36,7 +36,7 @@ function processLinks(links) {
 
     // Filter links based on pattern
     if (urlFilter) {
-        const re = new RegExp(urlFilter, 'g')
+        const re = new RegExp(urlFilter, 'ig')
         console.log(`Filtering Links by: ${re}`)
         items = items.filter((item) => item.match(re))
     }
