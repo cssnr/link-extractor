@@ -10,14 +10,12 @@
 
 <div class="container-fluid p-3">
     <div class="d-grid g-2 gap-2">
-<!--        <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links w/ Filter</button>-->
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
             <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links</button>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                <ul class="dropdown-menu">
-                    <!-- TODO: Dynamiclly Generate from Saved Filters -->
-                    <li><a class="dropdown-item" href="#">Saved Filters</a></li>
+                <ul id="filters-ul" class="dropdown-menu">
+                    <li id="no-filters"><a class="dropdown-item popup-click" href="#" data-href="html/options.html">No Saved Filters</a></li>
                 </ul>
             </div>
         </div>
@@ -25,10 +23,8 @@
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control" type="text" placeholder="Filter">
         </form>
-<!--        <button id="btn-default" class="btn btn-info btn-sm popup-click" type="button">Links w/ Default Filter</button>-->
         <button id="btn-domains" class="btn btn-primary btn-sm popup-click" type="button">Only Domains</button>
-        <button id="btn-options" class="btn btn-outline-warning btn-sm popup-click" type="button" data-href="html/options.html">Open Options</button>
-<!--        <button id="btn-about" class="btn btn-outline-warning btn-sm popup-click" type="button">Open Homepage</button>-->
+        <button class="btn btn-outline-warning btn-sm popup-click" type="button" data-href="html/options.html">Open Options</button>
         <p class="mb-0 text-center"><small>
             <a id="btn-about" class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover popup-click" type="button" rel="noopener"
                data-href="">Link Extractor</a> <span id="version" class=""></span>

@@ -1,7 +1,7 @@
 // JS for options.html
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.getElementById('submit').addEventListener('click', saveOptions)
+document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
 
 /**
@@ -10,20 +10,14 @@ document.getElementById('add-input').addEventListener('click', addInputFilter)
  */
 async function initOptions() {
     console.log('initOptions')
-    const { pattern } = await chrome.storage.sync.get(['pattern'])
-    console.log(`pattern: ${pattern}`)
-
-    // TODO: loop through saved patterns and createInputFilter
-
-    // document.getElementById('pattern').value = pattern || ''
-    // const manifest = chrome.runtime.getManifest()
-    // document.getElementById('version').outerText = `Version ${manifest.version}`
-
-    // Array.from(form.elements).forEach((input) => {
-    //     console.log(input)
-    // })
-
-    createInputFilter('0', pattern || '')
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (patterns.length) {
+        patterns.forEach(function (value, i) {
+            createFilterInput(i.toString(), value)
+        })
+    } else {
+        createFilterInput('0', '')
+    }
 }
 
 /**
@@ -55,16 +49,16 @@ function addInputFilter(event) {
     console.log(event)
     const el = document.getElementById('filters-inputs')
     const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
-    createInputFilter(next)
+    createFilterInput(next)
 }
 
 /**
  * Add Form Input for a Filter
- * @function createInputFilter
+ * @function createFilterInput
  * @param {String} number
  * @param {String} value
  */
-function createInputFilter(number, value = '') {
+function createFilterInput(number, value = '') {
     const el = document.getElementById('filters-inputs')
     const input = document.createElement('input')
     input.id = `filters-${number}`
@@ -72,7 +66,7 @@ function createInputFilter(number, value = '') {
     input.classList.add('form-control')
     el.appendChild(input)
     const a = document.createElement('a')
-    a.id = `filters-${number}-remove`
+    // a.id = `filters-${number}-remove`
     a.textContent = 'Remove'
     a.href = '#'
     a.dataset.id = number
@@ -86,13 +80,16 @@ function createInputFilter(number, value = '') {
  * @param {MouseEvent} event
  */
 async function saveOptions(event) {
-    // TODO: loop through inputs and save as array
     event.preventDefault()
     console.log('saveOptions')
-    const urlInput = document.getElementById('pattern')
-    const pattern = urlInput.value
-    console.log(`pattern: ${pattern}`)
-    await chrome.storage.sync.set({ pattern: pattern })
+    const patterns = []
+    Array.from(event.target.elements).forEach((input) => {
+        if (input.type === 'text' && input.value) {
+            patterns.push(input.value)
+        }
+    })
+    console.log(patterns)
+    await chrome.storage.sync.set({ patterns: patterns })
     showToast('Options Saved')
 }
 
