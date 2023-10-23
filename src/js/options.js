@@ -12,6 +12,7 @@ async function initOptions() {
     console.log('initOptions')
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     if (patterns?.length) {
+        console.log(patterns)
         patterns.forEach(function (value, i) {
             createFilterInput(i.toString(), value)
         })
@@ -104,7 +105,6 @@ async function saveOptions(event) {
  */
 function showToast(message, bsClass = 'success') {
     // TODO: Remove jQuery Dependency
-    const toastContainer = $('#toast-container')
     const toastEl = $(
         '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
             '    <div class="d-flex">\n' +
@@ -115,7 +115,7 @@ function showToast(message, bsClass = 'success') {
     )
     toastEl.find('.toast-body').text(message)
     toastEl.addClass('text-bg-' + bsClass)
-    toastContainer.append(toastEl)
+    $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
 }
