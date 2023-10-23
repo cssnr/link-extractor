@@ -5,9 +5,6 @@ on:
   release:
     types: [published]
 
-env:
-  PACKAGE_NAME: link_extractor
-
 jobs:
   build:
     name: "Build"
@@ -29,7 +26,18 @@ jobs:
       - name: "Parse Manifest"
         id: manifest
         run: |
+          # export version="$(jq '.version' < src/manifest.json)"
           echo "version=$(jq '.version' < src/manifest.json)" >> "$GITHUB_OUTPUT"
+          export name="$(jq '.name' < src/manifest.json | tr '[:upper:]' '[:lower:]')"
+          echo "package_name=${name// /_}" >> "$GITHUB_OUTPUT"
+
+      - name: "Release Manifest Version Check"
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          if [ "${{ github.ref_name }}" != ${{ steps.manifest.outputs.version }} ];then
+            echo "Manifest Version ${{ steps.manifest.outputs.version }} does not match release tag ${{ github.ref_name }}"
+            exit 1
+          fi
 
       - name: "Build Firefox"
         id: web-ext-build
@@ -51,13 +59,13 @@ jobs:
           echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
           ${{ steps.setup-chrome.outputs.chrome-path }} --version
           ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
-          mv src.crx web-ext-artifacts/${{ env.PACKAGE_NAME }}-${{ steps.manifest.outputs.version }}.crx
+          mv src.crx web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.crx
 
       - name: "Create ZIP Archive"
         working-directory: "src"
         run: |
           ls -lAh .
-          zip "../web-ext-artifacts/${{ env.PACKAGE_NAME }}-${{ steps.manifest.outputs.version }}.zip" -r .
+          zip "../web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.zip" -r .
 
       - name: "Archive Artifacts"
         uses: actions/upload-artifact@v3
