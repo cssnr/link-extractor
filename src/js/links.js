@@ -41,11 +41,11 @@ function processLinks(links) {
         items = items.filter((item) => item.match(re))
     }
 
-    // If no items, update message and return
-    const messageEl = document.getElementById('message')
+    // If no items, alert and return
     if (!items.length) {
-        messageEl.textContent = 'No matches'
-        return console.log('return: !items.length')
+        alert('No Results')
+        window.close()
+        return
     }
 
     // Update links if onlyDomains is not set
@@ -67,7 +67,8 @@ function processLinks(links) {
         updateTable(domains, 'domains')
     }
 
-    messageEl.style.display = 'None'
+    // Hide Loading message
+    document.getElementById('message').style.display = 'None'
 }
 
 /**
