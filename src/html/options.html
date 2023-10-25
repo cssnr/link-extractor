@@ -17,8 +17,13 @@
                     <h1 class="text-center">Link Extractor Options</h1>
                     <img src="../images/logo128.png" class="img-fluid m-auto d-block" alt="Link Extractor" height="128" width="128">
                     <p class="text-center lead"><span id="version" class=""></span></p>
-                    <span id="add-input" class="badge text-bg-primary" role="button">Add Filter</span>
                     <form id="filters-form" class="">
+                        <label for="reFlags" class="form-label">Regex Flags</label>
+                        <input type="text" id="reFlags" class="form-control" aria-describedby="reFlagsHelp">
+                        <div id="reFlagsHelp" class="form-text">
+                            <strong>Important: make sure to include <kbd>g</kbd></strong>
+                        </div>
+                        <span id="add-input" class="badge text-bg-primary mt-3" role="button">Add Filter</span>
                         <div id="filters-inputs" class="my-2"></div>
                         <button id="submit" type="submit" class="btn btn-success w-100">Save Options</button>
                     </form>

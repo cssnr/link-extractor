@@ -33,14 +33,12 @@ function createFilterLink(number, value = '') {
     const ul = document.getElementById('filters-ul')
     const li = document.createElement('li')
     ul.appendChild(li)
-    const small = document.createElement('small')
     const a = document.createElement('a')
     a.textContent = value
     a.href = '#'
-    a.classList.add('dropdown-item')
+    a.classList.add('dropdown-item', 'small')
     a.addEventListener('click', popupClick)
-    small.appendChild(a)
-    li.appendChild(small)
+    li.appendChild(a)
 }
 
 /**

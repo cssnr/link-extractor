@@ -14,7 +14,7 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  * @function processLinks
  * @param links
  */
-function processLinks(links) {
+async function processLinks(links) {
     // TODO: Cleanup this WHOLE function...
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
@@ -36,7 +36,8 @@ function processLinks(links) {
 
     // Filter links based on pattern
     if (urlFilter) {
-        const re = new RegExp(urlFilter, 'ig')
+        const { options } = await chrome.storage.sync.get(['options'])
+        const re = new RegExp(urlFilter, options?.flags || 'ig')
         console.log(`Filtering Links with re: ${re}`)
         items = items.filter((item) => item.match(re))
     }
