@@ -10,11 +10,13 @@ document.getElementById('add-input').addEventListener('click', addInputFilter)
  */
 async function initOptions() {
     console.log('initOptions')
+    // await chrome.storage.sync.clear()
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    document.getElementById('reFlags').value = options?.flags || 'ig'
+    document.getElementById('reFlags').value =
+        options !== undefined ? options.flags : 'ig'
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {

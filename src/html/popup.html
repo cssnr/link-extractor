@@ -13,7 +13,7 @@
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
             <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links</button>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Filters</button>
                 <ul id="filters-ul" class="dropdown-menu">
                     <li id="no-filters"><a class="dropdown-item popup-click" href="#" data-href="html/options.html">No Saved Filters</a></li>
                 </ul>
@@ -22,9 +22,13 @@
         <form id="filter-form" class="my-0">
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control" type="text" placeholder="Filter">
+<!--            <div class="input-group mb-3">-->
+<!--                <input type="text" id="filter-input" class="form-control w-75" placeholder="Filter" aria-label="Filter">-->
+<!--                <input type="text" id="flags-input" class="form-control w-25" placeholder="Flags" aria-label="Flags">-->
+<!--            </div>-->
         </form>
         <button id="btn-domains" class="btn btn-primary btn-sm popup-click" type="button">Only Domains</button>
-        <button class="btn btn-outline-warning btn-sm popup-click" type="button" data-href="html/options.html">Open Options</button>
+        <button class="btn btn-outline-info btn-sm popup-click" type="button" data-href="html/options.html">Options</button>
         <p class="mb-0 text-center"><small>
             <a id="btn-about" class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover popup-click" type="button" rel="noopener"
                data-href="">Link Extractor</a> <span id="version" class=""></span>
