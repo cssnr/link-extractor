@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
+document.getElementById('reset-default').addEventListener('click', resetForm)
 
 'focus input'.split(' ').forEach(function (type) {
     document.getElementById('reFlags').addEventListener(type, function (event) {
@@ -147,4 +148,17 @@ function showToast(message, bsClass = 'success') {
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
+}
+
+/**
+ * Reset Options Form Click Callback
+ * @function resetForm
+ * @param {MouseEvent} event
+ */
+function resetForm(event) {
+    event.preventDefault()
+    console.log(event)
+    const input = document.getElementById('reFlags')
+    input.value = 'ig'
+    input.focus()
 }
