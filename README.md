@@ -10,14 +10,14 @@
 Modern Chrome and Firefox Addon to easily extract all links/domains from a web page with optional filters.
 Including automatic dark/light mode, copy all links or domains, striped tables, and more...
 
-*   [Download](#download)
+*   [Install](#install)
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Chrome Setup](#chrome-setup)
     -   [Firefox Setup](#firefox-setup)
 
-# Download
+# Install
 
 *   Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 *   Firefox: https://addons.mozilla.org/addon/link-extractor
