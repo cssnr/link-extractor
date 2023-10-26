@@ -27,7 +27,9 @@
                         </div>
                         <span id="add-input" class="badge text-bg-primary mt-3" role="button">Add Filter</span>
                         <div id="filters-inputs" class="my-2"></div>
-                        <button id="submit" type="submit" class="btn btn-outline-success w-100">Save Options</button>
+                        <div class="d-md-none">
+                            <button type="submit" class="btn btn-outline-success w-100">Save Options</button>
+                        </div>
                     </form>
                 </div>
                 <div class="text-center mb-3">
@@ -45,7 +47,12 @@
     </div>
 </div>
 
-<div id="toast-container" class="position-fixed bottom-0 end-0 p-3"></div>
+<div id="bottom-container" class="position-fixed bottom-0 end-0">
+    <div id="toast-container" class=""></div>
+    <div class="d-flex justify-content-end mt-4 d-none d-md-flex">
+        <button type="submit" form="filters-form" class="btn btn-outline-success text-end">Save Options</button>
+    </div>
+</div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
