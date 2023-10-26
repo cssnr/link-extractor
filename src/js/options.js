@@ -4,13 +4,20 @@ document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
 
+'focus input'.split(' ').forEach(function (type) {
+    document.getElementById('reFlags').addEventListener(type, function (event) {
+        if (event.target.classList.contains('is-invalid')) {
+            event.target.classList.remove('is-invalid')
+        }
+    })
+})
+
 /**
  * Options Page Init
  * @function initOptions
  */
 async function initOptions() {
     console.log('initOptions')
-    // await chrome.storage.sync.clear()
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -92,11 +99,25 @@ async function saveOptions(event) {
     event.preventDefault()
     console.log('saveOptions')
     const options = {}
-    options.flags = document.getElementById('reFlags').value
+    const input = document.getElementById('reFlags')
+    let flags = input.value.toLowerCase().replace(/\s+/gm, '').split('')
+    flags = new Set(flags)
+    flags = [...flags].join('')
+    console.log(flags)
+    for (const flag of flags) {
+        if (!'dgimsuvy'.includes(flag)) {
+            input.classList.add('is-invalid')
+            showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+            return
+        }
+    }
+    options.flags = flags
+    input.value = flags
+
     const patterns = []
     Array.from(event.target.elements).forEach((input) => {
-        if (input.classList.contains('filter-input') && input.value) {
-            patterns.push(input.value)
+        if (input.classList.contains('filter-input') && input.value.trim()) {
+            patterns.push(input.value.trim())
         }
     })
     console.log(patterns)

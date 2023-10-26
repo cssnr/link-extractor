@@ -20,6 +20,9 @@
                     <form id="filters-form" class="">
                         <label for="reFlags" class="form-label">Regex Flags</label>
                         <input type="text" id="reFlags" class="form-control" aria-describedby="reFlagsHelp">
+                        <div id="flagsInvalid" class="invalid-feedback">
+                            Invalid Regex Flags. <a href="#" class="pe-none visually-hidden">Reset to Default</a>
+                        </div>
                         <div id="reFlagsHelp" class="form-text">
                             Flags used when using a filter.
                             <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank">
