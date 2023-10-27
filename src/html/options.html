@@ -17,10 +17,23 @@
                     <h1 class="text-center">Link Extractor Options</h1>
                     <img src="../images/logo128.png" class="img-fluid m-auto d-block" alt="Link Extractor" height="128" width="128">
                     <p class="text-center lead"><span id="version" class=""></span></p>
-                    <span id="add-input" class="badge text-bg-primary" role="button">Add Filter</span>
                     <form id="filters-form" class="">
+                        <label for="reFlags" class="form-label">Regex Flags</label>
+                        <a id="reset-default" class="float-end align-bottom small" role="button">Reset to Default</a>
+                        <input type="text" id="reFlags" class="form-control" aria-describedby="reFlagsHelp">
+                        <div id="flagsInvalid" class="invalid-feedback">
+                            Invalid Regex Flags.
+                        </div>
+                        <div id="reFlagsHelp" class="form-text">
+                            Flags used when using a filter.
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
+                                Available Flags</a>.
+                        </div>
+                        <span id="add-input" class="badge text-bg-primary mt-3" role="button">Add Filter</span>
                         <div id="filters-inputs" class="my-2"></div>
-                        <button id="submit" type="submit" class="btn btn-success w-100">Save Options</button>
+                        <div class="d-md-none">
+                            <button type="submit" class="btn btn-outline-success w-100">Save Options</button>
+                        </div>
                     </form>
                 </div>
                 <div class="text-center mb-3">
@@ -38,7 +51,12 @@
     </div>
 </div>
 
-<div id="toast-container" class="position-fixed bottom-0 end-0 p-3"></div>
+<div id="bottom-container" class="position-fixed bottom-0 end-0">
+    <div id="toast-container" class=""></div>
+    <div class="d-flex justify-content-end mt-4 d-none d-md-flex">
+        <button type="submit" form="filters-form" class="btn btn-outline-success text-end">Save Options</button>
+    </div>
+</div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

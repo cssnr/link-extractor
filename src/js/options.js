@@ -3,6 +3,15 @@
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
+document.getElementById('reset-default').addEventListener('click', resetForm)
+
+'focus input'.split(' ').forEach(function (type) {
+    document.getElementById('reFlags').addEventListener(type, function (event) {
+        if (event.target.classList.contains('is-invalid')) {
+            event.target.classList.remove('is-invalid')
+        }
+    })
+})
 
 /**
  * Options Page Init
@@ -10,7 +19,12 @@ document.getElementById('add-input').addEventListener('click', addInputFilter)
  */
 async function initOptions() {
     console.log('initOptions')
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    const { options, patterns } = await chrome.storage.sync.get([
+        'options',
+        'patterns',
+    ])
+    document.getElementById('reFlags').value =
+        options !== undefined ? options.flags : 'ig'
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {
@@ -66,15 +80,15 @@ function createFilterInput(number, value = '') {
     const input = document.createElement('input')
     input.id = `filters-${number}`
     input.value = value
-    input.classList.add('form-control')
-    el.appendChild(input)
+    input.classList.add('form-control', 'form-control-sm', 'filter-input')
     const a = document.createElement('a')
-    // a.id = `filters-${number}-remove`
     a.textContent = 'Remove'
     a.href = '#'
     a.dataset.id = number
+    a.classList.add('small')
     a.addEventListener('click', deleteInputFilter)
     el.appendChild(a)
+    el.appendChild(input)
 }
 
 /**
@@ -85,14 +99,30 @@ function createFilterInput(number, value = '') {
 async function saveOptions(event) {
     event.preventDefault()
     console.log('saveOptions')
+    const options = {}
+    const input = document.getElementById('reFlags')
+    let flags = input.value.toLowerCase().replace(/\s+/gm, '').split('')
+    flags = new Set(flags)
+    flags = [...flags].join('')
+    console.log(flags)
+    for (const flag of flags) {
+        if (!'dgimsuvy'.includes(flag)) {
+            input.classList.add('is-invalid')
+            showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+            return
+        }
+    }
+    options.flags = flags
+    input.value = flags
+
     const patterns = []
     Array.from(event.target.elements).forEach((input) => {
-        if (input.type === 'text' && input.value) {
-            patterns.push(input.value)
+        if (input.classList.contains('filter-input') && input.value.trim()) {
+            patterns.push(input.value.trim())
         }
     })
     console.log(patterns)
-    await chrome.storage.sync.set({ patterns: patterns })
+    await chrome.storage.sync.set({ options: options, patterns: patterns })
     showToast('Options Saved')
 }
 
@@ -118,4 +148,17 @@ function showToast(message, bsClass = 'success') {
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
+}
+
+/**
+ * Reset Options Form Click Callback
+ * @function resetForm
+ * @param {MouseEvent} event
+ */
+function resetForm(event) {
+    event.preventDefault()
+    console.log(event)
+    const input = document.getElementById('reFlags')
+    input.value = 'ig'
+    input.focus()
 }
