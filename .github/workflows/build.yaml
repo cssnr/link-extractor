@@ -81,3 +81,25 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+#      - name: "Upload to Mozilla Addons"
+#        # https://github.com/marketplace/actions/firefox-addon-action
+#        if: ${{ github.event_name == 'release' }}
+#        uses: trmcnvn/firefox-addon@v1
+#        with:
+#          uuid: link-extractor@cssnr.com
+#          xpi: web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.xpi
+#          manifest: src/manifest.json
+#          api-key: ${{ secrets.FIREFOX_API_KEY }}
+#          api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+#
+#      - name: "Upload to Chrome Web Store"
+#        # https://github.com/marketplace/actions/chrome-extension-upload-action
+#        if: ${{ github.event_name == 'release' }}
+#        uses: mnao305/chrome-extension-upload@v4.0.1
+#        with:
+#          file-path: web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.zip
+#          extension-id: ifefifghpkllfibejafbakmflidjcjfp
+#          client-id: ${{ secrets.CLIENT_ID }}
+#          client-secret: ${{ secrets.CLIENT_SECRET }}
+#          refresh-token: ${{ secrets.REFRESH_TOKEN }}

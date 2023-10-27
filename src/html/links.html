@@ -4,6 +4,7 @@
     <title>Link Extractor</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/links.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
@@ -12,20 +13,20 @@
 <div class="container-fluid p-3">
     <h2 id="message">Loading...</h2>
 
-    <div id="links-div" style="display: none">
+    <div class="links" style="display: none">
         <h2>Links</h2>
         <a id="links-clip" class="clip btn btn-sm btn-outline-success mb-2" role="button" data-clipboard-text="">
-            Copy Links</a>
+            Copy Links</a> Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.
         <table id="links" class="table table-sm table-striped table-hover">
             <caption class="visually-hidden">Links</caption>
             <tbody></tbody>
         </table>
     </div>
 
-    <div id="domains-div" style="display: none">
+    <div class="domains" style="display: none">
     <h2>Domains</h2>
         <a id="domains-clip" class="clip btn btn-sm btn-outline-primary mb-2" role="button" data-clipboard-text="">
-            Copy Domains</a>
+            Copy Domains</a> Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.
         <table id="domains" class="table table-sm table-striped table-hover">
             <caption class="visually-hidden">Domains</caption>
             <tbody></tbody>
@@ -33,9 +34,35 @@
     </div>
 </div>
 
+<div id="bottom-container" class="position-fixed bottom-0 end-0">
+    <div id="toast-container" class=""></div>
+</div>
+
+<div id="keybinds-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Keyboard Shortcuts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p><kbd>C</kbd> or <kbd>L</kbd> Copy All Links</p>
+                        <p><kbd>D</kbd> or <kbd>M</kbd> Copy All Domains</p>
+                        <p><kbd>T</kbd> or <kbd>O</kbd> Open Options</p>
+                        <p><kbd>Z</kbd> or <kbd>K</kbd> Keyboard Shortcuts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
 <script type="text/javascript" src="../js/links.js"></script>
 
 </body>

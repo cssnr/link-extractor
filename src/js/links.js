@@ -1,6 +1,6 @@
 // JS for links.html
 
-new ClipboardJS('.clip')
+window.addEventListener('keydown', checkKey)
 
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
@@ -57,7 +57,8 @@ async function processLinks(links) {
         document
             .getElementById('links-clip')
             .setAttribute('data-clipboard-text', items.join('\n'))
-        document.getElementById('links-div').style.display = 'block'
+        const linksElements = document.querySelectorAll('.links')
+        linksElements.forEach((el) => (el.style.display = 'block'))
         updateTable(items, 'links')
     }
 
@@ -67,12 +68,13 @@ async function processLinks(links) {
         .getElementById('domains-clip')
         .setAttribute('data-clipboard-text', domains.join('\n'))
     if (domains.length) {
-        document.getElementById('domains-div').style.display = 'block'
+        const domainsElements = document.querySelectorAll('.domains')
+        domainsElements.forEach((el) => (el.style.display = 'block'))
         updateTable(domains, 'domains')
     }
 
     // Hide Loading message
-    document.getElementById('message').style.display = 'None'
+    document.getElementById('message').style.display = 'none'
 }
 
 /**
@@ -85,7 +87,7 @@ function updateTable(data, elementId) {
     const tbody = document
         .getElementById(elementId)
         .getElementsByTagName('tbody')[0]
-    data.forEach(function (url, i) {
+    data.forEach(function (url) {
         const link = document.createElement('a')
         link.text = url
         link.href = url
@@ -108,5 +110,27 @@ function getBaseURL(link) {
         return `${result[1]}/`
     } else {
         return `http://${result[2] || result[3]}/`
+    }
+}
+
+/**
+ * Keyboard Callback
+ * @function checkKey
+ * @param {onkeydown} event
+ */
+function checkKey(event) {
+    const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
+    if (!formElements.includes(event.target.tagName)) {
+        console.log(event.keyCode)
+        if (event.keyCode === 67 || event.keyCode === 76) {
+            document.getElementById('links-clip').click() // C|L
+        } else if (event.keyCode === 68 || event.keyCode === 77) {
+            document.getElementById('domains-clip').click() // D|M
+        } else if (event.keyCode === 84 || event.keyCode === 79) {
+            const url = chrome.runtime.getURL('../html/options.html')
+            chrome.tabs.create({ active: true, url: url }).then() // T|O
+        } else if (event.keyCode === 90 || event.keyCode === 75) {
+            $('#keybinds-modal').modal('toggle') // Z|K
+        }
     }
 }
