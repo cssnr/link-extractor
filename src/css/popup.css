@@ -1,7 +1,7 @@
 body {
-  width: 280px;
+    width: 280px;
 }
 
 input::placeholder {
-  text-align: center;
+    text-align: center;
 }
