@@ -121,16 +121,16 @@ function getBaseURL(link) {
 function checkKey(event) {
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
-        // console.log(event.keyCode)
-        if (event.keyCode === 67) {
-            document.getElementById('links-clip').click() // C
-        } else if (event.keyCode === 68) {
-            document.getElementById('domains-clip').click() // D
-        } else if (event.keyCode === 79) {
+        console.log(event.keyCode)
+        if (event.keyCode === 67 || event.keyCode === 76) {
+            document.getElementById('links-clip').click() // C|L
+        } else if (event.keyCode === 68 || event.keyCode === 77) {
+            document.getElementById('domains-clip').click() // D|M
+        } else if (event.keyCode === 84 || event.keyCode === 79) {
             const url = chrome.runtime.getURL('../html/options.html')
-            chrome.tabs.create({ active: true, url: url }).then() // O
-        } else if (event.keyCode === 75 || event.keyCode === 90) {
-            $('#keybinds-modal').modal('toggle') // K
+            chrome.tabs.create({ active: true, url: url }).then() // T|O
+        } else if (event.keyCode === 90 || event.keyCode === 75) {
+            $('#keybinds-modal').modal('toggle') // Z|K
         }
     }
 }
