@@ -68,7 +68,7 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 ## Firefox
 
 For development, you can and should load unpacked in Firefox as a temporary addon.
-This not remain after restarting your browser. It is also useful to keep data after removing an extension.
+This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
 
 1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Load temporary from: `about:debugging#/runtime/this-firefox`
