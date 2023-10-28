@@ -7,8 +7,8 @@
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/link-extractor)
 # Link Extractor
 
-Modern Chrome and Firefox Addon to easily extract all links/domains from a web page with optional filters.
-Feature packed with a link parser, copy to clipboard, keyboard shortcuts, automatic dark/light mode and much more...
+Modern Chrome and Firefox Addon to easily extract, parse, and open all links/domains from a web page with optional filters.
+Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
 *   [Install](#install)
 *   [Features](#features)
@@ -28,13 +28,14 @@ Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discus
 for any new features you would like to see implemented.
 
 *   Extract all Links and/or Domains
+*   Parse or open links from text or clipboard
 *   Copy all URLs or Domains to the clipboard
 *   Quick Filter URLs with a regular expression
 *   Quick Filter links by a saved regular expressions
-*   Parse and open links from text or clipboard
 *   Automatic Dark/Light mode based on browser setting
+*   Keyboard Shortcuts for Copying Links or Domains
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/fd2e2fe9-d896-42eb-80be-603f5230d36e)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/7807bbb5-ec14-4fae-85d8-e3252a460cff)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
