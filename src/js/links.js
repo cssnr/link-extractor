@@ -1,26 +1,45 @@
 // JS for links.html
 
 window.addEventListener('keydown', checkKey)
+document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
-chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
-    processLinks(links)
-})
+/**
+ * Links Init
+ * TODO: Review this function
+ * @function initLinks
+ */
+async function initLinks() {
+    if (urlParams.has('popup')) {
+        const links = await chrome.runtime.sendMessage({
+            msg: 'extract',
+        })
+        await processLinks(links)
+    } else if (tabId) {
+        chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
+            processLinks(links)
+        })
+    } else {
+        console.error('No Data to Process...')
+        alert('No Data to Process...')
+        window.close()
+    }
+}
 
 /**
  * Process Links
+ * TODO: Cleanup this function
  * @function processLinks
- * @param links
+ * @param {array} links
  */
 async function processLinks(links) {
-    // TODO: Cleanup this WHOLE function...
+    console.log('processLinks:', links)
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-    console.log(links)
 
     if (chrome.runtime.lastError) {
         alert(chrome.runtime.lastError)
@@ -80,8 +99,8 @@ async function processLinks(links) {
 /**
  * Update Table with URLs
  * @function addNodes
- * @param {Array} data
- * @param {String} elementId
+ * @param {array} data
+ * @param {string} elementId
  */
 function updateTable(data, elementId) {
     const tbody = document
@@ -100,6 +119,7 @@ function updateTable(data, elementId) {
  * Get base URL of link
  * @function getBaseURL
  * @param {string} link
+ * @return string
  */
 function getBaseURL(link) {
     const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
@@ -116,21 +136,21 @@ function getBaseURL(link) {
 /**
  * Keyboard Callback
  * @function checkKey
- * @param {onkeydown} event
+ * @param {KeyboardEvent} event
  */
 function checkKey(event) {
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
-        console.log(event.keyCode)
-        if (event.keyCode === 67 || event.keyCode === 76) {
-            document.getElementById('links-clip').click() // C|L
-        } else if (event.keyCode === 68 || event.keyCode === 77) {
-            document.getElementById('domains-clip').click() // D|M
-        } else if (event.keyCode === 84 || event.keyCode === 79) {
+        // console.log(event.code)
+        if (event.code === 'KeyC' || event.code === 'KeyL') {
+            document.getElementById('links-clip').click()
+        } else if (event.code === 'KeyD' || event.code === 'KeyM') {
+            document.getElementById('domains-clip').click()
+        } else if (event.code === 'KeyT' || event.code === 'KeyO') {
             const url = chrome.runtime.getURL('../html/options.html')
-            chrome.tabs.create({ active: true, url: url }).then() // T|O
-        } else if (event.keyCode === 90 || event.keyCode === 75) {
-            $('#keybinds-modal').modal('toggle') // Z|K
+            chrome.tabs.create({ active: true, url: url }).then()
+        } else if (event.code === 'KeyZ' || event.code === 'KeyK') {
+            $('#keybinds-modal').modal('toggle')
         }
     }
 }

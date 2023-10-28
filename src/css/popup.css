@@ -1,7 +1,8 @@
 body {
-    width: 280px;
+    width: 300px;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
     text-align: center;
 }

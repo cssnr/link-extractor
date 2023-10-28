@@ -44,7 +44,7 @@ async function initOptions() {
  */
 function deleteInputFilter(event) {
     event.preventDefault()
-    console.log(event)
+    console.log('deleteInputFilter:', event)
     const inputs = document
         .getElementById('filters-inputs')
         .getElementsByTagName('input').length
@@ -63,7 +63,7 @@ function deleteInputFilter(event) {
  */
 function addInputFilter(event) {
     event.preventDefault()
-    console.log(event)
+    console.log('addInputFilter:', event)
     const el = document.getElementById('filters-inputs')
     const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
     createFilterInput(next)
@@ -72,8 +72,8 @@ function addInputFilter(event) {
 /**
  * Add Form Input for a Filter
  * @function createFilterInput
- * @param {String} number
- * @param {String} value
+ * @param {string} number
+ * @param {string} value
  */
 function createFilterInput(number, value = '') {
     const el = document.getElementById('filters-inputs')
@@ -98,7 +98,7 @@ function createFilterInput(number, value = '') {
  */
 async function saveOptions(event) {
     event.preventDefault()
-    console.log('saveOptions')
+    console.log('saveOptions:', event)
     const options = {}
     const input = document.getElementById('reFlags')
     let flags = input.value.toLowerCase().replace(/\s+/gm, '').split('')
@@ -133,7 +133,7 @@ async function saveOptions(event) {
  */
 function resetForm(event) {
     event.preventDefault()
-    console.log(event)
+    console.log('resetForm:', event)
     const input = document.getElementById('reFlags')
     input.value = 'ig'
     input.focus()

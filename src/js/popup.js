@@ -8,9 +8,33 @@ filterInput.focus()
 const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 
-document.getElementById('filter-form').addEventListener('submit', popupClick)
 document.addEventListener('DOMContentLoaded', initPopup)
+document.getElementById('filter-form').addEventListener('submit', popupClick)
+document.getElementById('links-form').addEventListener('submit', linksForm)
+document.getElementById('links-text').addEventListener('input', updateLinks)
 
+// const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+// const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log(`popup.js: request.msg: ${request.msg}`)
+    console.log('request:', request)
+    console.log('sender:', sender)
+    if (request.msg === 'extract') {
+        const links = document.getElementById('links-text')
+        let resp = extractURLs(links.value)
+        console.log('resp:', resp)
+        sendResponse(resp)
+        window.close()
+    } else {
+        console.error('Unknown Request:', request)
+    }
+})
+
+/**
+ * Popup Action Init
+ * @function initOptions
+ */
 async function initPopup() {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     if (patterns?.length) {
@@ -26,8 +50,8 @@ async function initPopup() {
 /**
  * Add Form Input for a Filter
  * @function createFilterLink
- * @param {String} number
- * @param {String} value
+ * @param {string} number
+ * @param {string} value
  */
 function createFilterLink(number, value = '') {
     const ul = document.getElementById('filters-ul')
@@ -58,7 +82,7 @@ async function popupClick(event) {
     }
     if (event.target.id === 'btn-about') {
         const manifest = chrome.runtime.getManifest()
-        console.log(`url: ${manifest.homepage_url}`)
+        console.log(`manifest.homepage_url: ${manifest.homepage_url}`)
         await chrome.tabs.create({ active: true, url: manifest.homepage_url })
         window.close()
         return
@@ -90,4 +114,73 @@ async function popupClick(event) {
     console.log(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
     window.close()
+}
+
+/**
+ * Links Form Callback
+ * @function linksForm
+ * @param {SubmitEvent} event
+ */
+async function linksForm(event) {
+    event.preventDefault()
+    console.log('linksForm:', event)
+    const urls = extractURLs(event.target[0].value)
+    if (!urls.length) {
+        return console.error('No Links Parsed.')
+    }
+    if (event.submitter.id === 'parse-links') {
+        // let urls = event.target[0].value.split(/\r\n?|\n/g)
+        // urls = urls.map((string) => string.trim())
+        const url = new URL(chrome.runtime.getURL('../html/links.html'))
+        url.searchParams.set('popup', 'yes')
+        await chrome.tabs.create({ active: true, url: url.toString() })
+    } else if (event.submitter.id === 'open-links') {
+        openLinksInTabs(urls)
+        window.close()
+    } else {
+        console.error('Unknown event.submitter:', event.submitter)
+    }
+}
+
+/**
+ * Update Links Callback
+ * @function updateLinks
+ * @param {InputEvent} event
+ */
+function updateLinks(event) {
+    // console.log('updateLinks:', event)
+    const urls = extractURLs(event.target.value)
+    console.log(`urls.length: ${urls.length}`)
+    const parse = document.getElementById('parse-links')
+    const open = document.getElementById('open-links')
+    parse.textContent = `${parse.dataset.text} (${urls.length})`
+    open.textContent = `${open.dataset.text} (${urls.length})`
+    if (urls?.length > 0) {
+        parse.classList.remove('disabled')
+        open.classList.remove('disabled')
+        // const re = new RegExp('btn-[a-z]+-?[a-z]+', 'gi')
+    } else {
+        parse.classList.add('disabled')
+        open.classList.add('disabled')
+    }
+}
+
+/**
+ * Extract URLs from text
+ * @function extractURLs
+ * @param {string} text
+ * @return array
+ */
+function extractURLs(text) {
+    // let urls = ''
+    const urls = []
+    let urlmatcharr
+    const urlregex =
+        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
+    while ((urlmatcharr = urlregex.exec(text)) !== null) {
+        const match = urlmatcharr[0]
+        // urls += match + '\n'
+        urls.push(match)
+    }
+    return urls
 }

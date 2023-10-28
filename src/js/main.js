@@ -3,7 +3,7 @@
 const clipboard = new ClipboardJS('.clip')
 
 clipboard.on('success', function (event) {
-    console.info('event:', event)
+    console.info('clipboard.success:', event)
     if (event.trigger.id === 'links-clip') {
         showToast('Links Copied')
     } else if (event.trigger.id === 'domains-clip') {
@@ -14,19 +14,18 @@ clipboard.on('success', function (event) {
 })
 
 clipboard.on('error', function (event) {
-    console.error('event:', event)
+    console.log('clipboard.error:', event)
     showToast('Clipboard Copy Failed', 'warning')
 })
 
 /**
  * Show Bootstrap Toast
- * Requires: jQuery
+ * TODO: Remove jQuery Dependency
  * @function showToast
- * @param {String} message
- * @param {String} bsClass
+ * @param {string} message
+ * @param {string} bsClass
  */
 function showToast(message, bsClass = 'success') {
-    // TODO: Remove jQuery Dependency
     const toastEl = $(
         '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
             '    <div class="d-flex">\n' +
@@ -40,4 +39,17 @@ function showToast(message, bsClass = 'success') {
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
+}
+
+/**
+ * Open Links in Tabs
+ * @function openLinks
+ * @param {array} links
+ * @param {boolean} active
+ */
+function openLinksInTabs(links, active = true) {
+    console.log('openLinksInTabs:', links)
+    links.forEach(function (url) {
+        chrome.tabs.create({ active, url }).then()
+    })
 }

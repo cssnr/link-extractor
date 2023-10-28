@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener(onMessage)
  * @param {function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.log(`onMessage: ${message.action}`)
+    console.log(`onMessage: message.action: ${message.action}`)
     if (message.action === 'extract') {
         sendResponse(extractLinks())
     }
@@ -19,6 +19,7 @@ function onMessage(message, sender, sendResponse) {
 /**
  * Extract links
  * @function extractLinks
+ * @return array
  */
 function extractLinks() {
     console.log('extractLinks')
