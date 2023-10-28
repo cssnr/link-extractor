@@ -67,7 +67,7 @@ async function popupClick(event) {
     }
     if (event.target.id === 'btn-about') {
         const manifest = chrome.runtime.getManifest()
-        console.log(`url: ${manifest.homepage_url}`)
+        console.log(`manifest.homepage_url: ${manifest.homepage_url}`)
         await chrome.tabs.create({ active: true, url: manifest.homepage_url })
         window.close()
         return
@@ -111,7 +111,7 @@ function linksForm(event) {
     console.log('linksForm:', event)
     const urls = extractURLs(event.target[0].value)
     if (!urls.length) {
-        return
+        return console.error('No Links Parsed.')
     }
     if (event.submitter.id === 'parse-links') {
         // let urls = event.target[0].value.split(/\r\n?|\n/g)
@@ -120,7 +120,7 @@ function linksForm(event) {
     } else if (event.submitter.id === 'open-links') {
         openLinksInTabs(urls)
     } else {
-        console.error('Unknown submitter:', event.submitter)
+        return console.error('Unknown event.submitter:', event.submitter)
     }
     window.close()
 }
@@ -133,11 +133,16 @@ function linksForm(event) {
 function updateLinks(event) {
     console.log('updateLinks:', event)
     const urls = extractURLs(event.target.value)
-    console.log(urls.length)
-    document.getElementById(
-        'parse-links'
-    ).textContent = `Parse (${urls.length})`
-    document.getElementById('open-links').textContent = `Open (${urls.length})`
+    console.log(`urls.length: ${urls.length}`)
+    // const parse = document.getElementById('parse-links')
+    // parse.textContent = `${parse.dataset.text} (${urls.length})`
+    const open = document.getElementById('open-links')
+    open.textContent = `${open.dataset.text} (${urls.length})`
+    if (urls?.length > 0) {
+        open.classList.remove('disabled')
+    } else {
+        open.classList.add('disabled')
+    }
 }
 
 /**

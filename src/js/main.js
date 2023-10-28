@@ -3,7 +3,7 @@
 const clipboard = new ClipboardJS('.clip')
 
 clipboard.on('success', function (event) {
-    console.info('event:', event)
+    console.info('clipboard.success:', event)
     if (event.trigger.id === 'links-clip') {
         showToast('Links Copied')
     } else if (event.trigger.id === 'domains-clip') {
@@ -14,7 +14,7 @@ clipboard.on('success', function (event) {
 })
 
 clipboard.on('error', function (event) {
-    console.log('event:', event)
+    console.log('clipboard.error:', event)
     showToast('Clipboard Copy Failed', 'warning')
 })
 
@@ -41,6 +41,25 @@ function showToast(message, bsClass = 'success') {
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
 }
+
+// /**
+//  * Send Popup Alert
+//  * @function appendAlert
+//  * @param {string} message
+//  * @param {string} type
+//  */
+// function appendAlert(message, type = 'danger') {
+//     const wrapper = document.createElement('div')
+//     wrapper.innerHTML = [
+//         `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+//         `   <div>${message}</div>`,
+//         '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+//         '</div>',
+//     ].join('')
+//     const outer = document.getElementById('popup-alert')
+//     outer.innerHTML = ''
+//     outer.append(wrapper)
+// }
 
 /**
  * Open Links in Tabs

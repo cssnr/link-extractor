@@ -16,11 +16,11 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
  */
 async function processLinks(links) {
     // TODO: Cleanup this WHOLE function...
+    console.log('processLinks:', links)
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-    console.log(links)
 
     if (chrome.runtime.lastError) {
         alert(chrome.runtime.lastError)
