@@ -8,10 +8,10 @@ filterInput.focus()
 const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 
+document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', popupClick)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document.addEventListener('DOMContentLoaded', initPopup)
 
 // const tooltipTriggerList = document.querySelectorAll(
 //     '[data-bs-toggle="tooltip"]'
@@ -20,6 +20,25 @@ document.addEventListener('DOMContentLoaded', initPopup)
 //     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 // )
 
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log(`popup.js: request.msg: ${request.msg}`)
+    console.log('request:', request)
+    console.log('sender:', sender)
+    if (request.msg === 'extract') {
+        const links = document.getElementById('links-text')
+        let resp = extractURLs(links.value)
+        console.log('resp:', resp)
+        sendResponse(resp)
+        window.close()
+    } else {
+        console.error('Unknown Request:', request)
+    }
+})
+
+/**
+ * Popup Action Init
+ * @function initOptions
+ */
 async function initPopup() {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     if (patterns?.length) {
@@ -106,7 +125,7 @@ async function popupClick(event) {
  * @function linksForm
  * @param {SubmitEvent} event
  */
-function linksForm(event) {
+async function linksForm(event) {
     event.preventDefault()
     console.log('linksForm:', event)
     const urls = extractURLs(event.target[0].value)
@@ -116,13 +135,15 @@ function linksForm(event) {
     if (event.submitter.id === 'parse-links') {
         // let urls = event.target[0].value.split(/\r\n?|\n/g)
         // urls = urls.map((string) => string.trim())
-        return console.error('Not Implemented: parse-links')
+        const url = new URL(chrome.runtime.getURL('../html/links.html'))
+        url.searchParams.set('popup', 'yes')
+        await chrome.tabs.create({ active: true, url: url.toString() })
     } else if (event.submitter.id === 'open-links') {
         openLinksInTabs(urls)
+        window.close()
     } else {
-        return console.error('Unknown event.submitter:', event.submitter)
+        console.error('Unknown event.submitter:', event.submitter)
     }
-    window.close()
 }
 
 /**
@@ -134,13 +155,16 @@ function updateLinks(event) {
     console.log('updateLinks:', event)
     const urls = extractURLs(event.target.value)
     console.log(`urls.length: ${urls.length}`)
-    // const parse = document.getElementById('parse-links')
-    // parse.textContent = `${parse.dataset.text} (${urls.length})`
+    const parse = document.getElementById('parse-links')
     const open = document.getElementById('open-links')
+    parse.textContent = `${parse.dataset.text} (${urls.length})`
     open.textContent = `${open.dataset.text} (${urls.length})`
     if (urls?.length > 0) {
+        parse.classList.remove('disabled')
         open.classList.remove('disabled')
+        // const re = new RegExp('btn-[a-z]+-?[a-z]+', 'gi')
     } else {
+        parse.classList.add('disabled')
         open.classList.add('disabled')
     }
 }
