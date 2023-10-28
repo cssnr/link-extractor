@@ -48,14 +48,14 @@ Make sure to click`Save Options` when finished. For more information on regex, s
 
 # Development
 
-To build locally or run from source, clone the repository then run `npm install`.  
-You can then run the addon from the [src](src) directory as normal.  
+To build locally or run from source, clone the repository then run `npm install`.
+You can then run the addon from the [src](src) directory as normal.
 
-NPM is only used to manage dependency versions and copy files to `src/dist`.  
-Files are copied automatically after `npm install`. See [gulpfile.js](gulpfile.js) for more information.  
+NPM is only used to manage dependency versions and copy files to `src/dist`.
+Files are copied automatically after `npm install`. See [gulpfile.js](gulpfile.js) for more information.
 
-The extension is automatically built on new releases then automatically uploaded to that release.  
-See [build.yaml](.github/workflows/build.yaml) for more information.  
+The extension is automatically built on new releases then automatically uploaded to that release.
+See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Chrome
 
@@ -67,9 +67,10 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Firefox
 
-For development, you can and should load unpacked in Firefox as a temporary addon.  
+For development, you can and should load unpacked in Firefox as a temporary addon.
 This not remain after restarting your browser. It is also useful to keep data after removing an extension.
 
+1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Load temporary from: `about:debugging#/runtime/this-firefox`
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
@@ -78,6 +79,5 @@ This not remain after restarting your browser. It is also useful to keep data af
 > This method **does not** work on Release Firefox and is NOT recommended for development.
 > You must use [ESR](https://www.mozilla.org/en-CA/firefox/all/#product-desktop-esr), Development, or Nightly.
 
-1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
