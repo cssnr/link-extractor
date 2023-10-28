@@ -141,7 +141,7 @@ function getBaseURL(link) {
 function checkKey(event) {
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
-        console.log(event.code)
+        // console.log(event.code)
         if (event.code === 'KeyC' || event.code === 'KeyL') {
             document.getElementById('links-clip').click()
         } else if (event.code === 'KeyD' || event.code === 'KeyM') {
