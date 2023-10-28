@@ -12,7 +12,7 @@ chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
 /**
  * Process Links
  * @function processLinks
- * @param links
+ * @param {array} links
  */
 async function processLinks(links) {
     // TODO: Cleanup this WHOLE function...
@@ -80,8 +80,8 @@ async function processLinks(links) {
 /**
  * Update Table with URLs
  * @function addNodes
- * @param {Array} data
- * @param {String} elementId
+ * @param {array} data
+ * @param {string} elementId
  */
 function updateTable(data, elementId) {
     const tbody = document
@@ -100,6 +100,7 @@ function updateTable(data, elementId) {
  * Get base URL of link
  * @function getBaseURL
  * @param {string} link
+ * @return string
  */
 function getBaseURL(link) {
     const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
@@ -121,7 +122,7 @@ function getBaseURL(link) {
 function checkKey(event) {
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
-        console.log(event.keyCode)
+        // console.log(event.keyCode)
         if (event.keyCode === 67 || event.keyCode === 76) {
             document.getElementById('links-clip').click() // C|L
         } else if (event.keyCode === 68 || event.keyCode === 77) {

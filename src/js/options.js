@@ -72,8 +72,8 @@ function addInputFilter(event) {
 /**
  * Add Form Input for a Filter
  * @function createFilterInput
- * @param {String} number
- * @param {String} value
+ * @param {string} number
+ * @param {string} value
  */
 function createFilterInput(number, value = '') {
     const el = document.getElementById('filters-inputs')

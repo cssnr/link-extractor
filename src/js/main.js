@@ -14,7 +14,7 @@ clipboard.on('success', function (event) {
 })
 
 clipboard.on('error', function (event) {
-    console.error('event:', event)
+    console.log('event:', event)
     showToast('Clipboard Copy Failed', 'warning')
 })
 
@@ -22,8 +22,8 @@ clipboard.on('error', function (event) {
  * Show Bootstrap Toast
  * Requires: jQuery
  * @function showToast
- * @param {String} message
- * @param {String} bsClass
+ * @param {string} message
+ * @param {string} bsClass
  */
 function showToast(message, bsClass = 'success') {
     // TODO: Remove jQuery Dependency
@@ -40,4 +40,17 @@ function showToast(message, bsClass = 'success') {
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
+}
+
+/**
+ * Open Links in Tabs
+ * @function openLinks
+ * @param {array} links
+ * @param {boolean} active
+ */
+function openLinksInTabs(links, active = true) {
+    console.log('openLinksInTabs:', links)
+    links.forEach(function (url) {
+        chrome.tabs.create({ active, url }).then()
+    })
 }

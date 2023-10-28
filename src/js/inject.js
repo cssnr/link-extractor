@@ -19,6 +19,7 @@ function onMessage(message, sender, sendResponse) {
 /**
  * Extract links
  * @function extractLinks
+ * @return array
  */
 function extractLinks() {
     console.log('extractLinks')

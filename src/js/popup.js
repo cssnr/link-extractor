@@ -9,7 +9,16 @@ const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
 
 document.getElementById('filter-form').addEventListener('submit', popupClick)
+document.getElementById('links-form').addEventListener('submit', linksForm)
+document.getElementById('links-text').addEventListener('input', updateLinks)
 document.addEventListener('DOMContentLoaded', initPopup)
+
+// const tooltipTriggerList = document.querySelectorAll(
+//     '[data-bs-toggle="tooltip"]'
+// )
+// const tooltipList = [...tooltipTriggerList].map(
+//     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+// )
 
 async function initPopup() {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
@@ -26,8 +35,8 @@ async function initPopup() {
 /**
  * Add Form Input for a Filter
  * @function createFilterLink
- * @param {String} number
- * @param {String} value
+ * @param {string} number
+ * @param {string} value
  */
 function createFilterLink(number, value = '') {
     const ul = document.getElementById('filters-ul')
@@ -90,4 +99,63 @@ async function popupClick(event) {
     console.log(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
     window.close()
+}
+
+/**
+ * Links Form Callback
+ * @function linksForm
+ * @param {SubmitEvent} event
+ */
+function linksForm(event) {
+    event.preventDefault()
+    console.log('linksForm:', event)
+    const urls = extractURLs(event.target[0].value)
+    if (!urls.length) {
+        return
+    }
+    if (event.submitter.id === 'parse-links') {
+        // let urls = event.target[0].value.split(/\r\n?|\n/g)
+        // urls = urls.map((string) => string.trim())
+        return console.error('Not Implemented: parse-links')
+    } else if (event.submitter.id === 'open-links') {
+        openLinksInTabs(urls)
+    } else {
+        console.error('Unknown submitter:', event.submitter)
+    }
+    window.close()
+}
+
+/**
+ * Update Links Callback
+ * @function updateLinks
+ * @param {InputEvent} event
+ */
+function updateLinks(event) {
+    console.log('updateLinks:', event)
+    const urls = extractURLs(event.target.value)
+    console.log(urls.length)
+    document.getElementById(
+        'parse-links'
+    ).textContent = `Parse (${urls.length})`
+    document.getElementById('open-links').textContent = `Open (${urls.length})`
+}
+
+/**
+ * Extract URLs from text
+ * @function extractURLs
+ * @param {string} text
+ * @return array
+ */
+function extractURLs(text) {
+    // let urls = ''
+    const urls = []
+    let urlmatcharr
+    const urlregex =
+        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
+    while ((urlmatcharr = urlregex.exec(text)) !== null) {
+        const match = urlmatcharr[0]
+        // urls += match + '\n'
+        urls.push(match)
+    }
+    return urls
 }

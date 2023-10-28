@@ -11,7 +11,9 @@
 <div class="container-fluid p-3">
     <div class="d-grid g-2 gap-3">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-            <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">All Links</button>
+            <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">
+                All Links
+            </button>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Filters</button>
                 <ul id="filters-ul" class="dropdown-menu">
@@ -21,24 +23,36 @@
         </div>
         <form id="filter-form" class="my-0">
             <label for="filter-input" class="visually-hidden"></label>
-            <input id="filter-input" class="form-control" type="text" placeholder="Filter">
+            <input id="filter-input" class="form-control form-control-sm" type="text" placeholder="Filter">
 <!--            <div class="input-group mb-3">-->
 <!--                <input type="text" id="filter-input" class="form-control w-75" placeholder="Filter" aria-label="Filter">-->
 <!--                <input type="text" id="flags-input" class="form-control w-25" placeholder="Flags" aria-label="Flags">-->
 <!--            </div>-->
         </form>
         <button id="btn-domains" class="btn btn-primary btn-sm popup-click" type="button">Only Domains</button>
+        <hr class="my-0">
+        <form id="links-form" class="my-0">
+            <label for="links-text" class="form-label visually-hidden">Open Links</label>
+            <textarea id="links-text" class="form-control form-control-sm" rows="2" placeholder="Paste Links"></textarea>
+        </form>
+        <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic example">
+            <button type="submit" form="links-form" class="btn btn-outline-info" id="parse-links" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Parse All Links">Parse</button>
+            <button type="submit" form="links-form" class="btn btn-outline-info" id="open-links" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Parse & Open All Links">Open</button>
+        </div>
         <button class="btn btn-outline-info btn-sm popup-click" type="button" data-href="html/options.html">Options</button>
-        <p class="mb-0 text-center"><small>
+        <p class="mb-0 text-center small">
             <a id="btn-about" class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover popup-click" type="button" rel="noopener"
                data-href="">Link Extractor</a> <span id="version" class=""></span>
-        </small></p>
+        </p>
     </div>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
 <script type="text/javascript" src="../js/popup.js"></script>
 
 </body>
