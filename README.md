@@ -1,6 +1,6 @@
 [![Build](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/link-extractor?filename=src%2Fmanifest.json&logo=readdotcv&label=manifest)](https://github.com/cssnr/link-extractor/blob/master/src/manifest.json)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/link-extractor?filename=src%2Fmanifest.json&logo=json&label=manifest)](https://github.com/cssnr/link-extractor/blob/master/src/manifest.json)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
@@ -8,20 +8,24 @@
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/link-extractor)
 # Link Extractor
 
-Modern Chrome and Firefox Addon to easily extract, parse, and open all links/domains from a web page with optional filters.
+Modern Chrome and Firefox Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
 *   [Install](#install)
 *   [Features](#features)
 *   [Configuration](#configuration)
 *   [Development](#development)
-    -   [Chrome](#chrome)
-    -   [Firefox](#firefox)
+    -   [Chrome Setup](#chrome-setup)
+    -   [Firefox Setup](#firefox-setup)
 
 # Install
 
 *   Google Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 *   Mozilla Firefox: https://addons.mozilla.org/addon/link-extractor
+
+**Alternative.** You may also download the latest release from GitHub for
+[Chrome (link_extractor-chrome.crx)](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-chrome.crx) or
+[Firefox (link_extractor-firefox.xpi)](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-firefox.xpi).
 
 # Features
 
@@ -34,7 +38,7 @@ for any new features you would like to see implemented.
 *   Quick Filter URLs with a regular expression
 *   Quick Filter links by a saved regular expressions
 *   Automatic Dark/Light mode based on browser setting
-*   Keyboard Shortcuts for Copying Links or Domains
+*   Keyboard Shortcuts for Copying Links and/or Domains
 
 [![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/7807bbb5-ec14-4fae-85d8-e3252a460cff)](https://github.com/cssnr/link-extractor)
 
@@ -59,7 +63,7 @@ Files are copied automatically after `npm install`. See [gulpfile.js](gulpfile.j
 The extension is automatically built on new releases then automatically uploaded to that release.
 See [build.yaml](.github/workflows/build.yaml) for more information.
 
-## Chrome
+## Chrome Setup
 
 1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -67,7 +71,7 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-## Firefox
+## Firefox Setup
 
 For development, you can and should load unpacked in Firefox as a temporary addon.
 This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
