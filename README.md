@@ -23,14 +23,16 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 *   Google Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 *   Mozilla Firefox: https://addons.mozilla.org/addon/link-extractor
 
-**Alternative.** You may also download the latest release from GitHub for
-[Chrome (link_extractor-chrome.crx)](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-chrome.crx) or
-[Firefox (link_extractor-firefox.xpi)](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-firefox.xpi).
+You may also download the latest [Release](https://github.com/cssnr/link-extractor/releases) from GitHub for
+[Chrome](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-chrome.crx) or
+[Firefox](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-firefox.xpi).
 
 # Features
 
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
-for any new features you would like to see implemented.
+for any new features you would like to see implemented and if you find any problems, please 
+[Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
+
 
 *   Extract all Links and/or Domains
 *   Parse or open links from text or clipboard
@@ -65,6 +67,8 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Chrome Setup
 
+To install for normal use, visit: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
+
 1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Open Chrome, click the `3 dots` in the top right, click `Extensions`, click `Manage Extensions`.
@@ -73,17 +77,11 @@ See [build.yaml](.github/workflows/build.yaml) for more information.
 
 ## Firefox Setup
 
-For development, you can and should load unpacked in Firefox as a temporary addon.
-This will **not** remain after restarting Firefox. It is also useful to keep data after removing an extension.
+To install for normal use, visit: https://addons.mozilla.org/addon/link-extractor
+
+Firefox Temporary addon's will **not** remain after restarting Firefox, therefore;
+it is very useful to keep addon storage after uninstall/restart with `keepStorageOnUninstall`.
 
 1.  Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Load temporary from: `about:debugging#/runtime/this-firefox`
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
-
-> **Note**
->
-> This method **does not** work on Release Firefox and is NOT recommended for development.
-> You must use [ESR](https://www.mozilla.org/en-CA/firefox/all/#product-desktop-esr), Development, or Nightly.
-
-1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
-1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.

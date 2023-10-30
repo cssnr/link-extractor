@@ -1,6 +1,14 @@
 // JS for links.html
 
-window.addEventListener('keydown', checkKey)
+let keysPressed = {}
+window.onblur = function () {
+    keysPressed = {}
+}
+window.addEventListener('keydown', handleKeybinds)
+document.addEventListener('keyup', (event) => {
+    delete keysPressed[event.key]
+})
+
 document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -135,22 +143,51 @@ function getBaseURL(link) {
 
 /**
  * Keyboard Callback
- * @function checkKey
+ * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
-function checkKey(event) {
+function handleKeybinds(event) {
+    // console.log('handleKeybinds:', event)
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
-        // console.log(event.code)
-        if (event.code === 'KeyC' || event.code === 'KeyL') {
+        keysPressed[event.key] = true
+        // console.log('keysPressed:', keysPressed)
+        if (checkKey(event, ['KeyC', 'KeyL'])) {
             document.getElementById('links-clip').click()
-        } else if (event.code === 'KeyD' || event.code === 'KeyM') {
+        } else if (checkKey(event, ['KeyD', 'KeyM'])) {
             document.getElementById('domains-clip').click()
-        } else if (event.code === 'KeyT' || event.code === 'KeyO') {
+        } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
-        } else if (event.code === 'KeyZ' || event.code === 'KeyK') {
+        } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             $('#keybinds-modal').modal('toggle')
         }
     }
+}
+
+/**
+ * Keyboard Callback
+ * @function checkKey
+ * @param {KeyboardEvent} event
+ * @param {array} keys
+ * @return {boolean}
+ */
+function checkKey(event, keys) {
+    // console.log('checkKey:', event)
+    // console.log('keys:', keys)
+    // console.log(`event.key: ${event.key}`)
+    // console.log(`event.code: ${event.code}`)
+    // console.log('keysPressed:', keysPressed)
+    const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
+    let hasCtrlKey = false
+    ctrlKeys.forEach(function (key) {
+        if (keysPressed[key]) {
+            // console.log(keysPressed[key])
+            hasCtrlKey = true
+        }
+    })
+    if (hasCtrlKey) {
+        return false
+    }
+    return !!keys.includes(event.code)
 }
