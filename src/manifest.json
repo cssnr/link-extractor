@@ -1,8 +1,8 @@
 {
   "name": "Link Extractor",
-  "description": "Modern Chrome and Firefox Addon to extract all links from a web page with optional filters.",
+  "description": "Easily extract, parse, or open all links/domains from a site or text with optional filters.",
   "homepage_url": "https://github.com/cssnr/link-extractor",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "manifest_version": 3,
   "permissions": [
     "activeTab",
@@ -15,6 +15,7 @@
   },
   "action": {
     "default_popup": "html/popup.html",
+    "default_title": "Link Extractor",
     "default_icon": {
       "16": "images/logo16.png",
       "32": "images/logo32.png",

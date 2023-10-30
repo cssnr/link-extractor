@@ -13,8 +13,12 @@ document.getElementById('filter-form').addEventListener('submit', popupClick)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 
-// const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-// const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"]'
+)
+const tooltipList = [...tooltipTriggerList].map(
+    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+)
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log(`popup.js: request.msg: ${request.msg}`)
@@ -125,17 +129,19 @@ async function linksForm(event) {
     event.preventDefault()
     console.log('linksForm:', event)
     const urls = extractURLs(event.target[0].value)
-    if (!urls.length) {
-        return console.error('No Links Parsed.')
-    }
     if (event.submitter.id === 'parse-links') {
         // let urls = event.target[0].value.split(/\r\n?|\n/g)
         // urls = urls.map((string) => string.trim())
         const url = new URL(chrome.runtime.getURL('../html/links.html'))
         url.searchParams.set('popup', 'yes')
         await chrome.tabs.create({ active: true, url: url.toString() })
-    } else if (event.submitter.id === 'open-links') {
+    } else if (event.submitter.id === 'open-parsed') {
         openLinksInTabs(urls)
+        window.close()
+    } else if (event.submitter.id === 'open-lines') {
+        let text = event.target[0].value.split(/\r\n?|\n/g)
+        text = text.filter((str) => str !== '')
+        openLinksInTabs(text)
         window.close()
     } else {
         console.error('Unknown event.submitter:', event.submitter)
@@ -149,19 +155,34 @@ async function linksForm(event) {
  */
 function updateLinks(event) {
     // console.log('updateLinks:', event)
+    let text = event.target.value.split(/\r\n?|\n/g)
+    text = text.filter((str) => str !== '')
     const urls = extractURLs(event.target.value)
-    console.log(`urls.length: ${urls.length}`)
-    const parse = document.getElementById('parse-links')
-    const open = document.getElementById('open-links')
-    parse.textContent = `${parse.dataset.text} (${urls.length})`
-    open.textContent = `${open.dataset.text} (${urls.length})`
-    if (urls?.length > 0) {
-        parse.classList.remove('disabled')
-        open.classList.remove('disabled')
-        // const re = new RegExp('btn-[a-z]+-?[a-z]+', 'gi')
+    const parseLines = document.getElementsByClassName('parse-lines')
+    Array.from(parseLines).forEach(function (el) {
+        updateElements(el, text)
+    })
+    const parseLinks = document.getElementsByClassName('parse-links')
+    Array.from(parseLinks).forEach(function (el) {
+        updateElements(el, urls)
+    })
+}
+
+/**
+ * Update Elements based on Array lines
+ * @function extractURLs
+ * @param {HTMLElement} el
+ * @param {array} lines
+ */
+function updateElements(el, lines) {
+    // console.log('el:', el)
+    // console.log('lines:', lines)
+    if (lines?.length > 0) {
+        el.classList.remove('disabled')
+        el.textContent = `${el.dataset.text} (${lines.length})`
     } else {
-        parse.classList.add('disabled')
-        open.classList.add('disabled')
+        el.classList.add('disabled')
+        el.textContent = `${el.dataset.text}`
     }
 }
 
