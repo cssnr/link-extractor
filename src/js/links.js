@@ -105,6 +105,24 @@ async function processLinks(links) {
 }
 
 /**
+ * Get base URL of link
+ * @function getBaseURL
+ * @param {string} link
+ * @return string
+ */
+function getBaseURL(link) {
+    const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
+    const result = RegExp(reBaseURL).exec(link)
+    if (!result) {
+        return null
+    } else if (result[1]) {
+        return `${result[1]}/`
+    } else {
+        return `http://${result[2] || result[3]}/`
+    }
+}
+
+/**
  * Update Table with URLs
  * @function addNodes
  * @param {array} data
@@ -124,25 +142,7 @@ function updateTable(data, elementId) {
 }
 
 /**
- * Get base URL of link
- * @function getBaseURL
- * @param {string} link
- * @return string
- */
-function getBaseURL(link) {
-    const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
-    const result = RegExp(reBaseURL).exec(link)
-    if (!result) {
-        return null
-    } else if (result[1]) {
-        return `${result[1]}/`
-    } else {
-        return `http://${result[2] || result[3]}/`
-    }
-}
-
-/**
- * Keyboard Callback
+ * Keyboard Event Callback
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
@@ -151,7 +151,6 @@ function handleKeybinds(event) {
     const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
     if (!formElements.includes(event.target.tagName)) {
         keysPressed[event.key] = true
-        // console.log('keysPressed:', keysPressed)
         if (checkKey(event, ['KeyC', 'KeyL'])) {
             document.getElementById('links-clip').click()
         } else if (checkKey(event, ['KeyD', 'KeyM'])) {
@@ -166,23 +165,17 @@ function handleKeybinds(event) {
 }
 
 /**
- * Keyboard Callback
+ * Check Key Down Combination
  * @function checkKey
  * @param {KeyboardEvent} event
  * @param {array} keys
  * @return {boolean}
  */
 function checkKey(event, keys) {
-    // console.log('checkKey:', event)
-    // console.log('keys:', keys)
-    // console.log(`event.key: ${event.key}`)
-    // console.log(`event.code: ${event.code}`)
-    // console.log('keysPressed:', keysPressed)
     const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
     let hasCtrlKey = false
     ctrlKeys.forEach(function (key) {
         if (keysPressed[key]) {
-            // console.log(keysPressed[key])
             hasCtrlKey = true
         }
     })
