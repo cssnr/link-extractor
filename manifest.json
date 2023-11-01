@@ -6,6 +6,7 @@
   "manifest_version": 3,
   "permissions": [
     "activeTab",
+    "contextMenus",
     "scripting",
     "storage"
   ],
@@ -30,10 +31,5 @@
     "48": "images/logo48.png",
     "96": "images/logo96.png",
     "128": "images/logo128.png"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "link-extractor@cssnr.com"
-    }
   }
 }
