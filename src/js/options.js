@@ -1,5 +1,7 @@
 // JS for options.html
 
+import { createContextMenus } from './exports.js'
+
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
@@ -115,7 +117,15 @@ async function saveOptions(event) {
     }
     flagsInput.value = flags
     options.flags = flags
+
     options.contextMenu = document.getElementById('contextMenu').checked
+    if (options.contextMenu) {
+        console.log('Creating Context Menus')
+        createContextMenus()
+    } else {
+        console.log('Removing Context Menus')
+        chrome.contextMenus.removeAll()
+    }
     console.log(options)
 
     const patterns = []
@@ -125,6 +135,7 @@ async function saveOptions(event) {
         }
     })
     console.log(patterns)
+
     await chrome.storage.sync.set({ options, patterns })
     showToast('Options Saved')
 }
