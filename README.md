@@ -23,20 +23,15 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 
 # Install
 
-*   Google Chrome: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
-*   Mozilla Firefox: https://addons.mozilla.org/addon/link-extractor
-*   Microsoft Edge: https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej
-
-You may also download the latest [Release](https://github.com/cssnr/link-extractor/releases) from GitHub for
-[Chrome](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-chrome.crx) or
-[Firefox](https://github.com/cssnr/link-extractor/releases/latest/download/link_extractor-firefox.xpi).
+*   Google Chrome Web Store: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
+*   Mozilla Firefox Add-ons: https://addons.mozilla.org/addon/link-extractor
+*   Microsoft Edge Add-ons: https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej
 
 # Features
 
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
 for any new features you would like to see implemented and if you find any problems, please 
 [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
-
 
 *   Extract all Links and/or Domains
 *   Parse or open links from text or clipboard
@@ -60,20 +55,23 @@ Make sure to click`Save Options` when finished. For more information on regex, s
 
 # Development
 
-**See Below** for which commands do which, but the general workflow is as follows:
+**Quick Start**
 
-1.  Install node modules and copy libraries to the `src/dist` directory.
-1.  Generate the `manifest.json` for the desired browser in the `src/manifest.json` directory.
-
-Quick Start, build and run with web-ext.
+To run chrome or firefox with web-ext.
 ```shell
-npm install
+npm isntall
 npm run chrome
 npm run firefox
 ```
 
-For more information on web-ext [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
-To pass additional arguments to npm run commands use `--`.  
+To Load Unpacked/Temporary Add-on make a `manifest.json` with. 
+```shell
+npm run make-chrome
+npm run make-firefox
+```
+
+For more information on web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
+To pass additional arguments to an `npm run` command, use `--`.  
 Example: `npm run chrome -- --chromium-binary=...`  
 
 ## Building
