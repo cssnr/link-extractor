@@ -10,10 +10,26 @@ chrome.contextMenus.onClicked.addListener(async function (ctx) {
         await injectTab(null, null)
     } else if (ctx.menuItemId === 'domains') {
         await injectTab(null, true)
+    } else if (ctx.menuItemId.startsWith('filter-')) {
+        const { patterns } = await chrome.storage.sync.get(['patterns'])
+        const i = ctx.menuItemId.split('-')[1]
+        console.log(`i: ${i}`)
+        console.log(`filter: ${patterns[i]}`)
+        await injectTab(patterns[i], true)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
 })
+
+// chrome.storage.onChanged.addListener((changes, namespace) => {
+//     for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+//         console.log(
+//             `Storage key "${key}" in namespace "${namespace}" changed. Old/New:`,
+//             oldValue,
+//             newValue
+//         )
+//     }
+// })
 
 /**
  * Init Context Menus and Options
@@ -21,7 +37,6 @@ chrome.contextMenus.onClicked.addListener(async function (ctx) {
  */
 export async function onInstalled() {
     console.log('onInstalled')
-    // Set Default Options
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -30,6 +45,6 @@ export async function onInstalled() {
     patterns = patterns || []
     await chrome.storage.sync.set({ options, patterns })
     if (options.contextMenu) {
-        createContextMenus()
+        createContextMenus(patterns)
     }
 }

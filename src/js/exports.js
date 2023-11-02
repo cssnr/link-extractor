@@ -1,8 +1,14 @@
 // JS Exports
 
-export function createContextMenus() {
+/**
+ * Create Context Menus
+ * @function createContextMenus
+ * @param {Array} patterns
+ */
+export function createContextMenus(patterns) {
     const contexts = [
         // ['link', 'link', 'Copy Text to Clipboard'],
+        ['page', 'filters', 'Extract with Filter'],
         ['page', 'links', 'Extract All Links'],
         ['page', 'domains', 'Extract All Domains'],
     ]
@@ -13,10 +19,23 @@ export function createContextMenus() {
             id: context[1],
         })
     }
+    // const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.log('patterns', patterns)
+    if (patterns) {
+        patterns.forEach((pattern, i) => {
+            // console.log(`pattern: ${i}: ${pattern}`)
+            chrome.contextMenus.create({
+                parentId: 'filters',
+                title: pattern.substring(0, 24),
+                contexts: ['page'],
+                id: `filter-${i}`,
+            })
+        })
+    }
 }
 
 /**
- * Inject JS to Tab and Open links.html
+ * Inject inject.js to Tab and Open links.html
  * @function processLinks
  * @param {String} filter
  * @param {Boolean} domains

@@ -1,5 +1,10 @@
 // JS for links.html
 
+document.addEventListener('DOMContentLoaded', initLinks)
+
+const urlParams = new URLSearchParams(window.location.search)
+const tabId = parseInt(urlParams.get('tab'))
+
 let keysPressed = {}
 window.onblur = function () {
     keysPressed = {}
@@ -8,11 +13,6 @@ window.addEventListener('keydown', handleKeybinds)
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
-
-document.addEventListener('DOMContentLoaded', initLinks)
-
-const urlParams = new URLSearchParams(window.location.search)
-const tabId = parseInt(urlParams.get('tab'))
 
 /**
  * Links Init

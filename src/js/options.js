@@ -107,7 +107,7 @@ async function saveOptions(event) {
     let flags = flagsInput.value.toLowerCase().replace(/\s+/gm, '').split('')
     flags = new Set(flags)
     flags = [...flags].join('')
-    console.log(flags)
+    console.log(`flags: ${flags}`)
     for (const flag of flags) {
         if (!'dgimsuvy'.includes(flag)) {
             flagsInput.classList.add('is-invalid')
@@ -118,16 +118,6 @@ async function saveOptions(event) {
     flagsInput.value = flags
     options.flags = flags
 
-    options.contextMenu = document.getElementById('contextMenu').checked
-    if (options.contextMenu) {
-        console.log('Creating Context Menus')
-        createContextMenus()
-    } else {
-        console.log('Removing Context Menus')
-        chrome.contextMenus.removeAll()
-    }
-    console.log(options)
-
     const patterns = []
     Array.from(event.target.elements).forEach((input) => {
         if (input.classList.contains('filter-input') && input.value.trim()) {
@@ -135,6 +125,15 @@ async function saveOptions(event) {
         }
     })
     console.log(patterns)
+
+    options.contextMenu = document.getElementById('contextMenu').checked
+    if (options.contextMenu) {
+        chrome.contextMenus.removeAll()
+        createContextMenus(patterns)
+    } else {
+        chrome.contextMenus.removeAll()
+    }
+    console.log(options)
 
     await chrome.storage.sync.set({ options, patterns })
     showToast('Options Saved')
