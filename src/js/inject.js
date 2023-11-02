@@ -19,7 +19,7 @@ function onMessage(message, sender, sendResponse) {
 /**
  * Extract links
  * @function extractLinks
- * @return array
+ * @return {Array}
  */
 function extractLinks() {
     console.log('extractLinks')
