@@ -42,6 +42,9 @@ export async function onInstalled() {
         'patterns',
     ])
     options = options || { flags: 'ig', contextMenu: true }
+    if (options.contextMenu === undefined) {
+        options.contextMenu = true
+    }
     patterns = patterns || []
     await chrome.storage.sync.set({ options, patterns })
     if (options.contextMenu) {
