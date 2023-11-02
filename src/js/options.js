@@ -25,7 +25,7 @@ async function initOptions() {
     ])
     document.getElementById('reFlags').value =
         options !== undefined ? options.flags : 'ig'
-    // document.getElementById('ctxMenu').checked = options.ctxMenu
+    document.getElementById('contextMenu').checked = options.contextMenu
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {
@@ -115,7 +115,7 @@ async function saveOptions(event) {
     }
     flagsInput.value = flags
     options.flags = flags
-    // options.ctxMenu = document.getElementById('ctxMenu').checked
+    options.contextMenu = document.getElementById('contextMenu').checked
     console.log(options)
 
     const patterns = []

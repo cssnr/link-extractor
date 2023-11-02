@@ -6,9 +6,10 @@ chrome.runtime.onInstalled.addListener(onInstalled)
 
 chrome.contextMenus.onClicked.addListener(async function (ctx) {
     console.log('ctx:', ctx)
-    if (ctx.menuItemId === 'page') {
-        console.log(`ctx.pageUrl: ${ctx.pageUrl}`)
+    if (ctx.menuItemId === 'links') {
         await injectTab(null, null)
+    } else if (ctx.menuItemId === 'domains') {
+        await injectTab(null, true)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -20,28 +21,26 @@ chrome.contextMenus.onClicked.addListener(async function (ctx) {
  */
 export async function onInstalled() {
     console.log('onInstalled')
-
-    const contexts = [
-        // ['link', 'link', 'Copy Text to Clipboard'],
-        ['page', 'page', 'Extract All Links'],
-    ]
-    for (const context of contexts) {
-        chrome.contextMenus.create({
-            title: context[2],
-            contexts: [context[0]],
-            id: context[1],
-        })
+    // Set Default Options
+    let { options, patterns } = await chrome.storage.sync.get([
+        'options',
+        'patterns',
+    ])
+    options = options || { flags: 'ig', contextMenu: true }
+    patterns = patterns || []
+    await chrome.storage.sync.set({ options, patterns })
+    if (options.contextMenu) {
+        const contexts = [
+            // ['link', 'link', 'Copy Text to Clipboard'],
+            ['page', 'links', 'Extract All Links'],
+            ['page', 'domains', 'Extract All Domains'],
+        ]
+        for (const context of contexts) {
+            chrome.contextMenus.create({
+                title: context[2],
+                contexts: [context[0]],
+                id: context[1],
+            })
+        }
     }
-
-    // let { options, patterns } = await chrome.storage.sync.get([
-    //     'options',
-    //     'patterns',
-    // ])
-    // console.log(options)
-    // options = options || { flags: 'ig' }
-    // console.log(options)
-    // console.log(patterns)
-    // patterns = patterns || []
-    // console.log(patterns)
-    // await chrome.storage.sync.set({ options, patterns })
 }

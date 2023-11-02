@@ -25,15 +25,18 @@
                         <div id="flagsInvalid" class="invalid-feedback">
                             Invalid Regex Flags.
                         </div>
-                        <div id="reFlagsHelp" class="form-text">
+                        <div id="reFlagsHelp" class="form-text mb-3">
                             Flags used when using a filter.
                             <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
                                 Available Flags</a>.
                         </div>
-<!--                        <div class="form-check form-switch form-control-lg">-->
-<!--                            <input class="form-check-input" type="checkbox" role="switch" id="ctxMenu">-->
-<!--                            <label class="form-check-label" for="ctxMenu">Enable Right Click Context Menu</label>-->
-<!--                        </div>-->
+                        <div class="form-check form-switch form-control-lg">
+                            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
+                            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+                        </div>
+                        <div id="contextMenuHelp" class="form-text">
+                            Context Menu Requires a Browser Restart.
+                        </div>
                         <hr>
                         <span id="add-input" class="badge text-bg-primary" role="button">Add Filter</span>
                         <div id="filters-inputs" class="my-2"></div>
