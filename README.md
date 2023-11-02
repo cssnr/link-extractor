@@ -37,12 +37,13 @@ for any new features you would like to see implemented and if you find any probl
 [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
 
 *   Extract all Links and/or Domains
-*   Parse or open links from text or clipboard
+*   Parse or Open Links from text or clipboard
 *   Copy all URLs or Domains to the clipboard
 *   Quick Filter URLs with a regular expression
-*   Quick Filter links by a saved regular expressions
-*   Automatic Dark/Light mode based on browser setting
-*   Keyboard Shortcuts for Copying Links and/or Domains
+*   Quick Filter Links by a saved regular expressions
+*   Right-Click Context Menu can be disabled in options
+*   Automatic Dark/Light Mode based on browser setting
+*   Keyboard Shortcuts for copying Links and/or Domains
 
 [![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/7807bbb5-ec14-4fae-85d8-e3252a460cff)](https://github.com/cssnr/link-extractor)
 
