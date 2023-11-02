@@ -18,8 +18,8 @@ jobs:
       - name: "Release Version Check"
         if: ${{ github.event_name == 'release' }}
         run: |
-          export version="$(jq '.version' < manifest.json)"
-          if [ "${{ github.ref_name }}" != ${version} ];then
+          export version="$(jq '.version' < manifest.json | tr -d '"')"
+          if [ "${{ github.ref_name }}" != "${version}" ];then
             echo "Manifest Version ${version} does not match release tag ${{ github.ref_name }}"
             exit 1
           fi
