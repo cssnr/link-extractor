@@ -1,6 +1,6 @@
 // Background Service Worker JS
 
-import { injectTab } from './exports.js'
+import { createContextMenus, injectTab } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 
@@ -30,17 +30,6 @@ export async function onInstalled() {
     patterns = patterns || []
     await chrome.storage.sync.set({ options, patterns })
     if (options.contextMenu) {
-        const contexts = [
-            // ['link', 'link', 'Copy Text to Clipboard'],
-            ['page', 'links', 'Extract All Links'],
-            ['page', 'domains', 'Extract All Domains'],
-        ]
-        for (const context of contexts) {
-            chrome.contextMenus.create({
-                title: context[2],
-                contexts: [context[0]],
-                id: context[1],
-            })
-        }
+        createContextMenus()
     }
 }
