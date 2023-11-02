@@ -27,14 +27,28 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
 *   [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 
-All Chromium Browsers including **Edge**, **Opera**, **Brave**, and **Vivaldi** can download from the
+Tested on the following browsers:
+
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="48" height="48" /></a>
+<a href="https://addons.mozilla.org/addon/link-extractor">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="48" height="48" /></a>
+<a href="https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="48" height="48" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="48" height="48" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="48" height="48" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
+    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="48" height="48" /></a>
+
+All Chromium Based Browsers can install the extension from the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
 
 # Features
 
-Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
-for any new features you would like to see implemented and if you find any problems, please 
-[Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
+Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.   
+For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
 
 *   Extract all Links and/or Domains
 *   Parse or Open Links from text or clipboard
