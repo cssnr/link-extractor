@@ -1,0 +1,10 @@
+{
+  "background": {
+    "scripts": ["js/service-worker.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "link-extractor@cssnr.com"
+    }
+  }
+}

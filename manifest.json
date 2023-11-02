@@ -2,13 +2,17 @@
   "name": "Link Extractor",
   "description": "Easily extract, parse, or open all links/domains from a site or text with optional filters.",
   "homepage_url": "https://github.com/cssnr/link-extractor",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "manifest_version": 3,
   "permissions": [
     "activeTab",
+    "contextMenus",
     "scripting",
     "storage"
   ],
+  "background": {
+    "type": "module"
+  },
   "options_ui": {
     "page": "html/options.html",
     "open_in_tab": true
@@ -30,10 +34,5 @@
     "48": "images/logo48.png",
     "96": "images/logo96.png",
     "128": "images/logo128.png"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "link-extractor@cssnr.com"
-    }
   }
 }

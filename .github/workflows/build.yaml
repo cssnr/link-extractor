@@ -1,4 +1,4 @@
-name: build
+name: "Build"
 
 on:
   workflow_dispatch:
@@ -15,7 +15,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
-      - name: "Setup Node 18"
+      - name: "Release Version Check"
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          export version="$(jq '.version' < manifest.json)"
+          if [ "${{ github.ref_name }}" != ${version} ];then
+            echo "Manifest Version ${version} does not match release tag ${{ github.ref_name }}"
+            exit 1
+          fi
+
+      - name: "Setup Node"
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -23,57 +32,16 @@ jobs:
       - name: "Node Install"
         run: npm install
 
-      - name: "Parse Manifest"
-        id: manifest
-        run: |
-          # export version="$(jq '.version' < src/manifest.json)"
-          echo "version=$(jq '.version' < src/manifest.json)" >> "$GITHUB_OUTPUT"
-          export name="$(jq '.name' < src/manifest.json | tr '[:upper:]' '[:lower:]')"
-          echo "package_name=${name// /_}" >> "$GITHUB_OUTPUT"
+      - name: "Build All"
+        run: npm run build-all
 
-      - name: "Release Manifest Version Check"
-        if: ${{ github.event_name == 'release' }}
-        run: |
-          if [ "${{ github.ref_name }}" != ${{ steps.manifest.outputs.version }} ];then
-            echo "Manifest Version ${{ steps.manifest.outputs.version }} does not match release tag ${{ github.ref_name }}"
-            exit 1
-          fi
-
-      - name: "Build Firefox"
-        id: web-ext-build
-        uses: kewisch/action-web-ext@v1
-        with:
-          cmd: build
-          source: src
-          filename: "{name}-{version}.xpi"
-
-      - name: "Setup Chrome"
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: "1191187"
-
-      - name: "Build Chrome"
-        run: |
-          echo "${{ secrets.CHROME_PRIVATE_KEY }}" > .key
-          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-          ${{ steps.setup-chrome.outputs.chrome-path }} --version
-          ${{ steps.setup-chrome.outputs.chrome-path }} --pack-extension=./src --pack-extension-key=.key
-          mv src.crx web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.crx
-
-      - name: "Create ZIP Archive"
-        working-directory: "src"
-        run: |
-          ls -lAh .
-          zip "../web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.zip" -r .
-
-      - name: "Archive Artifacts"
+      - name: "Upload to Actions"
         uses: actions/upload-artifact@v3
         with:
           name: artifacts
           path: web-ext-artifacts/
 
-      - name: "Upload Artifacts to Release"
+      - name: "Upload to Release"
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -81,25 +49,3 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-
-#      - name: "Upload to Mozilla Addons"
-#        # https://github.com/marketplace/actions/firefox-addon-action
-#        if: ${{ github.event_name == 'release' }}
-#        uses: trmcnvn/firefox-addon@v1
-#        with:
-#          uuid: link-extractor@cssnr.com
-#          xpi: web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.xpi
-#          manifest: src/manifest.json
-#          api-key: ${{ secrets.FIREFOX_API_KEY }}
-#          api-secret: ${{ secrets.FIREFOX_API_SECRET }}
-#
-#      - name: "Upload to Chrome Web Store"
-#        # https://github.com/marketplace/actions/chrome-extension-upload-action
-#        if: ${{ github.event_name == 'release' }}
-#        uses: mnao305/chrome-extension-upload@v4.0.1
-#        with:
-#          file-path: web-ext-artifacts/${{ steps.manifest.outputs.package_name }}-${{ steps.manifest.outputs.version }}.zip
-#          extension-id: ifefifghpkllfibejafbakmflidjcjfp
-#          client-id: ${{ secrets.CLIENT_ID }}
-#          client-secret: ${{ secrets.CLIENT_SECRET }}
-#          refresh-token: ${{ secrets.REFRESH_TOKEN }}
