@@ -23,9 +23,9 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 
 # Install
 
-*   Google Chrome Web Store: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
-*   Mozilla Firefox Add-ons: https://addons.mozilla.org/addon/link-extractor
-*   Microsoft Edge Add-ons: https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej
+*   [Google Chrome Web Store](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+*   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
+*   [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 
 # Features
 
