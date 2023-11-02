@@ -29,11 +29,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: "Node Install"
-        run: npm install
-
       - name: "Build All"
-        run: npm run build-all
+        run: |
+          npm install
+          npm run build-all
 
       - name: "Upload to Actions"
         uses: actions/upload-artifact@v3

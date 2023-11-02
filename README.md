@@ -73,14 +73,14 @@ Make sure to click`Save Options` when finished. For more information on regex, s
 
 **Quick Start**
 
-To run chrome or firefox with web-ext.
+To install and run chrome or firefox with web-ext.
 ```shell
 npm isntall
 npm run chrome
 npm run firefox
 ```
 
-To Load Unpacked/Temporary Add-on make a `manifest.json` with. 
+To Load Unpacked/Temporary Add-on make a `manifest.json` first. 
 ```shell
 npm run make-chrome
 npm run make-firefox
@@ -93,7 +93,7 @@ Example: `npm run chrome -- --chromium-binary=...`
 ## Building
 
 Install the requirements and copy libraries into the `src/dist` directory by running `npm install`.
-See [gulpfile.js](gulpfile.js) for more information on postinstall.
+See [gulpfile.js](gulpfile.js) for more information on `postinstall`.
 ```shell
 npm install
 ```
@@ -115,7 +115,7 @@ For more information on building, see the scripts in the [package.json](package.
 
 ## Chrome Setup
 
-To install for production use: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
+To install for production: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
 1.  Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -125,7 +125,7 @@ To install for production use: https://chrome.google.com/webstore/detail/link-ex
 
 ## Firefox Setup
 
-To install for production use: https://addons.mozilla.org/addon/link-extractor
+To install for production: https://addons.mozilla.org/addon/link-extractor
 
 Note: Firefox Temporary addon's will **not** remain after restarting Firefox, therefore;
 it is very useful to keep addon storage after uninstall/restart with `keepStorageOnUninstall`.
@@ -135,3 +135,9 @@ it is very useful to keep addon storage after uninstall/restart with `keepStorag
 1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
+
+If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
+
+1.  Run `npm run build-firefox` then use `web-ext-artifacts/link_extractor-firefox-0.1.0.zip`.
+1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
+1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
