@@ -27,6 +27,9 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
 *   [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 
+All Chromium Browsers including **Edge**, **Opera**, **Brave**, and **Vivaldi** can download from the
+[Chrome Web Store](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
+
 # Features
 
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
