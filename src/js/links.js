@@ -30,7 +30,7 @@ async function initLinks() {
             processLinks(links)
         })
     } else {
-        console.error('No Data to Process...')
+        console.log('No Data to Process...')
         alert('No Data to Process...')
         window.close()
     }
@@ -40,7 +40,7 @@ async function initLinks() {
  * Process Links
  * TODO: Cleanup this function
  * @function processLinks
- * @param {array} links
+ * @param {Array} links
  */
 async function processLinks(links) {
     console.log('processLinks:', links)
@@ -107,8 +107,8 @@ async function processLinks(links) {
 /**
  * Get base URL of link
  * @function getBaseURL
- * @param {string} link
- * @return string
+ * @param {String} link
+ * @return {String}
  */
 function getBaseURL(link) {
     const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
@@ -125,8 +125,8 @@ function getBaseURL(link) {
 /**
  * Update Table with URLs
  * @function addNodes
- * @param {array} data
- * @param {string} elementId
+ * @param {Array} data
+ * @param {String} elementId
  */
 function updateTable(data, elementId) {
     const tbody = document
@@ -168,8 +168,8 @@ function handleKeybinds(event) {
  * Check Key Down Combination
  * @function checkKey
  * @param {KeyboardEvent} event
- * @param {array} keys
- * @return {boolean}
+ * @param {Array} keys
+ * @return {Boolean}
  */
 function checkKey(event, keys) {
     const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']

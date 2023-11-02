@@ -25,6 +25,7 @@ async function initOptions() {
     ])
     document.getElementById('reFlags').value =
         options !== undefined ? options.flags : 'ig'
+    // document.getElementById('ctxMenu').checked = options.ctxMenu
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {
@@ -72,8 +73,8 @@ function addInputFilter(event) {
 /**
  * Add Form Input for a Filter
  * @function createFilterInput
- * @param {string} number
- * @param {string} value
+ * @param {String} number
+ * @param {String} value
  */
 function createFilterInput(number, value = '') {
     const el = document.getElementById('filters-inputs')
@@ -100,20 +101,22 @@ async function saveOptions(event) {
     event.preventDefault()
     console.log('saveOptions:', event)
     const options = {}
-    const input = document.getElementById('reFlags')
-    let flags = input.value.toLowerCase().replace(/\s+/gm, '').split('')
+    const flagsInput = document.getElementById('reFlags')
+    let flags = flagsInput.value.toLowerCase().replace(/\s+/gm, '').split('')
     flags = new Set(flags)
     flags = [...flags].join('')
     console.log(flags)
     for (const flag of flags) {
         if (!'dgimsuvy'.includes(flag)) {
-            input.classList.add('is-invalid')
+            flagsInput.classList.add('is-invalid')
             showToast(`Invalid Regex Flag: ${flag}`, 'danger')
             return
         }
     }
+    flagsInput.value = flags
     options.flags = flags
-    input.value = flags
+    // options.ctxMenu = document.getElementById('ctxMenu').checked
+    console.log(options)
 
     const patterns = []
     Array.from(event.target.elements).forEach((input) => {
@@ -122,7 +125,7 @@ async function saveOptions(event) {
         }
     })
     console.log(patterns)
-    await chrome.storage.sync.set({ options: options, patterns: patterns })
+    await chrome.storage.sync.set({ options, patterns })
     showToast('Options Saved')
 }
 

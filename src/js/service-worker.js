@@ -1,6 +1,26 @@
 // Background Service Worker JS
 
-chrome.runtime.onInstalled.addListener(async function () {
+import { injectTab } from './exports.js'
+
+chrome.runtime.onInstalled.addListener(onInstalled)
+
+chrome.contextMenus.onClicked.addListener(async function (ctx) {
+    console.log('ctx:', ctx)
+    if (ctx.menuItemId === 'page') {
+        console.log(`ctx.pageUrl: ${ctx.pageUrl}`)
+        await injectTab(null, null)
+    } else {
+        console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
+    }
+})
+
+/**
+ * Init Context Menus and Options
+ * @function onInstalled
+ */
+export async function onInstalled() {
+    console.log('onInstalled')
+
     const contexts = [
         // ['link', 'link', 'Copy Text to Clipboard'],
         ['page', 'page', 'Extract All Links'],
@@ -12,30 +32,16 @@ chrome.runtime.onInstalled.addListener(async function () {
             id: context[1],
         })
     }
-})
 
-chrome.contextMenus.onClicked.addListener(async function (ctx) {
-    console.log('ctx:', ctx)
-    if (ctx.menuItemId === 'page') {
-        console.log(`ctx.pageUrl: ${ctx.pageUrl}`)
-        await initLinks()
-    } else {
-        console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
-    }
-})
-
-async function initLinks() {
-    // TODO: Update this function and integrate into popup.js
-    const url = new URL(chrome.runtime.getURL('../html/links.html'))
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    console.log(`tab.id: ${tab.id}`)
-    url.searchParams.set('tab', tab.id.toString())
-
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['/js/inject.js'],
-    })
-
-    console.log(`url: ${url.toString()}`)
-    await chrome.tabs.create({ active: true, url: url.toString() })
+    // let { options, patterns } = await chrome.storage.sync.get([
+    //     'options',
+    //     'patterns',
+    // ])
+    // console.log(options)
+    // options = options || { flags: 'ig' }
+    // console.log(options)
+    // console.log(patterns)
+    // patterns = patterns || []
+    // console.log(patterns)
+    // await chrome.storage.sync.set({ options, patterns })
 }

@@ -1,17 +1,17 @@
 // JS for popup.html
 
-jQuery('html').hide().fadeIn('slow')
+import { injectTab } from './exports.js'
 
 const filterInput = document.getElementById('filter-input')
 filterInput.focus()
-
-const buttons = document.querySelectorAll('.popup-click')
-buttons.forEach((el) => el.addEventListener('click', popupClick))
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', popupClick)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+
+const buttons = document.querySelectorAll('.popup-click')
+buttons.forEach((el) => el.addEventListener('click', popupClick))
 
 const tooltipTriggerList = document.querySelectorAll(
     '[data-bs-toggle="tooltip"]'
@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse(resp)
         window.close()
     } else {
-        console.error('Unknown Request:', request)
+        console.error('Unknown request:', request)
     }
 })
 
@@ -54,8 +54,8 @@ async function initPopup() {
 /**
  * Add Form Input for a Filter
  * @function createFilterLink
- * @param {string} number
- * @param {string} value
+ * @param {String} number
+ * @param {String} value
  */
 function createFilterLink(number, value = '') {
     const ul = document.getElementById('filters-ul')
@@ -78,45 +78,33 @@ async function popupClick(event) {
     event.preventDefault()
     console.log(event)
     if (event.target.dataset.href) {
-        const url = chrome.runtime.getURL(event.target.dataset.href)
+        let url
+        if (event.target.dataset.href.startsWith('http')) {
+            url = event.target.dataset.href
+        } else {
+            url = chrome.runtime.getURL(event.target.dataset.href)
+        }
         console.log(`url: ${url}`)
         await chrome.tabs.create({ active: true, url })
-        window.close()
-        return
+        return window.close()
     }
     if (event.target.id === 'btn-about') {
         const manifest = chrome.runtime.getManifest()
         console.log(`manifest.homepage_url: ${manifest.homepage_url}`)
         await chrome.tabs.create({ active: true, url: manifest.homepage_url })
-        window.close()
-        return
+        return window.close()
     }
 
-    const url = new URL(chrome.runtime.getURL('../html/links.html'))
-    if (event.target.id === 'btn-domains') {
-        console.log('domains: yes')
-        url.searchParams.set('domains', 'yes')
-    }
-
+    let filter
     if (event.target.classList.contains('dropdown-item')) {
         console.log(`event.target.textContent: ${event.target.textContent}`)
-        url.searchParams.set('filter', event.target.textContent)
+        filter = event.target.textContent
     } else if (filterInput.value) {
         console.log(`filterInput.value: ${filterInput.value}`)
-        url.searchParams.set('filter', filterInput.value)
+        filter = filterInput.value
     }
-
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    console.log(`tab.id: ${tab.id}`)
-    url.searchParams.set('tab', tab.id.toString())
-
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['/js/inject.js'],
-    })
-
-    console.log(`url: ${url.toString()}`)
-    await chrome.tabs.create({ active: true, url: url.toString() })
+    const domains = event.target.id === 'btn-domains'
+    await injectTab(filter, domains)
     window.close()
 }
 
@@ -149,6 +137,19 @@ async function linksForm(event) {
 }
 
 /**
+ * Open Links in Tabs
+ * @function openLinks
+ * @param {Array} links
+ * @param {Boolean} active
+ */
+function openLinksInTabs(links, active = true) {
+    console.log('openLinksInTabs:', links)
+    links.forEach(function (url) {
+        chrome.tabs.create({ active, url }).then()
+    })
+}
+
+/**
  * Update Links Callback
  * @function updateLinks
  * @param {InputEvent} event
@@ -172,7 +173,7 @@ function updateLinks(event) {
  * Update Elements based on Array lines
  * @function extractURLs
  * @param {HTMLElement} el
- * @param {array} lines
+ * @param {Array} lines
  */
 function updateElements(el, lines) {
     // console.log('el:', el)
@@ -189,8 +190,8 @@ function updateElements(el, lines) {
 /**
  * Extract URLs from text
  * @function extractURLs
- * @param {string} text
- * @return array
+ * @param {String} text
+ * @return {Array}
  */
 function extractURLs(text) {
     // let urls = ''

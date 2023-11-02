@@ -22,8 +22,8 @@ clipboard.on('error', function (event) {
  * Show Bootstrap Toast
  * TODO: Remove jQuery Dependency
  * @function showToast
- * @param {string} message
- * @param {string} bsClass
+ * @param {String} message
+ * @param {String} bsClass
  */
 function showToast(message, bsClass = 'success') {
     const toastEl = $(
@@ -39,17 +39,4 @@ function showToast(message, bsClass = 'success') {
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
-}
-
-/**
- * Open Links in Tabs
- * @function openLinks
- * @param {array} links
- * @param {boolean} active
- */
-function openLinksInTabs(links, active = true) {
-    console.log('openLinksInTabs:', links)
-    links.forEach(function (url) {
-        chrome.tabs.create({ active, url }).then()
-    })
 }

@@ -5,9 +5,9 @@ chrome.runtime.onMessage.addListener(onMessage)
 /**
  * Handle Messages
  * @function onMessage
- * @param {object} message
- * @param {chrome.runtime.MessageSender} sender
- * @param {function} sendResponse
+ * @param {Object} message
+ * @param {MessageSender} sender
+ * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
     console.log(`onMessage: message.action: ${message.action}`)
