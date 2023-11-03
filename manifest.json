@@ -5,12 +5,21 @@
   "author": "Shane",
   "version": "0.1.2",
   "manifest_version": 3,
-  "permissions": [
-    "activeTab",
-    "contextMenus",
-    "scripting",
-    "storage"
-  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Show Main Popup Action"
+    },
+    "extract": {
+      "suggested_key": {
+        "default": "Alt+Shift+X"
+      },
+      "description": "Extract Links from Tab"
+    }
+  },
+  "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
   "background": {
     "type": "module"
   },

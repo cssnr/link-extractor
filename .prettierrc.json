@@ -9,6 +9,12 @@
       "options": {
         "singleQuote": false
       }
+    },
+    {
+      "files": ["**/*.json"],
+      "options": {
+        "tabWidth": 2
+      }
     }
   ]
 }

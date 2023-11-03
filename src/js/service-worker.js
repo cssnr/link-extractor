@@ -6,6 +6,8 @@ chrome.runtime.onInstalled.addListener(onInstalled)
 
 chrome.contextMenus.onClicked.addListener(onClicked)
 
+chrome.commands.onCommand.addListener(onCommand)
+
 // chrome.storage.onChanged.addListener((changes, namespace) => {
 //     for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
 //         console.log(
@@ -60,5 +62,19 @@ async function onClicked(ctx) {
         await injectTab(patterns[i], true)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
+    }
+}
+
+/**
+ * On Command Callback
+ * @function onCommand
+ * @param {String} command
+ */
+async function onCommand(command) {
+    console.log(`onCommand: command: ${command}`)
+    if (command === 'extract') {
+        await injectTab(null, null)
+    } else {
+        console.error(`Unknown command: ${command}`)
     }
 }
