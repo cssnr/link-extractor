@@ -18,8 +18,6 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Building](#building)
-    -   [Chrome Setup](#chrome-setup)
-    -   [Firefox Setup](#firefox-setup)
 
 # Install
 
@@ -48,16 +46,15 @@ All Chromium Based Browsers can install the extension from the
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.   
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
 
-*   Extract all Links and/or Domains
-*   Parse or Open Links from text or clipboard
-*   Copy all URLs or Domains to the clipboard
-*   Quick Filter URLs with a regular expression
-*   Quick Filter Links by a saved regular expressions
-*   Right-Click Context Menu can be disabled in options
+*   Extract Links and/or Domains from Any Site
+*   Parse Links from text/clipboard or open in tabs
+*   Quick Filter Links with a regular expression
+*   Quick Filter Links with saved regular expressions
+*   Right-Click Context Menu which can be disabled in options
+*   Keyboard Shortcuts to activate addon and copy links/domains
 *   Automatic Dark/Light Mode based on browser setting
-*   Keyboard Shortcuts for copying Links and/or Domains
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/7807bbb5-ec14-4fae-85d8-e3252a460cff)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/b9e7a09f-ed07-40c0-84e5-8efeb4fbd7f4)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
@@ -82,8 +79,8 @@ npm run firefox
 
 To Load Unpacked/Temporary Add-on make a `manifest.json` first. 
 ```shell
-npm run make-chrome
-npm run make-firefox
+npm run manifest:chrome
+npm run manifest:firefox
 ```
 
 For more information on web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
@@ -100,15 +97,15 @@ npm install
 
 To load unpacked or temporary addon from the [src](src) folder, you must generate the `src/manifest.json` for the desired browser.
 ```shell
-npm run make-chrome
-npm run make-firefox
+npm run manifest:chrome
+npm run manifest:firefox
 ```
 
 If you would like to create a `.zip` archive of the [src](src) directory for the desired browser.
 ```shell
-npm run build-chrome
-npm run build-firefox
-npm run build-all
+npm run build
+npm run build:chrome
+npm run build:firefox
 ```
 
 For more information on building, see the scripts in the [package.json](package.json) file.
@@ -138,6 +135,6 @@ it is very useful to keep addon storage after uninstall/restart with `keepStorag
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 
-1.  Run `npm run build-firefox` then use `web-ext-artifacts/link_extractor-firefox-0.1.0.zip`.
+1.  Run `npm run build:firefox` then use `web-ext-artifacts/link_extractor-firefox-0.1.0.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.

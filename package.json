@@ -2,13 +2,13 @@
   "scripts": {
     "postinstall": "npx gulp",
     "lint": "npx eslint src/js",
-    "chrome": "npm run make-chrome && web-ext run --source-dir ./src/ --target=chromium",
-    "firefox": "npm run make-firefox && web-ext run --source-dir ./src/",
-    "make-chrome": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-chrome.json",
-    "make-firefox": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-firefox.json",
-    "build-chrome": "npm run make-chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
-    "build-firefox": "npm run make-firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
-    "build-all": "npm run build-chrome && npm run build-firefox"
+    "chrome": "npm run manifest:chrome && web-ext run --source-dir ./src/ --target=chromium",
+    "firefox": "npm run manifest:firefox && web-ext run --source-dir ./src/",
+    "manifest:chrome": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-chrome.json",
+    "manifest:firefox": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-firefox.json",
+    "build:chrome": "npm run manifest:chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
+    "build:firefox": "npm run manifest:firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
+    "build": "npm run build:chrome && npm run build:firefox"
   },
   "dependencies": {
     "bootstrap": "^5.3.2",

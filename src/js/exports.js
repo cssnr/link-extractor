@@ -6,18 +6,29 @@
  * @param {Array} patterns
  */
 export function createContextMenus(patterns) {
+    const ctx = ['page', 'link', 'image', 'selection']
     const contexts = [
         // ['link', 'link', 'Copy Text to Clipboard'],
-        ['page', 'filters', 'Extract with Filter'],
-        ['page', 'links', 'Extract All Links'],
-        ['page', 'domains', 'Extract All Domains'],
+        [ctx, 'filters', 'Extract with Filter'],
+        [ctx, 'links', 'Extract All Links'],
+        [ctx, 'domains', 'Extract All Domains'],
+        [ctx, 'separator', 'separator-1'],
+        [ctx, 'options', 'Open Options'],
     ]
     for (const context of contexts) {
-        chrome.contextMenus.create({
-            title: context[2],
-            contexts: [context[0]],
-            id: context[1],
-        })
+        if (context[1] === 'separator') {
+            chrome.contextMenus.create({
+                type: context[1],
+                contexts: context[0],
+                id: context[2],
+            })
+        } else {
+            chrome.contextMenus.create({
+                title: context[2],
+                contexts: context[0],
+                id: context[1],
+            })
+        }
     }
     // const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.log('patterns', patterns)
@@ -27,7 +38,7 @@ export function createContextMenus(patterns) {
             chrome.contextMenus.create({
                 parentId: 'filters',
                 title: pattern.substring(0, 24),
-                contexts: ['page'],
+                contexts: [ctx],
                 id: `filter-${i}`,
             })
         })
