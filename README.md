@@ -54,7 +54,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Keyboard Shortcuts to activate addon and copy links/domains
 *   Automatic Dark/Light Mode based on browser setting
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/7807bbb5-ec14-4fae-85d8-e3252a460cff)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/b9e7a09f-ed07-40c0-84e5-8efeb4fbd7f4)](https://github.com/cssnr/link-extractor)
 
 # Configuration
 
@@ -110,7 +110,7 @@ npm run build:firefox
 
 For more information on building, see the scripts in the [package.json](package.json) file.
 
-### Chrome Setup
+## Chrome Setup
 
 To install for production: https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp
 
@@ -120,7 +120,7 @@ To install for production: https://chrome.google.com/webstore/detail/link-extrac
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-### Firefox Setup
+## Firefox Setup
 
 To install for production: https://addons.mozilla.org/addon/link-extractor
 
