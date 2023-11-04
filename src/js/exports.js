@@ -34,11 +34,11 @@ export function createContextMenus(patterns) {
     // console.log('patterns', patterns)
     if (patterns) {
         patterns.forEach((pattern, i) => {
-            // console.log(`pattern: ${i}: ${pattern}`)
+            console.log(`pattern: ${i}: ${pattern}`)
             chrome.contextMenus.create({
                 parentId: 'filters',
                 title: pattern.substring(0, 24),
-                contexts: [ctx],
+                contexts: ctx,
                 id: `filter-${i}`,
             })
         })
