@@ -8,7 +8,7 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Alt+Shift+S"
+        "default": "Alt+Shift+A"
       },
       "description": "Show Main Popup Action"
     },
