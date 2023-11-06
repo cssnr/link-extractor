@@ -11,6 +11,8 @@
 Modern Chrome and Firefox Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
+Website: https://link-extractor.cssnr.com/
+
 *   [Install](#install)
 *   [Features](#features)
 *   [Configuration](#configuration)
