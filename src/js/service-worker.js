@@ -37,7 +37,9 @@ async function onInstalled() {
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
-    chrome.runtime.setUninstallURL('https://form.jotform.com/233061684896063')
+    chrome.runtime.setUninstallURL(
+        'https://link-extractor.cssnr.com/uninstall/'
+    )
 }
 
 /**
