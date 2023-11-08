@@ -41,30 +41,27 @@ function extractLinks() {
  * @return {Array}
  */
 function extractSelection() {
-    console.log('gatherLinks')
-    const result = new Set()
+    console.log('extractSelection')
+    const results = new Set()
     const selection = window.getSelection()
     console.log(selection)
     if (selection?.type !== 'Range') {
+        console.error('No selection or wrong selection.type')
         return null
     }
-
-    for (let ri = 0; ri < selection.rangeCount; ri++) {
-        const ancestor = selection.getRangeAt(ri).commonAncestorContainer
+    for (let i = 0; i < selection.rangeCount; i++) {
+        const ancestor = selection.getRangeAt(i).commonAncestorContainer
         if (ancestor.nodeName === '#text') {
             continue
         }
         ancestor.querySelectorAll('a').forEach((node) => {
-            if (
-                !selection.containsNode(node, true) ||
-                node.href === '' ||
-                result.has(node.href)
-            ) {
+            console.log('node:', node)
+            if (!selection.containsNode(node, true) || !node.href) {
                 return
             }
-            result.add(node.href)
+            results.add(node.href)
         })
     }
-    console.log(result)
-    return Array.from(result)
+    console.log(results)
+    return Array.from(results)
 }

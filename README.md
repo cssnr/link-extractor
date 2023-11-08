@@ -46,6 +46,7 @@ Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discus
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
 
 *   Extract All Links and Domains from Any Site
+*   Extract Links from Selected Text on any Site
 *   Extract Links from Clipboard or Any Text
 *   Open Multiple Links in Tabs from Text
 *   Quick Filter Links with a Regular Expression

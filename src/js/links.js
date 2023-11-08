@@ -24,7 +24,7 @@ async function initLinks() {
         const links = await chrome.runtime.sendMessage({
             msg: 'extract',
         })
-        console.log('popup: links:', links)
+        console.log('popup:', links)
     } else if (urlParams.has('selection')) {
         chrome.tabs.sendMessage(tabId, { action: 'selection' }, (links) => {
             processLinks(links)
