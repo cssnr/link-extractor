@@ -56,7 +56,7 @@ async function onClicked(ctx) {
         console.log(`injectTab: filter-${i}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         console.log(`filter: ${patterns[i]}`)
-        await injectTab(patterns[i], true, null)
+        await injectTab(patterns[i], null, null)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
