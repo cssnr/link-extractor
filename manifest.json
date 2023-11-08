@@ -1,9 +1,9 @@
 {
   "name": "Link Extractor",
   "description": "Easily extract, parse, or open all links/domains from a site or text with optional filters.",
-  "homepage_url": "https://github.com/cssnr/link-extractor",
+  "homepage_url": "https://link-extractor.cssnr.com/",
   "author": "Shane",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "manifest_version": 3,
   "commands": {
     "_execute_action": {

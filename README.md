@@ -1,15 +1,17 @@
-[![Build](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/link-extractor?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/link-extractor/blob/master/manifest.json)
-[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
-[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-[![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white&label=google%20users)](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/link-extractor)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/link-extractor?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/link-extractor/blob/master/manifest.json)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
+[![Build](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 # Link Extractor
 
 Modern Chrome and Firefox Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
+
+Website: https://link-extractor.cssnr.com/
 
 *   [Install](#install)
 *   [Features](#features)
@@ -22,18 +24,18 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 *   [Google Chrome Web Store](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
 
-<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="48" height="48" /></a>
-<a href="https://addons.mozilla.org/addon/link-extractor">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="48" height="48" /></a>
-<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="48" height="48" /></a>
-<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="48" height="48" /></a>
-<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="48" height="48" /></a>
-<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp">
-    <img src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="48" height="48" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp" target="_blank">
+    <img alt="Chrome" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="42" height="42" /></a>
+<a href="https://addons.mozilla.org/addon/link-extractor" target="_blank">
+    <img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp" target="_blank">
+    <img alt="Edge" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp" target="_blank">
+    <img alt="Opera" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp" target="_blank">
+    <img alt="Brave" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="42" height="42" /></a>
+<a href="https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp" target="_blank">
+    <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
   
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
@@ -43,13 +45,14 @@ All **Chromium** Based Browsers can install the extension from the
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.   
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
 
-*   Extract Links and/or Domains from Any Site
-*   Parse Links from text/clipboard or open in tabs
-*   Quick Filter Links with a regular expression
-*   Quick Filter Links with saved regular expressions
-*   Right-Click Context Menu which can be disabled in options
-*   Keyboard Shortcuts to activate addon and copy links/domains
-*   Automatic Dark/Light Mode based on browser setting
+*   Extract All Links and Domains from Any Site
+*   Extract Links from Selected Text on any Site
+*   Extract Links from Clipboard or Any Text
+*   Open Multiple Links in Tabs from Text
+*   Quick Filter Links with a Regular Expression
+*   Store Regular Expressions for Quick Filtering
+*   Automatic Dark/Light Mode based on Browser Setting
+*   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
 [![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/b9e7a09f-ed07-40c0-84e5-8efeb4fbd7f4)](https://github.com/cssnr/link-extractor)
 

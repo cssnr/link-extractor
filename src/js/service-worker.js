@@ -8,16 +8,6 @@ chrome.contextMenus.onClicked.addListener(onClicked)
 
 chrome.commands.onCommand.addListener(onCommand)
 
-// chrome.storage.onChanged.addListener((changes, namespace) => {
-//     for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-//         console.log(
-//             `Storage key "${key}" in namespace "${namespace}" changed. Old/New:`,
-//             oldValue,
-//             newValue
-//         )
-//     }
-// })
-
 /**
  * Init Context Menus and Options
  * @function onInstalled
@@ -37,11 +27,13 @@ async function onInstalled() {
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
-    chrome.runtime.setUninstallURL('https://form.jotform.com/233061684896063')
+    chrome.runtime.setUninstallURL(
+        'https://link-extractor.cssnr.com/uninstall/'
+    )
 }
 
 /**
- * Init Context Menus and Options
+ * On Context Menu Click Callback
  * @function onClicked
  * @param {Object} ctx
  */
@@ -51,29 +43,34 @@ async function onClicked(ctx) {
         const url = chrome.runtime.getURL('/html/options.html')
         await chrome.tabs.create({ active: true, url })
     } else if (ctx.menuItemId === 'links') {
-        await injectTab(null, null)
+        console.log('injectTab: links')
+        await injectTab(null, null, null)
     } else if (ctx.menuItemId === 'domains') {
-        await injectTab(null, true)
+        console.log('injectTab: domains')
+        await injectTab(null, true, null)
+    } else if (ctx.menuItemId === 'selection') {
+        console.log('injectTab: selection')
+        await injectTab(null, null, true)
     } else if (ctx.menuItemId.startsWith('filter-')) {
-        const { patterns } = await chrome.storage.sync.get(['patterns'])
         const i = ctx.menuItemId.split('-')[1]
-        console.log(`i: ${i}`)
+        console.log(`injectTab: filter-${i}`)
+        const { patterns } = await chrome.storage.sync.get(['patterns'])
         console.log(`filter: ${patterns[i]}`)
-        await injectTab(patterns[i], true)
+        await injectTab(patterns[i], null, null)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
 }
 
 /**
- * On Command Callback
+ * On Command Callback for Key Binds
  * @function onCommand
  * @param {String} command
  */
 async function onCommand(command) {
     console.log(`onCommand: command: ${command}`)
     if (command === 'extract') {
-        await injectTab(null, null)
+        await injectTab(null, null, null)
     } else {
         console.error(`Unknown command: ${command}`)
     }
