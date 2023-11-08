@@ -9,6 +9,7 @@ export function createContextMenus(patterns) {
     const ctx = ['page', 'link', 'image', 'selection']
     const contexts = [
         // ['link', 'link', 'Copy Text to Clipboard'],
+        [['selection'], 'selection', 'Extract from Selection'],
         [ctx, 'filters', 'Extract with Filter'],
         [ctx, 'links', 'Extract All Links'],
         [ctx, 'domains', 'Extract All Domains'],
@@ -46,20 +47,25 @@ export function createContextMenus(patterns) {
 }
 
 /**
- * Inject inject.js to Tab and Open links.html
+ * Inject inject.js to Tab and Open links.html with params
  * @function processLinks
  * @param {String} filter
  * @param {Boolean} domains
+ * @param {Boolean} selection
  */
-export async function injectTab(filter, domains) {
+export async function injectTab(filter, domains, selection) {
     const url = new URL(chrome.runtime.getURL('../html/links.html'))
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     console.log(`tab.id: ${tab.id}`)
     url.searchParams.set('tab', tab.id.toString())
     if (filter) {
         url.searchParams.set('filter', filter)
-    } else if (domains) {
+    }
+    if (domains) {
         url.searchParams.set('domains', 'yes')
+    }
+    if (selection) {
+        url.searchParams.set('selection', 'yes')
     }
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
