@@ -59,7 +59,7 @@ async function onClicked(ctx) {
         await injectTab(patterns[i], null, null)
     } else if (ctx.menuItemId === 'copy') {
         console.log('injectFunction: copy')
-        await injectFunction(copyActiveElementText, null)
+        await injectFunction(copyActiveElementText, [ctx])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -80,12 +80,14 @@ async function onCommand(command) {
 }
 
 /**
- * Copy Text of Active Element of DOM
+ * Copy Text of ctx.linkText or from Active Element
  * @function copyActiveElementText
+ * @param {OnClickData} ctx
  */
-function copyActiveElementText() {
+function copyActiveElementText(ctx) {
     // console.log('document.activeElement:', document.activeElement)
     let text =
+        ctx.linkText?.trim() ||
         document.activeElement.innerText?.trim() ||
         document.activeElement.title?.trim() ||
         document.activeElement.firstElementChild?.alt?.trim() ||
@@ -94,7 +96,7 @@ function copyActiveElementText() {
     if (text.length) {
         navigator.clipboard.writeText(text).then()
     } else {
-        console.warn('No Text Found to Copy.')
+        console.warn('No Text to Copy.')
     }
 }
 
