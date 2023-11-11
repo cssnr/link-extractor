@@ -86,9 +86,10 @@ async function onCommand(command) {
 function copyActiveElementText() {
     console.log('document.activeElement:', document.activeElement)
     let text =
-        document.activeElement.innerText.trim() ||
-        document.activeElement.title.trim() ||
-        document.activeElement.firstElementChild.alt.trim()
+        document.activeElement.innerText?.trim() ||
+        document.activeElement.title?.trim() ||
+        document.activeElement.firstElementChild?.alt?.trim() ||
+        document.activeElement.ariaLabel?.trim()
     console.log(`text: "${text}"`)
     if (text.length) {
         navigator.clipboard.writeText(text).then()
