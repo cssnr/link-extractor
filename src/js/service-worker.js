@@ -81,6 +81,9 @@ async function onCommand(command) {
 
 /**
  * Copy Text of ctx.linkText or from Active Element
+ * TODO: Update this once
+ *  Mozilla adds support for document.activeElement
+ *  Chromium adds supports ctx.linkText
  * @function copyActiveElementText
  * @param {OnClickData} ctx
  */
@@ -93,7 +96,7 @@ function copyActiveElementText(ctx) {
         document.activeElement.firstElementChild?.alt?.trim() ||
         document.activeElement.ariaLabel?.trim()
     console.log(`text: "${text}"`)
-    if (text.length) {
+    if (text?.length) {
         navigator.clipboard.writeText(text).then()
     } else {
         console.warn('No Text to Copy.')
