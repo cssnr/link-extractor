@@ -35,7 +35,7 @@ async function onInstalled() {
 /**
  * On Context Menu Click Callback
  * @function onClicked
- * @param {Object} ctx
+ * @param {OnClickData} ctx
  */
 async function onClicked(ctx) {
     console.log('ctx:', ctx)
@@ -57,6 +57,9 @@ async function onClicked(ctx) {
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         console.log(`filter: ${patterns[i]}`)
         await injectTab(patterns[i], null, null)
+    } else if (ctx.menuItemId === 'copy') {
+        console.log('copy')
+        await injectFunction(copyActiveElementText, null)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -74,4 +77,40 @@ async function onCommand(command) {
     } else {
         console.error(`Unknown command: ${command}`)
     }
+}
+
+/**
+ * Copy Text of Active Element of DOM
+ * @function copyActiveElementText
+ */
+function copyActiveElementText() {
+    console.log('document.activeElement:', document.activeElement)
+    let text =
+        document.activeElement.innerText.trim() ||
+        document.activeElement.title.trim() ||
+        document.activeElement.firstElementChild.alt.trim()
+    console.log(`text: "${text}"`)
+    if (text.length) {
+        navigator.clipboard.writeText(text).then()
+    } else {
+        console.warn('No Text Found to Copy.')
+    }
+}
+
+/**
+ * Inject Function into Current Tab with args
+ * @function injectFunction
+ * @param {Function} func
+ * @param {Array} args
+ */
+async function injectFunction(func, args) {
+    const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+    })
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: func,
+        args: args,
+    })
 }

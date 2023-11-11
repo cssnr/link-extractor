@@ -6,14 +6,15 @@
  * @param {Array} patterns
  */
 export function createContextMenus(patterns) {
-    const ctx = ['page', 'link', 'image', 'selection']
+    const ctx = ['page', 'link', 'selection']
     const contexts = [
-        // ['link', 'link', 'Copy Text to Clipboard'],
+        [['link'], 'copy', 'Copy Link Text to Clipboard'],
         [['selection'], 'selection', 'Extract from Selection'],
+        [['selection', 'link'], 'separator', 'seperator-top'],
         [ctx, 'filters', 'Extract with Filter'],
         [ctx, 'links', 'Extract All Links'],
         [ctx, 'domains', 'Extract All Domains'],
-        [ctx, 'separator', 'separator-1'],
+        [ctx, 'separator', 'separator-bottom'],
         [ctx, 'options', 'Open Options'],
     ]
     for (const context of contexts) {
