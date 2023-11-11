@@ -58,7 +58,7 @@ async function onClicked(ctx) {
         console.log(`filter: ${patterns[i]}`)
         await injectTab(patterns[i], null, null)
     } else if (ctx.menuItemId === 'copy') {
-        console.log('copy')
+        console.log('injectFunction: copy')
         await injectFunction(copyActiveElementText, null)
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
@@ -84,7 +84,7 @@ async function onCommand(command) {
  * @function copyActiveElementText
  */
 function copyActiveElementText() {
-    console.log('document.activeElement:', document.activeElement)
+    // console.log('document.activeElement:', document.activeElement)
     let text =
         document.activeElement.innerText?.trim() ||
         document.activeElement.title?.trim() ||
