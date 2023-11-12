@@ -89,8 +89,8 @@ async function processLinks(links) {
             .getElementById('links-clip')
             .setAttribute('data-clipboard-text', items.join('\n'))
         const linksElements = document.querySelectorAll('.links')
-        linksElements.forEach((el) => (el.style.display = 'block'))
-        updateTable(items, 'links')
+        linksElements.forEach((el) => el.classList.remove('visually-hidden'))
+        updateTable(items, 'links-table')
     }
 
     // Extract domains from items and sort
@@ -100,12 +100,12 @@ async function processLinks(links) {
         .setAttribute('data-clipboard-text', domains.join('\n'))
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
-        domainsElements.forEach((el) => (el.style.display = 'block'))
-        updateTable(domains, 'domains')
+        domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
+        updateTable(domains, 'domains-table')
     }
 
     // Hide Loading message
-    document.getElementById('message').style.display = 'none'
+    document.getElementById('loading-message').classList.add('visually-hidden')
 }
 
 /**
