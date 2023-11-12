@@ -11,10 +11,24 @@
 <body>
 
 <div id="top-container" class="position-fixed top-0 end-0 visually-hidden links domains">
-    <a href="#links"><span class="badge text-bg-success visually-hidden links">Links</span></a>
-    <a role="button" class="clip" data-clipboard-target="#links-clip"><span class="badge text-bg-success visually-hidden links">Copy</span></a>
-    <a href="#domains"><span class="badge text-bg-primary visually-hidden domains">Domains</span></a>
-    <a role="button" class="clip" data-clipboard-target="#domains-clip"><span class="badge text-bg-primary visually-hidden domains">Copy</span></a>
+    <div class="row g-1">
+        <div class="col">
+            <a href="#links"><span class="badge text-bg-success visually-hidden w-100 links">Links</span></a>
+        </div>
+        <div class="col">
+            <a role="button" class="clip" data-clipboard-target="#links-clip">
+                <span class="badge text-bg-success visually-hidden w-100 links">Copy</span></a>
+        </div>
+    </div>
+    <div class="row g-1">
+        <div class="col">
+            <a href="#domains"><span class="badge text-bg-primary visually-hidden w-100 domains">Domains</span></a>
+        </div>
+        <div class="col">
+            <a role="button" class="clip" data-clipboard-target="#domains-clip">
+                <span class="badge text-bg-primary visually-hidden w-100 domains">Copy</span></a>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid p-3">
