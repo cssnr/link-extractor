@@ -85,9 +85,7 @@ async function processLinks(links) {
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        document
-            .getElementById('links-clip')
-            .setAttribute('data-clipboard-text', items.join('\n'))
+        document.getElementById('links-clip').value = items.join('\n')
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
         updateTable(items, 'links-table')
@@ -95,9 +93,7 @@ async function processLinks(links) {
 
     // Extract domains from items and sort
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
-    document
-        .getElementById('domains-clip')
-        .setAttribute('data-clipboard-text', domains.join('\n'))
+    document.getElementById('domains-clip').value = domains.join('\n')
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
@@ -156,9 +152,9 @@ function handleKeybinds(event) {
     if (!formElements.includes(event.target.tagName)) {
         keysPressed[event.key] = true
         if (checkKey(event, ['KeyC', 'KeyL'])) {
-            document.getElementById('links-clip').click()
+            document.getElementById('copy-links').click()
         } else if (checkKey(event, ['KeyD', 'KeyM'])) {
-            document.getElementById('domains-clip').click()
+            document.getElementById('copy-domains').click()
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()

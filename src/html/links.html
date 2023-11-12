@@ -10,19 +10,20 @@
 </head>
 <body>
 
-<!--<div id="top-container" class="position-fixed top-0 end-0 visually-hidden links domains">-->
-<!--    <a href="#links"><span class="badge text-bg-success visually-hidden links">Links</span></a>-->
-<!--    <a href="#links"><span class="badge text-bg-success visually-hidden links">Copy</span></a>-->
-<!--    <a href="#domains"><span class="badge text-bg-primary visually-hidden domains">Domains</span></a>-->
-<!--    <a href="#domains"><span class="badge text-bg-primary visually-hidden domains">Copy</span></a>-->
-<!--</div>-->
+<div id="top-container" class="position-fixed top-0 end-0 visually-hidden links domains">
+    <a href="#links"><span class="badge text-bg-success visually-hidden links">Links</span></a>
+    <a role="button" class="clip" data-clipboard-target="#links-clip"><span class="badge text-bg-success visually-hidden links">Copy</span></a>
+    <a href="#domains"><span class="badge text-bg-primary visually-hidden domains">Domains</span></a>
+    <a role="button" class="clip" data-clipboard-target="#domains-clip"><span class="badge text-bg-primary visually-hidden domains">Copy</span></a>
+</div>
 
 <div class="container-fluid p-3">
     <h2 id="loading-message">Loading...</h2>
     <div class="visually-hidden links">
+        <input id="links-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="links">Links</h2>
-            <a id="links-clip" class="clip btn btn-sm btn-outline-success mb-2" role="button" data-clipboard-text="">
+            <a id="copy-links" class="clip btn btn-sm btn-outline-success mb-2" role="button" data-clipboard-target="#links-clip">
                 Copy Links</a> Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.
         </div>
         <table id="links-table" class="table table-sm table-striped table-hover">
@@ -33,9 +34,10 @@
     </div>
 
     <div class="visually-hidden domains">
+        <input id="domains-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="domains">Domains</h2>
-            <a id="domains-clip" class="clip btn btn-sm btn-outline-primary mb-2" role="button" data-clipboard-text="">
+            <a id="copy-domains" class="clip btn btn-sm btn-outline-primary mb-2" role="button" data-clipboard-target="#domains-clip">
                 Copy Domains</a> Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover">
