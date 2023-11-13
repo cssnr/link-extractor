@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { injectTab } from './exports.js'
+import { injectTab, openLinksInTabs } from './exports.js'
 
 const filterInput = document.getElementById('filter-input')
 filterInput.focus()
@@ -137,19 +137,6 @@ async function linksForm(event) {
 }
 
 /**
- * Open Links in Tabs
- * @function openLinks
- * @param {Array} links
- * @param {Boolean} active
- */
-function openLinksInTabs(links, active = true) {
-    console.log('openLinksInTabs:', links)
-    links.forEach(function (url) {
-        chrome.tabs.create({ active, url }).then()
-    })
-}
-
-/**
  * Update Links Callback
  * @function updateLinks
  * @param {InputEvent} event
@@ -171,7 +158,7 @@ function updateLinks(event) {
 
 /**
  * Update Elements based on Array lines
- * @function extractURLs
+ * @function updateElements
  * @param {HTMLElement} el
  * @param {Array} lines
  */

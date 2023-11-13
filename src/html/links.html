@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div id="top-container" class="position-fixed top-0 end-0 visually-hidden links domains">
+<div id="top-container" class="position-fixed top-0 end-0 user-select-none visually-hidden links domains">
     <div class="row g-1">
         <div class="col">
             <a href="#links"><span class="badge text-bg-success visually-hidden w-100 links">Links</span></a>
@@ -32,16 +32,19 @@
 </div>
 
 <div class="container-fluid p-3">
-    <h2 id="loading-message">Loading...</h2>
+    <h2 id="loading-message" class="user-select-none">Loading...</h2>
     <div class="visually-hidden links">
         <input id="links-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="links">Links</h2>
-            <a id="copy-links" class="clip btn btn-sm btn-outline-success mb-2" role="button" data-clipboard-target="#links-clip">
-                Copy Links</a> Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.
+            <a id="copy-links" class="btn btn-sm btn-success clip" role="button" data-clipboard-target="#links-clip">
+                Copy Links</a>
+            <a id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs" role="button" data-target="#links-clip">
+                Open ALL</a>
+            Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.
         </div>
         <table id="links-table" class="table table-sm table-striped table-hover">
-            <caption class="visually-hidden">Links</caption>
+            <caption class="visually-hidden user-select-none">Links</caption>
             <thead><tr><th></th></tr></thead>
             <tbody></tbody>
         </table>
@@ -51,11 +54,14 @@
         <input id="domains-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="domains">Domains</h2>
-            <a id="copy-domains" class="clip btn btn-sm btn-outline-primary mb-2" role="button" data-clipboard-target="#domains-clip">
-                Copy Domains</a> Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.
+            <a id="copy-domains" class="btn btn-sm btn-primary clip" role="button" data-clipboard-target="#domains-clip">
+                Copy Domains</a>
+            <a id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs" role="button" data-target="#domains-clip">
+                Open ALL</a>
+            Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover">
-            <caption class="visually-hidden">Domains</caption>
+            <caption class="visually-hidden user-select-none">Domains</caption>
             <thead><tr><th></th></tr></thead>
             <tbody></tbody>
         </table>
@@ -91,7 +97,7 @@
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
-<script type="text/javascript" src="../js/links.js"></script>
+<script type="module" src="../js/links.js"></script>
 
 </body>
 </html>

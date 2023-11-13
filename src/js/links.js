@@ -1,5 +1,7 @@
 // JS for links.html
 
+import { openLinksInTabs } from './exports.js'
+
 document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -13,6 +15,9 @@ window.addEventListener('keydown', handleKeybinds)
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
+
+const openLinksBtns = document.querySelectorAll('.open-in-tabs')
+openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
 
 /**
  * Links Init
@@ -183,4 +188,19 @@ function checkKey(event, keys) {
         return false
     }
     return !!keys.includes(event.code)
+}
+
+/**
+ * Open links Button Click Callback
+ * @function openLinksClick
+ * @param {KeyboardEvent} event
+ */
+function openLinksClick(event) {
+    console.log('openLinksBtn:', event)
+    console.log(`openLinksBtn: ${event.target.dataset.target}`)
+    const input = document.querySelector(event.target.dataset.target)
+    console.log('input:', input)
+    const links = input.value.toString().split('\n')
+    console.log('links:', links)
+    openLinksInTabs(links)
 }

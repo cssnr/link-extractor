@@ -75,3 +75,16 @@ export async function injectTab(filter, domains, selection) {
     console.log(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
 }
+
+/**
+ * Open Links in Tabs
+ * @function openLinksInTabs
+ * @param {Array} links
+ * @param {Boolean} active
+ */
+export function openLinksInTabs(links, active = true) {
+    console.log('openLinksInTabs:', links)
+    links.forEach(function (url) {
+        chrome.tabs.create({ active, url }).then()
+    })
+}
