@@ -57,6 +57,7 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
+    const openWarnCount = 30
 
     if (chrome.runtime.lastError) {
         alert(chrome.runtime.lastError)
@@ -90,6 +91,13 @@ async function processLinks(links) {
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
+        document.getElementById('links-count').textContent =
+            items.length.toString()
+        if (items.length >= openWarnCount) {
+            const openCount = document.getElementById('open-links-count')
+            openCount.classList.remove('visually-hidden')
+            openCount.textContent = items.length.toString()
+        }
         document.getElementById('links-clip').value = items.join('\n')
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
@@ -98,6 +106,13 @@ async function processLinks(links) {
 
     // Extract domains from items and sort
     const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    document.getElementById('domains-count').textContent =
+        domains.length.toString()
+    if (domains.length >= openWarnCount) {
+        const openCount = document.getElementById('open-domains-count')
+        openCount.classList.remove('visually-hidden')
+        openCount.textContent = domains.length.toString()
+    }
     document.getElementById('domains-clip').value = domains.join('\n')
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
