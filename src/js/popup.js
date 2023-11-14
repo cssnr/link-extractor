@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', popupClick)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+document
+    .getElementById('defaultFilter')
+    .addEventListener('change', updateOptions)
 
 const buttons = document.querySelectorAll('.popup-click')
 buttons.forEach((el) => el.addEventListener('click', popupClick))
@@ -40,13 +43,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
  * @function initOptions
  */
 async function initPopup() {
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    const { options, patterns } = await chrome.storage.sync.get([
+        'options',
+        'patterns',
+    ])
+    console.log(options)
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
             createFilterLink(i.toString(), value)
         })
     }
+    document.getElementById('defaultFilter').checked = options.defaultFilter
     const manifest = chrome.runtime.getManifest()
     document.getElementById('version').outerText = `v${manifest.version}`
 }
@@ -192,4 +200,19 @@ function extractURLs(text) {
         urls.push(match)
     }
     return urls
+}
+
+/**
+ * Save Default Radio on Change Callback
+ * @function updateOptions
+ * @param {SubmitEvent} event
+ */
+async function updateOptions(event) {
+    console.log('updateOptions')
+    console.log(event)
+    let { options } = await chrome.storage.sync.get(['options'])
+    console.log(options)
+    options.defaultFilter = event.target.checked
+    console.log(`options.defaultFilter: ${options.defaultFilter}`)
+    await chrome.storage.sync.set({ options })
 }

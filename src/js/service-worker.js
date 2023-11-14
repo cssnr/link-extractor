@@ -14,15 +14,25 @@ chrome.commands.onCommand.addListener(onCommand)
  */
 async function onInstalled() {
     console.log('onInstalled')
+    const defaultSettings = {
+        flags: 'ig',
+        contextMenu: true,
+        defaultFilter: true,
+    }
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    options = options || { flags: 'ig', contextMenu: true }
+    options = options || defaultSettings
     if (options.contextMenu === undefined) {
         options.contextMenu = true
     }
+    if (options.defaultFilter === undefined) {
+        options.defaultFilter = true
+    }
+    console.log(options)
     patterns = patterns || []
+    console.log(patterns)
     await chrome.storage.sync.set({ options, patterns })
     if (options.contextMenu) {
         createContextMenus(patterns)

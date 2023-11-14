@@ -58,6 +58,8 @@ async function processLinks(links) {
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
     const openWarnCount = 30
+    const { options } = await chrome.storage.sync.get(['options'])
+    console.log('options:', options)
 
     if (chrome.runtime.lastError) {
         alert(chrome.runtime.lastError)
@@ -65,18 +67,17 @@ async function processLinks(links) {
         return
     }
 
-    // Filter bad links like: javascript:void(0)
-    const filteredLinks = links.filter(
-        (link) => link.lastIndexOf('://', 10) > 0
-    )
+    // Filter links by :// if not disabled by user
+    if (options.defaultFilter) {
+        links = links.filter((link) => link.lastIndexOf('://', 10) > 0)
+    }
 
     // Remove duplicate and sort links
-    let items = [...new Set(filteredLinks)].sort()
+    let items = [...new Set(links)].sort()
 
     // Filter links based on pattern
     if (urlFilter) {
-        const { options } = await chrome.storage.sync.get(['options'])
-        const flags = options !== undefined ? options.flags : 'ig'
+        const flags = options?.flags !== undefined ? options.flags : 'ig'
         const re = new RegExp(urlFilter, flags)
         console.log(`Filtering Links with re: ${re}`)
         items = items.filter((item) => item.match(re))
@@ -104,8 +105,11 @@ async function processLinks(links) {
         updateTable(items, 'links-table')
     }
 
-    // Extract domains from items and sort
-    const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    // Extract domains from items, sort, and remove null
+    let domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    domains = domains.filter(function (el) {
+        return el != null
+    })
     document.getElementById('domains-count').textContent =
         domains.length.toString()
     if (domains.length >= openWarnCount) {
