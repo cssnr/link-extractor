@@ -1,5 +1,7 @@
 // JS for links.html
 
+import { openLinksInTabs } from './exports.js'
+
 document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -13,6 +15,9 @@ window.addEventListener('keydown', handleKeybinds)
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
+
+const openLinksBtns = document.querySelectorAll('.open-in-tabs')
+openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
 
 /**
  * Links Init
@@ -52,6 +57,9 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
+    const openWarnCount = 30
+    const { options } = await chrome.storage.sync.get(['options'])
+    console.log('options:', options)
 
     if (chrome.runtime.lastError) {
         alert(chrome.runtime.lastError)
@@ -59,18 +67,17 @@ async function processLinks(links) {
         return
     }
 
-    // Filter bad links like: javascript:void(0)
-    const filteredLinks = links.filter(
-        (link) => link.lastIndexOf('://', 10) > 0
-    )
+    // Filter links by :// if not disabled by user
+    if (options.defaultFilter) {
+        links = links.filter((link) => link.lastIndexOf('://', 10) > 0)
+    }
 
     // Remove duplicate and sort links
-    let items = [...new Set(filteredLinks)].sort()
+    let items = [...new Set(links)].sort()
 
     // Filter links based on pattern
     if (urlFilter) {
-        const { options } = await chrome.storage.sync.get(['options'])
-        const flags = options !== undefined ? options.flags : 'ig'
+        const flags = options?.flags !== undefined ? options.flags : 'ig'
         const re = new RegExp(urlFilter, flags)
         console.log(`Filtering Links with re: ${re}`)
         items = items.filter((item) => item.match(re))
@@ -85,27 +92,40 @@ async function processLinks(links) {
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        document
-            .getElementById('links-clip')
-            .setAttribute('data-clipboard-text', items.join('\n'))
+        document.getElementById('links-count').textContent =
+            items.length.toString()
+        if (items.length >= openWarnCount) {
+            const openCount = document.getElementById('open-links-count')
+            openCount.classList.remove('visually-hidden')
+            openCount.textContent = items.length.toString()
+        }
+        document.getElementById('links-clip').value = items.join('\n')
         const linksElements = document.querySelectorAll('.links')
-        linksElements.forEach((el) => (el.style.display = 'block'))
-        updateTable(items, 'links')
+        linksElements.forEach((el) => el.classList.remove('visually-hidden'))
+        updateTable(items, 'links-table')
     }
 
-    // Extract domains from items and sort
-    const domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
-    document
-        .getElementById('domains-clip')
-        .setAttribute('data-clipboard-text', domains.join('\n'))
+    // Extract domains from items, sort, and remove null
+    let domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    domains = domains.filter(function (el) {
+        return el != null
+    })
+    document.getElementById('domains-count').textContent =
+        domains.length.toString()
+    if (domains.length >= openWarnCount) {
+        const openCount = document.getElementById('open-domains-count')
+        openCount.classList.remove('visually-hidden')
+        openCount.textContent = domains.length.toString()
+    }
+    document.getElementById('domains-clip').value = domains.join('\n')
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
-        domainsElements.forEach((el) => (el.style.display = 'block'))
-        updateTable(domains, 'domains')
+        domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
+        updateTable(domains, 'domains-table')
     }
 
     // Hide Loading message
-    document.getElementById('message').style.display = 'none'
+    document.getElementById('loading-message').classList.add('visually-hidden')
 }
 
 /**
@@ -156,9 +176,9 @@ function handleKeybinds(event) {
     if (!formElements.includes(event.target.tagName)) {
         keysPressed[event.key] = true
         if (checkKey(event, ['KeyC', 'KeyL'])) {
-            document.getElementById('links-clip').click()
+            document.getElementById('copy-links').click()
         } else if (checkKey(event, ['KeyD', 'KeyM'])) {
-            document.getElementById('domains-clip').click()
+            document.getElementById('copy-domains').click()
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
@@ -187,4 +207,19 @@ function checkKey(event, keys) {
         return false
     }
     return !!keys.includes(event.code)
+}
+
+/**
+ * Open links Button Click Callback
+ * @function openLinksClick
+ * @param {KeyboardEvent} event
+ */
+function openLinksClick(event) {
+    console.log('openLinksBtn:', event)
+    console.log(`openLinksBtn: ${event.target.dataset.target}`)
+    const input = document.querySelector(event.target.dataset.target)
+    console.log('input:', input)
+    const links = input.value.toString().split('\n')
+    console.log('links:', links)
+    openLinksInTabs(links)
 }

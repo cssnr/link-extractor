@@ -10,7 +10,7 @@
 <body>
 
 <div class="container-fluid p-3">
-    <div class="d-grid g-2 gap-3">
+    <div class="d-grid g-2 gap-2">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
             <button id="btn-all" class="btn btn-success btn-sm popup-click" type="button">
                 All Links</button>
@@ -44,6 +44,19 @@
                     data-bs-placement="bottom" data-bs-title="Open Parsed Links" data-text="Open">Open</button>
             <button type="submit" form="links-form" class="btn btn-outline-warning disabled parse-lines" id="open-lines" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="Open Each Line" data-text="Open">Open</button>
+        </div>
+
+        <div class="form-check form-switch form-check-inline d-flex justify-content-center align-items-center">
+            <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
+<!--            <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">No Internal Filtering for-->
+<!--                <span class="badge bg-secondary ">://</span></label>-->
+            <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
+                Use Default Link Filtering
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                     data-bs-placement="bottom" data-bs-title="Filter Out Links Without ://">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+            </label>
         </div>
 
         <button class="btn btn-outline-info btn-sm popup-click" type="button" data-href="html/options.html">Options</button>

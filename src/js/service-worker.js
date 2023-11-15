@@ -14,15 +14,25 @@ chrome.commands.onCommand.addListener(onCommand)
  */
 async function onInstalled() {
     console.log('onInstalled')
+    const defaultSettings = {
+        flags: 'ig',
+        contextMenu: true,
+        defaultFilter: true,
+    }
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    options = options || { flags: 'ig', contextMenu: true }
+    options = options || defaultSettings
     if (options.contextMenu === undefined) {
         options.contextMenu = true
     }
+    if (options.defaultFilter === undefined) {
+        options.defaultFilter = true
+    }
+    console.log(options)
     patterns = patterns || []
+    console.log(patterns)
     await chrome.storage.sync.set({ options, patterns })
     if (options.contextMenu) {
         createContextMenus(patterns)
@@ -81,6 +91,9 @@ async function onCommand(command) {
 
 /**
  * Copy Text of ctx.linkText or from Active Element
+ * TODO: Update this once
+ *  Mozilla adds support for document.activeElement
+ *  Chromium adds supports ctx.linkText
  * @function copyActiveElementText
  * @param {OnClickData} ctx
  */
@@ -93,7 +106,7 @@ function copyActiveElementText(ctx) {
         document.activeElement.firstElementChild?.alt?.trim() ||
         document.activeElement.ariaLabel?.trim()
     console.log(`text: "${text}"`)
-    if (text.length) {
+    if (text?.length) {
         navigator.clipboard.writeText(text).then()
     } else {
         console.warn('No Text to Copy.')

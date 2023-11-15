@@ -29,7 +29,9 @@ function extractLinks() {
     console.log('extractLinks')
     const links = []
     for (const element of document.links) {
-        links.push(decodeURI(element.href))
+        if (element.href) {
+            links.push(decodeURI(element.href))
+        }
     }
     console.log(links)
     return links

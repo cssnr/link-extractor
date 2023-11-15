@@ -15,6 +15,13 @@ document.getElementById('reset-default').addEventListener('click', resetForm)
     })
 })
 
+const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"]'
+)
+const tooltipList = [...tooltipTriggerList].map(
+    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+)
+
 /**
  * Options Page Init
  * @function initOptions
@@ -25,9 +32,11 @@ async function initOptions() {
         'options',
         'patterns',
     ])
+    console.log('options:', options)
     document.getElementById('reFlags').value =
         options !== undefined ? options.flags : 'ig'
     document.getElementById('contextMenu').checked = options.contextMenu
+    document.getElementById('defaultFilter').checked = options.defaultFilter
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {
@@ -139,6 +148,7 @@ async function saveOptions(event) {
         chrome.contextMenus.removeAll()
     }
     console.log(options)
+    options.defaultFilter = document.getElementById('defaultFilter').checked
 
     await chrome.storage.sync.set({ options, patterns })
     showToast('Options Saved')
