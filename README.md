@@ -49,6 +49,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Extract Links from Selected Text on any Site
 *   Extract Links from Clipboard or Any Text
 *   Open Multiple Links in Tabs from Text
+*   Download Links and Domains as a Text File
 *   Copy the Text from a Link via Context Menu
 *   Quick Filter Links with a Regular Expression
 *   Store Regular Expressions for Quick Filtering
