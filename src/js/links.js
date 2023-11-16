@@ -18,6 +18,8 @@ document.addEventListener('keyup', (event) => {
 
 const openLinksBtns = document.querySelectorAll('.open-in-tabs')
 openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
+const downFileBtns = document.querySelectorAll('.download-file')
+downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
 
 /**
  * Links Init
@@ -222,4 +224,39 @@ function openLinksClick(event) {
     const links = input.value.toString().split('\n')
     console.log('links:', links)
     openLinksInTabs(links)
+}
+
+/**
+ * Download links Button Click Callback
+ * @function downloadLinksClick
+ * @param {KeyboardEvent} event
+ */
+function downloadFileClick(event) {
+    console.log('downloadLinksClick:', event)
+    console.log(`openLinksBtn: ${event.target.dataset.target}`)
+    const input = document.querySelector(event.target.dataset.target)
+    const links = input.value.toString()
+    console.log('links:', links)
+    download(event.target.dataset.filename, links)
+    // showToast('File Downloaded.')
+}
+
+/**
+ * Download filename with text
+ * @function download
+ * @param {String} filename
+ * @param {String} text
+ */
+function download(filename, text) {
+    console.log(`download: ${filename}`)
+    const element = document.createElement('a')
+    element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    )
+    element.setAttribute('download', filename)
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
 }
