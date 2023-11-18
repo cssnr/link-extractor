@@ -55,8 +55,8 @@ async function initPopup() {
         })
     }
     document.getElementById('defaultFilter').checked = options.defaultFilter
-    const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').outerText = `v${manifest.version}`
+    document.getElementById('version').innerText =
+        chrome.runtime.getManifest().version
 }
 
 /**
@@ -98,9 +98,8 @@ async function popupClick(event) {
         return window.close()
     }
     if (event.target.id === 'btn-about') {
-        const manifest = chrome.runtime.getManifest()
-        console.log(`manifest.homepage_url: ${manifest.homepage_url}`)
-        await chrome.tabs.create({ active: true, url: manifest.homepage_url })
+        const url = chrome.runtime.getManifest().homepage_url
+        await chrome.tabs.create({ active: true, url })
         return window.close()
     }
 
