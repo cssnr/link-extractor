@@ -45,7 +45,7 @@ async function initOptions() {
     } else {
         createFilterInput('0', '')
     }
-    document.getElementById('version').innerText =
+    document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
     const commands = await chrome.commands.getAll()
     document.getElementById('mainKey').textContent =

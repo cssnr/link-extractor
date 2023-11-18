@@ -55,7 +55,7 @@ async function initPopup() {
         })
     }
     document.getElementById('defaultFilter').checked = options.defaultFilter
-    document.getElementById('version').innerText =
+    document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
 }
 
