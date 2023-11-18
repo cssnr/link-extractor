@@ -3,17 +3,16 @@
 import { createContextMenus, injectTab } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
-
 chrome.contextMenus.onClicked.addListener(onClicked)
-
 chrome.commands.onCommand.addListener(onCommand)
 
 /**
  * Init Context Menus and Options
  * @function onInstalled
+ * @param {InstalledDetails} details
  */
-async function onInstalled() {
-    console.log('onInstalled')
+async function onInstalled(details) {
+    console.log('onInstalled:', details)
     const defaultSettings = {
         flags: 'ig',
         contextMenu: true,
@@ -37,6 +36,10 @@ async function onInstalled() {
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
+    if (details.reason === 'install') {
+        const url = chrome.runtime.getURL('/html/options.html')
+        await chrome.tabs.create({ active: true, url })
+    }
     chrome.runtime.setUninstallURL(
         'https://link-extractor.cssnr.com/uninstall/'
     )
@@ -46,9 +49,10 @@ async function onInstalled() {
  * On Context Menu Click Callback
  * @function onClicked
  * @param {OnClickData} ctx
+ * @param {Tab} tab
  */
-async function onClicked(ctx) {
-    console.log('ctx:', ctx)
+async function onClicked(ctx, tab) {
+    console.log('onClicked:', ctx, tab)
     if (['options', 'filters'].includes(ctx.menuItemId)) {
         const url = chrome.runtime.getURL('/html/options.html')
         await chrome.tabs.create({ active: true, url })
@@ -76,12 +80,12 @@ async function onClicked(ctx) {
 }
 
 /**
- * On Command Callback for Key Binds
+ * On Command Callback
  * @function onCommand
  * @param {String} command
  */
 async function onCommand(command) {
-    console.log(`onCommand: command: ${command}`)
+    console.log(`onCommand: ${command}`)
     if (command === 'extract') {
         await injectTab(null, null, null)
     } else {
