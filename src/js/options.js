@@ -45,8 +45,8 @@ async function initOptions() {
     } else {
         createFilterInput('0', '')
     }
-    const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').outerText = `v${manifest.version}`
+    document.getElementById('version').textContent =
+        chrome.runtime.getManifest().version
     const commands = await chrome.commands.getAll()
     document.getElementById('mainKey').textContent =
         commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'

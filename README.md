@@ -79,7 +79,7 @@ npm run chrome
 npm run firefox
 ```
 
-To Load Unpacked/Temporary Add-on make a `manifest.json` first. 
+To Load Unpacked/Temporary Add-on make a `manifest.json` and run from the [src](src) folder.
 ```shell
 npm run manifest:chrome
 npm run manifest:firefox
@@ -137,6 +137,6 @@ it is very useful to keep addon storage after uninstall/restart with `keepStorag
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 
-1.  Run `npm run build:firefox` then use `web-ext-artifacts/link_extractor-firefox-0.1.0.zip`.
+1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
