@@ -85,12 +85,13 @@ function createFilterLink(number, value = '') {
 async function popupClick(event) {
     event.preventDefault()
     console.log(event)
-    if (event.target.dataset.href) {
+    const anchor = event.target.closest('a')
+    if (anchor?.dataset?.href) {
         let url
-        if (event.target.dataset.href.startsWith('http')) {
-            url = event.target.dataset.href
+        if (anchor.dataset.href.startsWith('http')) {
+            url = anchor.dataset.href
         } else {
-            url = chrome.runtime.getURL(event.target.dataset.href)
+            url = chrome.runtime.getURL(anchor.dataset.href)
         }
         console.log(`url: ${url}`)
         await chrome.tabs.create({ active: true, url })
