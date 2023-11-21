@@ -37,6 +37,7 @@ async function initOptions() {
         options !== undefined ? options.flags : 'ig'
     document.getElementById('contextMenu').checked = options.contextMenu
     document.getElementById('defaultFilter').checked = options.defaultFilter
+    document.getElementById('showUpdate').checked = options.showUpdate
     if (patterns?.length) {
         console.log(patterns)
         patterns.forEach(function (value, i) {
@@ -149,6 +150,7 @@ async function saveOptions(event) {
     }
     console.log(options)
     options.defaultFilter = document.getElementById('defaultFilter').checked
+    options.showUpdate = document.getElementById('showUpdate').checked
 
     await chrome.storage.sync.set({ options, patterns })
     showToast('Options Saved')

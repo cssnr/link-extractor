@@ -6,6 +6,8 @@ chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 
+const ghUrl = 'https://github.com/cssnr/link-extractor'
+
 /**
  * Init Context Menus and Options
  * @function onInstalled
@@ -13,32 +15,35 @@ chrome.commands.onCommand.addListener(onCommand)
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const defaultSettings = {
+    const defaultOptions = {
         flags: 'ig',
         contextMenu: true,
         defaultFilter: true,
+        showUpdate: false,
     }
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    options = options || defaultSettings
-    if (options.contextMenu === undefined) {
-        options.contextMenu = true
-    }
-    if (options.defaultFilter === undefined) {
-        options.defaultFilter = true
-    }
+    options = setDefaults(options, defaultOptions)
     console.log(options)
     patterns = patterns || []
     console.log(patterns)
     await chrome.storage.sync.set({ options, patterns })
+
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
     if (details.reason === 'install') {
         const url = chrome.runtime.getURL('/html/options.html')
         await chrome.tabs.create({ active: true, url })
+    } else if (options.showUpdate && details.reason === 'update') {
+        const manifest = chrome.runtime.getManifest()
+        if (manifest.version !== details.previousVersion) {
+            const url = `${ghUrl}/releases/tag/${manifest.version}`
+            console.log(`url: ${url}`)
+            await chrome.tabs.create({ active: true, url })
+        }
     }
     chrome.runtime.setUninstallURL(
         'https://link-extractor.cssnr.com/uninstall/'
@@ -133,4 +138,23 @@ async function injectFunction(func, args) {
         func: func,
         args: args,
     })
+}
+
+/**
+ * Set Default Options
+ * @function setDefaults
+ * @param {Object} options
+ * @param {Object} defaultOptions
+ * @return {Object}
+ */
+function setDefaults(options, defaultOptions) {
+    options = options || {}
+    for (const [key, value] of Object.entries(defaultOptions)) {
+        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        if (options[key] === undefined) {
+            options[key] = value
+            console.log(`Set ${key}:`, value)
+        }
+    }
+    return options
 }

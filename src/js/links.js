@@ -21,6 +21,19 @@ openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
 const downFileBtns = document.querySelectorAll('.download-file')
 downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
 
+const filterInput = document.querySelectorAll('.filter-input')
+filterInput.forEach((el) => el.addEventListener('input', filterLinks))
+
+/**
+ * Filter Links
+ * @function filterLinks
+ * @param {MouseEvent} event
+ */
+function filterLinks(event) {
+    // console.log('filterLinks:', event)
+    console.log(`value: ${event.target.value}`)
+}
+
 /**
  * Links Init
  * TODO: Review this function
