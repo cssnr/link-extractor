@@ -26,12 +26,29 @@ filterInput.forEach((el) => el.addEventListener('input', filterLinks))
 
 /**
  * Filter Links
+ * TODO: Remove JQuery
  * @function filterLinks
  * @param {MouseEvent} event
  */
 function filterLinks(event) {
     // console.log('filterLinks:', event)
     console.log(`value: ${event.target.value}`)
+
+    const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
+    console.log(`input: ${input}`)
+    const val = `^(?=.*\\b${input}).*$`
+    console.log(`val: ${val}`)
+    const reg = RegExp(val, 'i')
+    console.log(`reg: ${reg}`)
+    let text
+
+    function filterFunction() {
+        text = $(this).text().replace(/\s+/g, ' ')
+        return !reg.test(text)
+    }
+
+    const rows = $('table tr')
+    rows.show().filter(filterFunction).hide()
 }
 
 /**
@@ -183,6 +200,7 @@ function updateTable(data, elementId) {
 
 /**
  * Keyboard Event Callback
+ * TODO: Remove JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
