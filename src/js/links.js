@@ -27,6 +27,7 @@ filterInput.forEach((el) => el.addEventListener('input', filterLinks))
 /**
  * Filter Links
  * TODO: Remove JQuery
+ *  Update Link/Domain Copy Functions to Work
  * @function filterLinks
  * @param {MouseEvent} event
  */
@@ -40,8 +41,8 @@ function filterLinks(event) {
     console.log(`val: ${val}`)
     const reg = RegExp(val, 'i')
     console.log(`reg: ${reg}`)
-    let text
 
+    let text
     function filterFunction() {
         text = $(this).text().replace(/\s+/g, ' ')
         return !reg.test(text)
@@ -57,12 +58,19 @@ function filterLinks(event) {
  * @function initLinks
  */
 async function initLinks() {
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    console.log(patterns)
+    const savedFilters = document.getElementById('savedFilters')
+    patterns.forEach((pattern) => {
+        const option = document.createElement('option')
+        option.value = pattern
+        savedFilters.appendChild(option)
+    })
+
     if (urlParams.has('popup')) {
-        const links = await chrome.runtime.sendMessage({
-            msg: 'extract',
-        })
-        console.log('popup:', links)
-        await processLinks(links)
+        const { popup } = await chrome.storage.local.get(['popup'])
+        console.log('popup:', popup)
+        await processLinks(popup)
     } else if (urlParams.has('selection')) {
         chrome.tabs.sendMessage(tabId, { action: 'selection' }, (links) => {
             processLinks(links)

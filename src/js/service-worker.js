@@ -5,6 +5,7 @@ import { createContextMenus, injectTab } from './exports.js'
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
+chrome.runtime.onMessage.addListener(onMessage)
 
 const ghUrl = 'https://github.com/cssnr/link-extractor'
 
@@ -96,6 +97,17 @@ async function onCommand(command) {
     } else {
         console.error(`Unknown command: ${command}`)
     }
+}
+
+/**
+ * Message Callback
+ * @function onMessage
+ * @param {Object} message
+ * @param {MessageSender} sender
+ */
+async function onMessage(message, sender) {
+    console.log('onMessage', message, sender)
+    console.log(`message.action: ${message.action}`)
 }
 
 /**
