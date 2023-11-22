@@ -37,7 +37,7 @@ All **Chromium** Based Browsers can install the extension from the
 
 # Features
 
-Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.   
+Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.  
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
 
 *   Extract All Links and Domains from Any Site
@@ -51,7 +51,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/b9e7a09f-ed07-40c0-84e5-8efeb4fbd7f4)](https://github.com/cssnr/link-extractor)
+[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/0944a60d-058b-4269-954c-8aec6ab59f4c)](https://link-extractor.cssnr.com/screenshots/)
 
 # Configuration
 
