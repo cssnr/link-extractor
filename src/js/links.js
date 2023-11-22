@@ -71,7 +71,7 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-    const openWarnCount = 30
+    // const openWarnCount = 30
     const { options } = await chrome.storage.sync.get(['options'])
     console.log('options:', options)
 
@@ -108,12 +108,11 @@ async function processLinks(links) {
     if (!onlyDomains) {
         document.getElementById('links-count').textContent =
             items.length.toString()
-        if (items.length >= openWarnCount) {
-            const openCount = document.getElementById('open-links-count')
-            openCount.classList.remove('visually-hidden')
-            openCount.textContent = items.length.toString()
-        }
-        // document.getElementById('links-clip').value = items.join('\n')
+        // if (items.length >= openWarnCount) {
+        //     const openCount = document.getElementById('open-links-count')
+        //     openCount.classList.remove('visually-hidden')
+        //     openCount.textContent = items.length.toString()
+        // }
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
         updateTable(items, 'links-table')
@@ -126,12 +125,11 @@ async function processLinks(links) {
     })
     document.getElementById('domains-count').textContent =
         domains.length.toString()
-    if (domains.length >= openWarnCount) {
-        const openCount = document.getElementById('open-domains-count')
-        openCount.classList.remove('visually-hidden')
-        openCount.textContent = domains.length.toString()
-    }
-    // document.getElementById('domains-clip').value = domains.join('\n')
+    // if (domains.length >= openWarnCount) {
+    //     const openCount = document.getElementById('open-domains-count')
+    //     openCount.classList.remove('visually-hidden')
+    //     openCount.textContent = domains.length.toString()
+    // }
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('visually-hidden'))

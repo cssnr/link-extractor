@@ -6,4 +6,5 @@ a:visited {
     margin-top: 10px;
     margin-right: 10px;
     width: 160px;
+    z-index: 10;
 }
