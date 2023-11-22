@@ -23,21 +23,6 @@ const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 )
 
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//     console.log(`popup.js: request.msg: ${request.msg}`)
-//     console.log('request:', request)
-//     console.log('sender:', sender)
-//     if (request.msg === 'extract') {
-//         const links = document.getElementById('links-text')
-//         let resp = extractURLs(links.value)
-//         console.log('resp:', resp)
-//         sendResponse(resp)
-//         window.close()
-//     } else {
-//         console.error('Unknown request:', request)
-//     }
-// })
-
 /**
  * Popup Action Init
  * @function initOptions

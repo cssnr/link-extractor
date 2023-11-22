@@ -5,7 +5,6 @@ import { createContextMenus, injectTab } from './exports.js'
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
-chrome.runtime.onMessage.addListener(onMessage)
 
 const ghUrl = 'https://github.com/cssnr/link-extractor'
 
@@ -100,23 +99,12 @@ async function onCommand(command) {
 }
 
 /**
- * Message Callback
- * @function onMessage
- * @param {Object} message
- * @param {MessageSender} sender
- */
-async function onMessage(message, sender) {
-    console.log('onMessage', message, sender)
-    console.log(`message.action: ${message.action}`)
-}
-
-/**
  * Copy Text of ctx.linkText or from Active Element
  * TODO: Update this once
  *  Mozilla adds support for document.activeElement
  *  Chromium adds supports ctx.linkText
  * @function copyActiveElementText
- * @param {OnClickData} ctx
+ * @param {Object} ctx
  */
 function copyActiveElementText(ctx) {
     // console.log('document.activeElement:', document.activeElement)
