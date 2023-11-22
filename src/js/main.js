@@ -2,30 +2,18 @@
 
 const clipboard = new ClipboardJS('.clip')
 
-// const clipboard = new ClipboardJS('.clip', {
-//     text: function (trigger) {
-//         // const el = document.querySelector(trigger.dataset.clipboardTarget)
-//         // return el.table.innerText.trim()
-//         const table = document.querySelector(trigger.dataset.clipboardTarget)
-//         const text = table.innerText.trim()
-//         console.log(text)
-//         return text
-//     },
-// })
-
-// TODO: Update This for New Link Copy
+// TODO: Update Event Triggers to Catch All Copy Buttons
 clipboard.on('success', function (event) {
     console.info('clipboard.success:', event)
     const text = event.text.trim()
     console.log(`text: "${text}"`)
-    showToast('Copied to Clipboard')
-    // if (event.trigger.id === 'links-clip') {
-    //     showToast('Links Copied')
-    // } else if (event.trigger.id === 'domains-clip') {
-    //     showToast('Domains Copied')
-    // } else {
-    //     showToast('Copied to Clipboard')
-    // }
+    if (event.trigger.id === 'copy-links') {
+        showToast('Links Copied')
+    } else if (event.trigger.id === 'copy-domains') {
+        showToast('Domains Copied')
+    } else {
+        showToast('Copied to Clipboard')
+    }
 })
 
 clipboard.on('error', function (event) {

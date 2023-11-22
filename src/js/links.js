@@ -4,8 +4,6 @@ import { openLinksInTabs } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initLinks)
 
-document.getElementById('reset-button').addEventListener('click', resetButton)
-
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
@@ -26,9 +24,10 @@ downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
 const filterInput = document.querySelectorAll('.filter-input')
 filterInput.forEach((el) => el.addEventListener('input', filterLinks))
 
+document.getElementById('reset-button').addEventListener('click', resetButton)
+
 /**
  * Links Init
- * TODO: Review this function
  * @function initLinks
  */
 async function initLinks() {
@@ -234,13 +233,10 @@ function checkKey(event, keys) {
  * @param {KeyboardEvent} event
  */
 function openLinksClick(event) {
-    console.log('openLinksBtn:', event)
-    console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    // const input = document.querySelector(event.target.dataset.target)
-    // console.log('input:', input)
-    // const links = input.value.toString().split('\n')
-    const table = document.querySelector(event.target.dataset.target)
-    const links = table.innerText.trim()
+    console.log('openLinksClick:', event)
+    console.log(`querySelector: ${event.target.dataset.target}`)
+    const element = document.querySelector(event.target.dataset.target)
+    const links = element.innerText.trim()
     console.log('links:', links)
     if (links) {
         openLinksInTabs(links.split('\n'))
@@ -250,17 +246,15 @@ function openLinksClick(event) {
 }
 
 /**
- * Download links Button Click Callback
- * @function downloadLinksClick
+ * Download Links Button Click Callback
+ * @function downloadFileClick
  * @param {KeyboardEvent} event
  */
 function downloadFileClick(event) {
-    console.log('downloadLinksClick:', event)
-    console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    // const input = document.querySelector(event.target.dataset.target)
-    // const links = input.value.toString()
-    const table = document.querySelector(event.target.dataset.target)
-    const links = table.innerText.trim()
+    console.log('downloadFileClick:', event)
+    console.log(`querySelector: ${event.target.dataset.target}`)
+    const element = document.querySelector(event.target.dataset.target)
+    const links = element.innerText.trim()
     console.log('links:', links)
     if (links) {
         download(event.target.dataset.filename, links)
@@ -291,17 +285,6 @@ function download(filename, text) {
 }
 
 /**
- * Reset Filter Click Callback
- * @function resetButton
- * @param {MouseEvent} event
- */
-async function resetButton(event) {
-    console.log('resetButton:', event)
-    document.getElementById('filter-links').value = ''
-    await filterLinks(event)
-}
-
-/**
  * Filter Links
  * TODO: Remove JQuery
  * @function filterLinks
@@ -311,12 +294,8 @@ function filterLinks(event) {
     // console.log('filterLinks:', event)
     // console.log(`value: ${event.target.value}`)
     const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
-    // console.log(`input: ${input}`)
-
-    const val = `^(?=.*\\b${input}).*$`
-    // console.log(`val: ${val}`)
-    const reg = RegExp(val, 'i')
-    // console.log(`reg: ${reg}`)
+    const value = `^(?=.*\\b${input}).*$`
+    const reg = RegExp(value, 'i')
 
     let text
     function filterFunction() {
@@ -326,4 +305,17 @@ function filterLinks(event) {
 
     const rows = $('table tr')
     rows.show().filter(filterFunction).hide()
+    $('#links-count').text($('#links-table tr:visible').length)
+    $('#domains-count').text($('#domains-table tr:visible').length)
+}
+
+/**
+ * Reset Filter Click Callback
+ * @function resetButton
+ * @param {MouseEvent} event
+ */
+function resetButton(event) {
+    console.log('resetButton:', event)
+    document.getElementById('filter-links').value = ''
+    filterLinks(event)
 }

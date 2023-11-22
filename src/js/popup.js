@@ -115,11 +115,10 @@ async function linksForm(event) {
         const popup = extractURLs(text.value)
         console.log('popup:', popup)
         await chrome.storage.local.set({ popup })
-
         const url = new URL(chrome.runtime.getURL('../html/links.html'))
         url.searchParams.set('popup', 'yes')
-        // TODO: This Destroys the Popup on Linux Chrome and Prevents Link Parsing from Popup
         await chrome.tabs.create({ active: true, url: url.toString() })
+        window.close()
     } else if (event.submitter.id === 'open-parsed') {
         openLinksInTabs(urls)
         window.close()
