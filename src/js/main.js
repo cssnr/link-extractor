@@ -2,15 +2,12 @@
 
 const clipboard = new ClipboardJS('.clip')
 
-// TODO: Update Event Triggers to Catch All Copy Buttons
 clipboard.on('success', function (event) {
     console.info('clipboard.success:', event)
     const text = event.text.trim()
     console.log(`text: "${text}"`)
-    if (event.trigger.id === 'copy-links') {
-        showToast('Links Copied')
-    } else if (event.trigger.id === 'copy-domains') {
-        showToast('Domains Copied')
+    if (event.trigger.dataset.toast) {
+        showToast(event.trigger.dataset.toast)
     } else {
         showToast('Copied to Clipboard')
     }

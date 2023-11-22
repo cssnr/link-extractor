@@ -11,22 +11,22 @@
 <body>
 
 <div id="top-container" class="position-fixed top-0 end-0 user-select-none visually-hidden links domains">
-    <div class="row g-1">
+    <div class="row g-1 visually-hidden links">
         <div class="col">
             <a href="#links"><span class="badge text-bg-success visually-hidden w-100 links">Links</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#links-body">
-                <span class="badge text-bg-success visually-hidden w-100 links">Copy</span></a>
+            <a role="button" class="clip" data-clipboard-target="#links-body" data-toast="Copied Links">
+                <span class="badge text-bg-success w-100">Copy</span></a>
         </div>
     </div>
-    <div class="row g-1">
+    <div class="row g-1 visually-hidden domains">
         <div class="col">
-            <a href="#domains"><span class="badge text-bg-primary visually-hidden w-100 domains">Domains</span></a>
+            <a href="#domains"><span class="badge text-bg-primary w-100">Domains</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#domains-body">
-                <span class="badge text-bg-primary visually-hidden w-100 domains">Copy</span></a>
+            <a role="button" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+                <span class="badge text-bg-primary w-100">Copy</span></a>
         </div>
     </div>
 </div>
@@ -36,7 +36,7 @@
     <div class="visually-hidden links">
         <div class="user-select-none">
             <h2 id="links">Links <span id="links-count" class="badge bg-success-subtle"></span></h2>
-            <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body">
+            <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body" data-toast="Copied Links">
                 Copy Links</a>
             <a id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#links-body" data-filename="links.txt">
                 Download</a>
@@ -63,9 +63,9 @@
     <div class="visually-hidden domains">
         <div class="user-select-none">
             <h2 id="domains">Domains <span id="domains-count" class="badge bg-primary-subtle"></span></h2>
-            <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body">
+            <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
                 Copy Domains</a>
-            <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body"  data-filename="domains.txt">
+            <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body" data-filename="domains.txt">
                 Download</a>
             <button type="button" id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-1 mb-2" data-target="#domains-body">
                 Open
