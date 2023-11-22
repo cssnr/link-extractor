@@ -4,6 +4,8 @@ import { openLinksInTabs } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initLinks)
 
+document.getElementById('reset-button').addEventListener('click', resetButton)
+
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
@@ -23,34 +25,6 @@ downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const filterInput = document.querySelectorAll('.filter-input')
 filterInput.forEach((el) => el.addEventListener('input', filterLinks))
-
-/**
- * Filter Links
- * TODO: Remove JQuery
- *  Update Link/Domain Copy Functions to Work
- * @function filterLinks
- * @param {MouseEvent} event
- */
-function filterLinks(event) {
-    // console.log('filterLinks:', event)
-    console.log(`value: ${event.target.value}`)
-
-    const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
-    console.log(`input: ${input}`)
-    const val = `^(?=.*\\b${input}).*$`
-    console.log(`val: ${val}`)
-    const reg = RegExp(val, 'i')
-    console.log(`reg: ${reg}`)
-
-    let text
-    function filterFunction() {
-        text = $(this).text().replace(/\s+/g, ' ')
-        return !reg.test(text)
-    }
-
-    const rows = $('table tr')
-    rows.show().filter(filterFunction).hide()
-}
 
 /**
  * Links Init
@@ -140,7 +114,7 @@ async function processLinks(links) {
             openCount.classList.remove('visually-hidden')
             openCount.textContent = items.length.toString()
         }
-        document.getElementById('links-clip').value = items.join('\n')
+        // document.getElementById('links-clip').value = items.join('\n')
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
         updateTable(items, 'links-table')
@@ -158,7 +132,7 @@ async function processLinks(links) {
         openCount.classList.remove('visually-hidden')
         openCount.textContent = domains.length.toString()
     }
-    document.getElementById('domains-clip').value = domains.join('\n')
+    // document.getElementById('domains-clip').value = domains.join('\n')
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
@@ -207,7 +181,7 @@ function updateTable(data, elementId) {
 }
 
 /**
- * Keyboard Event Callback
+ * Keyboard keydown Callback
  * TODO: Remove JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
@@ -224,6 +198,9 @@ function handleKeybinds(event) {
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
+        } else if (checkKey(event, ['KeyF', 'KeyI'])) {
+            event.preventDefault()
+            document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             $('#keybinds-modal').modal('toggle')
         }
@@ -259,11 +236,17 @@ function checkKey(event, keys) {
 function openLinksClick(event) {
     console.log('openLinksBtn:', event)
     console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    const input = document.querySelector(event.target.dataset.target)
-    console.log('input:', input)
-    const links = input.value.toString().split('\n')
+    // const input = document.querySelector(event.target.dataset.target)
+    // console.log('input:', input)
+    // const links = input.value.toString().split('\n')
+    const table = document.querySelector(event.target.dataset.target)
+    const links = table.innerText.trim()
     console.log('links:', links)
-    openLinksInTabs(links)
+    if (links) {
+        openLinksInTabs(links.split('\n'))
+    } else {
+        showToast('No Links to Open.', 'warning')
+    }
 }
 
 /**
@@ -274,11 +257,17 @@ function openLinksClick(event) {
 function downloadFileClick(event) {
     console.log('downloadLinksClick:', event)
     console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    const input = document.querySelector(event.target.dataset.target)
-    const links = input.value.toString()
+    // const input = document.querySelector(event.target.dataset.target)
+    // const links = input.value.toString()
+    const table = document.querySelector(event.target.dataset.target)
+    const links = table.innerText.trim()
     console.log('links:', links)
-    download(event.target.dataset.filename, links)
-    // showToast('File Downloaded.')
+    if (links) {
+        download(event.target.dataset.filename, links)
+        showToast('Download Started.')
+    } else {
+        showToast('No Links to Download.', 'warning')
+    }
 }
 
 /**
@@ -299,4 +288,42 @@ function download(filename, text) {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
+}
+
+/**
+ * Reset Filter Click Callback
+ * @function resetButton
+ * @param {MouseEvent} event
+ */
+async function resetButton(event) {
+    console.log('resetButton:', event)
+    document.getElementById('filter-links').value = ''
+    await filterLinks(event)
+}
+
+/**
+ * Filter Links
+ * TODO: Remove JQuery
+ * @function filterLinks
+ * @param {MouseEvent} event
+ */
+function filterLinks(event) {
+    // console.log('filterLinks:', event)
+    // console.log(`value: ${event.target.value}`)
+    const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
+    // console.log(`input: ${input}`)
+
+    const val = `^(?=.*\\b${input}).*$`
+    // console.log(`val: ${val}`)
+    const reg = RegExp(val, 'i')
+    // console.log(`reg: ${reg}`)
+
+    let text
+    function filterFunction() {
+        text = $(this).text().replace(/\s+/g, ' ')
+        return !reg.test(text)
+    }
+
+    const rows = $('table tr')
+    rows.show().filter(filterFunction).hide()
 }
