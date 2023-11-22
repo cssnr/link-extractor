@@ -1,4 +1,4 @@
-// JS Exports
+// JS exports
 
 /**
  * Create Context Menus
@@ -48,7 +48,7 @@ export function createContextMenus(patterns) {
 }
 
 /**
- * Inject inject.js to Tab and Open links.html with params
+ * Inject extract.js to Tab and Open links.html with params
  * @function processLinks
  * @param {String} filter
  * @param {Boolean} domains
@@ -70,7 +70,7 @@ export async function injectTab(filter, domains, selection) {
     }
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        files: ['/js/inject.js'],
+        files: ['/js/extract.js'],
     })
     console.log(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })

@@ -4,10 +4,10 @@ const clipboard = new ClipboardJS('.clip')
 
 clipboard.on('success', function (event) {
     console.info('clipboard.success:', event)
-    if (event.trigger.id === 'links-clip') {
-        showToast('Links Copied')
-    } else if (event.trigger.id === 'domains-clip') {
-        showToast('Domains Copied')
+    const text = event.text.trim()
+    console.log(`text: "${text}"`)
+    if (event.trigger.dataset.toast) {
+        showToast(event.trigger.dataset.toast)
     } else {
         showToast('Copied to Clipboard')
     }

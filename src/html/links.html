@@ -11,22 +11,22 @@
 <body>
 
 <div id="top-container" class="position-fixed top-0 end-0 user-select-none visually-hidden links domains">
-    <div class="row g-1">
+    <div class="row g-1 visually-hidden links">
         <div class="col">
             <a href="#links"><span class="badge text-bg-success visually-hidden w-100 links">Links</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#links-clip">
-                <span class="badge text-bg-success visually-hidden w-100 links">Copy</span></a>
+            <a role="button" class="clip" data-clipboard-target="#links-body" data-toast="Copied Links">
+                <span class="badge text-bg-success w-100">Copy</span></a>
         </div>
     </div>
-    <div class="row g-1">
+    <div class="row g-1 visually-hidden domains">
         <div class="col">
-            <a href="#domains"><span class="badge text-bg-primary visually-hidden w-100 domains">Domains</span></a>
+            <a href="#domains"><span class="badge text-bg-primary w-100">Domains</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#domains-clip">
-                <span class="badge text-bg-primary visually-hidden w-100 domains">Copy</span></a>
+            <a role="button" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+                <span class="badge text-bg-primary w-100">Copy</span></a>
         </div>
     </div>
 </div>
@@ -34,42 +34,49 @@
 <div class="container-fluid p-3">
     <h2 id="loading-message" class="user-select-none">Loading...</h2>
     <div class="visually-hidden links">
-        <input id="links-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="links">Links <span id="links-count" class="badge bg-success-subtle"></span></h2>
-            <a id="copy-links" class="btn btn-sm btn-success me-1 clip" role="button" data-clipboard-target="#links-clip">
+            <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body" data-toast="Copied Links">
                 Copy Links</a>
-            <a id="down-links" class="btn btn-sm btn-outline-info download-file" role="button" data-target="#links-clip" data-filename="links.txt">
+            <a id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#links-body" data-filename="links.txt">
                 Download</a>
-            <button type="button" id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-3" data-target="#links-clip">
-                Open <span id="open-links-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger visually-hidden"></span>
+            <button type="button" id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-1 mb-2" data-target="#links-body">
+                Open
+<!--                <span id="open-links-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger visually-hidden"></span>-->
             </button>
-            Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.
+            <span class="d-inline-block me-1 mb-2">Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.</span>
         </div>
+
+        <div class="input-group mb-2">
+            <input id="filter-links" type="text" class="form-control filter-input" list="savedFilters" placeholder="Press F and Type to Filter..." aria-label="Filter" aria-describedby="reset-button">
+            <button class="btn btn-outline-secondary" type="button" id="reset-button">Reset</button>
+        </div>
+        <datalist id="savedFilters"></datalist>
+
         <table id="links-table" class="table table-sm table-striped table-hover">
-            <caption class="visually-hidden user-select-none">Links</caption>
-            <thead><tr><th></th></tr></thead>
-            <tbody></tbody>
+            <caption class="visually-hidden user-select-none" style="display: none;">Links</caption>
+            <thead class="visually-hidden"><tr><th></th></tr></thead>
+            <tbody id="links-body"></tbody>
         </table>
     </div>
 
     <div class="visually-hidden domains">
-        <input id="domains-clip" class="visually-hidden" type="hidden" value="">
         <div class="user-select-none">
             <h2 id="domains">Domains <span id="domains-count" class="badge bg-primary-subtle"></span></h2>
-            <a id="copy-domains" class="btn btn-sm btn-primary me-1 clip" role="button" data-clipboard-target="#domains-clip">
+            <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
                 Copy Domains</a>
-            <a id="down-domains" class="btn btn-sm btn-outline-info download-file" role="button" data-target="#domains-clip"  data-filename="domains.txt">
+            <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body" data-filename="domains.txt">
                 Download</a>
-            <button type="button" id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-3" data-target="#domains-clip">
-                Open <span id="open-domains-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger visually-hidden"></span>
+            <button type="button" id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-1 mb-2" data-target="#domains-body">
+                Open
+<!--                <span id="open-domains-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger visually-hidden"></span>-->
             </button>
-            Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.
+            <span class="d-inline-block me-1 mb-2">Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.</span>
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover">
-            <caption class="visually-hidden user-select-none">Domains</caption>
-            <thead><tr><th></th></tr></thead>
-            <tbody></tbody>
+            <caption class="visually-hidden user-select-none" style="display: none;">Domains</caption>
+            <thead class="visually-hidden"><tr><th></th></tr></thead>
+            <tbody id="domains-body"></tbody>
         </table>
     </div>
 </div>
@@ -90,6 +97,7 @@
                     <div class="col">
                         <p><kbd>C</kbd> or <kbd>L</kbd> Copy All Links</p>
                         <p><kbd>D</kbd> or <kbd>M</kbd> Copy All Domains</p>
+                        <p><kbd>F</kbd> or <kbd>I</kbd> Focus Filter Input</p>
                         <p><kbd>T</kbd> or <kbd>O</kbd> Open Options</p>
                         <p><kbd>Z</kbd> or <kbd>K</kbd> Keyboard Shortcuts</p>
                     </div>

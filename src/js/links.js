@@ -21,18 +21,29 @@ openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
 const downFileBtns = document.querySelectorAll('.download-file')
 downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
 
+const filterInput = document.querySelectorAll('.filter-input')
+filterInput.forEach((el) => el.addEventListener('input', filterLinks))
+
+document.getElementById('reset-button').addEventListener('click', resetButton)
+
 /**
  * Links Init
- * TODO: Review this function
  * @function initLinks
  */
 async function initLinks() {
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    console.log(patterns)
+    const savedFilters = document.getElementById('savedFilters')
+    patterns.forEach((pattern) => {
+        const option = document.createElement('option')
+        option.value = pattern
+        savedFilters.appendChild(option)
+    })
+
     if (urlParams.has('popup')) {
-        const links = await chrome.runtime.sendMessage({
-            msg: 'extract',
-        })
-        console.log('popup:', links)
-        await processLinks(links)
+        const { popup } = await chrome.storage.local.get(['popup'])
+        console.log('popup:', popup)
+        await processLinks(popup)
     } else if (urlParams.has('selection')) {
         chrome.tabs.sendMessage(tabId, { action: 'selection' }, (links) => {
             processLinks(links)
@@ -60,7 +71,7 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-    const openWarnCount = 30
+    // const openWarnCount = 30
     const { options } = await chrome.storage.sync.get(['options'])
     console.log('options:', options)
 
@@ -97,12 +108,11 @@ async function processLinks(links) {
     if (!onlyDomains) {
         document.getElementById('links-count').textContent =
             items.length.toString()
-        if (items.length >= openWarnCount) {
-            const openCount = document.getElementById('open-links-count')
-            openCount.classList.remove('visually-hidden')
-            openCount.textContent = items.length.toString()
-        }
-        document.getElementById('links-clip').value = items.join('\n')
+        // if (items.length >= openWarnCount) {
+        //     const openCount = document.getElementById('open-links-count')
+        //     openCount.classList.remove('visually-hidden')
+        //     openCount.textContent = items.length.toString()
+        // }
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
         updateTable(items, 'links-table')
@@ -115,12 +125,11 @@ async function processLinks(links) {
     })
     document.getElementById('domains-count').textContent =
         domains.length.toString()
-    if (domains.length >= openWarnCount) {
-        const openCount = document.getElementById('open-domains-count')
-        openCount.classList.remove('visually-hidden')
-        openCount.textContent = domains.length.toString()
-    }
-    document.getElementById('domains-clip').value = domains.join('\n')
+    // if (domains.length >= openWarnCount) {
+    //     const openCount = document.getElementById('open-domains-count')
+    //     openCount.classList.remove('visually-hidden')
+    //     openCount.textContent = domains.length.toString()
+    // }
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
@@ -169,7 +178,8 @@ function updateTable(data, elementId) {
 }
 
 /**
- * Keyboard Event Callback
+ * Keyboard keydown Callback
+ * TODO: Remove JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
@@ -185,6 +195,9 @@ function handleKeybinds(event) {
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
+        } else if (checkKey(event, ['KeyF', 'KeyI'])) {
+            event.preventDefault()
+            document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             $('#keybinds-modal').modal('toggle')
         }
@@ -218,28 +231,35 @@ function checkKey(event, keys) {
  * @param {KeyboardEvent} event
  */
 function openLinksClick(event) {
-    console.log('openLinksBtn:', event)
-    console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    const input = document.querySelector(event.target.dataset.target)
-    console.log('input:', input)
-    const links = input.value.toString().split('\n')
+    console.log('openLinksClick:', event)
+    console.log(`querySelector: ${event.target.dataset.target}`)
+    const element = document.querySelector(event.target.dataset.target)
+    const links = element.innerText.trim()
     console.log('links:', links)
-    openLinksInTabs(links)
+    if (links) {
+        openLinksInTabs(links.split('\n'))
+    } else {
+        showToast('No Links to Open.', 'warning')
+    }
 }
 
 /**
- * Download links Button Click Callback
- * @function downloadLinksClick
+ * Download Links Button Click Callback
+ * @function downloadFileClick
  * @param {KeyboardEvent} event
  */
 function downloadFileClick(event) {
-    console.log('downloadLinksClick:', event)
-    console.log(`openLinksBtn: ${event.target.dataset.target}`)
-    const input = document.querySelector(event.target.dataset.target)
-    const links = input.value.toString()
+    console.log('downloadFileClick:', event)
+    console.log(`querySelector: ${event.target.dataset.target}`)
+    const element = document.querySelector(event.target.dataset.target)
+    const links = element.innerText.trim()
     console.log('links:', links)
-    download(event.target.dataset.filename, links)
-    // showToast('File Downloaded.')
+    if (links) {
+        download(event.target.dataset.filename, links)
+        showToast('Download Started.')
+    } else {
+        showToast('No Links to Download.', 'warning')
+    }
 }
 
 /**
@@ -260,4 +280,40 @@ function download(filename, text) {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
+}
+
+/**
+ * Filter Links
+ * TODO: Remove JQuery
+ * @function filterLinks
+ * @param {MouseEvent} event
+ */
+function filterLinks(event) {
+    // console.log('filterLinks:', event)
+    // console.log(`value: ${event.target.value}`)
+    const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
+    const value = `^(?=.*\\b${input}).*$`
+    const reg = RegExp(value, 'i')
+
+    let text
+    function filterFunction() {
+        text = $(this).text().replace(/\s+/g, ' ')
+        return !reg.test(text)
+    }
+
+    const rows = $('table tr')
+    rows.show().filter(filterFunction).hide()
+    $('#links-count').text($('#links-table tr:visible').length)
+    $('#domains-count').text($('#domains-table tr:visible').length)
+}
+
+/**
+ * Reset Filter Click Callback
+ * @function resetButton
+ * @param {MouseEvent} event
+ */
+function resetButton(event) {
+    console.log('resetButton:', event)
+    document.getElementById('filter-links').value = ''
+    filterLinks(event)
 }
