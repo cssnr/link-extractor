@@ -1,4 +1,4 @@
-// JS injected into active tab on popup
+// JS injected into active tab to extract links
 
 chrome.runtime.onMessage.addListener(onMessage)
 

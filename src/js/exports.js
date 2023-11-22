@@ -1,4 +1,4 @@
-// JS Exports
+// JS exports
 
 /**
  * Create Context Menus

@@ -1,4 +1,4 @@
-// Background Service Worker JS
+// JS Background Service Worker
 
 import { createContextMenus, injectTab } from './exports.js'
 
