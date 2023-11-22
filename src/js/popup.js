@@ -112,7 +112,7 @@ async function popupClick(event) {
         filter = filterInput.value
     }
     const domains = event.target.id === 'btn-domains'
-    await injectTab(filter, domains)
+    await injectTab(filter, domains, false)
     window.close()
 }
 
@@ -130,6 +130,7 @@ async function linksForm(event) {
         // urls = urls.map((string) => string.trim())
         const url = new URL(chrome.runtime.getURL('../html/links.html'))
         url.searchParams.set('popup', 'yes')
+        // TODO: This Destroys the Popup on Linux Chrome and Prevents Link Parsing from Popup
         await chrome.tabs.create({ active: true, url: url.toString() })
     } else if (event.submitter.id === 'open-parsed') {
         openLinksInTabs(urls)
