@@ -1,6 +1,6 @@
 // JS for options.html
 
-import { createContextMenus } from './exports.js'
+import { createContextMenus } from './service-worker.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', saveOptions)

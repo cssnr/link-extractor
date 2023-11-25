@@ -1,7 +1,5 @@
 // JS for links.html
 
-import { openLinksInTabs } from './exports.js'
-
 document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -237,7 +235,9 @@ function openLinksClick(event) {
     const links = element.innerText.trim()
     console.log('links:', links)
     if (links) {
-        openLinksInTabs(links.split('\n'))
+        links.split('\n').forEach(function (url) {
+            chrome.tabs.create({ active: true, url }).then()
+        })
     } else {
         showToast('No Links to Open.', 'warning')
     }

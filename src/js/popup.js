@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { injectTab, openLinksInTabs } from './exports.js'
+import { injectTab } from './service-worker.js'
 
 const filterInput = document.getElementById('filter-input')
 filterInput.focus()
@@ -109,7 +109,6 @@ async function popupClick(event) {
 async function linksForm(event) {
     event.preventDefault()
     console.log('linksForm:', event)
-    const urls = extractURLs(event.target[0].value)
     if (event.submitter.id === 'parse-links') {
         const text = document.getElementById('links-text')
         const popup = extractURLs(text.value)
@@ -120,12 +119,17 @@ async function linksForm(event) {
         await chrome.tabs.create({ active: true, url: url.toString() })
         window.close()
     } else if (event.submitter.id === 'open-parsed') {
-        openLinksInTabs(urls)
+        const urls = extractURLs(event.target[0].value)
+        urls.forEach(function (url) {
+            chrome.tabs.create({ active: true, url })
+        })
         window.close()
     } else if (event.submitter.id === 'open-lines') {
         let text = event.target[0].value.split(/\r\n?|\n/g)
         text = text.filter((str) => str !== '')
-        openLinksInTabs(text)
+        text.forEach(function (url) {
+            chrome.tabs.create({ active: true, url })
+        })
         window.close()
     } else {
         console.error('Unknown event.submitter:', event.submitter)
