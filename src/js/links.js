@@ -194,7 +194,7 @@ function handleKeybinds(event) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
         } else if (checkKey(event, ['KeyF', 'KeyI'])) {
-            event.preventDefault()
+            event.preventDefault() // prevent typing f on focus
             document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             $('#keybinds-modal').modal('toggle')

@@ -1,9 +1,6 @@
 // JS for popup.html
 
-import { injectTab } from './service-worker.js'
-
-const filterInput = document.getElementById('filter-input')
-filterInput.focus()
+import { injectTab } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', popupClick)
@@ -22,6 +19,9 @@ const tooltipTriggerList = document.querySelectorAll(
 const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 )
+
+const filterInput = document.getElementById('filter-input')
+filterInput.focus()
 
 /**
  * Popup Action Init
@@ -68,8 +68,8 @@ function createFilterLink(number, value = '') {
  * @param {MouseEvent} event
  */
 async function popupClick(event) {
+    console.log('popupClick:', event)
     event.preventDefault()
-    console.log(event)
     const anchor = event.target.closest('a')
     if (anchor?.dataset?.href) {
         let url
@@ -107,8 +107,8 @@ async function popupClick(event) {
  * @param {SubmitEvent} event
  */
 async function linksForm(event) {
-    event.preventDefault()
     console.log('linksForm:', event)
+    event.preventDefault()
     if (event.submitter.id === 'parse-links') {
         const text = document.getElementById('links-text')
         const popup = extractURLs(text.value)
@@ -200,8 +200,7 @@ function extractURLs(text) {
  * @param {SubmitEvent} event
  */
 async function updateOptions(event) {
-    console.log('updateOptions')
-    console.log(event)
+    console.log('updateOptions:', event)
     let { options } = await chrome.storage.sync.get(['options'])
     console.log(options)
     options.defaultFilter = event.target.checked
