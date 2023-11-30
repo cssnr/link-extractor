@@ -26,9 +26,9 @@ async function onInstalled(details) {
         'patterns',
     ])
     options = setDefaults(options, defaultOptions)
-    console.log(options)
+    console.log('options:', options)
     patterns = patterns || []
-    console.log(patterns)
+    console.log('patterns:', patterns)
     await chrome.storage.sync.set({ options, patterns })
 
     if (options.contextMenu) {
@@ -54,7 +54,7 @@ async function onInstalled(details) {
  * On Context Menu Click Callback
  * @function onClicked
  * @param {OnClickData} ctx
- * @param {Tab} tab
+ * @param {chrome.tabs.Tab} tab
  */
 async function onClicked(ctx, tab) {
     console.log('onClicked:', ctx, tab)
@@ -129,10 +129,7 @@ function copyActiveElementText(ctx) {
  * @param {Array} args
  */
 async function injectFunction(func, args) {
-    const [tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-    })
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: func,

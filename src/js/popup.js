@@ -1,9 +1,6 @@
 // JS for popup.html
 
-import { injectTab, openLinksInTabs } from './exports.js'
-
-const filterInput = document.getElementById('filter-input')
-filterInput.focus()
+import { injectTab } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', popupClick)
@@ -22,6 +19,9 @@ const tooltipTriggerList = document.querySelectorAll(
 const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 )
+
+const filterInput = document.getElementById('filter-input')
+filterInput.focus()
 
 /**
  * Popup Action Init
@@ -68,8 +68,8 @@ function createFilterLink(number, value = '') {
  * @param {MouseEvent} event
  */
 async function popupClick(event) {
+    console.log('popupClick:', event)
     event.preventDefault()
-    console.log(event)
     const anchor = event.target.closest('a')
     if (anchor?.dataset?.href) {
         let url
@@ -107,9 +107,8 @@ async function popupClick(event) {
  * @param {SubmitEvent} event
  */
 async function linksForm(event) {
-    event.preventDefault()
     console.log('linksForm:', event)
-    const urls = extractURLs(event.target[0].value)
+    event.preventDefault()
     if (event.submitter.id === 'parse-links') {
         const text = document.getElementById('links-text')
         const popup = extractURLs(text.value)
@@ -120,12 +119,17 @@ async function linksForm(event) {
         await chrome.tabs.create({ active: true, url: url.toString() })
         window.close()
     } else if (event.submitter.id === 'open-parsed') {
-        openLinksInTabs(urls)
+        const urls = extractURLs(event.target[0].value)
+        urls.forEach(function (url) {
+            chrome.tabs.create({ active: true, url })
+        })
         window.close()
     } else if (event.submitter.id === 'open-lines') {
         let text = event.target[0].value.split(/\r\n?|\n/g)
         text = text.filter((str) => str !== '')
-        openLinksInTabs(text)
+        text.forEach(function (url) {
+            chrome.tabs.create({ active: true, url })
+        })
         window.close()
     } else {
         console.error('Unknown event.submitter:', event.submitter)
@@ -196,8 +200,7 @@ function extractURLs(text) {
  * @param {SubmitEvent} event
  */
 async function updateOptions(event) {
-    console.log('updateOptions')
-    console.log(event)
+    console.log('updateOptions:', event)
     let { options } = await chrome.storage.sync.get(['options'])
     console.log(options)
     options.defaultFilter = event.target.checked

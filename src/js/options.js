@@ -39,7 +39,7 @@ async function initOptions() {
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('showUpdate').checked = options.showUpdate
     if (patterns?.length) {
-        console.log(patterns)
+        console.log('patterns:', patterns)
         patterns.forEach(function (value, i) {
             createFilterInput(i.toString(), value)
         })
@@ -61,8 +61,8 @@ async function initOptions() {
  * @param {MouseEvent} event
  */
 function deleteInputFilter(event) {
-    event.preventDefault()
     console.log('deleteInputFilter:', event)
+    event.preventDefault()
     const inputs = document
         .getElementById('filters-inputs')
         .getElementsByTagName('input').length
@@ -80,8 +80,8 @@ function deleteInputFilter(event) {
  * @param {MouseEvent} event
  */
 function addInputFilter(event) {
-    event.preventDefault()
     console.log('addInputFilter:', event)
+    event.preventDefault()
     const el = document.getElementById('filters-inputs')
     const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
     createFilterInput(next)
@@ -115,8 +115,8 @@ function createFilterInput(number, value = '') {
  * @param {MouseEvent} event
  */
 async function saveOptions(event) {
-    event.preventDefault()
     console.log('saveOptions:', event)
+    event.preventDefault()
     const options = {}
     const flagsInput = document.getElementById('reFlags')
     let flags = flagsInput.value.toLowerCase().replace(/\s+/gm, '').split('')
@@ -162,8 +162,8 @@ async function saveOptions(event) {
  * @param {MouseEvent} event
  */
 function resetForm(event) {
-    event.preventDefault()
     console.log('resetForm:', event)
+    event.preventDefault()
     const input = document.getElementById('reFlags')
     input.value = 'ig'
     input.focus()

@@ -1,7 +1,5 @@
 // JS for links.html
 
-import { openLinksInTabs } from './exports.js'
-
 document.addEventListener('DOMContentLoaded', initLinks)
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -196,7 +194,7 @@ function handleKeybinds(event) {
             const url = chrome.runtime.getURL('../html/options.html')
             chrome.tabs.create({ active: true, url: url }).then()
         } else if (checkKey(event, ['KeyF', 'KeyI'])) {
-            event.preventDefault()
+            event.preventDefault() // prevent typing f on focus
             document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             $('#keybinds-modal').modal('toggle')
@@ -237,7 +235,9 @@ function openLinksClick(event) {
     const links = element.innerText.trim()
     console.log('links:', links)
     if (links) {
-        openLinksInTabs(links.split('\n'))
+        links.split('\n').forEach(function (url) {
+            chrome.tabs.create({ active: true, url }).then()
+        })
     } else {
         showToast('No Links to Open.', 'warning')
     }
