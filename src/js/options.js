@@ -15,12 +15,8 @@ document.getElementById('reset-default').addEventListener('click', resetForm)
     })
 })
 
-const tooltipTriggerList = document.querySelectorAll(
-    '[data-bs-toggle="tooltip"]'
-)
-const tooltipList = [...tooltipTriggerList].map(
-    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-)
+const toolTips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...toolTips].map((el) => new bootstrap.Tooltip(el))
 
 /**
  * Options Page Init
