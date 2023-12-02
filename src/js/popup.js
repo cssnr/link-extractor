@@ -83,7 +83,10 @@ async function popupClick(event) {
         } else {
             url = chrome.runtime.getURL(anchor.dataset.href)
         }
-        console.log(`url: ${url}`)
+        console.log('url:', url)
+        if (!url) {
+            return console.warn('No dataset.href for anchor:', anchor)
+        }
         await chrome.tabs.create({ active: true, url })
         return window.close()
     }
