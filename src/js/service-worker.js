@@ -35,8 +35,7 @@ async function onInstalled(details) {
         createContextMenus(patterns)
     }
     if (details.reason === 'install') {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
@@ -59,8 +58,7 @@ async function onInstalled(details) {
 async function onClicked(ctx, tab) {
     console.log('onClicked:', ctx, tab)
     if (['options', 'filters'].includes(ctx.menuItemId)) {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else if (ctx.menuItemId === 'links') {
         console.log('injectTab: links')
         await injectTab(null, null, null)

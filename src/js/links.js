@@ -191,8 +191,7 @@ function handleKeybinds(event) {
         } else if (checkKey(event, ['KeyD', 'KeyM'])) {
             document.getElementById('copy-domains').click()
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
-            const url = chrome.runtime.getURL('../html/options.html')
-            chrome.tabs.create({ active: true, url: url }).then()
+            chrome.runtime.openOptionsPage()
         } else if (checkKey(event, ['KeyF', 'KeyI'])) {
             event.preventDefault() // prevent typing f on focus
             document.getElementById('filter-links').focus()

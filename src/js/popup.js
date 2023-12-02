@@ -75,6 +75,11 @@ async function popupClick(event) {
         let url
         if (anchor.dataset.href.startsWith('http')) {
             url = anchor.dataset.href
+        } else if (anchor.dataset.href === 'homepage') {
+            url = chrome.runtime.getManifest().homepage_url
+        } else if (anchor.dataset.href === 'options') {
+            chrome.runtime.openOptionsPage()
+            return window.close()
         } else {
             url = chrome.runtime.getURL(anchor.dataset.href)
         }
@@ -82,12 +87,6 @@ async function popupClick(event) {
         await chrome.tabs.create({ active: true, url })
         return window.close()
     }
-    if (event.target.id === 'btn-about') {
-        const url = chrome.runtime.getManifest().homepage_url
-        await chrome.tabs.create({ active: true, url })
-        return window.close()
-    }
-
     let filter
     if (event.target.classList.contains('dropdown-item')) {
         console.log(`event.target.textContent: ${event.target.textContent}`)
