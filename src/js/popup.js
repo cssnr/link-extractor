@@ -3,31 +3,25 @@
 import { injectTab } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
-document.getElementById('filter-form').addEventListener('submit', popupClick)
+document.getElementById('filter-form').addEventListener('submit', popLinks)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 document
     .getElementById('defaultFilter')
     .addEventListener('change', updateOptions)
 
-const buttons = document.querySelectorAll('.popup-click')
-buttons.forEach((el) => el.addEventListener('click', popupClick))
+const popupLinks = document.querySelectorAll('[data-href]')
+popupLinks.forEach((el) => el.addEventListener('click', popLinks))
 
-const tooltipTriggerList = document.querySelectorAll(
-    '[data-bs-toggle="tooltip"]'
-)
-const tooltipList = [...tooltipTriggerList].map(
-    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-)
-
-const filterInput = document.getElementById('filter-input')
-filterInput.focus()
+const toolTips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...toolTips].map((el) => new bootstrap.Tooltip(el))
 
 /**
  * Popup Action Init
  * @function initOptions
  */
 async function initPopup() {
+    document.getElementById('filter-input').focus()
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -58,17 +52,18 @@ function createFilterLink(number, value = '') {
     a.textContent = value.substring(0, 24)
     a.href = '#'
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', popupClick)
+    a.addEventListener('click', popLinks)
     li.appendChild(a)
 }
 
 /**
- * Handle Popup Clicks
- * @function popupClick
+ * Popup Links Click Callback
+ * Firefox requires a call to window.close()
+ * @function popLinks
  * @param {MouseEvent} event
  */
-async function popupClick(event) {
-    console.log('popupClick:', event)
+async function popLinks(event) {
+    console.log('popLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
     if (anchor?.dataset?.href) {
@@ -85,7 +80,7 @@ async function popupClick(event) {
         }
         console.log('url:', url)
         if (!url) {
-            return console.warn('No dataset.href for anchor:', anchor)
+            return console.error('No dataset.href for anchor:', anchor)
         }
         await chrome.tabs.create({ active: true, url })
         return window.close()
