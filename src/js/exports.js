@@ -46,6 +46,7 @@ export function createContextMenus(patterns) {
  * @param {Boolean} selection
  */
 export async function injectTab(filter, domains, selection) {
+    // console.log('injectTab:', filter, domains, selection)
     const url = new URL(chrome.runtime.getURL('../html/links.html'))
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log(`tab.id: ${tab.id}`)
