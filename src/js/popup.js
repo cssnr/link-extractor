@@ -3,12 +3,13 @@
 import { injectTab } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
-document.getElementById('filter-form').addEventListener('submit', popLinks)
+document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document
-    .getElementById('defaultFilter')
-    .addEventListener('change', updateOptions)
+document.getElementById('defaultFilter').addEventListener('change', popOptions)
+
+const filterBtns = document.querySelectorAll('[data-filter]')
+filterBtns.forEach((el) => el.addEventListener('click', filterForm))
 
 const popupLinks = document.querySelectorAll('[data-href]')
 popupLinks.forEach((el) => el.addEventListener('click', popLinks))
@@ -52,7 +53,7 @@ function createFilterLink(number, value = '') {
     a.textContent = value.substring(0, 24)
     a.href = '#'
     a.classList.add('dropdown-item', 'small')
-    a.addEventListener('click', popLinks)
+    a.addEventListener('click', filterForm)
     li.appendChild(a)
 }
 
@@ -66,34 +67,41 @@ async function popLinks(event) {
     console.log('popLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    if (anchor?.dataset?.href) {
-        let url
-        if (anchor.dataset.href.startsWith('http')) {
-            url = anchor.dataset.href
-        } else if (anchor.dataset.href === 'homepage') {
-            url = chrome.runtime.getManifest().homepage_url
-        } else if (anchor.dataset.href === 'options') {
-            chrome.runtime.openOptionsPage()
-            return window.close()
-        } else {
-            url = chrome.runtime.getURL(anchor.dataset.href)
-        }
-        console.log('url:', url)
-        if (!url) {
-            return console.error('No dataset.href for anchor:', anchor)
-        }
-        await chrome.tabs.create({ active: true, url })
+    let url
+    if (anchor.dataset.href.startsWith('http')) {
+        url = anchor.dataset.href
+    } else if (anchor.dataset.href === 'homepage') {
+        url = chrome.runtime.getManifest().homepage_url
+    } else if (anchor.dataset.href === 'options') {
+        chrome.runtime.openOptionsPage()
         return window.close()
+    } else {
+        url = chrome.runtime.getURL(anchor.dataset.href)
     }
+    console.log('url:', url)
+    if (!url) {
+        return console.error('No dataset.href for anchor:', anchor)
+    }
+    await chrome.tabs.create({ active: true, url })
+    return window.close()
+}
+
+/**
+ * Filter Form Submit Callback
+ * @function formSubmit
+ * @param {SubmitEvent} event
+ */
+async function filterForm(event) {
+    console.log('filterForm:', event)
+    event.preventDefault()
+    const filterInput = document.getElementById('filter-input')
     let filter
     if (event.target.classList.contains('dropdown-item')) {
-        console.log(`event.target.textContent: ${event.target.textContent}`)
         filter = event.target.textContent
-    } else if (filterInput.value) {
-        console.log(`filterInput.value: ${filterInput.value}`)
+    } else if (filterInput?.value) {
         filter = filterInput.value
     }
-    const domains = event.target.id === 'btn-domains'
+    const domains = event.target.dataset.filter === 'domains'
     await injectTab(filter, domains, false)
     window.close()
 }
@@ -192,12 +200,12 @@ function extractURLs(text) {
 }
 
 /**
- * Save Default Radio on Change Callback
- * @function updateOptions
+ * Popup Options Change Callback
+ * @function popOptions
  * @param {SubmitEvent} event
  */
-async function updateOptions(event) {
-    console.log('updateOptions:', event)
+async function popOptions(event) {
+    console.log('popOptions:', event)
     let { options } = await chrome.storage.sync.get(['options'])
     console.log(options)
     options.defaultFilter = event.target.checked

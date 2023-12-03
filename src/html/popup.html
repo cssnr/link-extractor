@@ -12,11 +12,9 @@
 <div class="container-fluid p-3">
     <div class="d-grid g-2 gap-2">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-            <button id="btn-all" class="btn btn-success btn-sm" type="button">
-                All Links</button>
+            <a role="button" class="btn btn-success btn-sm" data-filter="">All Links</a>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filters</button>
+                <a role="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Filters</a>
                 <ul id="filters-ul" class="dropdown-menu">
                     <li id="no-filters"><a class="dropdown-item" href="#" data-href="options">No Saved Filters</a></li>
                 </ul>
@@ -30,7 +28,7 @@
 <!--                <input type="text" id="flags-input" class="form-control w-25" placeholder="Flags" aria-label="Flags">-->
 <!--            </div>-->
         </form>
-        <button id="btn-domains" class="btn btn-primary btn-sm" type="button">Only Domains</button>
+        <a role="button" class="btn btn-sm btn-primary" data-filter="domains">Only Domains</a>
         <hr class="my-0">
         <form id="links-form" class="my-0">
             <label for="links-text" class="form-label visually-hidden">Open Links</label>
