@@ -8,6 +8,9 @@ document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 document.getElementById('defaultFilter').addEventListener('change', popOptions)
 
+document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('del-perms').addEventListener('click', delPermsBtn)
+
 const filterBtns = document.querySelectorAll('[data-filter]')
 filterBtns.forEach((el) => el.addEventListener('click', filterForm))
 
@@ -37,6 +40,18 @@ async function initPopup() {
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+
+    // Host Perms check and processing
+    const hasPerms = await chrome.permissions.contains({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    if (hasPerms) {
+        const noPerms = document.querySelectorAll('.has-perms')
+        noPerms.forEach((el) => el.classList.remove('visually-hidden'))
+    } else {
+        const hasPerms = document.querySelectorAll('.no-perms')
+        hasPerms.forEach((el) => el.classList.remove('visually-hidden'))
+    }
 }
 
 /**
@@ -211,4 +226,42 @@ async function popOptions(event) {
     options.defaultFilter = event.target.checked
     console.log(`options.defaultFilter: ${options.defaultFilter}`)
     await chrome.storage.sync.set({ options })
+}
+
+/**
+ * Grant Permissions Button Click Callback
+ * @function grantPerms
+ * @param {Event} event
+ */
+function grantPermsBtn(event) {
+    console.log('permissions click:', event)
+    chrome.permissions.request({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    window.close()
+}
+
+/**
+ * Grant Permissions Button Click Callback
+ * @function grantPerms
+ * @param {Event} event
+ */
+async function delPermsBtn(event) {
+    await chrome.permissions.remove({
+        permissions: ['tabs'],
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    window.close()
+}
+
+/**
+ * Process Multiple Tabs
+ * @function processTabs
+ * @param {Event} event
+ */
+async function processTabs(event) {
+    console.log('processTabs:', event)
+    // Get all selected (highlighted) tabs
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    console.log('tabs:', tabs)
 }
