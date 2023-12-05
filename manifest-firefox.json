@@ -2,6 +2,7 @@
   "background": {
     "scripts": ["js/service-worker.js"]
   },
+  "optional_permissions": ["https://*/*", "http://*/*"],
   "browser_specific_settings": {
     "gecko": {
       "id": "link-extractor@cssnr.com",
