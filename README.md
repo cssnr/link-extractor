@@ -8,7 +8,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 # Link Extractor
 
-Modern Chrome and Firefox Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
+Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
 Website: https://link-extractor.cssnr.com/
