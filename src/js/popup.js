@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-// document.getElementById('defaultFilter').addEventListener('change', popOptions)
 
 document
     .querySelectorAll('[data-filter]')
@@ -14,6 +13,9 @@ document
 document
     .querySelectorAll('[data-href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('#options-form input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -201,15 +203,17 @@ function extractURLs(text) {
 }
 
 /**
- * Popup Options Change Callback
- * @function popOptions
- * @param {SubmitEvent} event
+ * Save Options Callback
+ * TODO: Cleanup this function
+ * @function saveOptions
+ * @param {InputEvent} event
  */
-async function popOptions(event) {
-    console.log('popOptions:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    console.log(options)
-    options.defaultFilter = event.target.checked
-    console.log(`options.defaultFilter: ${options.defaultFilter}`)
-    await chrome.storage.sync.set({ options })
+async function saveOptions(event) {
+    console.log('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    if (event.target.id && event.target.checked !== undefined) {
+        options[event.target.id] = event.target.checked
+        console.log(`Set: ${event.target.id}:`, event.target.checked)
+        await chrome.storage.sync.set({ options })
+    }
 }

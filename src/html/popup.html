@@ -23,10 +23,6 @@
         <form id="filter-form" class="my-0">
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control form-control-sm" type="text" placeholder="Quick Filter">
-<!--            <div class="input-group mb-3">-->
-<!--                <input type="text" id="filter-input" class="form-control w-75" placeholder="Filter" aria-label="Filter">-->
-<!--                <input type="text" id="flags-input" class="form-control w-25" placeholder="Flags" aria-label="Flags">-->
-<!--            </div>-->
         </form>
         <a role="button" class="btn btn-sm btn-primary" data-filter="domains">Only Domains</a>
         <hr class="my-0">
@@ -45,14 +41,16 @@
         </div>
 
         <div class="form-check form-switch form-check-inline d-flex justify-content-center align-items-center">
-            <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
-            <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
-                Use Default Link Filtering
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-info-circle-fill ms-1" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                     data-bs-placement="bottom" data-bs-title="Filter Out Links Without ://">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                </svg>
-            </label>
+            <form id="options-form">
+                <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
+                <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
+                    Use Default Link Filtering
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-info-circle-fill ms-1" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-placement="bottom" data-bs-title="Filter Out Links Without ://">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </svg>
+                </label>
+            </form>
         </div>
 
         <a class="btn btn-outline-info btn-sm" role="button" data-href="options">
