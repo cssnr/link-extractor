@@ -25,7 +25,7 @@ document
  * @function initOptions
  */
 async function initOptions() {
-    console.log('initOptions')
+    // console.log('initOptions')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -76,18 +76,19 @@ async function addFilter(event) {
     if (filter) {
         console.log(`filter: ${filter}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
-        patterns.push(filter)
-        console.log('patterns:', patterns)
-        await chrome.storage.sync.set({ patterns })
-        updateTable(patterns)
-        element.value = ''
+        if (!patterns.includes(filter)) {
+            patterns.push(filter)
+            console.log('patterns:', patterns)
+            await chrome.storage.sync.set({ patterns })
+            updateTable(patterns)
+        }
     }
+    element.value = ''
     element.focus()
 }
 
 /**
- * Update Popup Table with Data
- * TODO: Remove JQuery
+ * Update Filters Table with Data
  * @function updateTable
  * @param {Object} data
  */
@@ -96,8 +97,6 @@ function updateTable(data) {
         .getElementById('filters-table')
         .getElementsByTagName('tbody')[0]
     tbodyRef.innerHTML = ''
-
-    $('#hosts-table tbody tr').remove()
 
     data.forEach(function (value) {
         const row = tbodyRef.insertRow()

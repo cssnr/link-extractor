@@ -1,5 +1,25 @@
 // JS for links.html and options.html
 
+// document.addEventListener('DOMContentLoaded', domContentLoaded)
+
+const backToTop = document.getElementById('back-to-top')
+
+backToTop.addEventListener('click', () => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+})
+
+window.onscroll = () => {
+    if (
+        document.body.scrollTop > 20 ||
+        document.documentElement.scrollTop > 20
+    ) {
+        backToTop.style.display = 'block'
+    } else {
+        backToTop.style.display = 'none'
+    }
+}
+
 const clipboard = new ClipboardJS('.clip')
 
 clipboard.on('success', function (event) {
@@ -18,9 +38,19 @@ clipboard.on('error', function (event) {
     showToast('Clipboard Copy Failed', 'warning')
 })
 
+// /**
+//  * DOM Content Loaded
+//  * @function domContentLoaded
+//  */
+// async function domContentLoaded() {
+//     console.log('domContentLoaded')
+//     const { options } = await chrome.storage.sync.get(['options'])
+//     console.log('options:', options)
+// }
+
 /**
  * Show Bootstrap Toast
- * TODO: Remove jQuery Dependency
+ * Requires JQuery
  * @function showToast
  * @param {String} message
  * @param {String} bsClass

@@ -25,6 +25,7 @@ document
  * @function initOptions
  */
 async function initPopup() {
+    // console.log('initPopup')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -129,14 +130,14 @@ async function linksForm(event) {
     } else if (event.submitter.id === 'open-parsed') {
         const urls = extractURLs(event.target[0].value)
         urls.forEach(function (url) {
-            chrome.tabs.create({ active: true, url })
+            chrome.tabs.create({ active: false, url })
         })
         window.close()
     } else if (event.submitter.id === 'open-lines') {
         let text = event.target[0].value.split(/\r\n?|\n/g)
         text = text.filter((str) => str !== '')
         text.forEach(function (url) {
-            chrome.tabs.create({ active: true, url })
+            chrome.tabs.create({ active: false, url })
         })
         window.close()
     } else {

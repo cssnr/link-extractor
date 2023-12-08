@@ -35,7 +35,7 @@ async function onInstalled(details) {
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
-                await chrome.tabs.create({ active: true, url })
+                await chrome.tabs.create({ active: false, url })
             }
         }
     }
@@ -91,12 +91,13 @@ async function onCommand(command) {
 
 /**
  * On Changed Callback
+ * TODO: Cleanup this function
  * @function onChanged
  * @param {Object} changes
  * @param {String} namespace
  */
 async function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
+    // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
@@ -115,7 +116,6 @@ async function onChanged(changes, namespace) {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
                 console.log('Updating Context Menu Patterns...')
-                chrome.contextMenus.removeAll()
                 createContextMenus(newValue)
             }
         }
@@ -128,6 +128,8 @@ async function onChanged(changes, namespace) {
  * @param {Array} patterns
  */
 function createContextMenus(patterns) {
+    console.log('createContextMenus:', patterns)
+    chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
         [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
@@ -149,7 +151,7 @@ function createContextMenus(patterns) {
     })
     if (patterns) {
         patterns.forEach((pattern, i) => {
-            console.log(`pattern: ${i}: ${pattern}`)
+            // console.log(`pattern: ${i}: ${pattern}`)
             chrome.contextMenus.create({
                 parentId: 'filters',
                 title: pattern.substring(0, 28),
@@ -211,8 +213,10 @@ async function setDefaultOptions(defaultOptions) {
         'options',
         'patterns',
     ])
+    // console.log('options, patterns:', options, patterns)
     options = options || {}
     if (!patterns) {
+        console.warn('Set patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }

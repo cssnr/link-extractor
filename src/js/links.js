@@ -179,7 +179,7 @@ function updateTable(data, elementId) {
 
 /**
  * Keyboard keydown Callback
- * TODO: Remove JQuery
+ * Requires JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
@@ -237,7 +237,7 @@ function openLinksClick(event) {
     console.log('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
-            chrome.tabs.create({ active: true, url }).then()
+            chrome.tabs.create({ active: false, url }).then()
         })
     } else {
         showToast('No Links to Open.', 'warning')
@@ -285,7 +285,7 @@ function download(filename, text) {
 
 /**
  * Filter Links
- * TODO: Remove JQuery
+ * Requires JQuery
  * @function filterLinks
  * @param {MouseEvent} event
  */
