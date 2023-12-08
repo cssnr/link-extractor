@@ -8,14 +8,15 @@ document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 document.getElementById('defaultFilter').addEventListener('change', popOptions)
 
-const filterBtns = document.querySelectorAll('[data-filter]')
-filterBtns.forEach((el) => el.addEventListener('click', filterForm))
-
-const popupLinks = document.querySelectorAll('[data-href]')
-popupLinks.forEach((el) => el.addEventListener('click', popLinks))
-
-const toolTips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...toolTips].map((el) => new bootstrap.Tooltip(el))
+document
+    .querySelectorAll('[data-filter]')
+    .forEach((el) => el.addEventListener('click', filterForm))
+document
+    .querySelectorAll('[data-href]')
+    .forEach((el) => el.addEventListener('click', popLinks))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
 /**
  * Popup Action Init

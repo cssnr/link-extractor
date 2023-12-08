@@ -3,7 +3,7 @@
   "description": "Easily extract, parse, or open all links/domains from a site or text with optional filters.",
   "homepage_url": "https://link-extractor.cssnr.com/",
   "author": "Shane",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "manifest_version": 3,
   "commands": {
     "_execute_action": {
