@@ -237,7 +237,7 @@ function openLinksClick(event) {
     console.log('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
-            chrome.tabs.create({ active: true, url }).then()
+            chrome.tabs.create({ active: false, url }).then()
         })
     } else {
         showToast('No Links to Open.', 'warning')

@@ -35,7 +35,7 @@ async function onInstalled(details) {
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
-                await chrome.tabs.create({ active: true, url })
+                await chrome.tabs.create({ active: false, url })
             }
         }
     }
