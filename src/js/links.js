@@ -179,7 +179,7 @@ function updateTable(data, elementId) {
 
 /**
  * Keyboard keydown Callback
- * TODO: Remove JQuery
+ * Requires JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
@@ -285,7 +285,7 @@ function download(filename, text) {
 
 /**
  * Filter Links
- * TODO: Remove JQuery
+ * Requires JQuery
  * @function filterLinks
  * @param {MouseEvent} event
  */

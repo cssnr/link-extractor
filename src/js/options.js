@@ -88,8 +88,7 @@ async function addFilter(event) {
 }
 
 /**
- * Update Popup Table with Data
- * TODO: Remove JQuery
+ * Update Filters Table with Data
  * @function updateTable
  * @param {Object} data
  */
@@ -98,8 +97,6 @@ function updateTable(data) {
         .getElementById('filters-table')
         .getElementsByTagName('tbody')[0]
     tbodyRef.innerHTML = ''
-
-    $('#hosts-table tbody tr').remove()
 
     data.forEach(function (value) {
         const row = tbodyRef.insertRow()

@@ -91,12 +91,13 @@ async function onCommand(command) {
 
 /**
  * On Changed Callback
+ * TODO: Cleanup this function
  * @function onChanged
  * @param {Object} changes
  * @param {String} namespace
  */
 async function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
+    // console.log('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {

@@ -50,7 +50,7 @@ clipboard.on('error', function (event) {
 
 /**
  * Show Bootstrap Toast
- * TODO: Remove jQuery Dependency
+ * Requires JQuery
  * @function showToast
  * @param {String} message
  * @param {String} bsClass
