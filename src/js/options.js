@@ -1,23 +1,24 @@
 // JS for options.html
 
-import { createContextMenus } from './exports.js'
-
 document.addEventListener('DOMContentLoaded', initOptions)
+
+chrome.storage.onChanged.addListener(onChanged)
+
 document.getElementById('filters-form').addEventListener('submit', addFilter)
-document.getElementById('options-form').addEventListener('submit', saveOptions)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 
 document
+    .querySelectorAll('#options-form input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .getElementById('options-form')
+    .addEventListener('submit', (e) => e.preventDefault())
+document
+    .getElementById('flags')
+    .addEventListener('change', (e) => e.target.classList.remove('is-invalid'))
+document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
-
-'focus input'.split(' ').forEach(function (type) {
-    document.getElementById('reFlags').addEventListener(type, function (event) {
-        if (event.target.classList.contains('is-invalid')) {
-            event.target.classList.remove('is-invalid')
-        }
-    })
-})
 
 /**
  * Options Page Init
@@ -30,25 +31,34 @@ async function initOptions() {
         'patterns',
     ])
     console.log('options, patterns:', options, patterns)
-
-    document.getElementById('reFlags').value = options.flags
-    document.getElementById('contextMenu').checked = options.contextMenu
-    document.getElementById('defaultFilter').checked = options.defaultFilter
-    document.getElementById('showUpdate').checked = options.showUpdate
-
-    // patterns.forEach(function (value, i) {
-    //     createFilterInput(i.toString(), value)
-    // })
+    updateOptions(options)
     updateTable(patterns)
 
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
-
     const commands = await chrome.commands.getAll()
     document.getElementById('mainKey').textContent =
         commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
     document.getElementById('extractKey').textContent =
         commands.find((x) => x.name === 'extract').shortcut || 'Not Set'
+}
+
+/**
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
+ */
+function onChanged(changes, namespace) {
+    // console.log('onChanged:', changes, namespace)
+    for (let [key, { newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options') {
+            updateOptions(newValue)
+        }
+        if (namespace === 'sync' && key === 'patterns') {
+            updateTable(newValue)
+        }
+    }
 }
 
 /**
@@ -69,11 +79,8 @@ async function addFilter(event) {
         await chrome.storage.sync.set({ patterns })
         element.value = ''
         updateTable(patterns)
+        element.focus()
     }
-    // const el = document.getElementById('filters-inputs')
-    // console.log('el:', el)
-    // const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
-    // console.log('next:', next)
 }
 
 /**
@@ -108,10 +115,10 @@ function updateTable(data) {
         cell1.appendChild(deleteBtn)
 
         const filterLink = document.createElement('a')
+        filterLink.dataset.clipboardText = value
         filterLink.text = value
         filterLink.title = value
-        filterLink.href = `http://${value}`
-        filterLink.target = '_blank'
+        filterLink.classList.add('clip')
         filterLink.setAttribute('role', 'button')
         const cell2 = row.insertCell()
         cell2.appendChild(filterLink)
@@ -124,8 +131,8 @@ function updateTable(data) {
  * @param {MouseEvent} event
  */
 async function deleteHost(event) {
-    event.preventDefault()
     console.log('deleteHost:', event)
+    event.preventDefault()
     const anchor = event.target.closest('a')
     const filter = anchor?.dataset?.filter
     console.log(`filter: ${filter}`)
@@ -137,68 +144,87 @@ async function deleteHost(event) {
         if (index !== undefined) {
             patterns.splice(index, 1)
             await chrome.storage.sync.set({ patterns })
-            // console.log('patterns:', patterns)
+            console.log('patterns:', patterns)
             updateTable(patterns)
+            document.getElementById('filters-form')?.elements[0]?.focus()
         }
     }
-}
-
-/**
- * Save Options Click
- * @function saveOptions
- * @param {MouseEvent} event
- */
-async function saveOptions(event) {
-    console.log('saveOptions:', event)
-    event.preventDefault()
-    const options = {}
-    const flagsInput = document.getElementById('reFlags')
-    let flags = flagsInput.value.toLowerCase().replace(/\s+/gm, '').split('')
-    flags = new Set(flags)
-    flags = [...flags].join('')
-    console.log(`flags: ${flags}`)
-    for (const flag of flags) {
-        if (!'dgimsuvy'.includes(flag)) {
-            flagsInput.classList.add('is-invalid')
-            showToast(`Invalid Regex Flag: ${flag}`, 'danger')
-            return
-        }
-    }
-    flagsInput.value = flags
-    options.flags = flags
-
-    const patterns = []
-    Array.from(event.target.elements).forEach((input) => {
-        if (input.classList.contains('filter-input') && input.value.trim()) {
-            patterns.push(input.value.trim())
-        }
-    })
-    console.log(patterns)
-
-    options.contextMenu = document.getElementById('contextMenu').checked
-    if (options.contextMenu) {
-        chrome.contextMenus.removeAll()
-        createContextMenus(patterns)
-    } else {
-        chrome.contextMenus.removeAll()
-    }
-    console.log(options)
-    options.defaultFilter = document.getElementById('defaultFilter').checked
-    options.showUpdate = document.getElementById('showUpdate').checked
-
-    await chrome.storage.sync.set({ options, patterns })
-    showToast('Options Saved')
 }
 
 /**
  * Reset Options Form Click Callback
  * @function resetForm
- * @param {MouseEvent} event
+ * @param {InputEvent} event
  */
-function resetForm(event) {
+async function resetForm(event) {
     console.log('resetForm:', event)
     event.preventDefault()
-    const input = document.getElementById('reFlags')
+    const input = document.getElementById('flags')
     input.value = 'ig'
     input.focus()
+    await saveOptions(event)
+}
+
+/**
+ * Save Options Callback
+ * TODO: Cleanup this function
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+async function saveOptions(event) {
+    console.log('saveOptions:', event, event.target)
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key
+    let value
+    if (['flags', 'reset-default'].includes(event.target.id)) {
+        console.log('KEY: flags')
+        key = 'flags'
+        const element = document.getElementById(key)
+        let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
+        flags = new Set(flags)
+        flags = [...flags].join('')
+        console.log(`flags: ${flags}`)
+        for (const flag of flags) {
+            if (!'dgimsuvy'.includes(flag)) {
+                element.classList.add('is-invalid')
+                showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+                return
+            }
+        }
+        console.log('flags:', flags)
+        element.value = flags
+        value = flags
+    } else if (event.target.type === 'checkbox') {
+        key = event.target.id
+        value = event.target.checked
+    } else if (event.target.type === 'text') {
+        key = event.target.id
+        value = event.target.value
+    } else {
+        console.warn('UNKNOWN event.target.type:', event.target.type)
+    }
+    if (value !== undefined) {
+        options[key] = value
+        console.log(`Set: ${key}:`, value)
+        await chrome.storage.sync.set({ options })
+    }
+}
+
+/**
+ * Update Options
+ * @function initOptions
+ * @param {Object} options
+ */
+function updateOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+        // console.log(`${key}: ${value}`)
+        const el = document.getElementById(key)
+        if (el) {
+            if (typeof value === 'boolean') {
+                el.checked = value
+            } else if (typeof value === 'string') {
+                el.value = value
+            }
+        }
+    }
 }
