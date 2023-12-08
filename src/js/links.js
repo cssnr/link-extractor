@@ -1,7 +1,5 @@
 // JS for links.html
 
-document.addEventListener('DOMContentLoaded', initLinks)
-
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
@@ -14,13 +12,17 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
 
-const openLinksBtns = document.querySelectorAll('.open-in-tabs')
-openLinksBtns.forEach((el) => el.addEventListener('click', openLinksClick))
-const downFileBtns = document.querySelectorAll('.download-file')
-downFileBtns.forEach((el) => el.addEventListener('click', downloadFileClick))
+document.addEventListener('DOMContentLoaded', initLinks)
 
-const filterInput = document.querySelectorAll('.filter-input')
-filterInput.forEach((el) => el.addEventListener('input', filterLinks))
+document
+    .querySelectorAll('.open-in-tabs')
+    .forEach((el) => el.addEventListener('click', openLinksClick))
+document
+    .querySelectorAll('.download-file')
+    .forEach((el) => el.addEventListener('click', downloadFileClick))
+document
+    .querySelectorAll('.filter-input')
+    .forEach((el) => el.addEventListener('input', filterLinks))
 
 document.getElementById('reset-button').addEventListener('click', resetButton)
 

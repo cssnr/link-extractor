@@ -6,51 +6,43 @@ chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 
-const ghUrl = 'https://github.com/cssnr/link-extractor'
-
 /**
- * Init Context Menus and Options
+ * On Installed Callback
  * @function onInstalled
  * @param {InstalledDetails} details
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const defaultOptions = {
-        flags: 'ig',
-        contextMenu: true,
-        defaultFilter: true,
-        showUpdate: false,
-    }
-    let { options, patterns } = await chrome.storage.sync.get([
-        'options',
-        'patterns',
-    ])
-    options = setDefaults(options, defaultOptions)
-    console.log('options:', options)
-    patterns = patterns || []
-    console.log('patterns:', patterns)
-    await chrome.storage.sync.set({ options, patterns })
-
+    const githubURL = 'https://github.com/cssnr/link-extractor'
+    const [options, patterns] = await Promise.resolve(
+        setDefaultOptions({
+            flags: 'ig',
+            contextMenu: true,
+            defaultFilter: true,
+            showUpdate: false,
+        })
+    )
+    console.log('options, patterns:', options, patterns)
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
-    if (details.reason === 'install') {
+    if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
-    } else if (options.showUpdate && details.reason === 'update') {
-        const manifest = chrome.runtime.getManifest()
-        if (manifest.version !== details.previousVersion) {
-            const url = `${ghUrl}/releases/tag/${manifest.version}`
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
+    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+        if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
+            if (manifest.version !== details.previousVersion) {
+                const url = `${githubURL}/releases/tag/${manifest.version}`
+                console.log(`url: ${url}`)
+                await chrome.tabs.create({ active: true, url })
+            }
         }
     }
-    chrome.runtime.setUninstallURL(
-        'https://link-extractor.cssnr.com/uninstall/'
-    )
+    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**
- * On Context Menu Click Callback
+ * Context Menus On Clicked Callback
  * @function onClicked
  * @param {OnClickData} ctx
  * @param {chrome.tabs.Tab} tab
@@ -137,19 +129,33 @@ async function injectFunction(func, args) {
 
 /**
  * Set Default Options
- * @function setDefaults
- * @param {Object} options
+ * @function setDefaultOptions
  * @param {Object} defaultOptions
  * @return {Object}
  */
-function setDefaults(options, defaultOptions) {
+async function setDefaultOptions(defaultOptions) {
+    console.log('setDefaultOptions', defaultOptions)
+    let { options, patterns } = await chrome.storage.sync.get([
+        'options',
+        'patterns',
+    ])
     options = options || {}
+    if (!patterns) {
+        patterns = []
+        await chrome.storage.sync.set({ patterns })
+    }
+    let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
+            changed = true
             options[key] = value
             console.log(`Set ${key}:`, value)
         }
     }
-    return options
+    if (changed) {
+        await chrome.storage.sync.set({ options })
+        console.log('changed:', options)
+    }
+    return [options, patterns]
 }

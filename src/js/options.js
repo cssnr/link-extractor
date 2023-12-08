@@ -7,6 +7,10 @@ document.getElementById('filters-form').addEventListener('submit', saveOptions)
 document.getElementById('add-input').addEventListener('click', addInputFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
+
 'focus input'.split(' ').forEach(function (type) {
     document.getElementById('reFlags').addEventListener(type, function (event) {
         if (event.target.classList.contains('is-invalid')) {
@@ -14,9 +18,6 @@ document.getElementById('reset-default').addEventListener('click', resetForm)
         }
     })
 })
-
-const toolTips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...toolTips].map((el) => new bootstrap.Tooltip(el))
 
 /**
  * Options Page Init
@@ -28,22 +29,20 @@ async function initOptions() {
         'options',
         'patterns',
     ])
-    console.log('options:', options)
-    document.getElementById('reFlags').value =
-        options !== undefined ? options.flags : 'ig'
+    console.log('options, patterns:', options, patterns)
+
+    document.getElementById('reFlags').value = options.flags
     document.getElementById('contextMenu').checked = options.contextMenu
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('showUpdate').checked = options.showUpdate
-    if (patterns?.length) {
-        console.log('patterns:', patterns)
-        patterns.forEach(function (value, i) {
-            createFilterInput(i.toString(), value)
-        })
-    } else {
-        createFilterInput('0', '')
-    }
+
+    patterns.forEach(function (value, i) {
+        createFilterInput(i.toString(), value)
+    })
+
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+
     const commands = await chrome.commands.getAll()
     document.getElementById('mainKey').textContent =
         commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'

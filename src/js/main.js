@@ -35,7 +35,7 @@ function showToast(message, bsClass = 'success') {
             '</div>'
     )
     toastEl.find('.toast-body').text(message)
-    toastEl.addClass('text-bg-' + bsClass)
+    toastEl.addClass(`text-bg-${bsClass}`)
     $('#toast-container').append(toastEl)
     const toast = new bootstrap.Toast(toastEl)
     toast.show()
