@@ -154,7 +154,7 @@ function createContextMenus(patterns) {
             // console.log(`pattern: ${i}: ${pattern}`)
             chrome.contextMenus.create({
                 parentId: 'filters',
-                title: pattern.substring(0, 28),
+                title: pattern,
                 contexts: ctx,
                 id: `filter-${i}`,
             })
