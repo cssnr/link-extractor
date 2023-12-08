@@ -6,14 +6,16 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document.getElementById('defaultFilter').addEventListener('change', popOptions)
 
 document
     .querySelectorAll('[data-filter]')
     .forEach((el) => el.addEventListener('click', filterForm))
 document
     .querySelectorAll('[data-href]')
-    .forEach((el) => el.addEventListener('click', popLinks))
+    .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('#options-form input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -23,12 +25,11 @@ document
  * @function initOptions
  */
 async function initPopup() {
-    document.getElementById('filter-input').focus()
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.log(options)
+    console.log('options, patterns:', options, patterns)
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
@@ -38,6 +39,7 @@ async function initPopup() {
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+    document.getElementById('filter-input').focus()
 }
 
 /**
@@ -51,9 +53,9 @@ function createFilterLink(number, value = '') {
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
-    a.textContent = value.substring(0, 24)
-    a.href = '#'
+    a.textContent = value.substring(0, 28)
     a.classList.add('dropdown-item', 'small')
+    a.setAttribute('role', 'button')
     a.addEventListener('click', filterForm)
     li.appendChild(a)
 }
@@ -61,11 +63,11 @@ function createFilterLink(number, value = '') {
 /**
  * Popup Links Click Callback
  * Firefox requires a call to window.close()
- * @function popLinks
+ * @function popupLinks
  * @param {MouseEvent} event
  */
-async function popLinks(event) {
-    console.log('popLinks:', event)
+async function popupLinks(event) {
+    console.log('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
     let url
@@ -201,15 +203,17 @@ function extractURLs(text) {
 }
 
 /**
- * Popup Options Change Callback
- * @function popOptions
- * @param {SubmitEvent} event
+ * Save Options Callback
+ * TODO: Cleanup this function
+ * @function saveOptions
+ * @param {InputEvent} event
  */
-async function popOptions(event) {
-    console.log('popOptions:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    console.log(options)
-    options.defaultFilter = event.target.checked
-    console.log(`options.defaultFilter: ${options.defaultFilter}`)
-    await chrome.storage.sync.set({ options })
+async function saveOptions(event) {
+    console.log('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    if (event.target.id && event.target.checked !== undefined) {
+        options[event.target.id] = event.target.checked
+        console.log(`Set: ${event.target.id}:`, event.target.checked)
+        await chrome.storage.sync.set({ options })
+    }
 }

@@ -1,10 +1,11 @@
 // JS Background Service Worker
 
-import { createContextMenus, injectTab } from './exports.js'
+import { injectTab } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
+chrome.storage.onChanged.addListener(onChanged)
 
 /**
  * On Installed Callback
@@ -85,6 +86,77 @@ async function onCommand(command) {
         await injectTab(null, null, null)
     } else {
         console.error(`Unknown command: ${command}`)
+    }
+}
+
+/**
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
+ */
+async function onChanged(changes, namespace) {
+    console.log('onChanged:', changes, namespace)
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options') {
+            if (oldValue?.contextMenu !== newValue?.contextMenu) {
+                if (newValue?.contextMenu) {
+                    console.log('Enabled contextMenu...')
+                    const { patterns } = await chrome.storage.sync.get([
+                        'patterns',
+                    ])
+                    createContextMenus(patterns)
+                } else {
+                    console.log('Disabled contextMenu...')
+                    chrome.contextMenus.removeAll()
+                }
+            }
+        } else if (namespace === 'sync' && key === 'patterns') {
+            const { options } = await chrome.storage.sync.get(['options'])
+            if (options?.contextMenu) {
+                console.log('Updating Context Menu Patterns...')
+                chrome.contextMenus.removeAll()
+                createContextMenus(newValue)
+            }
+        }
+    }
+}
+
+/**
+ * Create Context Menus
+ * @function createContextMenus
+ * @param {Array} patterns
+ */
+function createContextMenus(patterns) {
+    const ctx = ['all']
+    const contexts = [
+        [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
+        [['selection'], 'selection', 'normal', 'Extract from Selection'],
+        [['selection', 'link'], 'separator-1', 'separator', 'separator'],
+        [ctx, 'filters', 'normal', 'Extract with Filter'],
+        [ctx, 'links', 'normal', 'Extract All Links'],
+        [ctx, 'domains', 'normal', 'Extract All Domains'],
+        [ctx, 'separator-2', 'separator', 'separator'],
+        [ctx, 'options', 'normal', 'Open Options'],
+    ]
+    contexts.forEach((context) => {
+        chrome.contextMenus.create({
+            contexts: context[0],
+            id: context[1],
+            type: context[2],
+            title: context[3],
+        })
+    })
+    if (patterns) {
+        patterns.forEach((pattern, i) => {
+            console.log(`pattern: ${i}: ${pattern}`)
+            chrome.contextMenus.create({
+                parentId: 'filters',
+                title: pattern.substring(0, 28),
+                contexts: ctx,
+                id: `filter-${i}`,
+            })
+        })
     }
 }
 

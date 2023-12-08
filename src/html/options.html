@@ -5,7 +5,6 @@
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../css/options.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
 <body>
@@ -21,6 +20,7 @@
     </div>
     <div class="clearfix"></div>
     <p class="text-center lead">v<span id="version"></span></p>
+
     <table class="table table-sm table-borderless ">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
@@ -35,12 +35,13 @@
             </tr>
         </tbody>
     </table>
-    <form id="filters-form" class="">
-        <label for="reFlags" class="form-label">Regex Flags</label>
+
+    <form id="options-form">
+        <label for="flags" class="form-label">Regex Flags</label>
         <a id="reset-default" class="float-end align-bottom small" role="button">Reset to Default</a>
-        <input type="text" id="reFlags" class="form-control" aria-describedby="reFlagsHelp">
+        <input type="text" id="flags" class="form-control" aria-describedby="flagsHelp">
         <div id="flagsInvalid" class="invalid-feedback">Invalid Regex Flags.</div>
-        <div id="reFlagsHelp" class="form-text mb-3">
+        <div id="flagsHelp" class="form-text mb-3">
             Flags used when using a filter.
             <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
                 Available Flags</a>.
@@ -63,27 +64,40 @@
             <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
             <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
         </div>
-        <hr>
-        <span id="add-input" class="badge text-bg-primary" role="button">Add Filter</span>
-        <div id="filters-inputs" class="my-2"></div>
-        <div class="d-md-none">
-            <button type="submit" class="btn btn-success w-100">
-                Save Options
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-floppy2 ms-1" viewBox="0 0 16 16">
-                    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v3.5A1.5 1.5 0 0 1 11.5 6h-7A1.5 1.5 0 0 1 3 4.5V1H1.5a.5.5 0 0 0-.5.5Zm9.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-1Z"/>
-                </svg>
-            </button>
+    </form>
+
+    <hr>
+
+    <form id="filters-form">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
+            <button class="btn btn-outline-success" type="submit" id="add-filter-btn">Add</button>
         </div>
     </form>
+    <div class="table-responsive">
+        <table id="filters-table" class="table table-sm table-hover bg-transparent">
+            <caption>Saved Filters</caption>
+            <thead><tr>
+                <th scope="col" class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                    </svg>
+                </th>
+                <th scope="col">Filter</th>
+            </tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
     <div class="text-center mb-3">
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
            href="https://link-extractor.cssnr.com/docs/">Get Help</a>
         |
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-           href="https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests">Request Feature</a>
+           href="https://github.com/cssnr/link-extractor/discussions/categories/feature-requests">Request Feature</a>
         |
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-           href="https://github.com/cssnr/link-extractor/issues/new">Open Issue</a>
+           href="https://github.com/cssnr/link-extractor/issues">Open Issue</a>
     </div>
 </div> <!-- card-body -->
 </div> <!-- card -->
@@ -93,21 +107,13 @@
 
 <div id="bottom-container" class="position-fixed bottom-0 end-0">
     <div id="toast-container" class=""></div>
-    <div class="d-flex justify-content-end mt-4 d-none d-md-flex">
-        <button type="submit" form="filters-form" class="btn btn-success text-end">
-            Save Options
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-floppy2 ms-1" viewBox="0 0 16 16">
-                <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v3.5A1.5 1.5 0 0 1 11.5 6h-7A1.5 1.5 0 0 1 3 4.5V1H1.5a.5.5 0 0 0-.5.5Zm9.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-1Z"/>
-            </svg>
-        </button>
-    </div>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
-<script type="module" src="../js/options.js"></script>
+<script type="text/javascript" src="../js/options.js"></script>
 
 </body>
 </html>
