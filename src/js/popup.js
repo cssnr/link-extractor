@@ -55,6 +55,7 @@ function createFilterLink(number, value = '') {
     ul.appendChild(li)
     const a = document.createElement('a')
     a.textContent = value.substring(0, 28)
+    a.dataset.pattern = value
     a.classList.add('dropdown-item', 'small')
     a.setAttribute('role', 'button')
     a.addEventListener('click', filterForm)
@@ -101,7 +102,7 @@ async function filterForm(event) {
     const filterInput = document.getElementById('filter-input')
     let filter
     if (event.target.classList.contains('dropdown-item')) {
-        filter = event.target.textContent
+        filter = event.target.dataset.pattern
     } else if (filterInput?.value) {
         filter = filterInput.value
     }
