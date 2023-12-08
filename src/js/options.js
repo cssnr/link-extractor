@@ -41,6 +41,8 @@ async function initOptions() {
         commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
     document.getElementById('extractKey').textContent =
         commands.find((x) => x.name === 'extract').shortcut || 'Not Set'
+
+    document.getElementById('add-filter').focus()
 }
 
 /**
@@ -67,20 +69,20 @@ function onChanged(changes, namespace) {
  * @param {SubmitEvent} event
  */
 async function addFilter(event) {
-    console.log('addFilter:', event)
+    // console.log('addFilter:', event)
     event.preventDefault()
     const element = document.getElementById('filters-form')?.elements[0]
     const filter = element.value
-    console.log(`filter: ${filter}`)
     if (filter) {
+        console.log(`filter: ${filter}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         patterns.push(filter)
         console.log('patterns:', patterns)
         await chrome.storage.sync.set({ patterns })
-        element.value = ''
         updateTable(patterns)
-        element.focus()
+        element.value = ''
     }
+    element.focus()
 }
 
 /**
@@ -146,7 +148,7 @@ async function deleteHost(event) {
             await chrome.storage.sync.set({ patterns })
             console.log('patterns:', patterns)
             updateTable(patterns)
-            document.getElementById('filters-form')?.elements[0]?.focus()
+            document.getElementById('add-filter').focus()
         }
     }
 }
@@ -161,6 +163,7 @@ async function resetForm(event) {
     event.preventDefault()
     const input = document.getElementById('flags')
     input.value = 'ig'
+    input.classList.remove('is-invalid')
     input.focus()
     await saveOptions(event)
 }
@@ -172,12 +175,11 @@ async function resetForm(event) {
  * @param {InputEvent} event
  */
 async function saveOptions(event) {
-    console.log('saveOptions:', event, event.target)
+    console.log('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
     let key
     let value
     if (['flags', 'reset-default'].includes(event.target.id)) {
-        console.log('KEY: flags')
         key = 'flags'
         const element = document.getElementById(key)
         let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
@@ -187,11 +189,9 @@ async function saveOptions(event) {
         for (const flag of flags) {
             if (!'dgimsuvy'.includes(flag)) {
                 element.classList.add('is-invalid')
-                showToast(`Invalid Regex Flag: ${flag}`, 'danger')
-                return
+                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
             }
         }
-        console.log('flags:', flags)
         element.value = flags
         value = flags
     } else if (event.target.type === 'checkbox') {
@@ -201,7 +201,7 @@ async function saveOptions(event) {
         key = event.target.id
         value = event.target.value
     } else {
-        console.warn('UNKNOWN event.target.type:', event.target.type)
+        console.warn('Unknown event.target:', event.target)
     }
     if (value !== undefined) {
         options[key] = value

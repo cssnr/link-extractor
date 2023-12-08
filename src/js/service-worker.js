@@ -128,7 +128,7 @@ async function onChanged(changes, namespace) {
  * @param {Array} patterns
  */
 function createContextMenus(patterns) {
-    const ctx = ['page', 'link', 'selection']
+    const ctx = ['all']
     const contexts = [
         [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
         [['selection'], 'selection', 'normal', 'Extract from Selection'],

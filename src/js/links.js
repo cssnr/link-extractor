@@ -32,7 +32,7 @@ document.getElementById('reset-button').addEventListener('click', resetButton)
  */
 async function initLinks() {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    console.log(patterns)
+    console.log('patterns:', patterns)
     const savedFilters = document.getElementById('savedFilters')
     patterns.forEach((pattern) => {
         const option = document.createElement('option')

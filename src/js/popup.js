@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document.getElementById('defaultFilter').addEventListener('change', popOptions)
+// document.getElementById('defaultFilter').addEventListener('change', popOptions)
 
 document
     .querySelectorAll('[data-filter]')
     .forEach((el) => el.addEventListener('click', filterForm))
 document
     .querySelectorAll('[data-href]')
-    .forEach((el) => el.addEventListener('click', popLinks))
+    .forEach((el) => el.addEventListener('click', popupLinks))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -23,12 +23,11 @@ document
  * @function initOptions
  */
 async function initPopup() {
-    document.getElementById('filter-input').focus()
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.log(options)
+    console.log('options, patterns:', options, patterns)
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
@@ -38,6 +37,7 @@ async function initPopup() {
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+    document.getElementById('filter-input').focus()
 }
 
 /**
@@ -61,11 +61,11 @@ function createFilterLink(number, value = '') {
 /**
  * Popup Links Click Callback
  * Firefox requires a call to window.close()
- * @function popLinks
+ * @function popupLinks
  * @param {MouseEvent} event
  */
-async function popLinks(event) {
-    console.log('popLinks:', event)
+async function popupLinks(event) {
+    console.log('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
     let url
