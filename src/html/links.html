@@ -51,7 +51,7 @@
         </div>
         <datalist id="savedFilters"></datalist>
 
-        <table id="links-table" class="table table-sm table-striped table-hover">
+        <table id="links-table" class="table table-sm table-striped table-hover small">
             <caption class="visually-hidden user-select-none" style="display: none;">Links</caption>
             <thead class="visually-hidden"><tr><th></th></tr></thead>
             <tbody id="links-body"></tbody>
@@ -69,7 +69,7 @@
                 Open</button>
             <span class="d-inline-block me-1 mb-2">Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.</span>
         </div>
-        <table id="domains-table" class="table table-sm table-striped table-hover">
+        <table id="domains-table" class="table table-sm table-striped table-hover small">
             <caption class="visually-hidden user-select-none" style="display: none;">Domains</caption>
             <thead class="visually-hidden"><tr><th></th></tr></thead>
             <tbody id="domains-body"></tbody>
@@ -102,6 +102,12 @@
         </div>
     </div>
 </div>
+
+<button type="button" class="btn btn-primary" id="back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-square-fill mb-1" viewBox="0 0 16 16">
+        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4 9h8a.5.5 0 0 0 .374-.832l-4-4.5a.5.5 0 0 0-.748 0l-4 4.5A.5.5 0 0 0 4 11"/>
+    </svg>
+</button>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

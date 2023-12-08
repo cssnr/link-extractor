@@ -2,6 +2,14 @@
     max-width: 260px;
 }
 
+#back-to-top {
+    position: fixed;
+    bottom: 56px;
+    right: 24px;
+    display: none;
+    z-index: 1005;
+}
+
 #bottom-container {
     margin-bottom: 50px;
     margin-right: 25px;

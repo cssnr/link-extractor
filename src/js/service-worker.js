@@ -115,7 +115,6 @@ async function onChanged(changes, namespace) {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
                 console.log('Updating Context Menu Patterns...')
-                chrome.contextMenus.removeAll()
                 createContextMenus(newValue)
             }
         }
@@ -128,6 +127,8 @@ async function onChanged(changes, namespace) {
  * @param {Array} patterns
  */
 function createContextMenus(patterns) {
+    console.log('createContextMenus:', patterns)
+    chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
         [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
@@ -149,7 +150,7 @@ function createContextMenus(patterns) {
     })
     if (patterns) {
         patterns.forEach((pattern, i) => {
-            console.log(`pattern: ${i}: ${pattern}`)
+            // console.log(`pattern: ${i}: ${pattern}`)
             chrome.contextMenus.create({
                 parentId: 'filters',
                 title: pattern.substring(0, 28),
@@ -211,8 +212,10 @@ async function setDefaultOptions(defaultOptions) {
         'options',
         'patterns',
     ])
+    // console.log('options, patterns:', options, patterns)
     options = options || {}
     if (!patterns) {
+        console.warn('Set patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }

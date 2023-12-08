@@ -25,7 +25,7 @@ document
  * @function initOptions
  */
 async function initOptions() {
-    console.log('initOptions')
+    // console.log('initOptions')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -76,12 +76,14 @@ async function addFilter(event) {
     if (filter) {
         console.log(`filter: ${filter}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
-        patterns.push(filter)
-        console.log('patterns:', patterns)
-        await chrome.storage.sync.set({ patterns })
-        updateTable(patterns)
-        element.value = ''
+        if (!patterns.includes(filter)) {
+            patterns.push(filter)
+            console.log('patterns:', patterns)
+            await chrome.storage.sync.set({ patterns })
+            updateTable(patterns)
+        }
     }
+    element.value = ''
     element.focus()
 }
 

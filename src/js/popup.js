@@ -25,6 +25,7 @@ document
  * @function initOptions
  */
 async function initPopup() {
+    // console.log('initPopup')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
