@@ -3,8 +3,8 @@
 import { createContextMenus } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.getElementById('filters-form').addEventListener('submit', saveOptions)
-document.getElementById('add-input').addEventListener('click', addInputFilter)
+document.getElementById('filters-form').addEventListener('submit', addFilter)
+document.getElementById('options-form').addEventListener('submit', saveOptions)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 
 document
@@ -36,9 +36,10 @@ async function initOptions() {
     document.getElementById('defaultFilter').checked = options.defaultFilter
     document.getElementById('showUpdate').checked = options.showUpdate
 
-    patterns.forEach(function (value, i) {
-        createFilterInput(i.toString(), value)
-    })
+    // patterns.forEach(function (value, i) {
+    //     createFilterInput(i.toString(), value)
+    // })
+    updateTable(patterns)
 
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
@@ -51,57 +52,95 @@ async function initOptions() {
 }
 
 /**
- * Delete Filter Click
- * @function deleteFilter
- * @param {MouseEvent} event
+ * Add Filter Submit
+ * @function addFilter
+ * @param {SubmitEvent} event
  */
-function deleteInputFilter(event) {
-    console.log('deleteInputFilter:', event)
+async function addFilter(event) {
+    console.log('addFilter:', event)
     event.preventDefault()
-    const inputs = document
-        .getElementById('filters-inputs')
-        .getElementsByTagName('input').length
-    console.log(`inputs: ${inputs}`)
-    if (inputs > 1) {
-        const input = document.getElementById(`filters-${this.dataset.id}`)
-        this.parentNode.removeChild(input)
-        this.parentNode.removeChild(this)
+    const element = document.getElementById('filters-form')?.elements[0]
+    const filter = element.value
+    console.log(`filter: ${filter}`)
+    if (filter) {
+        const { patterns } = await chrome.storage.sync.get(['patterns'])
+        patterns.push(filter)
+        console.log('patterns:', patterns)
+        await chrome.storage.sync.set({ patterns })
+        element.value = ''
+        updateTable(patterns)
     }
+    // const el = document.getElementById('filters-inputs')
+    // console.log('el:', el)
+    // const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
+    // console.log('next:', next)
 }
 
 /**
- * Delete Filter Click
- * @function deleteFilter
+ * Update Popup Table with Data
+ * TODO: Remove JQuery
+ * @function updateTable
+ * @param {Object} data
+ */
+function updateTable(data) {
+    const tbodyRef = document
+        .getElementById('filters-table')
+        .getElementsByTagName('tbody')[0]
+    tbodyRef.innerHTML = ''
+
+    $('#hosts-table tbody tr').remove()
+
+    data.forEach(function (value) {
+        const row = tbodyRef.insertRow()
+
+        const deleteBtn = document.createElement('a')
+        deleteBtn.title = 'Delete'
+        deleteBtn.setAttribute('role', 'button')
+        deleteBtn.classList.add('link-danger')
+        deleteBtn.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">\n' +
+            '  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>\n' +
+            '</svg>'
+        deleteBtn.dataset.filter = value
+        deleteBtn.addEventListener('click', deleteHost)
+        const cell1 = row.insertCell()
+        cell1.classList.add('text-center')
+        cell1.appendChild(deleteBtn)
+
+        const filterLink = document.createElement('a')
+        filterLink.text = value
+        filterLink.title = value
+        filterLink.href = `http://${value}`
+        filterLink.target = '_blank'
+        filterLink.setAttribute('role', 'button')
+        const cell2 = row.insertCell()
+        cell2.appendChild(filterLink)
+    })
+}
+
+/**
+ * Delete Host
+ * @function deleteHost
  * @param {MouseEvent} event
  */
-function addInputFilter(event) {
-    console.log('addInputFilter:', event)
+async function deleteHost(event) {
     event.preventDefault()
-    const el = document.getElementById('filters-inputs')
-    const next = (parseInt(el.lastChild.dataset.id) + 1).toString()
-    createFilterInput(next)
-}
-
-/**
- * Add Form Input for a Filter
- * @function createFilterInput
- * @param {String} number
- * @param {String} value
- */
-function createFilterInput(number, value = '') {
-    const el = document.getElementById('filters-inputs')
-    const input = document.createElement('input')
-    input.id = `filters-${number}`
-    input.value = value
-    input.classList.add('form-control', 'form-control-sm', 'filter-input')
-    const a = document.createElement('a')
-    a.textContent = 'Remove'
-    a.href = '#'
-    a.dataset.id = number
-    a.classList.add('small')
-    a.addEventListener('click', deleteInputFilter)
-    el.appendChild(a)
-    el.appendChild(input)
+    console.log('deleteHost:', event)
+    const anchor = event.target.closest('a')
+    const filter = anchor?.dataset?.filter
+    console.log(`filter: ${filter}`)
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.log('patterns:', patterns)
+    if (filter && patterns.includes(filter)) {
+        const index = patterns.indexOf(filter)
+        console.log(`index: ${index}`)
+        if (index !== undefined) {
+            patterns.splice(index, 1)
+            await chrome.storage.sync.set({ patterns })
+            // console.log('patterns:', patterns)
+            updateTable(patterns)
+        }
+    }
 }
 
 /**
