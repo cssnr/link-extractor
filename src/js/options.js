@@ -93,13 +93,11 @@ async function addFilter(event) {
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbodyRef = document
-        .getElementById('filters-table')
-        .getElementsByTagName('tbody')[0]
-    tbodyRef.innerHTML = ''
+    const tbody = document.querySelector('#filters-table tbody')
+    tbody.innerHTML = ''
 
     data.forEach(function (value) {
-        const row = tbodyRef.insertRow()
+        const row = tbody.insertRow()
 
         const deleteBtn = document.createElement('a')
         const svg = document.getElementById('bi-trash3').cloneNode(true)
