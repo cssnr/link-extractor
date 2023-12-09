@@ -71,7 +71,7 @@ function onChanged(changes, namespace) {
 async function addFilter(event) {
     // console.log('addFilter:', event)
     event.preventDefault()
-    const element = document.getElementById('filters-form')?.elements[0]
+    const element = document.querySelector('#filters-form input')
     const filter = element.value
     if (filter) {
         console.log(`filter: ${filter}`)

@@ -115,7 +115,7 @@ async function processLinks(links) {
         // }
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('visually-hidden'))
-        updateTable(items, 'links-table')
+        updateTable(items, '#links-table')
     }
 
     // Extract domains from items, sort, and remove null
@@ -133,7 +133,7 @@ async function processLinks(links) {
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
-        updateTable(domains, 'domains-table')
+        updateTable(domains, '#domains-table')
     }
 
     // Hide Loading message
@@ -162,12 +162,10 @@ function getBaseURL(link) {
  * Update Table with URLs
  * @function addNodes
  * @param {Array} data
- * @param {String} elementId
+ * @param {String} selector
  */
-function updateTable(data, elementId) {
-    const tbody = document
-        .getElementById(elementId)
-        .getElementsByTagName('tbody')[0]
+function updateTable(data, selector) {
+    const tbody = document.querySelector(`${selector} tbody`)
     data.forEach(function (url) {
         const link = document.createElement('a')
         link.text = url
