@@ -119,7 +119,12 @@ function updateTable(data) {
         filterLink.dataset.clipboardText = value
         filterLink.text = value
         filterLink.title = value
-        filterLink.classList.add('clip')
+        filterLink.classList.add(
+            'clip',
+            'link-body-emphasis',
+            'link-underline',
+            'link-underline-opacity-0'
+        )
         filterLink.setAttribute('role', 'button')
         const cell2 = row.insertCell()
         cell2.appendChild(filterLink)
