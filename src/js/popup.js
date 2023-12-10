@@ -54,7 +54,7 @@ function createFilterLink(number, value = '') {
     const li = document.createElement('li')
     ul.appendChild(li)
     const a = document.createElement('a')
-    a.textContent = value.substring(0, 28)
+    a.textContent = value
     a.dataset.pattern = value
     a.classList.add('dropdown-item', 'small')
     a.setAttribute('role', 'button')
