@@ -15,7 +15,7 @@ document
     .addEventListener('submit', (e) => e.preventDefault())
 document
     .getElementById('flags')
-    .addEventListener('change', (e) => e.target.classList.remove('is-invalid'))
+    .addEventListener('input', (e) => e.target.classList.remove('is-invalid'))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -225,6 +225,7 @@ function updateOptions(options) {
             } else if (typeof value === 'string') {
                 el.value = value
             }
+            el.classList.remove('is-invalid')
         }
     }
 }

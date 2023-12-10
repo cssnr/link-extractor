@@ -15,6 +15,7 @@ chrome.storage.onChanged.addListener(onChanged)
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
+    const uninstallURL = 'https://link-extractor.cssnr.com/uninstall/'
     const [options, patterns] = await Promise.resolve(
         setDefaultOptions({
             flags: 'ig',
@@ -39,7 +40,7 @@ async function onInstalled(details) {
             }
         }
     }
-    await chrome.runtime.setUninstallURL(`${githubURL}/issues`)
+    await chrome.runtime.setUninstallURL(uninstallURL)
 }
 
 /**
