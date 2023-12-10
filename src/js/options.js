@@ -225,6 +225,7 @@ function updateOptions(options) {
             } else if (typeof value === 'string') {
                 el.value = value
             }
+            el.classList.remove('is-invalid')
         }
     }
 }
