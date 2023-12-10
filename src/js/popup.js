@@ -156,14 +156,12 @@ function updateLinks(event) {
     let text = event.target.value.split(/\r\n?|\n/g)
     text = text.filter((str) => str !== '')
     const urls = extractURLs(event.target.value)
-    const parseLines = document.getElementsByClassName('parse-lines')
-    Array.from(parseLines).forEach(function (el) {
-        updateElements(el, text)
-    })
-    const parseLinks = document.getElementsByClassName('parse-links')
-    Array.from(parseLinks).forEach(function (el) {
-        updateElements(el, urls)
-    })
+    document
+        .querySelectorAll('.parse-lines')
+        .forEach((el) => updateElements(el, text))
+    document
+        .querySelectorAll('.parse-links')
+        .forEach((el) => updateElements(el, urls))
 }
 
 /**
