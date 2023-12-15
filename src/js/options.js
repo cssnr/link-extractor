@@ -99,31 +99,31 @@ function updateTable(data) {
     data.forEach(function (value) {
         const row = tbody.insertRow()
 
-        const deleteBtn = document.createElement('a')
+        const button = document.createElement('a')
         const svg = document.getElementById('bi-trash3').cloneNode(true)
-        deleteBtn.appendChild(svg)
-        deleteBtn.title = 'Delete'
-        deleteBtn.dataset.value = value
-        deleteBtn.classList.add('link-danger')
-        deleteBtn.setAttribute('role', 'button')
-        deleteBtn.addEventListener('click', deleteHost)
+        button.appendChild(svg)
+        button.title = 'Delete'
+        button.dataset.value = value
+        button.classList.add('link-danger')
+        button.setAttribute('role', 'button')
+        button.addEventListener('click', deleteHost)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center')
-        cell1.appendChild(deleteBtn)
+        cell1.appendChild(button)
 
-        const filterLink = document.createElement('a')
-        filterLink.dataset.clipboardText = value
-        filterLink.text = value
-        filterLink.title = value
-        filterLink.classList.add(
+        const link = document.createElement('a')
+        link.dataset.clipboardText = value
+        link.text = value
+        link.title = value
+        link.classList.add(
             'clip',
             'link-body-emphasis',
             'link-underline',
             'link-underline-opacity-0'
         )
-        filterLink.setAttribute('role', 'button')
+        link.setAttribute('role', 'button')
         const cell2 = row.insertCell()
-        cell2.appendChild(filterLink)
+        cell2.appendChild(link)
     })
 }
 

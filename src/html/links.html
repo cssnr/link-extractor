@@ -10,17 +10,17 @@
 </head>
 <body>
 
-<div id="top-container" class="position-fixed top-0 end-0 user-select-none visually-hidden links domains">
-    <div class="row g-1 visually-hidden links">
+<div id="top-container" class="position-fixed top-0 end-0 user-select-none">
+    <div class="row g-1 links d-none">
         <div class="col">
-            <a href="#links"><span class="badge text-bg-success visually-hidden w-100 links">Links</span></a>
+            <a href="#links"><span class="badge text-bg-success w-100">Links</span></a>
         </div>
         <div class="col">
             <a role="button" class="clip" data-clipboard-target="#links-body" data-toast="Copied Links">
                 <span class="badge text-bg-success w-100">Copy</span></a>
         </div>
     </div>
-    <div class="row g-1 visually-hidden domains">
+    <div class="row g-1 domains d-none">
         <div class="col">
             <a href="#domains"><span class="badge text-bg-primary w-100">Domains</span></a>
         </div>
@@ -32,8 +32,8 @@
 </div>
 
 <div class="container-fluid p-3">
-    <h2 id="loading-message" class="user-select-none">Loading...</h2>
-    <div class="visually-hidden links">
+    <h2 id="loading-message" class="user-select-none d-none">Loading...</h2>
+    <div class="links d-none">
         <div class="user-select-none">
             <h2 id="links">Links <span id="links-count" class="badge bg-success-subtle"></span></h2>
             <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body" data-toast="Copied Links">
@@ -52,13 +52,13 @@
         <datalist id="savedFilters"></datalist>
 
         <table id="links-table" class="table table-sm table-striped table-hover small">
-            <caption class="visually-hidden user-select-none" style="display: none;">Links</caption>
+            <caption class="visually-hidden user-select-none">Links</caption>
             <thead class="visually-hidden"><tr><th></th></tr></thead>
             <tbody id="links-body"></tbody>
         </table>
     </div>
 
-    <div class="visually-hidden domains">
+    <div class="domains d-none">
         <div class="user-select-none">
             <h2 id="domains">Domains <span id="domains-count" class="badge bg-primary-subtle"></span></h2>
             <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
@@ -70,7 +70,7 @@
             <span class="d-inline-block me-1 mb-2">Press <kbd>D</kbd> or <kbd>M</kbd> to Copy Domains.</span>
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover small">
-            <caption class="visually-hidden user-select-none" style="display: none;">Domains</caption>
+            <caption class="visually-hidden user-select-none">Domains</caption>
             <thead class="visually-hidden"><tr><th></th></tr></thead>
             <tbody id="domains-body"></tbody>
         </table>
