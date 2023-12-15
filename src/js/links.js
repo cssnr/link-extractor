@@ -71,7 +71,6 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     console.log(`urlFilter: ${urlFilter}`)
     console.log(`onlyDomains: ${onlyDomains}`)
-    // const openWarnCount = 30
     const { options } = await chrome.storage.sync.get(['options'])
     console.log('options:', options)
 
@@ -108,13 +107,8 @@ async function processLinks(links) {
     if (!onlyDomains) {
         document.getElementById('links-count').textContent =
             items.length.toString()
-        // if (items.length >= openWarnCount) {
-        //     const openCount = document.getElementById('open-links-count')
-        //     openCount.classList.remove('visually-hidden')
-        //     openCount.textContent = items.length.toString()
-        // }
         const linksElements = document.querySelectorAll('.links')
-        linksElements.forEach((el) => el.classList.remove('visually-hidden'))
+        linksElements.forEach((el) => (el.style.display = ''))
         updateTable(items, '#links-table')
     }
 
@@ -125,19 +119,14 @@ async function processLinks(links) {
     })
     document.getElementById('domains-count').textContent =
         domains.length.toString()
-    // if (domains.length >= openWarnCount) {
-    //     const openCount = document.getElementById('open-domains-count')
-    //     openCount.classList.remove('visually-hidden')
-    //     openCount.textContent = domains.length.toString()
-    // }
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
-        domainsElements.forEach((el) => el.classList.remove('visually-hidden'))
+        domainsElements.forEach((el) => (el.style.display = ''))
         updateTable(domains, '#domains-table')
     }
 
     // Hide Loading message
-    document.getElementById('loading-message').classList.add('visually-hidden')
+    document.getElementById('loading-message').style.display = 'none'
 }
 
 /**
@@ -177,7 +166,6 @@ function updateTable(data, selector) {
 
 /**
  * Keyboard keydown Callback
- * Requires JQuery
  * @function handleKeybinds
  * @param {KeyboardEvent} event
  */
@@ -196,7 +184,7 @@ function handleKeybinds(event) {
             event.preventDefault() // prevent typing f on focus
             document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
-            $('#keybinds-modal').modal('toggle')
+            bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
         }
     }
 }
@@ -249,10 +237,8 @@ function openLinksClick(event) {
  */
 function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
-    console.log(`querySelector: ${event.target.dataset.target}`)
     const element = document.querySelector(event.target.dataset.target)
     const links = element.innerText.trim()
-    console.log('links:', links)
     if (links) {
         download(event.target.dataset.filename, links)
         showToast('Download Started.')
@@ -282,15 +268,24 @@ function download(filename, text) {
 }
 
 /**
+ * Reset Filter Click Callback
+ * @function resetButton
+ * @param {MouseEvent} event
+ */
+function resetButton(event) {
+    document.getElementById('filter-links').value = ''
+    filterLinks()
+}
+
+/**
  * Filter Links
  * Requires JQuery
  * @function filterLinks
- * @param {MouseEvent} event
  */
-function filterLinks(event) {
-    // console.log('filterLinks:', event)
-    // console.log(`value: ${event.target.value}`)
-    const input = $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b')
+function filterLinks() {
+    const input = $.trim($('#filter-links').val())
+        .split(/\s+/)
+        .join('\\b)(?=.*\\b')
     const value = `^(?=.*\\b${input}).*$`
     const reg = RegExp(value, 'i')
 
@@ -304,15 +299,4 @@ function filterLinks(event) {
     rows.show().filter(filterFunction).hide()
     $('#links-count').text($('#links-table tr:visible').length)
     $('#domains-count').text($('#domains-table tr:visible').length)
-}
-
-/**
- * Reset Filter Click Callback
- * @function resetButton
- * @param {MouseEvent} event
- */
-function resetButton(event) {
-    console.log('resetButton:', event)
-    document.getElementById('filter-links').value = ''
-    filterLinks(event)
 }
