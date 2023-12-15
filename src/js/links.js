@@ -108,7 +108,7 @@ async function processLinks(links) {
         document.getElementById('links-count').textContent =
             items.length.toString()
         const linksElements = document.querySelectorAll('.links')
-        linksElements.forEach((el) => (el.style.display = ''))
+        linksElements.forEach((el) => el.classList.remove('d-none'))
         updateTable(items, '#links-table')
     }
 
@@ -121,12 +121,12 @@ async function processLinks(links) {
         domains.length.toString()
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
-        domainsElements.forEach((el) => (el.style.display = ''))
+        domainsElements.forEach((el) => el.classList.remove('d-none'))
         updateTable(domains, '#domains-table')
     }
 
     // Hide Loading message
-    document.getElementById('loading-message').style.display = 'none'
+    document.getElementById('loading-message').classList.add('d-none')
 }
 
 /**
@@ -261,7 +261,7 @@ function download(filename, text) {
         'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
     )
     element.setAttribute('download', filename)
-    element.style.display = 'none'
+    element.classList.add('d-none')
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
