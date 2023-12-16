@@ -4,6 +4,7 @@
     <title>Link Extractor</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/datatables/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/links.css">
     <script type="text/javascript" src="../js/theme.js"></script>
@@ -45,15 +46,15 @@
             <span class="d-inline-block me-1 mb-2">Press <kbd>C</kbd> or <kbd>L</kbd> to Copy Links.</span>
         </div>
 
-        <div class="input-group mb-2">
-            <input id="filter-links" type="text" class="form-control filter-input" list="savedFilters" placeholder="Press F and Type to Filter..." aria-label="Filter" aria-describedby="reset-button">
-            <button class="btn btn-outline-secondary" type="button" id="reset-button">Reset</button>
-        </div>
-        <datalist id="savedFilters"></datalist>
+<!--        <div class="input-group mb-2">-->
+<!--            <input id="filter-links" type="text" class="form-control filter-input" list="savedFilters" placeholder="Press F and Type to Filter..." aria-label="Filter" aria-describedby="reset-button">-->
+<!--            <button class="btn btn-outline-secondary" type="button" id="reset-button">Reset</button>-->
+<!--        </div>-->
+<!--        <datalist id="savedFilters"></datalist>-->
 
         <table id="links-table" class="table table-sm table-striped table-hover small">
             <caption class="visually-hidden user-select-none">Links</caption>
-            <thead class="visually-hidden"><tr><th></th></tr></thead>
+            <thead class=""><tr><th>Link</th></tr></thead>
             <tbody id="links-body"></tbody>
         </table>
     </div>
@@ -71,7 +72,7 @@
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover small">
             <caption class="visually-hidden user-select-none">Domains</caption>
-            <thead class="visually-hidden"><tr><th></th></tr></thead>
+            <thead class=""><tr><th>Link</th></tr></thead>
             <tbody id="domains-body"></tbody>
         </table>
     </div>
@@ -93,7 +94,6 @@
                     <div class="col">
                         <p><kbd>C</kbd> or <kbd>L</kbd> Copy All Links</p>
                         <p><kbd>D</kbd> or <kbd>M</kbd> Copy All Domains</p>
-                        <p><kbd>F</kbd> or <kbd>I</kbd> Focus Filter Input</p>
                         <p><kbd>T</kbd> or <kbd>O</kbd> Open Options</p>
                         <p><kbd>Z</kbd> or <kbd>K</kbd> Keyboard Shortcuts</p>
                     </div>
@@ -111,6 +111,8 @@
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
 <script type="text/javascript" src="../js/links.js"></script>

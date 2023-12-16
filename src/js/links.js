@@ -1,5 +1,14 @@
 // JS for links.html
 
+document.addEventListener('DOMContentLoaded', initLinks)
+
+document
+    .querySelectorAll('.open-in-tabs')
+    .forEach((el) => el.addEventListener('click', openLinksClick))
+document
+    .querySelectorAll('.download-file')
+    .forEach((el) => el.addEventListener('click', downloadFileClick))
+
 const urlParams = new URLSearchParams(window.location.search)
 const tabId = parseInt(urlParams.get('tab'))
 
@@ -12,33 +21,32 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
 
-document.addEventListener('DOMContentLoaded', initLinks)
-
-document
-    .querySelectorAll('.open-in-tabs')
-    .forEach((el) => el.addEventListener('click', openLinksClick))
-document
-    .querySelectorAll('.download-file')
-    .forEach((el) => el.addEventListener('click', downloadFileClick))
-document
-    .querySelectorAll('.filter-input')
-    .forEach((el) => el.addEventListener('input', filterLinks))
-
-document.getElementById('reset-button').addEventListener('click', resetButton)
+const dataTablesOptions = {
+    info: false,
+    processing: true,
+    saveState: true,
+    bSort: true,
+    order: [0, 'desc'],
+    pageLength: -1,
+    lengthMenu: [
+        [10, 25, 50, 100, 250, -1],
+        [10, 25, 50, 100, 250, 'All'],
+    ],
+}
 
 /**
  * Links Init
  * @function initLinks
  */
 async function initLinks() {
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
-    console.log('patterns:', patterns)
-    const savedFilters = document.getElementById('savedFilters')
-    patterns.forEach((pattern) => {
-        const option = document.createElement('option')
-        option.value = pattern
-        savedFilters.appendChild(option)
-    })
+    // const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.log('patterns:', patterns)
+    // const savedFilters = document.getElementById('savedFilters')
+    // patterns.forEach((pattern) => {
+    //     const option = document.createElement('option')
+    //     option.value = pattern
+    //     savedFilters.appendChild(option)
+    // })
 
     if (urlParams.has('popup')) {
         const { popup } = await chrome.storage.local.get(['popup'])
@@ -162,6 +170,7 @@ function updateTable(data, selector) {
         link.target = '_blank'
         tbody.insertRow().insertCell().appendChild(link)
     })
+    new DataTable(selector, dataTablesOptions) // eslint-disable-line no-undef
 }
 
 /**
@@ -180,9 +189,6 @@ function handleKeybinds(event) {
             document.getElementById('copy-domains').click()
         } else if (checkKey(event, ['KeyT', 'KeyO'])) {
             chrome.runtime.openOptionsPage()
-        } else if (checkKey(event, ['KeyF', 'KeyI'])) {
-            event.preventDefault() // prevent typing f on focus
-            document.getElementById('filter-links').focus()
         } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
             bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
         }
@@ -265,38 +271,4 @@ function download(filename, text) {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
-}
-
-/**
- * Reset Filter Click Callback
- * @function resetButton
- * @param {MouseEvent} event
- */
-function resetButton(event) {
-    document.getElementById('filter-links').value = ''
-    filterLinks()
-}
-
-/**
- * Filter Links
- * Requires JQuery
- * @function filterLinks
- */
-function filterLinks() {
-    const input = $.trim($('#filter-links').val())
-        .split(/\s+/)
-        .join('\\b)(?=.*\\b')
-    const value = `^(?=.*\\b${input}).*$`
-    const reg = RegExp(value, 'i')
-
-    let text
-    function filterFunction() {
-        text = $(this).text().replace(/\s+/g, ' ')
-        return !reg.test(text)
-    }
-
-    const rows = $('table tr')
-    rows.show().filter(filterFunction).hide()
-    $('#links-count').text($('#links-table tr:visible').length)
-    $('#domains-count').text($('#domains-table tr:visible').length)
 }
