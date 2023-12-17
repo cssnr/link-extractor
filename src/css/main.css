@@ -1,5 +1,9 @@
-.toast {
-    max-width: 260px;
+/* CSS for global */
+
+svg {
+    height: 1em;
+    width: 1em;
+    margin-bottom: 0.15em;
 }
 
 #back-to-top {
@@ -13,4 +17,8 @@
 #bottom-container {
     margin-bottom: 50px;
     margin-right: 25px;
+}
+
+.toast {
+    max-width: 260px;
 }
