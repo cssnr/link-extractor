@@ -1,32 +1,36 @@
 // JS injected into active tab to extract links
 
-chrome.runtime.onMessage.addListener(onMessage)
+if (!window.injected) {
+    console.log('Injected: extract.js')
+    chrome.runtime.onMessage.addListener(onMessage)
+    window.injected = true
+}
 
 /**
  * Handle Messages
  * @function onMessage
- * @param {Object} message
+ * @param {String} message
  * @param {MessageSender} sender
  * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.log(`onMessage: message.action: ${message.action}`)
-    if (message.action === 'extract') {
-        sendResponse(extractLinks())
-    } else if (message.action === 'selection') {
+    console.log(`onMessage: message: ${message}`)
+    if (message === 'all') {
+        sendResponse(extractAllLinks())
+    } else if (message === 'selection') {
         sendResponse(extractSelection())
     } else {
-        console.warn(`Unknown message.action: ${message.action}`)
+        console.warn('Unknown message:', message)
     }
 }
 
 /**
  * Extract links
- * @function extractLinks
+ * @function extractAllLinks
  * @return {Array}
  */
-function extractLinks() {
-    console.log('extractLinks')
+function extractAllLinks() {
+    console.log('extractAllLinks')
     const links = []
     for (const element of document.links) {
         if (element.href) {
@@ -57,7 +61,6 @@ function extractSelection() {
             continue
         }
         ancestor.querySelectorAll('a').forEach((element) => {
-            console.log('element:', element)
             if (selection.containsNode(element, true)) {
                 pushElement(links, element)
             }

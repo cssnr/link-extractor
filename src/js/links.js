@@ -10,7 +10,6 @@ document
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const urlParams = new URLSearchParams(window.location.search)
-const tabId = parseInt(urlParams.get('tab'))
 
 let keysPressed = {}
 window.onblur = function () {
@@ -21,7 +20,7 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
 
-const dataTablesOptions = {
+const dtOptions = {
     info: false,
     processing: true,
     saveState: true,
@@ -39,6 +38,7 @@ const dataTablesOptions = {
  * @function initLinks
  */
 async function initLinks() {
+    console.log('initLinks: urlParams:', urlParams)
     // const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.log('patterns:', patterns)
     // const savedFilters = document.getElementById('savedFilters')
@@ -48,22 +48,17 @@ async function initLinks() {
     //     savedFilters.appendChild(option)
     // })
 
-    if (urlParams.has('popup')) {
-        const { popup } = await chrome.storage.local.get(['popup'])
-        console.log('popup:', popup)
-        await processLinks(popup)
-    } else if (urlParams.has('selection')) {
-        chrome.tabs.sendMessage(tabId, { action: 'selection' }, (links) => {
-            processLinks(links)
-        })
-    } else if (tabId) {
-        chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
-            processLinks(links)
-        })
+    const tabId = parseInt(urlParams.get('tab'))
+    const selection = urlParams.has('selection')
+    console.log(`tabId: ${tabId}, selection: ${selection}`)
+
+    if (tabId) {
+        const action = selection ? 'selection' : 'all'
+        const links = await chrome.tabs.sendMessage(tabId, action)
+        await processLinks(links)
     } else {
-        console.log('No Data to Process...')
-        alert('No Data to Process...')
-        window.close()
+        const { links } = await chrome.storage.local.get(['links'])
+        await processLinks(links)
     }
 }
 
@@ -157,20 +152,31 @@ function getBaseURL(link) {
 
 /**
  * Update Table with URLs
- * @function addNodes
- * @param {Array} data
+ * @function updateTable
+ * @param {Array} links
  * @param {String} selector
  */
-function updateTable(data, selector) {
+function updateTable(links, selector) {
+    console.log(`updateTable: ${selector}`)
+
     const tbody = document.querySelector(`${selector} tbody`)
-    data.forEach(function (url) {
+    links.forEach(function (url) {
         const link = document.createElement('a')
         link.text = url
         link.href = url
         link.target = '_blank'
         tbody.insertRow().insertCell().appendChild(link)
     })
-    new DataTable(selector, dataTablesOptions) // eslint-disable-line no-undef
+
+    // const data = []
+    // links.forEach((value) => {
+    //     // console.log(value)
+    //     data.push([value])
+    // })
+    // console.log('data:', data)
+    // dtOptions['data'] = data
+
+    new DataTable(selector, dtOptions) // eslint-disable-line no-undef
 }
 
 /**
@@ -223,7 +229,6 @@ function checkKey(event, keys) {
  */
 function openLinksClick(event) {
     console.log('openLinksClick:', event)
-    console.log(`querySelector: ${event.target.dataset.target}`)
     const element = document.querySelector(event.target.dataset.target)
     const links = element.innerText.trim()
     console.log('links:', links)
@@ -245,6 +250,7 @@ function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
     const element = document.querySelector(event.target.dataset.target)
     const links = element.innerText.trim()
+    console.log('links:', links)
     if (links) {
         download(event.target.dataset.filename, links)
         showToast('Download Started.')
