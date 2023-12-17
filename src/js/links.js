@@ -108,8 +108,7 @@ async function processLinks(links) {
     // If no items, alert and return
     if (!items.length) {
         alert('No Results')
-        window.close()
-        return
+        return window.close()
     }
 
     // Update links if onlyDomains is not set
