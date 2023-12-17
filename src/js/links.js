@@ -48,17 +48,23 @@ async function initLinks() {
     //     savedFilters.appendChild(option)
     // })
 
-    const tabId = parseInt(urlParams.get('tab'))
-    const selection = urlParams.has('selection')
-    console.log(`tabId: ${tabId}, selection: ${selection}`)
+    try {
+        const tabId = parseInt(urlParams.get('tab'))
+        const selection = urlParams.has('selection')
+        console.log(`tabId: ${tabId}, selection: ${selection}`)
 
-    if (tabId) {
-        const action = selection ? 'selection' : 'all'
-        const links = await chrome.tabs.sendMessage(tabId, action)
-        await processLinks(links)
-    } else {
-        const { links } = await chrome.storage.local.get(['links'])
-        await processLinks(links)
+        if (tabId) {
+            const action = selection ? 'selection' : 'all'
+            const links = await chrome.tabs.sendMessage(tabId, action)
+            await processLinks(links)
+        } else {
+            const { links } = await chrome.storage.local.get(['links'])
+            await processLinks(links)
+        }
+    } catch (e) {
+        console.log('error:', e)
+        alert('No Results! See Console for Details.')
+        window.close()
     }
 }
 
