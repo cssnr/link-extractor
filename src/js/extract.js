@@ -30,10 +30,10 @@ function extractLinks() {
     const links = []
     for (const element of document.links) {
         if (element.href) {
-            links.push(decodeURI(element.href))
+            pushElement(links, element)
         }
     }
-    console.log(links)
+    console.log('links:', links)
     return links
 }
 
@@ -44,26 +44,39 @@ function extractLinks() {
  */
 function extractSelection() {
     console.log('extractSelection')
-    const results = new Set()
+    const links = []
     const selection = window.getSelection()
-    console.log(selection)
+    console.log('selection:', selection)
     if (selection?.type !== 'Range') {
-        console.error('No selection or wrong selection.type')
-        return null
+        console.log('No selection or wrong selection.type')
+        return links
     }
     for (let i = 0; i < selection.rangeCount; i++) {
         const ancestor = selection.getRangeAt(i).commonAncestorContainer
         if (ancestor.nodeName === '#text') {
             continue
         }
-        ancestor.querySelectorAll('a').forEach((node) => {
-            console.log('node:', node)
-            if (!selection.containsNode(node, true) || !node.href) {
-                return
+        ancestor.querySelectorAll('a').forEach((element) => {
+            console.log('element:', element)
+            if (selection.containsNode(element, true)) {
+                pushElement(links, element)
             }
-            results.add(node.href)
         })
     }
-    console.log(results)
-    return Array.from(results)
+    console.log('links:', links)
+    return links
+}
+
+/**
+ * Add Element to Array
+ * @function pushElement
+ * @param {Array} array
+ * @param {HTMLAnchorElement} element
+ */
+function pushElement(array, element) {
+    try {
+        array.push(decodeURI(element.href))
+    } catch (e) {
+        console.log(e)
+    }
 }
