@@ -16,7 +16,7 @@
 <div class="card" >
 <div class="card-body">
     <div class="justify-content-center align-items-center d-flex">
-        <img src="../images/logo48.png" class="img-fluid float-start me-2" alt="Link Extractor" height="48" width="48">
+        <img src="../images/logo48.png" class="img-fluid float-start me-2" title="Link Extractor" alt="Link Extractor" height="48" width="48">
         <h1 class="align-middle">Link Extractor</h1>
     </div>
     <div class="clearfix"></div>
@@ -28,11 +28,11 @@
         <tbody>
             <tr>
                 <td>Show Popup Action <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></td>
-                <td title="Keyboard Shortcut" class="text-end"><kbd id="mainKey">Unknown</kbd></td>
+                <td class="text-end" title="Keyboard Shortcut"><kbd id="mainKey">Unknown</kbd></td>
             </tr>
             <tr>
                 <td>Extract Links from Tab <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></td>
-                <td title="Keyboard Shortcut" class="text-end"><kbd id="extractKey">Unknown</kbd></td>
+                <td class="text-end" title="Keyboard Shortcut"><kbd id="extractKey">Unknown</kbd></td>
             </tr>
         </tbody>
     </table>
@@ -49,7 +49,12 @@
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Enable Right Click Context Menu.">
+                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
+                </span>
+            </label>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="defaultFilter">
@@ -60,9 +65,14 @@
                 </span>
             </label>
         </div>
-        <div class="form-check form-switch mb-3">
+        <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="showUpdate">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
+                Show Release Notes on Update
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Show Release Notes on Version Update.">
+                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
+                </span>
+            </label>
         </div>
     </form>
 
