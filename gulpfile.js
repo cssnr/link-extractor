@@ -25,6 +25,18 @@ gulp.task('datatables', () => {
         .pipe(gulp.dest('src/dist/datatables'))
 })
 
+gulp.task('fontawesome', () => {
+    return gulp
+        .src(
+            [
+                'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+                'node_modules/@fortawesome/fontawesome-free/webfonts/**/*',
+            ],
+            { base: 'node_modules/@fortawesome/fontawesome-free' }
+        )
+        .pipe(gulp.dest('src/dist/fontawesome'))
+})
+
 gulp.task('jquery', () => {
     return gulp
         .src('node_modules/jquery/dist/jquery.min.js')
@@ -33,5 +45,11 @@ gulp.task('jquery', () => {
 
 gulp.task(
     'default',
-    gulp.parallel('bootstrap', 'clipboard', 'datatables', 'jquery')
+    gulp.parallel(
+        'bootstrap',
+        'clipboard',
+        'datatables',
+        'fontawesome',
+        'jquery'
+    )
 )

@@ -100,7 +100,9 @@ function updateTable(data) {
         const row = tbody.insertRow()
 
         const button = document.createElement('a')
-        const svg = document.getElementById('bi-trash3').cloneNode(true)
+        const svg = document
+            .querySelector('.fa-regular.fa-trash-can')
+            .cloneNode(true)
         button.appendChild(svg)
         button.title = 'Delete'
         button.dataset.value = value

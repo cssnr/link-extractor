@@ -4,6 +4,7 @@
     <title>Link Extractor</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/popup.css">
     <script type="text/javascript" src="../js/theme.js"></script>
@@ -14,7 +15,7 @@
     <div class="d-grid g-2 gap-2">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
             <a role="button" class="btn btn-success btn-sm" data-filter="">
-                All Links <svg><use xlink:href="#bi-link-45deg" /></svg></a>
+                <i class="fa-solid fa-link ms-1"></i> All Links</a>
             <div class="btn-group" role="group">
                 <a role="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Filters</a>
                 <ul id="filters-ul" class="dropdown-menu">
@@ -26,7 +27,8 @@
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control form-control-sm" type="text" placeholder="Quick Filter">
         </form>
-        <a role="button" class="btn btn-sm btn-primary" data-filter="domains">Only Domains</a>
+        <a role="button" class="btn btn-sm btn-primary" data-filter="domains">
+            <i class="fa-solid fa-globe"></i> Only Domains</a>
         <hr class="my-0">
         <form id="links-form" class="my-0">
             <label for="links-text" class="form-label visually-hidden">Open Links</label>
@@ -48,35 +50,20 @@
                 <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
                     Use Default Link Filtering
                     <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Filter Out Links Without ://">
-                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
-                </span>
+                        <i class="fa-solid fa-circle-info ms-1"></i>
+                    </span>
                 </label>
             </form>
         </div>
 
         <a class="btn btn-outline-info btn-sm" role="button" data-href="options">
-            Options <svg class="ms-1"><use xlink:href="#bi-gear" /></svg>
-        </a>
+            <i class="fa-solid fa-sliders"></i> Options</a>
         <div class=" d-flex justify-content-center align-items-center text-center small">
             <img class="" src="../images/logo16.png" alt="Link Extractor" width="16" height="16">
             <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
                data-href="homepage">Link Extractor</a> v<span id="version"></span>
         </div>
     </div>
-</div>
-
-<div class="d-none">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-info-circle-fill" viewBox="0 0 16 16">
-        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-gear" viewBox="0 0 16 16">
-        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-link-45deg" viewBox="0 0 16 16">
-        <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
-        <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/>
-    </svg>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>

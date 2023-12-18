@@ -5,6 +5,7 @@
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/datatables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/links.css">
     <script type="text/javascript" src="../js/theme.js"></script>
@@ -38,13 +39,13 @@
         <div class="user-select-none">
             <h2 id="links">Links <span id="links-count" class="badge bg-success-subtle"></span></h2>
             <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body" data-toast="Copied Links">
-                Copy Links <svg class="ms-1"><use xlink:href="#bi-copy" /></svg></a>
+                Copy Links <i class="fa-solid fa-copy ms-1"></i></a>
             <a id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#links-body" data-filename="links.txt">
-                Download <svg class="ms-1"><use xlink:href="#bi-cloud-download" /></svg></a>
-            <button type="button" id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-1 mb-2" data-target="#links-body">
-                Open <svg class="ms-1"><use xlink:href="#bi-box-arrow-up-right" /></svg></button>
+                Download <i class="fa-solid fa-download m-1"></i></a>
+            <button type="button" id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" data-target="#links-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
-                Press <kbd>C</kbd> <svg><use xlink:href="#bi-keyboard" /></svg> <kbd>L</kbd> to Copy Links.</span>
+                <kbd>C</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>L</kbd> to Copy Links.</span>
         </div>
 
 <!--        <div class="input-group mb-2">-->
@@ -64,13 +65,13 @@
         <div class="user-select-none">
             <h2 id="domains">Domains <span id="domains-count" class="badge bg-primary-subtle"></span></h2>
             <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
-                Copy Domains <svg class="ms-1"><use xlink:href="#bi-copy" /></svg></a>
+                Copy Domains <i class="fa-solid fa-copy ms-1"></i></a>
             <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body" data-filename="domains.txt">
-                Download <svg class="ms-1"><use xlink:href="#bi-cloud-download" /></svg></a>
-            <button type="button" id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-1 mb-2" data-target="#domains-body">
-                Open <svg class="ms-1"><use xlink:href="#bi-box-arrow-up-right" /></svg></button>
+                Download <i class="fa-solid fa-download ms-1"></i></a>
+            <button type="button" id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" data-target="#domains-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
-                Press <kbd>D</kbd> <svg><use xlink:href="#bi-keyboard" /></svg> <kbd>M</kbd> to Copy Domains.</span>
+                <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
         </div>
         <table id="domains-table" class="table table-sm table-striped table-hover small">
             <caption class="visually-hidden user-select-none">Domains</caption>
@@ -88,7 +89,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Keyboard Shortcuts <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></h5>
+                <h5 class="modal-title">Keyboard Shortcuts <i class="fa-regular fa-keyboard ms-2"></i></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

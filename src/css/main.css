@@ -1,11 +1,5 @@
 /* CSS for global */
 
-svg {
-    height: 1em;
-    width: 1em;
-    margin-bottom: 0.15em;
-}
-
 #back-to-top {
     position: fixed;
     bottom: 60px;
