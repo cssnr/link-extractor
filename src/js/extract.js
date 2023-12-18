@@ -1,39 +1,43 @@
 // JS injected into active tab to extract links
 
-chrome.runtime.onMessage.addListener(onMessage)
+if (!window.injected) {
+    console.log('Injected: extract.js')
+    chrome.runtime.onMessage.addListener(onMessage)
+    window.injected = true
+}
 
 /**
  * Handle Messages
  * @function onMessage
- * @param {Object} message
+ * @param {String} message
  * @param {MessageSender} sender
  * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.log(`onMessage: message.action: ${message.action}`)
-    if (message.action === 'extract') {
-        sendResponse(extractLinks())
-    } else if (message.action === 'selection') {
+    console.log(`onMessage: message: ${message}`)
+    if (message === 'all') {
+        sendResponse(extractAllLinks())
+    } else if (message === 'selection') {
         sendResponse(extractSelection())
     } else {
-        console.warn(`Unknown message.action: ${message.action}`)
+        console.warn('Unknown message:', message)
     }
 }
 
 /**
  * Extract links
- * @function extractLinks
+ * @function extractAllLinks
  * @return {Array}
  */
-function extractLinks() {
-    console.log('extractLinks')
+function extractAllLinks() {
+    console.log('extractAllLinks')
     const links = []
     for (const element of document.links) {
         if (element.href) {
-            links.push(decodeURI(element.href))
+            pushElement(links, element)
         }
     }
-    console.log(links)
+    console.log('links:', links)
     return links
 }
 
@@ -44,26 +48,38 @@ function extractLinks() {
  */
 function extractSelection() {
     console.log('extractSelection')
-    const results = new Set()
+    const links = []
     const selection = window.getSelection()
-    console.log(selection)
+    console.log('selection:', selection)
     if (selection?.type !== 'Range') {
-        console.error('No selection or wrong selection.type')
-        return null
+        console.log('No selection or wrong selection.type')
+        return links
     }
     for (let i = 0; i < selection.rangeCount; i++) {
         const ancestor = selection.getRangeAt(i).commonAncestorContainer
         if (ancestor.nodeName === '#text') {
             continue
         }
-        ancestor.querySelectorAll('a').forEach((node) => {
-            console.log('node:', node)
-            if (!selection.containsNode(node, true) || !node.href) {
-                return
+        ancestor.querySelectorAll('a').forEach((element) => {
+            if (selection.containsNode(element, true)) {
+                pushElement(links, element)
             }
-            results.add(node.href)
         })
     }
-    console.log(results)
-    return Array.from(results)
+    console.log('links:', links)
+    return links
+}
+
+/**
+ * Add Element to Array
+ * @function pushElement
+ * @param {Array} array
+ * @param {HTMLAnchorElement} element
+ */
+function pushElement(array, element) {
+    try {
+        array.push(decodeURI(element.href))
+    } catch (e) {
+        console.log(e)
+    }
 }

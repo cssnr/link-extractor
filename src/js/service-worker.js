@@ -55,19 +55,19 @@ async function onClicked(ctx, tab) {
         chrome.runtime.openOptionsPage()
     } else if (ctx.menuItemId === 'links') {
         console.log('injectTab: links')
-        await injectTab(null, null, null)
+        await injectTab()
     } else if (ctx.menuItemId === 'domains') {
         console.log('injectTab: domains')
-        await injectTab(null, true, null)
+        await injectTab({ domains: true })
     } else if (ctx.menuItemId === 'selection') {
         console.log('injectTab: selection')
-        await injectTab(null, null, true)
+        await injectTab({ selection: true })
     } else if (ctx.menuItemId.startsWith('filter-')) {
         const i = ctx.menuItemId.split('-')[1]
         console.log(`injectTab: filter-${i}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         console.log(`filter: ${patterns[i]}`)
-        await injectTab(patterns[i], null, null)
+        await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
         console.log('injectFunction: copy')
         await injectFunction(copyActiveElementText, [ctx])
@@ -84,7 +84,7 @@ async function onClicked(ctx, tab) {
 async function onCommand(command) {
     console.log(`onCommand: ${command}`)
     if (command === 'extract') {
-        await injectTab(null, null, null)
+        await injectTab()
     } else {
         console.error(`Unknown command: ${command}`)
     }

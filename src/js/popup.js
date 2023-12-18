@@ -107,7 +107,7 @@ async function filterForm(event) {
         filter = filterInput.value
     }
     const domains = event.target.dataset.filter === 'domains'
-    await injectTab(filter, domains, false)
+    await injectTab({ filter, domains })
     window.close()
 }
 
@@ -121,11 +121,9 @@ async function linksForm(event) {
     event.preventDefault()
     if (event.submitter.id === 'parse-links') {
         const text = document.getElementById('links-text')
-        const popup = extractURLs(text.value)
-        console.log('popup:', popup)
-        await chrome.storage.local.set({ popup })
+        const links = extractURLs(text.value)
+        await chrome.storage.local.set({ links })
         const url = new URL(chrome.runtime.getURL('../html/links.html'))
-        url.searchParams.set('popup', 'yes')
         await chrome.tabs.create({ active: true, url: url.toString() })
         window.close()
     } else if (event.submitter.id === 'open-parsed') {

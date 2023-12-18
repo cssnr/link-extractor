@@ -1,5 +1,7 @@
+/* CSS for popup.html */
+
 body {
-    width: 320px;
+    width: 340px;
 }
 
 input::placeholder,

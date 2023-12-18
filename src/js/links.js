@@ -1,7 +1,15 @@
 // JS for links.html
 
+document.addEventListener('DOMContentLoaded', initLinks)
+
+document
+    .querySelectorAll('.open-in-tabs')
+    .forEach((el) => el.addEventListener('click', openLinksClick))
+document
+    .querySelectorAll('.download-file')
+    .forEach((el) => el.addEventListener('click', downloadFileClick))
+
 const urlParams = new URLSearchParams(window.location.search)
-const tabId = parseInt(urlParams.get('tab'))
 
 let keysPressed = {}
 window.onblur = function () {
@@ -12,49 +20,50 @@ document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key]
 })
 
-document.addEventListener('DOMContentLoaded', initLinks)
-
-document
-    .querySelectorAll('.open-in-tabs')
-    .forEach((el) => el.addEventListener('click', openLinksClick))
-document
-    .querySelectorAll('.download-file')
-    .forEach((el) => el.addEventListener('click', downloadFileClick))
-document
-    .querySelectorAll('.filter-input')
-    .forEach((el) => el.addEventListener('input', filterLinks))
-
-document.getElementById('reset-button').addEventListener('click', resetButton)
+const dtOptions = {
+    info: false,
+    processing: true,
+    saveState: true,
+    bSort: true,
+    order: [0, 'desc'],
+    pageLength: -1,
+    lengthMenu: [
+        [10, 25, 50, 100, 250, -1],
+        [10, 25, 50, 100, 250, 'All'],
+    ],
+}
 
 /**
  * Links Init
  * @function initLinks
  */
 async function initLinks() {
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
-    console.log('patterns:', patterns)
-    const savedFilters = document.getElementById('savedFilters')
-    patterns.forEach((pattern) => {
-        const option = document.createElement('option')
-        option.value = pattern
-        savedFilters.appendChild(option)
-    })
+    console.log('initLinks: urlParams:', urlParams)
+    // const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.log('patterns:', patterns)
+    // const savedFilters = document.getElementById('savedFilters')
+    // patterns.forEach((pattern) => {
+    //     const option = document.createElement('option')
+    //     option.value = pattern
+    //     savedFilters.appendChild(option)
+    // })
 
-    if (urlParams.has('popup')) {
-        const { popup } = await chrome.storage.local.get(['popup'])
-        console.log('popup:', popup)
-        await processLinks(popup)
-    } else if (urlParams.has('selection')) {
-        chrome.tabs.sendMessage(tabId, { action: 'selection' }, (links) => {
-            processLinks(links)
-        })
-    } else if (tabId) {
-        chrome.tabs.sendMessage(tabId, { action: 'extract' }, (links) => {
-            processLinks(links)
-        })
-    } else {
-        console.log('No Data to Process...')
-        alert('No Data to Process...')
+    try {
+        const tabId = parseInt(urlParams.get('tab'))
+        const selection = urlParams.has('selection')
+        console.log(`tabId: ${tabId}, selection: ${selection}`)
+
+        if (tabId) {
+            const action = selection ? 'selection' : 'all'
+            const links = await chrome.tabs.sendMessage(tabId, action)
+            await processLinks(links)
+        } else {
+            const { links } = await chrome.storage.local.get(['links'])
+            await processLinks(links)
+        }
+    } catch (e) {
+        console.log('error:', e)
+        alert('No Results! See Console for Details.')
         window.close()
     }
 }
@@ -99,8 +108,7 @@ async function processLinks(links) {
     // If no items, alert and return
     if (!items.length) {
         alert('No Results')
-        window.close()
-        return
+        return window.close()
     }
 
     // Update links if onlyDomains is not set
@@ -149,65 +157,31 @@ function getBaseURL(link) {
 
 /**
  * Update Table with URLs
- * @function addNodes
- * @param {Array} data
+ * @function updateTable
+ * @param {Array} links
  * @param {String} selector
  */
-function updateTable(data, selector) {
+function updateTable(links, selector) {
+    console.log(`updateTable: ${selector}`)
+
     const tbody = document.querySelector(`${selector} tbody`)
-    data.forEach(function (url) {
+    links.forEach(function (url) {
         const link = document.createElement('a')
         link.text = url
         link.href = url
         link.target = '_blank'
         tbody.insertRow().insertCell().appendChild(link)
     })
-}
 
-/**
- * Keyboard keydown Callback
- * @function handleKeybinds
- * @param {KeyboardEvent} event
- */
-function handleKeybinds(event) {
-    // console.log('handleKeybinds:', event)
-    const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
-    if (!formElements.includes(event.target.tagName)) {
-        keysPressed[event.key] = true
-        if (checkKey(event, ['KeyC', 'KeyL'])) {
-            document.getElementById('copy-links').click()
-        } else if (checkKey(event, ['KeyD', 'KeyM'])) {
-            document.getElementById('copy-domains').click()
-        } else if (checkKey(event, ['KeyT', 'KeyO'])) {
-            chrome.runtime.openOptionsPage()
-        } else if (checkKey(event, ['KeyF', 'KeyI'])) {
-            event.preventDefault() // prevent typing f on focus
-            document.getElementById('filter-links').focus()
-        } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
-            bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
-        }
-    }
-}
+    // const data = []
+    // links.forEach((value) => {
+    //     // console.log(value)
+    //     data.push([value])
+    // })
+    // console.log('data:', data)
+    // dtOptions['data'] = data
 
-/**
- * Check Key Down Combination
- * @function checkKey
- * @param {KeyboardEvent} event
- * @param {Array} keys
- * @return {Boolean}
- */
-function checkKey(event, keys) {
-    const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
-    let hasCtrlKey = false
-    ctrlKeys.forEach(function (key) {
-        if (keysPressed[key]) {
-            hasCtrlKey = true
-        }
-    })
-    if (hasCtrlKey) {
-        return false
-    }
-    return !!keys.includes(event.code)
+    new DataTable(selector, dtOptions) // eslint-disable-line no-undef
 }
 
 /**
@@ -217,7 +191,6 @@ function checkKey(event, keys) {
  */
 function openLinksClick(event) {
     console.log('openLinksClick:', event)
-    console.log(`querySelector: ${event.target.dataset.target}`)
     const element = document.querySelector(event.target.dataset.target)
     const links = element.innerText.trim()
     console.log('links:', links)
@@ -239,6 +212,7 @@ function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
     const element = document.querySelector(event.target.dataset.target)
     const links = element.innerText.trim()
+    console.log('links:', links)
     if (links) {
         download(event.target.dataset.filename, links)
         showToast('Download Started.')
@@ -268,35 +242,44 @@ function download(filename, text) {
 }
 
 /**
- * Reset Filter Click Callback
- * @function resetButton
- * @param {MouseEvent} event
+ * Keyboard keydown Callback
+ * @function handleKeybinds
+ * @param {KeyboardEvent} event
  */
-function resetButton(event) {
-    document.getElementById('filter-links').value = ''
-    filterLinks()
+function handleKeybinds(event) {
+    // console.log('handleKeybinds:', event)
+    const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
+    if (!formElements.includes(event.target.tagName)) {
+        keysPressed[event.key] = true
+        if (checkKey(event, ['KeyC', 'KeyL'])) {
+            document.getElementById('copy-links').click()
+        } else if (checkKey(event, ['KeyD', 'KeyM'])) {
+            document.getElementById('copy-domains').click()
+        } else if (checkKey(event, ['KeyT', 'KeyO'])) {
+            chrome.runtime.openOptionsPage()
+        } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
+            bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
+        }
+    }
 }
 
 /**
- * Filter Links
- * Requires JQuery
- * @function filterLinks
+ * Check Key Down Combination
+ * @function checkKey
+ * @param {KeyboardEvent} event
+ * @param {Array} keys
+ * @return {Boolean}
  */
-function filterLinks() {
-    const input = $.trim($('#filter-links').val())
-        .split(/\s+/)
-        .join('\\b)(?=.*\\b')
-    const value = `^(?=.*\\b${input}).*$`
-    const reg = RegExp(value, 'i')
-
-    let text
-    function filterFunction() {
-        text = $(this).text().replace(/\s+/g, ' ')
-        return !reg.test(text)
+function checkKey(event, keys) {
+    const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
+    let hasCtrlKey = false
+    ctrlKeys.forEach(function (key) {
+        if (keysPressed[key]) {
+            hasCtrlKey = true
+        }
+    })
+    if (hasCtrlKey) {
+        return false
     }
-
-    const rows = $('table tr')
-    rows.show().filter(filterFunction).hide()
-    $('#links-count').text($('#links-table tr:visible').length)
-    $('#domains-count').text($('#domains-table tr:visible').length)
+    return !!keys.includes(event.code)
 }
