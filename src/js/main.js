@@ -1,7 +1,5 @@
 // JS for links.html and options.html
 
-// document.addEventListener('DOMContentLoaded', domContentLoaded)
-
 const backToTop = document.getElementById('back-to-top')
 
 backToTop.addEventListener('click', () => {
@@ -38,35 +36,24 @@ clipboard.on('error', function (event) {
     showToast('Clipboard Copy Failed', 'warning')
 })
 
-// /**
-//  * DOM Content Loaded
-//  * @function domContentLoaded
-//  */
-// async function domContentLoaded() {
-//     console.log('domContentLoaded')
-//     const { options } = await chrome.storage.sync.get(['options'])
-//     console.log('options:', options)
-// }
-
 /**
  * Show Bootstrap Toast
  * Requires JQuery
  * @function showToast
  * @param {String} message
- * @param {String} bsClass
+ * @param {String} type
  */
-function showToast(message, bsClass = 'success') {
-    const toastEl = $(
-        '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
-            '    <div class="d-flex">\n' +
-            '        <div class="toast-body">Options Saved</div>\n' +
-            '        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-            '    </div>\n' +
+function showToast(message, type = 'success') {
+    const toast = $(
+        '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">' +
+            '  <div class="d-flex">' +
+            '    <div class="toast-body"></div>' +
+            '    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+            '  </div>' +
             '</div>'
     )
-    toastEl.find('.toast-body').text(message)
-    toastEl.addClass(`text-bg-${bsClass}`)
-    $('#toast-container').append(toastEl)
-    const toast = new bootstrap.Toast(toastEl)
-    toast.show()
+    toast.find('.toast-body').text(message)
+    toast.addClass(`text-bg-${type}`)
+    $('#toast-container').append(toast)
+    toast.toast('show')
 }

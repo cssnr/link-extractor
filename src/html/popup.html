@@ -15,11 +15,11 @@
     <div class="d-grid g-2 gap-2">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
             <a role="button" class="btn btn-success btn-sm" data-filter="">
-                <i class="fa-solid fa-link ms-1"></i> All Links</a>
+                <i class="fa-solid fa-link me-1"></i> All Links</a>
             <div class="btn-group" role="group">
                 <a role="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Filters</a>
-                <ul id="filters-ul" class="dropdown-menu">
-                    <li id="no-filters"><a class="dropdown-item" href="#" data-href="options">No Saved Filters</a></li>
+                <ul id="filters-ul" class="dropdown-menu small">
+                    <li id="no-filters"><a class="dropdown-item" href="../html/options.html">Add Saved Filters</a></li>
                 </ul>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <input id="filter-input" class="form-control form-control-sm" type="text" placeholder="Quick Filter">
         </form>
         <a role="button" class="btn btn-sm btn-primary" data-filter="domains">
-            <i class="fa-solid fa-globe"></i> Only Domains</a>
+            <i class="fa-solid fa-globe me-1"></i> Only Domains</a>
         <hr class="my-0">
         <form id="links-form" class="my-0">
             <label for="links-text" class="form-label visually-hidden">Open Links</label>
@@ -56,12 +56,12 @@
             </form>
         </div>
 
-        <a class="btn btn-outline-info btn-sm" role="button" data-href="options">
-            <i class="fa-solid fa-sliders"></i> Options</a>
+        <a class="btn btn-outline-info btn-sm" role="button" href="../html/options.html">
+            <i class="fa-solid fa-sliders me-1"></i> Options</a>
         <div class=" d-flex justify-content-center align-items-center text-center small">
             <img class="" src="../images/logo16.png" alt="Link Extractor" width="16" height="16">
             <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
-               data-href="homepage">Link Extractor</a> v<span id="version"></span>
+               id="homepage_url" href="">Link Extractor</a> v<span id="version"></span>
         </div>
     </div>
 </div>
