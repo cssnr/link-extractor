@@ -8,11 +8,11 @@ document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 
 document
-    .querySelectorAll('[data-filter]')
-    .forEach((el) => el.addEventListener('click', filterForm))
-document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('[data-filter]')
+    .forEach((el) => el.addEventListener('click', filterForm))
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
