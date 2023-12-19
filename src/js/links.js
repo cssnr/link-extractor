@@ -25,7 +25,7 @@ const dtOptions = {
     processing: true,
     saveState: true,
     bSort: true,
-    order: [0, 'desc'],
+    order: [[0, 'desc']],
     pageLength: -1,
     lengthMenu: [
         [10, 25, 50, 100, 250, -1],
