@@ -8,3 +8,9 @@ input::placeholder,
 textarea::placeholder {
     text-align: center;
 }
+
+.dropdown-menu {
+    max-width: 100vw;
+    white-space: normal;
+    overflow: hidden;
+}

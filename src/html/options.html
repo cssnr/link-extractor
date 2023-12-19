@@ -40,10 +40,10 @@
         </tbody>
     </table>
 
-    <form id="options-form">
+    <form id="options-form" class="mb-3">
         <label for="flags" class="form-label">Regex Flags</label>
         <a id="reset-default" class="float-end align-bottom small" role="button">Reset to Default</a>
-        <input type="text" id="flags" class="form-control" aria-describedby="flagsHelp">
+        <input type="text" id="flags" class="form-control form-control-sm" aria-describedby="flagsHelp">
         <div id="flagsInvalid" class="invalid-feedback">Invalid Regex Flags.</div>
         <div id="flagsHelp" class="form-text mb-3">
             Flags used when using a filter.
@@ -79,8 +79,6 @@
         </div>
     </form>
 
-    <hr>
-
     <form id="filters-form">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
@@ -89,18 +87,16 @@
             </button>
         </div>
     </form>
-    <div class="table-responsive">
-        <table id="filters-table" class="table table-sm table-hover bg-transparent">
-            <caption>Saved Filters</caption>
-            <thead><tr>
-                <th scope="col" class="text-center" style="width: 36px;">
-                    <i class="fa-solid fa-trash-can"></i>
-                </th>
-                <th scope="col">Filter</th>
-            </tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <table id="filters-table" class="table table-sm table-hover bg-transparent">
+        <caption>Saved Filters</caption>
+        <thead><tr>
+            <th scope="col" class="text-center" style="width: 36px;">
+                <i class="fa-solid fa-trash-can"></i>
+            </th>
+            <th scope="col">Filter</th>
+        </tr></thead>
+        <tbody></tbody>
+    </table>
 
     <div class="text-center mb-3">
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
