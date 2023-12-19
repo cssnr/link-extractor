@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Link Extractor Options</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
@@ -16,14 +17,15 @@
 <div class="col-xl-6 col-md-8 col-12 m-auto">
 <div class="card" >
 <div class="card-body">
-    <div class="justify-content-center align-items-center d-flex">
-        <img src="../images/logo48.png" class="img-fluid float-start me-2" title="Link Extractor" alt="Link Extractor" height="48" width="48">
-        <h1 class="align-middle">Link Extractor</h1>
+    <div class="d-flex justify-content-center align-items-center">
+        <img src="../images/logo48.png" class="me-2" height="48" width="48"
+             alt="Link Extractor" title="Link Extractor">
+        <h1>Link Extractor</h1>
     </div>
     <div class="clearfix"></div>
     <p class="text-center lead">v<span id="version"></span></p>
 
-    <table class="table table-sm table-borderless ">
+    <table class="table table-sm table-borderless">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
         <tbody>
@@ -38,10 +40,10 @@
         </tbody>
     </table>
 
-    <form id="options-form">
+    <form id="options-form" class="mb-3">
         <label for="flags" class="form-label">Regex Flags</label>
         <a id="reset-default" class="float-end align-bottom small" role="button">Reset to Default</a>
-        <input type="text" id="flags" class="form-control" aria-describedby="flagsHelp">
+        <input type="text" id="flags" class="form-control form-control-sm" aria-describedby="flagsHelp">
         <div id="flagsInvalid" class="invalid-feedback">Invalid Regex Flags.</div>
         <div id="flagsHelp" class="form-text mb-3">
             Flags used when using a filter.
@@ -77,8 +79,6 @@
         </div>
     </form>
 
-    <hr>
-
     <form id="filters-form">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
@@ -87,18 +87,16 @@
             </button>
         </div>
     </form>
-    <div class="table-responsive">
-        <table id="filters-table" class="table table-sm table-hover bg-transparent">
-            <caption>Saved Filters</caption>
-            <thead><tr>
-                <th scope="col" class="text-center" style="width: 36px;">
-                    <i class="fa-solid fa-trash-can"></i>
-                </th>
-                <th scope="col">Filter</th>
-            </tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <table id="filters-table" class="table table-sm table-hover bg-transparent">
+        <caption>Saved Filters</caption>
+        <thead><tr>
+            <th scope="col" class="text-center" style="width: 36px;">
+                <i class="fa-solid fa-trash-can"></i>
+            </th>
+            <th scope="col">Filter</th>
+        </tr></thead>
+        <tbody></tbody>
+    </table>
 
     <div class="text-center mb-3">
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"

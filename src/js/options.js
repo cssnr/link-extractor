@@ -110,7 +110,7 @@ function updateTable(data) {
         button.setAttribute('role', 'button')
         button.addEventListener('click', deleteHost)
         const cell1 = row.insertCell()
-        cell1.classList.add('text-center')
+        cell1.classList.add('text-center', 'align-middle')
         cell1.appendChild(button)
 
         const link = document.createElement('a')
@@ -125,6 +125,7 @@ function updateTable(data) {
         )
         link.setAttribute('role', 'button')
         const cell2 = row.insertCell()
+        cell2.classList.add('text-break')
         cell2.appendChild(link)
     })
 }

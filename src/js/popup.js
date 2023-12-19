@@ -8,11 +8,11 @@ document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 
 document
-    .querySelectorAll('[data-filter]')
-    .forEach((el) => el.addEventListener('click', filterForm))
-document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('[data-filter]')
+    .forEach((el) => el.addEventListener('click', filterForm))
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -59,7 +59,7 @@ function createFilterLink(number, value = '') {
     const a = document.createElement('a')
     a.textContent = value
     a.dataset.pattern = value
-    a.classList.add('dropdown-item', 'small')
+    a.classList.add('dropdown-item', 'small', 'text-break')
     a.setAttribute('role', 'button')
     a.addEventListener('click', filterForm)
     li.appendChild(a)
