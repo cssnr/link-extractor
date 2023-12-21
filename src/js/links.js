@@ -242,8 +242,7 @@ function handleKeyboard(e) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
         return
     }
-    const inputs = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
-    if (inputs.includes(e.target.tagName)) {
+    if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
         return
     }
     if (['KeyC', 'KeyL'].includes(e.code)) {
