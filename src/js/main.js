@@ -79,10 +79,10 @@ function showToast(message, type = 'success') {
  * @param {Number} timeout
  */
 function debounce(func, timeout = 300) {
-    let timer
+    let timeoutID
     return (...args) => {
-        clearTimeout(timer)
-        timer = setTimeout(() => {
+        clearTimeout(timeoutID)
+        timeoutID = setTimeout(() => {
             func.apply(this, args)
         }, timeout)
     }
