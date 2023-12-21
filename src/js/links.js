@@ -22,6 +22,12 @@ const dtOptions = {
         [10, 25, 50, 100, 250, -1],
         [10, 25, 50, 100, 250, 'All'],
     ],
+    language: {
+        emptyTable: '',
+        lengthMenu: '_MENU_ links',
+        search: 'Filter:',
+        zeroRecords: '',
+    },
 }
 
 /**
@@ -106,6 +112,8 @@ async function processLinks(links) {
     if (!onlyDomains) {
         document.getElementById('links-count').textContent =
             items.length.toString()
+        document.getElementById('links-total').textContent =
+            items.length.toString()
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
         updateTable(items, '#links-table')
@@ -117,6 +125,8 @@ async function processLinks(links) {
         return el != null
     })
     document.getElementById('domains-count').textContent =
+        domains.length.toString()
+    document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
@@ -172,7 +182,8 @@ function updateTable(links, selector) {
     // console.log('data:', data)
     // dtOptions['data'] = data
 
-    new DataTable(selector, dtOptions) // eslint-disable-line no-undef
+    const table = new DataTable(selector, dtOptions)
+    table.on('draw.dt', debounce(dtDraw, 150))
 }
 
 /**
@@ -254,4 +265,17 @@ function handleKeyboard(e) {
     } else if (['KeyZ', 'KeyK'].includes(e.code)) {
         bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
     }
+}
+
+function dtDraw(event) {
+    console.log('dtDraw:', event)
+    const tbody = event.target.querySelector('tbody')
+    let length = tbody.rows.length
+    if (tbody.rows.length === 1) {
+        if (!tbody.rows[0].textContent) {
+            length = 0
+        }
+    }
+    document.getElementById(event.target.dataset.counter).textContent =
+        length.toString()
 }
