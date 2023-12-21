@@ -3,7 +3,7 @@
 const backToTop = document.getElementById('back-to-top')
 if (backToTop) {
     // console.log('Initialize backToTop')
-    const processScroll = debounce((e) => onScroll(e))
+    const processScroll = debounce(() => onScroll())
     window.addEventListener('scroll', processScroll)
     backToTop.addEventListener('click', () => {
         document.body.scrollTop = 0
@@ -37,19 +37,15 @@ $('.form-control').on('focus change input', function () {
 /**
  * On Scroll Callback
  * @function onScroll
- * @param {Event} event
  */
-function onScroll(event) {
-    // console.log('onScroll:', event)
-    window.onscroll = () => {
-        if (
-            document.body.scrollTop > 20 ||
-            document.documentElement.scrollTop > 20
-        ) {
-            backToTop.style.display = 'block'
-        } else {
-            backToTop.style.display = 'none'
-        }
+function onScroll() {
+    if (
+        document.body.scrollTop > 20 ||
+        document.documentElement.scrollTop > 20
+    ) {
+        backToTop.style.display = 'block'
+    } else {
+        backToTop.style.display = 'none'
     }
 }
 
