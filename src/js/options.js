@@ -5,17 +5,14 @@ document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 document
-    .querySelectorAll('#options-form input')
-    .forEach((el) => el.addEventListener('change', saveOptions))
-document
-    .getElementById('options-form')
-    .addEventListener('submit', (e) => e.preventDefault())
-document
-    .getElementById('flags')
-    .addEventListener('input', (e) => e.target.classList.remove('is-invalid'))
-document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
+
+const optionsForm = document.getElementById('options-form')
+optionsForm.addEventListener('submit', (e) => e.preventDefault())
+optionsForm
+    .querySelectorAll('input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
  * Initialize Options

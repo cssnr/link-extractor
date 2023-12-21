@@ -8,16 +8,12 @@ document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
-const urlParams = new URLSearchParams(window.location.search)
-
 let keysPressed = {}
-window.onblur = function () {
-    keysPressed = {}
-}
+window.addEventListener('blur', () => (keysPressed = {}))
 window.addEventListener('keydown', handleKeybinds)
-document.addEventListener('keyup', (event) => {
-    delete keysPressed[event.key]
-})
+document.addEventListener('keyup', (event) => delete keysPressed[event.key])
+
+const urlParams = new URLSearchParams(window.location.search)
 
 const dtOptions = {
     info: false,
