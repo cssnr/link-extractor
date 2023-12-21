@@ -1,9 +1,8 @@
 // JS injected into active tab to extract links
 
-if (!window.injected) {
-    console.log('Injected: extract.js')
+if (!chrome.storage.onMessage.hasListener(onMessage)) {
     chrome.runtime.onMessage.addListener(onMessage)
-    window.injected = true
+    console.log('Injected: extract.js')
 }
 
 /**
