@@ -2,9 +2,7 @@
 
 const backToTop = document.getElementById('back-to-top')
 if (backToTop) {
-    // console.log('Initialize backToTop')
-    const processScroll = debounce(() => onScroll())
-    window.addEventListener('scroll', processScroll)
+    window.addEventListener('scroll', debounce(onScroll))
     backToTop.addEventListener('click', () => {
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
@@ -12,7 +10,6 @@ if (backToTop) {
 }
 
 if (typeof ClipboardJS !== 'undefined') {
-    // console.log('Initialize ClipboardJS')
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
         // console.info('clipboard.success:', event)
