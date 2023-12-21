@@ -1,5 +1,6 @@
 // JS for links.html
 
+window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 document
     .querySelectorAll('.open-in-tabs')
@@ -7,11 +8,6 @@ document
 document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
-
-let keysPressed = {}
-window.addEventListener('blur', () => (keysPressed = {}))
-window.addEventListener('keydown', handleKeybinds)
-document.addEventListener('keyup', (event) => delete keysPressed[event.key])
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -58,7 +54,7 @@ async function initLinks() {
         }
     } catch (e) {
         console.log('error:', e)
-        alert('No Results! See Console for Details.')
+        alert('Error Processing Results. See Console for More Details...')
         window.close()
     }
 }
@@ -237,44 +233,26 @@ function download(filename, text) {
 }
 
 /**
- * Keyboard keydown Callback
- * @function handleKeybinds
- * @param {KeyboardEvent} event
+ * Handle Keyboard Shortcuts Callback
+ * @function handleKeyboard
+ * @param {KeyboardEvent} e
  */
-function handleKeybinds(event) {
-    // console.log('handleKeybinds:', event)
-    const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
-    if (!formElements.includes(event.target.tagName)) {
-        keysPressed[event.key] = true
-        if (checkKey(event, ['KeyC', 'KeyL'])) {
-            document.getElementById('copy-links').click()
-        } else if (checkKey(event, ['KeyD', 'KeyM'])) {
-            document.getElementById('copy-domains').click()
-        } else if (checkKey(event, ['KeyT', 'KeyO'])) {
-            chrome.runtime.openOptionsPage()
-        } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
-            bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
-        }
+function handleKeyboard(e) {
+    // console.log('handleKeyboard:', e)
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
+        return
     }
-}
-
-/**
- * Check Key Down Combination
- * @function checkKey
- * @param {KeyboardEvent} event
- * @param {Array} keys
- * @return {Boolean}
- */
-function checkKey(event, keys) {
-    const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
-    let hasCtrlKey = false
-    ctrlKeys.forEach(function (key) {
-        if (keysPressed[key]) {
-            hasCtrlKey = true
-        }
-    })
-    if (hasCtrlKey) {
-        return false
+    const inputs = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
+    if (inputs.includes(e.target.tagName)) {
+        return
     }
-    return !!keys.includes(event.code)
+    if (['KeyC', 'KeyL'].includes(e.code)) {
+        document.getElementById('copy-links').click()
+    } else if (['KeyD', 'KeyM'].includes(e.code)) {
+        document.getElementById('copy-domains').click()
+    } else if (['KeyT', 'KeyO'].includes(e.code)) {
+        chrome.runtime.openOptionsPage()
+    } else if (['KeyZ', 'KeyK'].includes(e.code)) {
+        bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
+    }
 }
