@@ -15,6 +15,7 @@ chrome.storage.onChanged.addListener(onChanged)
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
+    const installURL = 'https://link-extractor.cssnr.com/docs/'
     const uninstallURL = 'https://link-extractor.cssnr.com/uninstall/'
     const [options, patterns] = await Promise.resolve(
         setDefaultOptions({
@@ -30,6 +31,7 @@ async function onInstalled(details) {
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
+        await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
             const manifest = chrome.runtime.getManifest()

@@ -1,7 +1,6 @@
 // JS for links.html
 
 document.addEventListener('DOMContentLoaded', initLinks)
-
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
@@ -34,7 +33,7 @@ const dtOptions = {
 }
 
 /**
- * Links Init
+ * Initialize Links
  * @function initLinks
  */
 async function initLinks() {
