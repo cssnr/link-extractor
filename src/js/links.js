@@ -250,20 +250,24 @@ function download(filename, text) {
  */
 function handleKeyboard(e) {
     // console.log('handleKeyboard:', e)
-    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
+    if (
+        e.altKey ||
+        e.ctrlKey ||
+        e.metaKey ||
+        e.shiftKey ||
+        e.repeat ||
+        ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)
+    ) {
         return
     }
-    if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
-        return
-    }
-    if (['KeyC', 'KeyL'].includes(e.code)) {
+    if (['KeyZ', 'KeyK'].includes(e.code)) {
+        bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
+    } else if (['KeyC', 'KeyL'].includes(e.code)) {
         document.getElementById('copy-links').click()
     } else if (['KeyD', 'KeyM'].includes(e.code)) {
         document.getElementById('copy-domains').click()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
         chrome.runtime.openOptionsPage()
-    } else if (['KeyZ', 'KeyK'].includes(e.code)) {
-        bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
     }
 }
 

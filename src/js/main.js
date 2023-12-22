@@ -56,7 +56,7 @@ function onScroll() {
 function showToast(message, type = 'success') {
     const el = $('#toast-container')
     if (!message || !el.length) {
-        return
+        return console.log('No message or #toast-container', message, el)
     }
     const toast = $(
         '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">' +
@@ -75,15 +75,13 @@ function showToast(message, type = 'success') {
 /**
  * DeBounce Function
  * @function debounce
- * @param {Function} func
+ * @param {Function} fn
  * @param {Number} timeout
  */
-function debounce(func, timeout = 300) {
+function debounce(fn, timeout = 300) {
     let timeoutID
     return (...args) => {
         clearTimeout(timeoutID)
-        timeoutID = setTimeout(() => {
-            func.apply(this, args)
-        }, timeout)
+        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }
