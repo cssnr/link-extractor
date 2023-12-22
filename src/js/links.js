@@ -250,14 +250,10 @@ function download(filename, text) {
  */
 function handleKeyboard(e) {
     // console.log('handleKeyboard:', e)
-    if (
-        e.altKey ||
-        e.ctrlKey ||
-        e.metaKey ||
-        e.shiftKey ||
-        e.repeat ||
-        ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)
-    ) {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
+        return
+    }
+    if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
         return
     }
     if (['KeyZ', 'KeyK'].includes(e.code)) {
