@@ -1,7 +1,7 @@
 // JS for links.html
 
+window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
-
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
@@ -10,15 +10,6 @@ document
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const urlParams = new URLSearchParams(window.location.search)
-
-let keysPressed = {}
-window.onblur = function () {
-    keysPressed = {}
-}
-window.addEventListener('keydown', handleKeybinds)
-document.addEventListener('keyup', (event) => {
-    delete keysPressed[event.key]
-})
 
 const dtOptions = {
     info: false,
@@ -31,10 +22,16 @@ const dtOptions = {
         [10, 25, 50, 100, 250, -1],
         [10, 25, 50, 100, 250, 'All'],
     ],
+    language: {
+        emptyTable: '',
+        lengthMenu: '_MENU_ links',
+        search: 'Filter:',
+        zeroRecords: '',
+    },
 }
 
 /**
- * Links Init
+ * Initialize Links
  * @function initLinks
  */
 async function initLinks() {
@@ -63,7 +60,7 @@ async function initLinks() {
         }
     } catch (e) {
         console.log('error:', e)
-        alert('No Results! See Console for Details.')
+        alert('Error Processing Results. See Console for More Details...')
         window.close()
     }
 }
@@ -115,6 +112,8 @@ async function processLinks(links) {
     if (!onlyDomains) {
         document.getElementById('links-count').textContent =
             items.length.toString()
+        document.getElementById('links-total').textContent =
+            items.length.toString()
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
         updateTable(items, '#links-table')
@@ -126,6 +125,8 @@ async function processLinks(links) {
         return el != null
     })
     document.getElementById('domains-count').textContent =
+        domains.length.toString()
+    document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
@@ -181,7 +182,8 @@ function updateTable(links, selector) {
     // console.log('data:', data)
     // dtOptions['data'] = data
 
-    new DataTable(selector, dtOptions) // eslint-disable-line no-undef
+    const table = new DataTable(selector, dtOptions)
+    table.on('draw.dt', debounce(dtDraw, 150))
 }
 
 /**
@@ -242,44 +244,38 @@ function download(filename, text) {
 }
 
 /**
- * Keyboard keydown Callback
- * @function handleKeybinds
- * @param {KeyboardEvent} event
+ * Handle Keyboard Shortcuts Callback
+ * @function handleKeyboard
+ * @param {KeyboardEvent} e
  */
-function handleKeybinds(event) {
-    // console.log('handleKeybinds:', event)
-    const formElements = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION']
-    if (!formElements.includes(event.target.tagName)) {
-        keysPressed[event.key] = true
-        if (checkKey(event, ['KeyC', 'KeyL'])) {
-            document.getElementById('copy-links').click()
-        } else if (checkKey(event, ['KeyD', 'KeyM'])) {
-            document.getElementById('copy-domains').click()
-        } else if (checkKey(event, ['KeyT', 'KeyO'])) {
-            chrome.runtime.openOptionsPage()
-        } else if (checkKey(event, ['KeyZ', 'KeyK'])) {
-            bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
-        }
+function handleKeyboard(e) {
+    // console.log('handleKeyboard:', e)
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
+        return
+    }
+    if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
+        return
+    }
+    if (['KeyC', 'KeyL'].includes(e.code)) {
+        document.getElementById('copy-links').click()
+    } else if (['KeyD', 'KeyM'].includes(e.code)) {
+        document.getElementById('copy-domains').click()
+    } else if (['KeyT', 'KeyO'].includes(e.code)) {
+        chrome.runtime.openOptionsPage()
+    } else if (['KeyZ', 'KeyK'].includes(e.code)) {
+        bootstrap.Modal.getOrCreateInstance('#keybinds-modal').toggle()
     }
 }
 
-/**
- * Check Key Down Combination
- * @function checkKey
- * @param {KeyboardEvent} event
- * @param {Array} keys
- * @return {Boolean}
- */
-function checkKey(event, keys) {
-    const ctrlKeys = ['Control', 'Alt', 'Shift', 'Meta']
-    let hasCtrlKey = false
-    ctrlKeys.forEach(function (key) {
-        if (keysPressed[key]) {
-            hasCtrlKey = true
+function dtDraw(event) {
+    console.log('dtDraw:', event)
+    const tbody = event.target.querySelector('tbody')
+    let length = tbody.rows.length
+    if (tbody.rows.length === 1) {
+        if (!tbody.rows[0].textContent) {
+            length = 0
         }
-    })
-    if (hasCtrlKey) {
-        return false
     }
-    return !!keys.includes(event.code)
+    document.getElementById(event.target.dataset.counter).textContent =
+        length.toString()
 }

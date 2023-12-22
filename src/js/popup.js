@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
@@ -21,7 +20,7 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 /**
- * Popup Action Init
+ * Initialize Popup
  * @function initOptions
  */
 async function initPopup() {
@@ -66,7 +65,7 @@ function createFilterLink(number, value = '') {
 }
 
 /**
- * Popup Links Click Callback
+ * Popup Links Callback
  * Firefox requires a call to window.close()
  * @function popupLinks
  * @param {MouseEvent} event
@@ -75,7 +74,7 @@ async function popupLinks(event) {
     console.log('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    console.log(`anchor.href: ${anchor.href}`)
+    // console.log(`anchor.href: ${anchor.href}`)
     let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
@@ -85,13 +84,13 @@ async function popupLinks(event) {
     } else {
         url = chrome.runtime.getURL(anchor.href)
     }
-    console.log('url:', url)
+    // console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
     return window.close()
 }
 
 /**
- * Filter Form Submit Callback
+ * Filter Form Callback
  * @function formSubmit
  * @param {SubmitEvent} event
  */
@@ -168,8 +167,7 @@ function updateLinks(event) {
  * @param {Array} lines
  */
 function updateElements(el, lines) {
-    // console.log('el:', el)
-    // console.log('lines:', lines)
+    // console.log('el, lines:', el, lines)
     if (lines?.length > 0) {
         el.classList.remove('disabled')
         el.textContent = `${el.dataset.text} (${lines.length})`
@@ -201,7 +199,6 @@ function extractURLs(text) {
 
 /**
  * Save Options Callback
- * TODO: Cleanup this function
  * @function saveOptions
  * @param {InputEvent} event
  */

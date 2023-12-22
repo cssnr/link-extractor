@@ -1,27 +1,21 @@
 // JS for options.html
 
-document.addEventListener('DOMContentLoaded', initOptions)
-
 chrome.storage.onChanged.addListener(onChanged)
-
+document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
-
-document
-    .querySelectorAll('#options-form input')
-    .forEach((el) => el.addEventListener('change', saveOptions))
-document
-    .getElementById('options-form')
-    .addEventListener('submit', (e) => e.preventDefault())
-document
-    .getElementById('flags')
-    .addEventListener('input', (e) => e.target.classList.remove('is-invalid'))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
+const optionsForm = document.getElementById('options-form')
+optionsForm.addEventListener('submit', (e) => e.preventDefault())
+optionsForm
+    .querySelectorAll('input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
+
 /**
- * Options Page Init
+ * Initialize Options
  * @function initOptions
  */
 async function initOptions() {
@@ -36,6 +30,7 @@ async function initOptions() {
 
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+
     const commands = await chrome.commands.getAll()
     document.getElementById('mainKey').textContent =
         commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
@@ -64,7 +59,7 @@ function onChanged(changes, namespace) {
 }
 
 /**
- * Add Filter Submit
+ * Add Filter Callback
  * @function addFilter
  * @param {SubmitEvent} event
  */
@@ -88,7 +83,7 @@ async function addFilter(event) {
 }
 
 /**
- * Update Filters Table with Data
+ * Update Filters Table with data
  * @function updateTable
  * @param {Object} data
  */

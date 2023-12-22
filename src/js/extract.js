@@ -1,4 +1,4 @@
-// JS injected into active tab to extract links
+// JS Injected to Extract Links
 
 if (!window.injected) {
     console.log('Injected: extract.js')
