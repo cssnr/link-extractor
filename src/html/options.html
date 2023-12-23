@@ -25,7 +25,7 @@
     <div class="clearfix"></div>
     <p class="text-center lead">v<span id="version"></span></p>
 
-    <table class="table table-sm table-borderless">
+    <table class="table table-sm table-borderless table-hover">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
         <tbody>
@@ -41,15 +41,37 @@
     </table>
 
     <form id="options-form" class="mb-3">
-        <label for="flags" class="form-label">Regex Flags</label>
-        <a id="reset-default" class="float-end align-bottom small" role="button">Reset to Default</a>
-        <input type="text" id="flags" class="form-control form-control-sm" aria-describedby="flagsHelp">
-        <div id="flagsInvalid" class="invalid-feedback">Invalid Regex Flags.</div>
-        <div id="flagsHelp" class="form-text mb-3">
-            Flags used when using a filter.
-            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
-                Available Flags</a>.
+        <div class="row">
+            <div class="col-sm-6 col-12 mb-2">
+                <label for="linksDisplay" class="form-label"><i class="fa-solid fa-list-ol me-2"></i> Links to Show</label>
+                <select id="linksDisplay" class="form-control form-select" aria-label="Number of Links" aria-describedby="linksDisplayHelp">
+                    <option value="-1" selected>All</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="250">250</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+                <div class="form-text" id="linksDisplayHelp">Initial # of Links to Show.</div>
+            </div>
+            <div class="col-sm-6 col-12 mb-2">
+                <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
+                <a id="reset-default" class="float-end align-bottom small" role="button">Reset</a>
+                <input id="flags" aria-describedby="flagsHelp" type="text" class="form-control" autocomplete="off">
+                <div id="flagsInvalid" class="invalid-feedback">Invalid Regex Flags.</div>
+                <div class="form-text" id="flagsHelp">
+                    Regex Flags for Filtering.
+<!--                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regex Flags Used When Filtering Links.">-->
+<!--                        <i class="fa-solid fa-circle-info ms-1"></i>-->
+<!--                    </span>-->
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-arrow-up-right-from-square ms-2"></i></a>
+                </div>
+            </div>
         </div>
+
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="contextMenu">
             <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
@@ -79,7 +101,9 @@
         </div>
     </form>
 
+    <hr>
     <form id="filters-form">
+        <label class="form-label" for="add-filter"><i class="fa-solid fa-filter me-2"></i> Filters</label>
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
             <button class="btn btn-outline-success" type="submit" id="add-filter-btn">
