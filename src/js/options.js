@@ -11,7 +11,7 @@ document
 const optionsForm = document.getElementById('options-form')
 optionsForm.addEventListener('submit', (e) => e.preventDefault())
 optionsForm
-    .querySelectorAll('input')
+    .querySelectorAll('input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
@@ -192,14 +192,15 @@ async function saveOptions(event) {
         }
         element.value = flags
         value = flags
+    } else if (event.target.id === 'linksDisplay') {
+        key = event.target.id
+        value = parseInt(event.target.value)
     } else if (event.target.type === 'checkbox') {
         key = event.target.id
         value = event.target.checked
-    } else if (event.target.type === 'text') {
+    } else {
         key = event.target.id
         value = event.target.value
-    } else {
-        console.warn('Unknown event.target:', event.target)
     }
     if (value !== undefined) {
         options[key] = value
@@ -220,7 +221,7 @@ function updateOptions(options) {
         if (el) {
             if (typeof value === 'boolean') {
                 el.checked = value
-            } else if (typeof value === 'string') {
+            } else {
                 el.value = value
             }
             el.classList.remove('is-invalid')

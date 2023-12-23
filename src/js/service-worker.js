@@ -19,6 +19,7 @@ async function onInstalled(details) {
     const uninstallURL = 'https://link-extractor.cssnr.com/uninstall/'
     const [options, patterns] = await Promise.resolve(
         setDefaultOptions({
+            linksDisplay: -1,
             flags: 'ig',
             contextMenu: true,
             defaultFilter: true,

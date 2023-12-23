@@ -19,8 +19,8 @@ const dtOptions = {
     order: [[0, 'asc']],
     pageLength: -1,
     lengthMenu: [
-        [10, 25, 50, 100, 250, -1],
-        [10, 25, 50, 100, 250, 'All'],
+        [-1, 10, 25, 50, 100, 250, 500, 1000],
+        ['All', 10, 25, 50, 100, 250, 500, 1000],
     ],
     language: {
         emptyTable: '',
@@ -108,10 +108,15 @@ async function processLinks(links) {
         return window.close()
     }
 
+    // Set custom DataTables options
+    if (options.linksDisplay !== undefined) {
+        dtOptions.pageLength = options.linksDisplay
+    }
+
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        document.getElementById('links-count').textContent =
-            items.length.toString()
+        // document.getElementById('links-count').textContent =
+        //     items.length.toString()
         document.getElementById('links-total').textContent =
             items.length.toString()
         const linksElements = document.querySelectorAll('.links')
@@ -124,8 +129,8 @@ async function processLinks(links) {
     domains = domains.filter(function (el) {
         return el != null
     })
-    document.getElementById('domains-count').textContent =
-        domains.length.toString()
+    // document.getElementById('domains-count').textContent =
+    //     domains.length.toString()
     document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
@@ -182,8 +187,10 @@ function updateTable(links, selector) {
     // console.log('data:', data)
     // dtOptions['data'] = data
 
-    const table = new DataTable(selector, dtOptions)
-    table.on('draw.dt', debounce(dtDraw, 150))
+    // const table = new DataTable(selector, dtOptions)
+    // dtDraw()
+    // table.on('draw.dt init.dt', dtDraw)
+    $(selector).on('draw.dt', debounce(dtDraw, 150)).DataTable(dtOptions)
 }
 
 /**
@@ -193,8 +200,7 @@ function updateTable(links, selector) {
  */
 function openLinksClick(event) {
     console.log('openLinksClick:', event)
-    const element = document.querySelector(event.target.dataset.target)
-    const links = element.innerText.trim()
+    const links = getTargetText(event)
     console.log('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
@@ -212,15 +218,28 @@ function openLinksClick(event) {
  */
 function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
-    const element = document.querySelector(event.target.dataset.target)
-    const links = element.innerText.trim()
-    console.log('links:', links)
+    const links = getTargetText(event)
     if (links) {
         download(event.target.dataset.filename, links)
         showToast('Download Started.')
     } else {
         showToast('No Links to Download.', 'warning')
     }
+}
+
+/**
+ * Download Links Button Click Callback
+ * @function downloadFileClick
+ * @param {KeyboardEvent} event
+ * @return {String}
+ */
+function getTargetText(event) {
+    // console.log('getTargetText:', event)
+    const target = event.target?.closest('a')
+    console.log('target:', target)
+    const element = document.querySelector(target?.dataset?.target)
+    console.log('element:', element)
+    return element?.innerText?.trim()
 }
 
 /**
