@@ -115,8 +115,6 @@ async function processLinks(links) {
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        // document.getElementById('links-count').textContent =
-        //     items.length.toString()
         document.getElementById('links-total').textContent =
             items.length.toString()
         const linksElements = document.querySelectorAll('.links')
@@ -129,8 +127,6 @@ async function processLinks(links) {
     domains = domains.filter(function (el) {
         return el != null
     })
-    // document.getElementById('domains-count').textContent =
-    //     domains.length.toString()
     document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
@@ -179,28 +175,18 @@ function updateTable(links, selector) {
         tbody.insertRow().insertCell().appendChild(link)
     })
 
-    // const data = []
-    // links.forEach((value) => {
-    //     // console.log(value)
-    //     data.push([value])
-    // })
-    // console.log('data:', data)
-    // dtOptions['data'] = data
-
-    // const table = new DataTable(selector, dtOptions)
-    // dtDraw()
-    // table.on('draw.dt init.dt', dtDraw)
     $(selector).on('draw.dt', debounce(dtDraw, 150)).DataTable(dtOptions)
 }
 
 /**
  * Open links Button Click Callback
  * @function openLinksClick
- * @param {KeyboardEvent} event
+ * @param {MouseEvent} event
  */
 function openLinksClick(event) {
     console.log('openLinksClick:', event)
-    const links = getTargetText(event)
+    const element = getEventTarget(event)
+    let links = element?.innerText?.trim()
     console.log('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
@@ -214,13 +200,14 @@ function openLinksClick(event) {
 /**
  * Download Links Button Click Callback
  * @function downloadFileClick
- * @param {KeyboardEvent} event
+ * @param {MouseEvent} event
  */
 function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
-    const links = getTargetText(event)
+    const element = getEventTarget(event)
+    let links = element?.innerText?.trim()
     if (links) {
-        download(event.target.dataset.filename, links)
+        download(element.dataset.filename || 'links.txt', links)
         showToast('Download Started.')
     } else {
         showToast('No Links to Download.', 'warning')
@@ -228,18 +215,16 @@ function downloadFileClick(event) {
 }
 
 /**
- * Download Links Button Click Callback
- * @function downloadFileClick
- * @param {KeyboardEvent} event
- * @return {String}
+ * Get HTMLElement for dataset.target from closest
+ * @function getEventTarget
+ * @param {MouseEvent} event
+ * @param {String} closest
+ * @return {HTMLElement}
  */
-function getTargetText(event) {
+function getEventTarget(event, closest = 'a') {
     // console.log('getTargetText:', event)
-    const target = event.target?.closest('a')
-    console.log('target:', target)
-    const element = document.querySelector(target?.dataset?.target)
-    console.log('element:', element)
-    return element?.innerText?.trim()
+    const target = event.target?.closest(closest)
+    return document.querySelector(target?.dataset?.target)
 }
 
 /**
