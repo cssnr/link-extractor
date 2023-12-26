@@ -82,10 +82,6 @@
     </div>
 </div>
 
-<div id="bottom-container" class="position-fixed bottom-0 end-0">
-    <div id="toast-container" class=""></div>
-</div>
-
 <div id="keybinds-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -103,6 +99,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0"></div>
+</div>
+
+<div class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body"></div>
         </div>
     </div>
 </div>

@@ -48,28 +48,19 @@ function onScroll() {
 
 /**
  * Show Bootstrap Toast
- * Requires JQuery
  * @function showToast
  * @param {String} message
  * @param {String} type
  */
 function showToast(message, type = 'success') {
-    const el = $('#toast-container')
-    if (!message || !el.length) {
-        return console.log('No message or #toast-container', message, el)
-    }
-    const toast = $(
-        '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">' +
-            '  <div class="d-flex">' +
-            '    <div class="toast-body"></div>' +
-            '    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
-            '  </div>' +
-            '</div>'
-    )
-    toast.find('.toast-body').text(message)
-    toast.addClass(`text-bg-${type}`)
-    el.append(toast)
-    toast.toast('show')
+    console.log(`showToast: ${type}:`, message)
+    const element = document.querySelector('.d-none .toast').cloneNode(true)
+    element.addEventListener('mouseover', () => toast.hide())
+    element.classList.add(`text-bg-${type}`)
+    element.querySelector('.toast-body').innerHTML = message
+    document.getElementById('toast-container').appendChild(element)
+    const toast = new bootstrap.Toast(element)
+    toast.show()
 }
 
 /**

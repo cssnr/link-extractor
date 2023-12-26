@@ -66,8 +66,9 @@
 <!--                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regex Flags Used When Filtering Links.">-->
 <!--                        <i class="fa-solid fa-circle-info ms-1"></i>-->
 <!--                    </span>-->
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags" target="_blank" rel="noopener">
-                        <i class="fa-solid fa-arrow-up-right-from-square ms-2"></i></a>
+                    <a target="_blank" rel="noopener" class="ms-1"
+                       href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
             </div>
         </div>
@@ -138,20 +139,23 @@
 </div> <!-- row -->
 </div> <!-- container -->
 
-<div id="bottom-container" class="position-fixed bottom-0 end-0">
-    <div id="toast-container" class=""></div>
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div>
 
-<button type="button" class="btn btn-outline-primary" id="back-to-top">
-    <i class="fa-regular fa-square-caret-up"></i>
-</button>
-
 <div class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="toast-body"></div>
+    </div>
     <i class="fa-regular fa-trash-can"></i>
     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
         <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
     </svg>
 </div>
+
+<button type="button" class="btn btn-outline-primary" id="back-to-top">
+    <i class="fa-regular fa-square-caret-up"></i>
+</button>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

@@ -14,12 +14,6 @@ svg {
     z-index: 3;
 }
 
-#bottom-container {
-    margin-bottom: 60px;
-    margin-right: 70px;
+#toast-container {
     z-index: 3;
-}
-
-.toast {
-    max-width: 260px;
 }

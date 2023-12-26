@@ -10,3 +10,12 @@ a:visited {
     width: 160px;
     z-index: 10;
 }
+
+#toast-container {
+    margin-bottom: 60px;
+    margin-right: 70px;
+}
+
+.toast {
+    max-width: 260px;
+}
