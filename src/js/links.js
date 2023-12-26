@@ -36,15 +36,6 @@ const dtOptions = {
  */
 async function initLinks() {
     console.log('initLinks: urlParams:', urlParams)
-    // const { patterns } = await chrome.storage.sync.get(['patterns'])
-    // console.log('patterns:', patterns)
-    // const savedFilters = document.getElementById('savedFilters')
-    // patterns.forEach((pattern) => {
-    //     const option = document.createElement('option')
-    //     option.value = pattern
-    //     savedFilters.appendChild(option)
-    // })
-
     try {
         const tabId = parseInt(urlParams.get('tab'))
         const selection = urlParams.has('selection')
@@ -59,7 +50,7 @@ async function initLinks() {
             await processLinks(links)
         }
     } catch (e) {
-        console.log('error:', e)
+        console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')
         window.close()
     }
@@ -80,12 +71,6 @@ async function processLinks(links) {
     const { options } = await chrome.storage.sync.get(['options'])
     console.log('options:', options)
 
-    if (chrome.runtime.lastError) {
-        alert(chrome.runtime.lastError)
-        window.close()
-        return
-    }
-
     // Filter links by :// if not disabled by user
     if (options.defaultFilter) {
         links = links.filter((link) => link.lastIndexOf('://', 10) > 0)
@@ -96,8 +81,7 @@ async function processLinks(links) {
 
     // Filter links based on pattern
     if (urlFilter) {
-        const flags = options?.flags !== undefined ? options.flags : 'ig'
-        const re = new RegExp(urlFilter, flags)
+        const re = new RegExp(urlFilter, options.flags)
         console.log(`Filtering Links with re: ${re}`)
         items = items.filter((item) => item.match(re))
     }
@@ -108,15 +92,11 @@ async function processLinks(links) {
         return window.close()
     }
 
-    // Set custom DataTables options
-    if (options.linksDisplay !== undefined) {
-        dtOptions.pageLength = options.linksDisplay
-    }
+    // Custom DataTables Options
+    dtOptions.pageLength = options.linksDisplay || -1
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
-        // document.getElementById('links-count').textContent =
-        //     items.length.toString()
         document.getElementById('links-total').textContent =
             items.length.toString()
         const linksElements = document.querySelectorAll('.links')
@@ -129,8 +109,6 @@ async function processLinks(links) {
     domains = domains.filter(function (el) {
         return el != null
     })
-    // document.getElementById('domains-count').textContent =
-    //     domains.length.toString()
     document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
@@ -169,7 +147,6 @@ function getBaseURL(link) {
  */
 function updateTable(links, selector) {
     console.log(`updateTable: ${selector}`)
-
     const tbody = document.querySelector(`${selector} tbody`)
     links.forEach(function (url) {
         const link = document.createElement('a')
@@ -178,29 +155,19 @@ function updateTable(links, selector) {
         link.target = '_blank'
         tbody.insertRow().insertCell().appendChild(link)
     })
-
-    // const data = []
-    // links.forEach((value) => {
-    //     // console.log(value)
-    //     data.push([value])
-    // })
-    // console.log('data:', data)
-    // dtOptions['data'] = data
-
-    // const table = new DataTable(selector, dtOptions)
-    // dtDraw()
-    // table.on('draw.dt init.dt', dtDraw)
     $(selector).on('draw.dt', debounce(dtDraw, 150)).DataTable(dtOptions)
 }
 
 /**
  * Open links Button Click Callback
  * @function openLinksClick
- * @param {KeyboardEvent} event
+ * @param {MouseEvent} event
  */
 function openLinksClick(event) {
     console.log('openLinksClick:', event)
-    const links = getTargetText(event)
+    const closest = event.target?.closest('a')
+    const target = document.querySelector(closest?.dataset?.target)
+    let links = target?.innerText?.trim()
     console.log('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
@@ -214,32 +181,19 @@ function openLinksClick(event) {
 /**
  * Download Links Button Click Callback
  * @function downloadFileClick
- * @param {KeyboardEvent} event
+ * @param {MouseEvent} event
  */
 function downloadFileClick(event) {
     console.log('downloadFileClick:', event)
-    const links = getTargetText(event)
+    const closest = event.target?.closest('a')
+    const target = document.querySelector(closest?.dataset?.target)
+    let links = target?.innerText?.trim()
     if (links) {
-        download(event.target.dataset.filename, links)
+        download(target.dataset.filename || 'links.txt', links)
         showToast('Download Started.')
     } else {
         showToast('No Links to Download.', 'warning')
     }
-}
-
-/**
- * Download Links Button Click Callback
- * @function downloadFileClick
- * @param {KeyboardEvent} event
- * @return {String}
- */
-function getTargetText(event) {
-    // console.log('getTargetText:', event)
-    const target = event.target?.closest('a')
-    console.log('target:', target)
-    const element = document.querySelector(target?.dataset?.target)
-    console.log('element:', element)
-    return element?.innerText?.trim()
 }
 
 /**

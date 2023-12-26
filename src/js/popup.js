@@ -105,8 +105,13 @@ async function filterForm(event) {
         filter = filterInput.value
     }
     const domains = event.target.dataset.filter === 'domains'
-    await injectTab({ filter, domains })
-    window.close()
+    try {
+        await injectTab({ filter, domains })
+        window.close()
+    } catch (e) {
+        console.log('e:', e)
+        showToast(e.toString(), 'danger')
+    }
 }
 
 /**
