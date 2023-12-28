@@ -150,15 +150,21 @@ async function filterClick(event) {
     if (event.target.classList.contains('filter-edit')) {
         return console.debug('Click on Input Detected.')
     }
+    let deleted
+    let previous = editing
     if (editing !== false) {
         console.debug(`-- saving: ${editing}`)
-        await saveEditing(event, editing)
+        deleted = await saveEditing(event, editing)
         editing = false
     }
     const td = event.target.closest('td')
     if (td?.dataset?.idx !== undefined) {
-        console.debug(`-- editing: ${td.dataset.idx}`)
-        editing = td.dataset.idx
+        let idx = td.dataset.idx
+        if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
+            idx -= 1
+        }
+        console.debug(`-- editing: ${idx}`)
+        editing = idx
         beginEditing(event, editing)
     }
 }
@@ -167,6 +173,7 @@ async function filterClick(event) {
  * @function saveEditing
  * @param {MouseEvent} event
  * @param {String} idx
+ * @return {Boolean}
  */
 async function saveEditing(event, idx) {
     console.debug(`saveEditInput: ${idx}`, event)
@@ -182,7 +189,8 @@ async function saveEditing(event, idx) {
     const value = input.value
     console.log('value:', value)
     if (!value) {
-        return await deleteFilter(event, idx)
+        await deleteFilter(event, idx)
+        return true
     }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
@@ -197,6 +205,7 @@ async function saveEditing(event, idx) {
     const link = genFilterLink(idx, value)
     td.removeChild(input)
     td.appendChild(link)
+    return false
 }
 
 /**
