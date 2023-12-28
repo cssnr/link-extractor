@@ -112,7 +112,12 @@
         </div>
     </form>
     <table id="filters-table" class="table table-sm table-hover bg-transparent">
-        <caption>Saved Filters</caption>
+        <caption>
+            Saved Filters
+            <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Click on an Existing Filter to Edit it.">
+                <i class="fa-solid fa-lightbulb ms-1"></i>
+            </span>
+        </caption>
         <thead><tr>
             <th scope="col" class="text-center" style="width: 36px;">
                 <i class="fa-solid fa-trash-can"></i>
@@ -143,6 +148,8 @@
 </div>
 
 <div class="d-none">
+    <form id="update-filter" name="update-filter"><button type="submit"></button></form>
+    <input class="form-control form-control-sm filter-edit" type="text" form="update-filter">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>

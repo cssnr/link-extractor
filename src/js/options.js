@@ -2,6 +2,8 @@
 
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
+document.addEventListener('click', filterClick)
+document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 document
@@ -91,7 +93,7 @@ function updateTable(data) {
     const tbody = document.querySelector('#filters-table tbody')
     tbody.innerHTML = ''
 
-    data.forEach(function (value) {
+    data.forEach((value, i) => {
         const row = tbody.insertRow()
 
         const button = document.createElement('a')
@@ -106,23 +108,117 @@ function updateTable(data) {
         button.addEventListener('click', deleteHost)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
+        cell1.dataset.idx = i.toString()
         cell1.appendChild(button)
-
-        const link = document.createElement('a')
-        link.dataset.clipboardText = value
-        link.text = value
-        link.title = value
-        link.classList.add(
-            'clip',
-            'link-body-emphasis',
-            'link-underline',
-            'link-underline-opacity-0'
-        )
-        link.setAttribute('role', 'button')
+        const link = genFilterLink(i.toString(), value)
         const cell2 = row.insertCell()
+        cell2.id = `td-filter-${i}`
+        cell2.dataset.idx = i.toString()
         cell2.classList.add('text-break')
+        cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
     })
+}
+
+/**
+ * @param {String} idx
+ * @param {String} value
+ * @return {HTMLAnchorElement}
+ */
+function genFilterLink(idx, value) {
+    const link = document.createElement('a')
+    // link.dataset.idx = idx
+    link.text = value
+    link.title = value
+    link.classList.add(
+        'link-body-emphasis',
+        'link-underline',
+        'link-underline-opacity-0'
+    )
+    link.setAttribute('role', 'button')
+    return link
+}
+
+let editing = false
+
+async function filterClick(event) {
+    // console.debug('filterClick:', event)
+    if (event.type === 'submit') {
+        // TODO: The submit event is also triggering a click event
+        return event.preventDefault()
+    }
+    if (event.target.classList.contains('filter-edit')) {
+        return console.debug('Click on Input Detected.')
+    }
+    if (editing !== false) {
+        console.debug(`-- saving: ${editing}`)
+        await saveEditing(event, editing)
+        editing = false
+    }
+    const td = event.target.closest('td')
+    if (td?.dataset?.idx !== undefined) {
+        console.debug(`-- editing: ${td.dataset.idx}`)
+        editing = td.dataset.idx
+        beginEditing(event, editing)
+    }
+}
+
+/**
+ * @function saveEditing
+ * @param {MouseEvent} event
+ * @param {String} idx
+ */
+async function saveEditing(event, idx) {
+    console.debug(`saveEditInput: ${idx}`, event)
+    const td = document.getElementById(`td-filter-${idx}`)
+    console.debug('td:', td)
+
+    const input = td.querySelector('input')
+    // if (!input) {
+    //     return console.log('input not found in td:', td)
+    // }
+    console.log('input:', input)
+    const value = input.value
+    console.log('value:', value)
+
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.log('pattern:', patterns[idx])
+    if (value !== patterns[idx]) {
+        console.log(`chrome.storage.sync.set: patterns[${idx}]: ${value}`)
+        patterns[idx] = value
+        await chrome.storage.sync.set({ patterns })
+    } else {
+        console.info('Value Unchanged!')
+    }
+
+    const link = genFilterLink(idx, value)
+    td.removeChild(input)
+    td.appendChild(link)
+}
+
+/**
+ * @function beginEditing
+ * @param {MouseEvent} event
+ * @param {String} idx
+ */
+function beginEditing(event, idx) {
+    console.debug(`addEditInput: ${idx}`, event)
+    const td = document.getElementById(`td-filter-${idx}`)
+    console.debug('td:', td)
+
+    const link = td.querySelector('a')
+    const value = link.textContent
+    console.log('value:', value)
+
+    const input = document.querySelector('.d-none input').cloneNode()
+    input.value = value
+    input.dataset.idx = idx
+
+    td.removeChild(link)
+    td.appendChild(input)
+
+    input.focus()
+    input.select()
 }
 
 /**
