@@ -105,7 +105,7 @@ function updateTable(data) {
         button.dataset.value = value
         button.classList.add('link-danger')
         button.setAttribute('role', 'button')
-        button.addEventListener('click', deleteHost)
+        button.addEventListener('click', deleteFilter)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
         cell1.dataset.idx = i.toString()
@@ -173,16 +173,19 @@ async function saveEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
 
+    if (!td) {
+        return console.warn(`TD Not Found: #td-filter-${idx}`)
+    }
+
     const input = td.querySelector('input')
-    // if (!input) {
-    //     return console.log('input not found in td:', td)
-    // }
     console.log('input:', input)
     const value = input.value
     console.log('value:', value)
+    if (!value) {
+        return await deleteFilter(event, idx)
+    }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    // console.log('pattern:', patterns[idx])
     if (value !== patterns[idx]) {
         console.log(`chrome.storage.sync.set: patterns[${idx}]: ${value}`)
         patterns[idx] = value
@@ -206,6 +209,10 @@ function beginEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
 
+    if (!td) {
+        return console.warn(`TD Not Found: #td-filter-${idx}`)
+    }
+
     const link = td.querySelector('a')
     const value = link.textContent
     console.log('value:', value)
@@ -222,28 +229,31 @@ function beginEditing(event, idx) {
 }
 
 /**
- * Delete Host
- * @function deleteHost
+ * Delete Filter
+ * @function deleteFilter
  * @param {MouseEvent} event
+ * @param {String} index
  */
-async function deleteHost(event) {
-    console.log('deleteHost:', event)
+async function deleteFilter(event, index = undefined) {
+    console.log('deleteFilter:', event)
     event.preventDefault()
-    const anchor = event.target.closest('a')
-    const filter = anchor?.dataset?.value
-    console.log(`filter: ${filter}`)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    // console.log('patterns:', patterns)
-    if (filter && patterns.includes(filter)) {
-        const index = patterns.indexOf(filter)
-        console.log(`index: ${index}`)
-        if (index !== undefined) {
-            patterns.splice(index, 1)
-            await chrome.storage.sync.set({ patterns })
-            console.log('patterns:', patterns)
-            updateTable(patterns)
-            document.getElementById('add-filter').focus()
+    if (!index) {
+        const anchor = event.target.closest('a')
+        const filter = anchor?.dataset?.value
+        console.log(`filter: ${filter}`)
+        // console.log('patterns:', patterns)
+        if (filter && patterns.includes(filter)) {
+            index = patterns.indexOf(filter)
         }
+    }
+    console.log(`index: ${index}`)
+    if (index !== undefined) {
+        patterns.splice(index, 1)
+        await chrome.storage.sync.set({ patterns })
+        console.log('patterns:', patterns)
+        updateTable(patterns)
+        document.getElementById('add-filter').focus()
     }
 }
 
