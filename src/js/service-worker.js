@@ -23,6 +23,7 @@ async function onInstalled(details) {
             flags: 'ig',
             contextMenu: true,
             defaultFilter: true,
+            sortLinks: true,
             showUpdate: false,
         })
     )

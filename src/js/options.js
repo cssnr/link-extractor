@@ -1,7 +1,12 @@
 // JS for options.html
 
+import { updateOptions } from './exports.js'
+
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
+document.addEventListener('blur', filterClick)
+document.addEventListener('click', filterClick)
+document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 document
@@ -91,7 +96,7 @@ function updateTable(data) {
     const tbody = document.querySelector('#filters-table tbody')
     tbody.innerHTML = ''
 
-    data.forEach(function (value) {
+    data.forEach((value, i) => {
         const row = tbody.insertRow()
 
         const button = document.createElement('a')
@@ -103,51 +108,166 @@ function updateTable(data) {
         button.dataset.value = value
         button.classList.add('link-danger')
         button.setAttribute('role', 'button')
-        button.addEventListener('click', deleteHost)
+        button.addEventListener('click', deleteFilter)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
+        cell1.dataset.idx = i.toString()
         cell1.appendChild(button)
-
-        const link = document.createElement('a')
-        link.dataset.clipboardText = value
-        link.text = value
-        link.title = value
-        link.classList.add(
-            'clip',
-            'link-body-emphasis',
-            'link-underline',
-            'link-underline-opacity-0'
-        )
-        link.setAttribute('role', 'button')
+        const link = genFilterLink(i.toString(), value)
         const cell2 = row.insertCell()
+        cell2.id = `td-filter-${i}`
+        cell2.dataset.idx = i.toString()
         cell2.classList.add('text-break')
+        cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
     })
 }
 
 /**
- * Delete Host
- * @function deleteHost
- * @param {MouseEvent} event
+ * @param {String} idx
+ * @param {String} value
+ * @return {HTMLAnchorElement}
  */
-async function deleteHost(event) {
-    console.log('deleteHost:', event)
-    event.preventDefault()
-    const anchor = event.target.closest('a')
-    const filter = anchor?.dataset?.value
-    console.log(`filter: ${filter}`)
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
-    // console.log('patterns:', patterns)
-    if (filter && patterns.includes(filter)) {
-        const index = patterns.indexOf(filter)
-        console.log(`index: ${index}`)
-        if (index !== undefined) {
-            patterns.splice(index, 1)
-            await chrome.storage.sync.set({ patterns })
-            console.log('patterns:', patterns)
-            updateTable(patterns)
-            document.getElementById('add-filter').focus()
+function genFilterLink(idx, value) {
+    const link = document.createElement('a')
+    // link.dataset.idx = idx
+    link.text = value
+    link.title = value
+    link.classList.add(
+        'link-body-emphasis',
+        'link-underline',
+        'link-underline-opacity-0'
+    )
+    link.setAttribute('role', 'button')
+    return link
+}
+
+let editing = false
+
+async function filterClick(event) {
+    // console.debug('filterClick:', event)
+    if (event.type === 'submit') {
+        // TODO: The submit event is also triggering a click event
+        return event.preventDefault()
+    }
+    if (event.target?.classList?.contains('filter-edit')) {
+        return console.debug('Click on Input Detected.')
+    }
+    let deleted
+    let previous = editing
+    if (editing !== false) {
+        console.debug(`-- saving: ${editing}`)
+        deleted = await saveEditing(event, editing)
+        editing = false
+    }
+    if (event.target?.closest) {
+        const td = event.target?.closest('td')
+        if (td?.dataset?.idx !== undefined) {
+            let idx = td.dataset.idx
+            if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
+                idx -= 1
+            }
+            console.debug(`-- editing: ${idx}`)
+            editing = idx
+            beginEditing(event, editing)
         }
+    }
+}
+
+/**
+ * @function saveEditing
+ * @param {MouseEvent} event
+ * @param {String} idx
+ * @return {Boolean}
+ */
+async function saveEditing(event, idx) {
+    console.debug(`saveEditInput: ${idx}`, event)
+    const td = document.getElementById(`td-filter-${idx}`)
+    console.debug('td:', td)
+
+    if (!td) {
+        return console.warn(`TD Not Found: #td-filter-${idx}`)
+    }
+
+    const input = td.querySelector('input')
+    console.log('input:', input)
+    const value = input.value
+    console.log('value:', value)
+    if (!value) {
+        await deleteFilter(event, idx)
+        return true
+    }
+
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (value !== patterns[idx]) {
+        console.log(`chrome.storage.sync.set: patterns[${idx}]: ${value}`)
+        patterns[idx] = value
+        await chrome.storage.sync.set({ patterns })
+    } else {
+        console.info('Value Unchanged!')
+    }
+
+    const link = genFilterLink(idx, value)
+    td.removeChild(input)
+    td.appendChild(link)
+    return false
+}
+
+/**
+ * @function beginEditing
+ * @param {MouseEvent} event
+ * @param {String} idx
+ */
+function beginEditing(event, idx) {
+    console.debug(`addEditInput: ${idx}`, event)
+    const td = document.getElementById(`td-filter-${idx}`)
+    console.debug('td:', td)
+
+    if (!td) {
+        return console.warn(`TD Not Found: #td-filter-${idx}`)
+    }
+
+    const link = td.querySelector('a')
+    const value = link.textContent
+    console.log('value:', value)
+
+    const input = document.querySelector('.d-none input').cloneNode()
+    input.value = value
+    input.dataset.idx = idx
+
+    td.removeChild(link)
+    td.appendChild(input)
+
+    input.focus()
+    input.select()
+}
+
+/**
+ * Delete Filter
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ * @param {String} index
+ */
+async function deleteFilter(event, index = undefined) {
+    console.log('deleteFilter:', event)
+    event.preventDefault()
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (!index) {
+        const anchor = event.target.closest('a')
+        const filter = anchor?.dataset?.value
+        console.log(`filter: ${filter}`)
+        // console.log('patterns:', patterns)
+        if (filter && patterns.includes(filter)) {
+            index = patterns.indexOf(filter)
+        }
+    }
+    console.log(`index: ${index}`)
+    if (index !== undefined) {
+        patterns.splice(index, 1)
+        await chrome.storage.sync.set({ patterns })
+        console.log('patterns:', patterns)
+        updateTable(patterns)
+        document.getElementById('add-filter').focus()
     }
 }
 
@@ -175,7 +295,7 @@ async function resetForm(event) {
 async function saveOptions(event) {
     console.log('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
-    let key
+    let key = event.target?.id
     let value
     if (['flags', 'reset-default'].includes(event.target.id)) {
         key = 'flags'
@@ -193,38 +313,15 @@ async function saveOptions(event) {
         element.value = flags
         value = flags
     } else if (event.target.id === 'linksDisplay') {
-        key = event.target.id
         value = parseInt(event.target.value)
     } else if (event.target.type === 'checkbox') {
-        key = event.target.id
         value = event.target.checked
     } else {
-        key = event.target.id
         value = event.target.value
     }
     if (value !== undefined) {
         options[key] = value
         console.log(`Set: ${key}:`, value)
         await chrome.storage.sync.set({ options })
-    }
-}
-
-/**
- * Update Options
- * @function initOptions
- * @param {Object} options
- */
-function updateOptions(options) {
-    for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
-        const el = document.getElementById(key)
-        if (el) {
-            if (typeof value === 'boolean') {
-                el.checked = value
-            } else {
-                el.value = value
-            }
-            el.classList.remove('is-invalid')
-        }
     }
 }

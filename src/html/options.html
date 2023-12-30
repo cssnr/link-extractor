@@ -91,6 +91,15 @@
             </label>
         </div>
         <div class="form-check form-switch">
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="sortLinks">
+            <label class="form-check-label" for="sortLinks" aria-describedby="sortLinksHelp">
+                Automatically Sort Alphabetically
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Sort Links and Domains Alphabetically">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="showUpdate">
             <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
                 Show Release Notes on Update
@@ -112,7 +121,12 @@
         </div>
     </form>
     <table id="filters-table" class="table table-sm table-hover bg-transparent">
-        <caption>Saved Filters</caption>
+        <caption>
+            Saved Filters
+            <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Click on an Existing Filter to Edit it.">
+                <i class="fa-solid fa-lightbulb text-warning-emphasis ms-1"></i>
+            </span>
+        </caption>
         <thead><tr>
             <th scope="col" class="text-center" style="width: 36px;">
                 <i class="fa-solid fa-trash-can"></i>
@@ -143,6 +157,8 @@
 </div>
 
 <div class="d-none">
+    <form id="update-filter" name="update-filter"><button type="submit"></button></form>
+    <input class="form-control form-control-sm filter-edit" type="text" form="update-filter">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
@@ -160,7 +176,7 @@
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
-<script type="text/javascript" src="../js/options.js"></script>
+<script type="module" src="../js/options.js"></script>
 
 </body>
 </html>

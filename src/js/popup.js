@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { injectTab } from './exports.js'
+import { injectTab, updateOptions } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
@@ -30,7 +30,8 @@ async function initPopup() {
         'patterns',
     ])
     console.log('options, patterns:', options, patterns)
-    document.getElementById('defaultFilter').checked = options.defaultFilter
+    // document.getElementById('defaultFilter').checked = options.defaultFilter
+    updateOptions(options)
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
