@@ -14,7 +14,7 @@ if (!window.injected) {
  * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.log(`onMessage: message: ${message}`)
+    console.debug(`onMessage: message: ${message}`)
     if (message === 'all') {
         sendResponse(extractAllLinks())
     } else if (message === 'selection') {
@@ -30,14 +30,14 @@ function onMessage(message, sender, sendResponse) {
  * @return {Array}
  */
 function extractAllLinks() {
-    console.log('extractAllLinks')
+    console.debug('extractAllLinks')
     const links = []
     for (const element of document.links) {
         if (element.href) {
             pushElement(links, element)
         }
     }
-    console.log('links:', links)
+    console.debug('links:', links)
     return links
 }
 
@@ -47,10 +47,10 @@ function extractAllLinks() {
  * @return {Array}
  */
 function extractSelection() {
-    console.log('extractSelection')
+    console.debug('extractSelection')
     const links = []
     const selection = window.getSelection()
-    console.log('selection:', selection)
+    console.debug('selection:', selection)
     if (selection?.type !== 'Range') {
         console.log('No selection or wrong selection.type')
         return links
@@ -66,7 +66,7 @@ function extractSelection() {
             }
         })
     }
-    console.log('links:', links)
+    console.debug('links:', links)
     return links
 }
 

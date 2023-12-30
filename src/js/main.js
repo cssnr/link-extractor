@@ -12,9 +12,9 @@ if (backToTop) {
 if (typeof ClipboardJS !== 'undefined') {
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
-        // console.info('clipboard.success:', event)
+        // console.debug('clipboard.success:', event)
         const text = event.text.trim()
-        console.log(`text: "${text}"`)
+        console.debug(`text: "${text}"`)
         if (event.trigger.dataset.toast) {
             showToast(event.trigger.dataset.toast)
         } else {
@@ -22,7 +22,7 @@ if (typeof ClipboardJS !== 'undefined') {
         }
     })
     clipboard.on('error', function (event) {
-        // console.log('clipboard.error:', event)
+        // console.debug('clipboard.error:', event)
         showToast('Clipboard Copy Failed', 'warning')
     })
 }
@@ -55,7 +55,7 @@ function onScroll() {
 function showToast(message, type = 'success') {
     console.log(`showToast: ${type}:`, message)
     const element = document.querySelector('.d-none .toast').cloneNode(true)
-    element.addEventListener('mouseover', () => toast.hide())
+    element.addEventListener('mousemove', () => toast.hide())
     element.classList.add(`text-bg-${type}`)
     element.querySelector('.toast-body').innerHTML = message
     document.getElementById('toast-container').appendChild(element)

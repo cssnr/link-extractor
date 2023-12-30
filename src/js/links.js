@@ -39,7 +39,7 @@ async function initLinks() {
     try {
         const tabId = parseInt(urlParams.get('tab'))
         const selection = urlParams.has('selection')
-        console.log(`tabId: ${tabId}, selection: ${selection}`)
+        console.debug(`tabId: ${tabId}, selection: ${selection}`)
 
         if (tabId) {
             const action = selection ? 'selection' : 'all'
@@ -63,13 +63,13 @@ async function initLinks() {
  * @param {Array} links
  */
 async function processLinks(links) {
-    console.log('processLinks:', links)
+    console.debug('processLinks:', links)
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
-    console.log(`urlFilter: ${urlFilter}`)
-    console.log(`onlyDomains: ${onlyDomains}`)
+    console.debug(`urlFilter: ${urlFilter}`)
+    console.debug(`onlyDomains: ${onlyDomains}`)
     const { options } = await chrome.storage.sync.get(['options'])
-    console.log('options:', options)
+    console.debug('options:', options)
 
     // Filter links by :// if not disabled by user
     if (options.defaultFilter) {
@@ -86,7 +86,7 @@ async function processLinks(links) {
     // Filter links based on pattern
     if (urlFilter) {
         const re = new RegExp(urlFilter, options.flags)
-        console.log(`Filtering Links with re: ${re}`)
+        console.debug(`Filtering Links with re: ${re}`)
         items = items.filter((item) => item.match(re))
     }
 
@@ -153,7 +153,7 @@ function getBaseURL(link) {
  * @param {String} selector
  */
 function updateTable(links, selector) {
-    console.log(`updateTable: ${selector}`)
+    console.debug(`updateTable: ${selector}`)
     const tbody = document.querySelector(`${selector} tbody`)
     links.forEach(function (url) {
         const link = document.createElement('a')
@@ -171,11 +171,11 @@ function updateTable(links, selector) {
  * @param {MouseEvent} event
  */
 function openLinksClick(event) {
-    console.log('openLinksClick:', event)
+    console.debug('openLinksClick:', event)
     const closest = event.target?.closest('a')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
-    console.log('links:', links)
+    console.debug('links:', links)
     if (links) {
         links.split('\n').forEach(function (url) {
             chrome.tabs.create({ active: false, url }).then()
@@ -191,7 +191,7 @@ function openLinksClick(event) {
  * @param {MouseEvent} event
  */
 function downloadFileClick(event) {
-    console.log('downloadFileClick:', event)
+    console.debug('downloadFileClick:', event)
     const closest = event.target?.closest('a')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
@@ -210,7 +210,7 @@ function downloadFileClick(event) {
  * @param {String} text
  */
 function download(filename, text) {
-    console.log(`download: ${filename}`)
+    console.debug(`download: ${filename}`)
     const element = document.createElement('a')
     element.setAttribute(
         'href',
@@ -229,7 +229,7 @@ function download(filename, text) {
  * @param {KeyboardEvent} e
  */
 function handleKeyboard(e) {
-    // console.log('handleKeyboard:', e)
+    // console.debug('handleKeyboard:', e)
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
         return
     }
@@ -248,7 +248,7 @@ function handleKeyboard(e) {
 }
 
 function dtDraw(event) {
-    console.log('dtDraw:', event)
+    console.debug('dtDraw:', event)
     const tbody = event.target.querySelector('tbody')
     let length = tbody.rows.length
     if (tbody.rows.length === 1) {

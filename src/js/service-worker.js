@@ -58,22 +58,22 @@ async function onClicked(ctx, tab) {
     if (['options', 'filters'].includes(ctx.menuItemId)) {
         chrome.runtime.openOptionsPage()
     } else if (ctx.menuItemId === 'links') {
-        console.log('injectTab: links')
+        console.debug('injectTab: links')
         await injectTab()
     } else if (ctx.menuItemId === 'domains') {
-        console.log('injectTab: domains')
+        console.debug('injectTab: domains')
         await injectTab({ domains: true })
     } else if (ctx.menuItemId === 'selection') {
-        console.log('injectTab: selection')
+        console.debug('injectTab: selection')
         await injectTab({ selection: true })
     } else if (ctx.menuItemId.startsWith('filter-')) {
         const i = ctx.menuItemId.split('-')[1]
-        console.log(`injectTab: filter-${i}`)
+        console.debug(`injectTab: filter-${i}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
-        console.log(`filter: ${patterns[i]}`)
+        console.debug(`filter: ${patterns[i]}`)
         await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
-        console.log('injectFunction: copy')
+        console.debug('injectFunction: copy')
         await injectFunction(copyActiveElementText, [ctx])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
@@ -102,7 +102,7 @@ async function onCommand(command) {
  * @param {String} namespace
  */
 async function onChanged(changes, namespace) {
-    // console.log('onChanged:', changes, namespace)
+    // console.debug('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
@@ -133,7 +133,7 @@ async function onChanged(changes, namespace) {
  * @param {Array} patterns
  */
 function createContextMenus(patterns) {
-    console.log('createContextMenus:', patterns)
+    console.debug('createContextMenus:', patterns)
     chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
