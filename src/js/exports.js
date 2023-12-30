@@ -43,3 +43,23 @@ export async function injectTab({
     console.log(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
 }
+
+/**
+ * Update Options
+ * @function initOptions
+ * @param {Object} options
+ */
+export function updateOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+        // console.log(`${key}: ${value}`)
+        const el = document.getElementById(key)
+        if (el) {
+            if (typeof value === 'boolean') {
+                el.checked = value
+            } else {
+                el.value = value
+            }
+            el.classList.remove('is-invalid')
+        }
+    }
+}

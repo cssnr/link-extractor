@@ -16,7 +16,7 @@ const dtOptions = {
     processing: true,
     saveState: true,
     bSort: true,
-    order: [[0, 'asc']],
+    order: [],
     pageLength: -1,
     lengthMenu: [
         [-1, 10, 25, 50, 100, 250, 500, 1000],
@@ -77,7 +77,11 @@ async function processLinks(links) {
     }
 
     // Remove duplicate and sort links
-    let items = [...new Set(links)].sort()
+    let items = [...new Set(links)]
+    if (options.sortLinks) {
+        dtOptions.order = [[0, 'asc']]
+        items.sort()
+    }
 
     // Filter links based on pattern
     if (urlFilter) {
@@ -105,7 +109,10 @@ async function processLinks(links) {
     }
 
     // Extract domains from items, sort, and remove null
-    let domains = [...new Set(items.map((link) => getBaseURL(link)))].sort()
+    let domains = [...new Set(items.map((link) => getBaseURL(link)))]
+    if (options.sortLinks) {
+        domains.sort()
+    }
     domains = domains.filter(function (el) {
         return el != null
     })

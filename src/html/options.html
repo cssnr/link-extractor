@@ -91,6 +91,15 @@
             </label>
         </div>
         <div class="form-check form-switch">
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="sortLinks">
+            <label class="form-check-label" for="sortLinks" aria-describedby="sortLinksHelp">
+                Automatically Sort Alphabetically
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Sort Links and Domains Alphabetically">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="showUpdate">
             <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
                 Show Release Notes on Update
@@ -167,7 +176,7 @@
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
-<script type="text/javascript" src="../js/options.js"></script>
+<script type="module" src="../js/options.js"></script>
 
 </body>
 </html>

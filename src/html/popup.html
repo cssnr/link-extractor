@@ -45,8 +45,8 @@
                     data-bs-placement="bottom" data-bs-title="Open Each Line" data-text="Open">Open</button>
         </div>
 
-        <div class="form-check form-switch form-check-inline d-flex justify-content-center align-items-center">
-            <form id="options-form">
+        <form id="options-form">
+            <div class="form-check form-switch">
                 <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
                 <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
                     Use Default Link Filtering
@@ -54,8 +54,17 @@
                         <i class="fa-solid fa-circle-info ms-1"></i>
                     </span>
                 </label>
-            </form>
-        </div>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="sortLinks">
+                <label class="form-check-label" for="sortLinks" aria-describedby="sortLinksHelp">
+                    Automatically Sort Alphabetically
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Sort Links and Domains Alphabetically">
+                        <i class="fa-solid fa-circle-info ms-1"></i>
+                    </span>
+                </label>
+            </div>
+        </form>
 
         <a class="btn btn-sm btn-outline-info" role="button" href="../html/options.html">
             <i class="fa-solid fa-sliders me-1"></i> Options</a>

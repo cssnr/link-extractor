@@ -1,7 +1,10 @@
 // JS for options.html
 
+import { updateOptions } from './exports.js'
+
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
+document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
@@ -147,7 +150,7 @@ async function filterClick(event) {
         // TODO: The submit event is also triggering a click event
         return event.preventDefault()
     }
-    if (event.target.classList.contains('filter-edit')) {
+    if (event.target?.classList?.contains('filter-edit')) {
         return console.debug('Click on Input Detected.')
     }
     let deleted
@@ -157,15 +160,17 @@ async function filterClick(event) {
         deleted = await saveEditing(event, editing)
         editing = false
     }
-    const td = event.target.closest('td')
-    if (td?.dataset?.idx !== undefined) {
-        let idx = td.dataset.idx
-        if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
-            idx -= 1
+    if (event.target?.closest) {
+        const td = event.target?.closest('td')
+        if (td?.dataset?.idx !== undefined) {
+            let idx = td.dataset.idx
+            if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
+                idx -= 1
+            }
+            console.debug(`-- editing: ${idx}`)
+            editing = idx
+            beginEditing(event, editing)
         }
-        console.debug(`-- editing: ${idx}`)
-        editing = idx
-        beginEditing(event, editing)
     }
 }
 
@@ -290,7 +295,7 @@ async function resetForm(event) {
 async function saveOptions(event) {
     console.log('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
-    let key
+    let key = event.target?.id
     let value
     if (['flags', 'reset-default'].includes(event.target.id)) {
         key = 'flags'
@@ -308,38 +313,15 @@ async function saveOptions(event) {
         element.value = flags
         value = flags
     } else if (event.target.id === 'linksDisplay') {
-        key = event.target.id
         value = parseInt(event.target.value)
     } else if (event.target.type === 'checkbox') {
-        key = event.target.id
         value = event.target.checked
     } else {
-        key = event.target.id
         value = event.target.value
     }
     if (value !== undefined) {
         options[key] = value
         console.log(`Set: ${key}:`, value)
         await chrome.storage.sync.set({ options })
-    }
-}
-
-/**
- * Update Options
- * @function initOptions
- * @param {Object} options
- */
-function updateOptions(options) {
-    for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
-        const el = document.getElementById(key)
-        if (el) {
-            if (typeof value === 'boolean') {
-                el.checked = value
-            } else {
-                el.value = value
-            }
-            el.classList.remove('is-invalid')
-        }
     }
 }
