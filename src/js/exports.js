@@ -16,7 +16,7 @@ export async function injectTab({
 
     // Get Current Tab
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    console.log(`tab: ${tab.id}`, tab)
+    console.debug(`tab: ${tab.id}`, tab)
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('../html/links.html'))
@@ -40,7 +40,7 @@ export async function injectTab({
     })
 
     // Open Tab to links.html with desired params
-    console.log(`url: ${url.toString()}`)
+    console.debug(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
 }
 
@@ -51,7 +51,7 @@ export async function injectTab({
  */
 export function updateOptions(options) {
     for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
+        // console.debug(`${key}: ${value}`)
         const el = document.getElementById(key)
         if (el) {
             if (typeof value === 'boolean') {

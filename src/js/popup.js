@@ -24,12 +24,12 @@ document
  * @function initOptions
  */
 async function initPopup() {
-    // console.log('initPopup')
+    // console.debug('initPopup')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.log('options, patterns:', options, patterns)
+    console.debug('options, patterns:', options, patterns)
     // document.getElementById('defaultFilter').checked = options.defaultFilter
     updateOptions(options)
     if (patterns?.length) {
@@ -72,10 +72,10 @@ function createFilterLink(number, value = '') {
  * @param {MouseEvent} event
  */
 async function popupLinks(event) {
-    console.log('popupLinks:', event)
+    console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    // console.log(`anchor.href: ${anchor.href}`)
+    // console.debug(`anchor.href: ${anchor.href}`)
     let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
@@ -85,7 +85,7 @@ async function popupLinks(event) {
     } else {
         url = chrome.runtime.getURL(anchor.href)
     }
-    // console.log('url:', url)
+    console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
     return window.close()
 }
@@ -96,7 +96,7 @@ async function popupLinks(event) {
  * @param {SubmitEvent} event
  */
 async function filterForm(event) {
-    console.log('filterForm:', event)
+    console.debug('filterForm:', event)
     event.preventDefault()
     const filterInput = document.getElementById('filter-input')
     let filter
@@ -154,7 +154,7 @@ async function linksForm(event) {
  * @param {InputEvent} event
  */
 function updateLinks(event) {
-    // console.log('updateLinks:', event)
+    // console.debug('updateLinks:', event)
     let text = event.target.value.split(/\r\n?|\n/g)
     text = text.filter((str) => str !== '')
     const urls = extractURLs(event.target.value)
@@ -173,7 +173,7 @@ function updateLinks(event) {
  * @param {Array} lines
  */
 function updateElements(el, lines) {
-    // console.log('el, lines:', el, lines)
+    // console.debug('el, lines:', el, lines)
     if (lines?.length > 0) {
         el.classList.remove('disabled')
         el.textContent = `${el.dataset.text} (${lines.length})`
@@ -209,11 +209,11 @@ function extractURLs(text) {
  * @param {InputEvent} event
  */
 async function saveOptions(event) {
-    console.log('saveOptions:', event)
+    console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
     if (event.target.id && event.target.checked !== undefined) {
         options[event.target.id] = event.target.checked
-        console.log(`Set: ${event.target.id}:`, event.target.checked)
+        console.info(`Set: ${event.target.id}:`, event.target.checked)
         await chrome.storage.sync.set({ options })
     }
 }

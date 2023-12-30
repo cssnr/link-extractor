@@ -24,12 +24,12 @@ optionsForm
  * @function initOptions
  */
 async function initOptions() {
-    // console.log('initOptions')
+    // console.debug('initOptions')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.log('options, patterns:', options, patterns)
+    console.debug('options, patterns:', options, patterns)
     updateOptions(options)
     updateTable(patterns)
 
@@ -52,7 +52,7 @@ async function initOptions() {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    // console.log('onChanged:', changes, namespace)
+    // console.debug('onChanged:', changes, namespace)
     for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             updateOptions(newValue)
@@ -69,7 +69,7 @@ function onChanged(changes, namespace) {
  * @param {SubmitEvent} event
  */
 async function addFilter(event) {
-    // console.log('addFilter:', event)
+    // console.debug('addFilter:', event)
     event.preventDefault()
     const element = document.querySelector('#filters-form input')
     const filter = element.value
@@ -78,7 +78,7 @@ async function addFilter(event) {
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         if (!patterns.includes(filter)) {
             patterns.push(filter)
-            console.log('patterns:', patterns)
+            console.debug('patterns:', patterns)
             await chrome.storage.sync.set({ patterns })
             updateTable(patterns)
         }
@@ -184,14 +184,13 @@ async function saveEditing(event, idx) {
     console.debug(`saveEditInput: ${idx}`, event)
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
-
     if (!td) {
-        return console.warn(`TD Not Found: #td-filter-${idx}`)
+        console.warn(`TD Not Found: #td-filter-${idx}`)
+        return false
     }
 
     const input = td.querySelector('input')
-    console.log('input:', input)
-    const value = input.value
+    let value = input.value
     console.log('value:', value)
     if (!value) {
         await deleteFilter(event, idx)
@@ -199,12 +198,19 @@ async function saveEditing(event, idx) {
     }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    if (value !== patterns[idx]) {
-        console.log(`chrome.storage.sync.set: patterns[${idx}]: ${value}`)
+    console.debug('patterns:', patterns)
+    if (value === patterns[idx]) {
+        console.info('Value Unchanged!')
+    } else if (patterns.includes(value)) {
+        showToast('Filter Already Exists!', 'warning')
+        console.info('Value Already Exists!')
+        value = patterns[idx]
+    } else {
+        console.info(
+            `Updated idx: ${idx} from "${patterns[idx]}" to "${value}"`
+        )
         patterns[idx] = value
         await chrome.storage.sync.set({ patterns })
-    } else {
-        console.info('Value Unchanged!')
     }
 
     const link = genFilterLink(idx, value)
@@ -222,7 +228,6 @@ function beginEditing(event, idx) {
     console.debug(`addEditInput: ${idx}`, event)
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
-
     if (!td) {
         return console.warn(`TD Not Found: #td-filter-${idx}`)
     }
@@ -252,11 +257,11 @@ async function deleteFilter(event, index = undefined) {
     console.log('deleteFilter:', event)
     event.preventDefault()
     const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.debug('patterns:', patterns)
     if (!index) {
         const anchor = event.target.closest('a')
         const filter = anchor?.dataset?.value
         console.log(`filter: ${filter}`)
-        // console.log('patterns:', patterns)
         if (filter && patterns.includes(filter)) {
             index = patterns.indexOf(filter)
         }
@@ -265,7 +270,7 @@ async function deleteFilter(event, index = undefined) {
     if (index !== undefined) {
         patterns.splice(index, 1)
         await chrome.storage.sync.set({ patterns })
-        console.log('patterns:', patterns)
+        console.debug('patterns:', patterns)
         updateTable(patterns)
         document.getElementById('add-filter').focus()
     }
@@ -293,7 +298,7 @@ async function resetForm(event) {
  * @param {InputEvent} event
  */
 async function saveOptions(event) {
-    console.log('saveOptions:', event)
+    console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
     let key = event.target?.id
     let value
@@ -303,7 +308,7 @@ async function saveOptions(event) {
         let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
         flags = new Set(flags)
         flags = [...flags].join('')
-        console.log(`flags: ${flags}`)
+        console.debug(`flags: ${flags}`)
         for (const flag of flags) {
             if (!'dgimsuvy'.includes(flag)) {
                 element.classList.add('is-invalid')
@@ -321,7 +326,7 @@ async function saveOptions(event) {
     }
     if (value !== undefined) {
         options[key] = value
-        console.log(`Set: ${key}:`, value)
+        console.info(`Set: ${key}:`, value)
         await chrome.storage.sync.set({ options })
     }
 }

@@ -12,9 +12,9 @@ if (backToTop) {
 if (typeof ClipboardJS !== 'undefined') {
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
-        // console.info('clipboard.success:', event)
+        // console.debug('clipboard.success:', event)
         const text = event.text.trim()
-        console.log(`text: "${text}"`)
+        console.debug(`text: "${text}"`)
         if (event.trigger.dataset.toast) {
             showToast(event.trigger.dataset.toast)
         } else {
@@ -22,7 +22,7 @@ if (typeof ClipboardJS !== 'undefined') {
         }
     })
     clipboard.on('error', function (event) {
-        // console.log('clipboard.error:', event)
+        // console.debug('clipboard.error:', event)
         showToast('Clipboard Copy Failed', 'warning')
     })
 }
