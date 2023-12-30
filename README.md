@@ -1,5 +1,7 @@
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white&label=google%20users)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/link-extractor)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ifefifghpkllfibejafbakmflidjcjfp)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+[![Mozilla Add-on Stars](https://img.shields.io/amo/stars/link-extractor)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
@@ -52,6 +54,12 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
 [![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/0944a60d-058b-4269-954c-8aec6ab59f4c)](https://link-extractor.cssnr.com/screenshots/)
+
+## Planned Upcoming Features
+
+*   Option to Extract and Display Link Titles
+*   Option to Set Titles for Saved Filters
+*   Option to Rearrange Saved Filters
 
 # Configuration
 
