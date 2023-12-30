@@ -55,7 +55,7 @@ function onScroll() {
 function showToast(message, type = 'success') {
     console.log(`showToast: ${type}:`, message)
     const element = document.querySelector('.d-none .toast').cloneNode(true)
-    element.addEventListener('mouseover', () => toast.hide())
+    element.addEventListener('mousemove', () => toast.hide())
     element.classList.add(`text-bg-${type}`)
     element.querySelector('.toast-body').innerHTML = message
     document.getElementById('toast-container').appendChild(element)
