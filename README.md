@@ -61,6 +61,10 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Option to Set Titles for Saved Filters
 *   Option to Rearrange Saved Filters
 
+> [!TIP]
+> **Don't see your feature here?**
+> Request one on the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
+
 # Configuration
 
 Documentation: https://link-extractor.cssnr.com/docs/
