@@ -65,6 +65,45 @@ export function updateOptions(options) {
 }
 
 /**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+export async function saveOptions(event) {
+    console.debug('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key = event.target?.id
+    let value
+    if (['flags', 'reset-default'].includes(event.target.id)) {
+        key = 'flags'
+        const element = document.getElementById(key)
+        let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
+        flags = new Set(flags)
+        flags = [...flags].join('')
+        console.debug(`flags: ${flags}`)
+        for (const flag of flags) {
+            if (!'dgimsuvy'.includes(flag)) {
+                element.classList.add('is-invalid')
+                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+            }
+        }
+        element.value = flags
+        value = flags
+    } else if (event.target.id === 'linksDisplay') {
+        value = parseInt(event.target.value)
+    } else if (event.target.type === 'checkbox') {
+        value = event.target.checked
+    } else {
+        value = event.target.value
+    }
+    if (value !== undefined) {
+        options[key] = value
+        console.info(`Set: ${key}:`, value)
+        await chrome.storage.sync.set({ options })
+    }
+}
+
+/**
  * Export Bookmark Click Callback
  * @function exportClick
  * @param {MouseEvent} event

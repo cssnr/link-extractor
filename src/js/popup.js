@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { injectTab, updateOptions } from './exports.js'
+import { injectTab, saveOptions, updateOptions } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
@@ -30,8 +30,9 @@ async function initPopup() {
         'patterns',
     ])
     console.debug('options, patterns:', options, patterns)
-    // document.getElementById('defaultFilter').checked = options.defaultFilter
+
     updateOptions(options)
+    // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
@@ -204,19 +205,4 @@ function extractURLs(text) {
         urls.push(match)
     }
     return urls
-}
-
-/**
- * Save Options Callback
- * @function saveOptions
- * @param {InputEvent} event
- */
-async function saveOptions(event) {
-    console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    if (event.target.id && event.target.checked !== undefined) {
-        options[event.target.id] = event.target.checked
-        console.info(`Set: ${event.target.id}:`, event.target.checked)
-        await chrome.storage.sync.set({ options })
-    }
 }
