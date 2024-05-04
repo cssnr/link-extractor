@@ -205,26 +205,6 @@ function downloadFileClick(event) {
     }
 }
 
-// /**
-//  * Download filename with text
-//  * @function download
-//  * @param {String} filename
-//  * @param {String} text
-//  */
-// function download(filename, text) {
-//     console.debug(`download: ${filename}`)
-//     const element = document.createElement('a')
-//     element.setAttribute(
-//         'href',
-//         'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
-//     )
-//     element.setAttribute('download', filename)
-//     element.classList.add('d-none')
-//     document.body.appendChild(element)
-//     element.click()
-//     document.body.removeChild(element)
-// }
-
 /**
  * Handle Keyboard Shortcuts Callback
  * @function handleKeyboard
