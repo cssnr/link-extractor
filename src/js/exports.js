@@ -110,6 +110,11 @@ export async function importChange(event) {
     const display = event.target.dataset.importDisplay
     console.debug('display:', display)
     const importInput = document.getElementById('import-input')
+    if (!importInput.files?.length) {
+        return console.debug('No importInput.files', importInput)
+    }
+    const file = importInput.files[0]
+    importInput.value = ''
     const fileReader = new FileReader()
     fileReader.onload = async function doImport() {
         const result = JSON.parse(fileReader.result.toString())
@@ -126,7 +131,7 @@ export async function importChange(event) {
         showToast(`Imported ${count}/${result.length} ${display}.`, 'success')
         await chrome.storage.sync.set(data)
     }
-    fileReader.readAsText(importInput.files[0])
+    fileReader.readAsText(file)
 }
 
 /**

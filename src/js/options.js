@@ -121,7 +121,7 @@ function updateTable(data) {
         button.addEventListener('click', deleteFilter)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
-        cell1.dataset.idx = i.toString()
+        // cell1.dataset.idx = i.toString()
         cell1.appendChild(button)
         const link = genFilterLink(i.toString(), value)
         const cell2 = row.insertCell()
@@ -195,12 +195,12 @@ async function saveEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
     if (!td) {
-        console.warn(`TD Not Found: #td-filter-${idx}`)
+        console.info(`TD Not Found: #td-filter-${idx}`)
         return false
     }
 
     const input = td.querySelector('input')
-    let value = input.value
+    let value = input?.value
     console.log('value:', value)
     if (!value) {
         await deleteFilter(event, idx)
@@ -239,7 +239,7 @@ function beginEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
     if (!td) {
-        return console.warn(`TD Not Found: #td-filter-${idx}`)
+        return console.info(`TD Not Found: #td-filter-${idx}`)
     }
 
     const link = td.querySelector('a')
