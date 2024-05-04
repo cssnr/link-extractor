@@ -197,11 +197,14 @@ function downloadFileClick(event) {
     const closest = event.target?.closest('a')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
+    const name =
+        event.target.dataset.filename || target.dataset.filename || 'links.txt'
+    console.info('name', name)
     if (links) {
-        textFileDownload(target.dataset.filename || 'links.txt', links)
+        textFileDownload(name, links)
         showToast('Download Started.')
     } else {
-        showToast('No Links to Download.', 'warning')
+        showToast('Nothing to Download.', 'warning')
     }
 }
 
