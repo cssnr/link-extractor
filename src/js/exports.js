@@ -156,7 +156,13 @@ export async function importChange(event) {
     importInput.value = ''
     const fileReader = new FileReader()
     fileReader.onload = async function doImport() {
-        const result = JSON.parse(fileReader.result.toString())
+        let result
+        try {
+            result = JSON.parse(fileReader.result.toString())
+        } catch (e) {
+            showToast('Unable to parse file contents.', 'danger')
+            return console.debug(e)
+        }
         console.debug('result:', result)
         const data = await chrome.storage.sync.get()
         console.debug('data:', data[name])
