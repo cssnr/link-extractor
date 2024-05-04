@@ -11,11 +11,7 @@ a:visited {
     z-index: 10;
 }
 
-#toast-container {
-    margin-bottom: 60px;
-    margin-right: 70px;
-}
-
-.toast {
+.toast-container {
     max-width: 260px;
+    width: 100%;
 }

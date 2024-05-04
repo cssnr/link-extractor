@@ -92,6 +92,9 @@ async function addFilter(event) {
             console.debug('patterns:', patterns)
             await chrome.storage.sync.set({ patterns })
             updateTable(patterns)
+            showToast(`Added Filter: ${filter}`)
+        } else {
+            showToast(`Filter Exists: ${filter}`, 'warning')
         }
     }
     element.value = ''
@@ -279,11 +282,13 @@ async function deleteFilter(event, index = undefined) {
     }
     console.log(`index: ${index}`)
     if (index !== undefined) {
+        const name = patterns[index]
         patterns.splice(index, 1)
         await chrome.storage.sync.set({ patterns })
         console.debug('patterns:', patterns)
         updateTable(patterns)
         document.getElementById('add-filter').focus()
+        showToast(`Removed Filter: ${name}`, 'info')
     }
 }
 

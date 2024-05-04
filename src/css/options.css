@@ -4,6 +4,7 @@
     min-width: 360px;
 }
 
-.toast {
-    max-width: 260px;
+.toast-container {
+    max-width: 320px;
+    width: 100%;
 }
