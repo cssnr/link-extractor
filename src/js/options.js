@@ -1,6 +1,12 @@
 // JS for options.html
 
-import { updateOptions } from './exports.js'
+import {
+    exportClick,
+    importChange,
+    importClick,
+    saveOptions,
+    updateOptions,
+} from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
@@ -18,6 +24,11 @@ optionsForm.addEventListener('submit', (e) => e.preventDefault())
 optionsForm
     .querySelectorAll('input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
+
+// Data Import/Export
+document.getElementById('export-data').addEventListener('click', exportClick)
+document.getElementById('import-data').addEventListener('click', importClick)
+document.getElementById('import-input').addEventListener('change', importChange)
 
 /**
  * Initialize Options
@@ -111,7 +122,7 @@ function updateTable(data) {
         button.addEventListener('click', deleteFilter)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center', 'align-middle')
-        cell1.dataset.idx = i.toString()
+        // cell1.dataset.idx = i.toString()
         cell1.appendChild(button)
         const link = genFilterLink(i.toString(), value)
         const cell2 = row.insertCell()
@@ -185,12 +196,12 @@ async function saveEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
     if (!td) {
-        console.warn(`TD Not Found: #td-filter-${idx}`)
+        console.info(`TD Not Found: #td-filter-${idx}`)
         return false
     }
 
     const input = td.querySelector('input')
-    let value = input.value
+    let value = input?.value
     console.log('value:', value)
     if (!value) {
         await deleteFilter(event, idx)
@@ -229,7 +240,7 @@ function beginEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug('td:', td)
     if (!td) {
-        return console.warn(`TD Not Found: #td-filter-${idx}`)
+        return console.info(`TD Not Found: #td-filter-${idx}`)
     }
 
     const link = td.querySelector('a')
@@ -289,44 +300,4 @@ async function resetForm(event) {
     input.classList.remove('is-invalid')
     input.focus()
     await saveOptions(event)
-}
-
-/**
- * Save Options Callback
- * TODO: Cleanup this function
- * @function saveOptions
- * @param {InputEvent} event
- */
-async function saveOptions(event) {
-    console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target?.id
-    let value
-    if (['flags', 'reset-default'].includes(event.target.id)) {
-        key = 'flags'
-        const element = document.getElementById(key)
-        let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
-        flags = new Set(flags)
-        flags = [...flags].join('')
-        console.debug(`flags: ${flags}`)
-        for (const flag of flags) {
-            if (!'dgimsuvy'.includes(flag)) {
-                element.classList.add('is-invalid')
-                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
-            }
-        }
-        element.value = flags
-        value = flags
-    } else if (event.target.id === 'linksDisplay') {
-        value = parseInt(event.target.value)
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
-    } else {
-        value = event.target.value
-    }
-    if (value !== undefined) {
-        options[key] = value
-        console.info(`Set: ${key}:`, value)
-        await chrome.storage.sync.set({ options })
-    }
 }

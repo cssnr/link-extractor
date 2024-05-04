@@ -1,6 +1,6 @@
 // JS for popup.html
 
-import { injectTab, updateOptions } from './exports.js'
+import { injectTab, saveOptions, updateOptions } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
@@ -30,8 +30,9 @@ async function initPopup() {
         'patterns',
     ])
     console.debug('options, patterns:', options, patterns)
-    // document.getElementById('defaultFilter').checked = options.defaultFilter
+
     updateOptions(options)
+    // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
         patterns.forEach(function (value, i) {
@@ -66,7 +67,7 @@ function createFilterLink(number, value = '') {
 }
 
 /**
- * Popup Links Callback
+ * Popup Links Click Callback
  * Firefox requires a call to window.close()
  * @function popupLinks
  * @param {MouseEvent} event
@@ -75,12 +76,15 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    // console.debug(`anchor.href: ${anchor.href}`)
+    // console.debug(`anchor.href: ${anchor.href}`, anchor)
     let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
         return window.close()
-    } else if (anchor.href.startsWith('http')) {
+    } else if (
+        anchor.href.startsWith('http') ||
+        anchor.href.startsWith('chrome-extension')
+    ) {
         url = anchor.href
     } else {
         url = chrome.runtime.getURL(anchor.href)
@@ -91,7 +95,7 @@ async function popupLinks(event) {
 }
 
 /**
- * Filter Form Callback
+ * Filter Form Submit Callback
  * @function formSubmit
  * @param {SubmitEvent} event
  */
@@ -116,7 +120,7 @@ async function filterForm(event) {
 }
 
 /**
- * Links Form Callback
+ * Links Form Submit Callback
  * @function linksForm
  * @param {SubmitEvent} event
  */
@@ -149,7 +153,7 @@ async function linksForm(event) {
 }
 
 /**
- * Update Links Callback
+ * Update Links Input Callback
  * @function updateLinks
  * @param {InputEvent} event
  */
@@ -201,19 +205,4 @@ function extractURLs(text) {
         urls.push(match)
     }
     return urls
-}
-
-/**
- * Save Options Callback
- * @function saveOptions
- * @param {InputEvent} event
- */
-async function saveOptions(event) {
-    console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    if (event.target.id && event.target.checked !== undefined) {
-        options[event.target.id] = event.target.checked
-        console.info(`Set: ${event.target.id}:`, event.target.checked)
-        await chrome.storage.sync.set({ options })
-    }
 }

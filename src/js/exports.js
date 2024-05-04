@@ -63,3 +63,132 @@ export function updateOptions(options) {
         }
     }
 }
+
+/**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+export async function saveOptions(event) {
+    console.debug('saveOptions:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key = event.target?.id
+    let value
+    if (['flags', 'reset-default'].includes(event.target.id)) {
+        key = 'flags'
+        const element = document.getElementById(key)
+        let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
+        flags = new Set(flags)
+        flags = [...flags].join('')
+        console.debug(`flags: ${flags}`)
+        for (const flag of flags) {
+            if (!'dgimsuvy'.includes(flag)) {
+                element.classList.add('is-invalid')
+                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+            }
+        }
+        element.value = flags
+        value = flags
+    } else if (event.target.id === 'linksDisplay') {
+        value = parseInt(event.target.value)
+    } else if (event.target.type === 'checkbox') {
+        value = event.target.checked
+    } else {
+        value = event.target.value
+    }
+    if (value !== undefined) {
+        options[key] = value
+        console.info(`Set: ${key}:`, value)
+        await chrome.storage.sync.set({ options })
+    }
+}
+
+/**
+ * Export Bookmark Click Callback
+ * @function exportClick
+ * @param {MouseEvent} event
+ */
+export async function exportClick(event) {
+    console.debug('exportClick:', event)
+    event.preventDefault()
+    const name = event.target.dataset.importName
+    console.debug('name:', name)
+    const display = event.target.dataset.importDisplay
+    console.debug('display:', display)
+    const data = await chrome.storage.sync.get()
+    console.debug('data:', data[name])
+    if (!data[name].length) {
+        return showToast(`No ${display} Found!`, 'warning')
+    }
+    const json = JSON.stringify(data[name])
+    textFileDownload(`${name}.txt`, json)
+}
+
+/**
+ * Import Bookmark Click Callback
+ * @function importClick
+ * @param {MouseEvent} event
+ */
+export async function importClick(event) {
+    console.debug('importClick:', event)
+    event.preventDefault()
+    const importInput = document.getElementById('import-input')
+    importInput.click()
+}
+
+/**
+ * Bookmark Input Change Callback
+ * @function importChange
+ * @param {InputEvent} event
+ */
+export async function importChange(event) {
+    console.debug('importChange:', event)
+    event.preventDefault()
+    const name = event.target.dataset.importName
+    console.debug('name:', name)
+    const display = event.target.dataset.importDisplay
+    console.debug('display:', display)
+    const importInput = document.getElementById('import-input')
+    if (!importInput.files?.length) {
+        return console.debug('No importInput.files', importInput)
+    }
+    const file = importInput.files[0]
+    importInput.value = ''
+    const fileReader = new FileReader()
+    fileReader.onload = async function doImport() {
+        const result = JSON.parse(fileReader.result.toString())
+        console.debug('result:', result)
+        const data = await chrome.storage.sync.get()
+        console.debug('data:', data[name])
+        let count = 0
+        for (const pid of result) {
+            if (!data[name].includes(pid)) {
+                data[name].push(pid)
+                count += 1
+            }
+        }
+        showToast(`Imported ${count}/${result.length} ${display}.`, 'success')
+        await chrome.storage.sync.set(data)
+    }
+    fileReader.readAsText(file)
+}
+
+/**
+ * Text File Download
+ * @function textFileDownload
+ * @param {String} filename
+ * @param {String} text
+ */
+export function textFileDownload(filename, text) {
+    console.debug(`textFileDownload: ${filename}`)
+    const element = document.createElement('a')
+    element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    )
+    element.setAttribute('download', filename)
+    element.classList.add('d-none')
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+}

@@ -1,5 +1,7 @@
 // JS for links.html
 
+import { textFileDownload } from './exports.js'
+
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 document
@@ -195,32 +197,15 @@ function downloadFileClick(event) {
     const closest = event.target?.closest('a')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
+    const name =
+        event.target.dataset.filename || target.dataset.filename || 'links.txt'
+    console.info('name', name)
     if (links) {
-        download(target.dataset.filename || 'links.txt', links)
+        textFileDownload(name, links)
         showToast('Download Started.')
     } else {
-        showToast('No Links to Download.', 'warning')
+        showToast('Nothing to Download.', 'warning')
     }
-}
-
-/**
- * Download filename with text
- * @function download
- * @param {String} filename
- * @param {String} text
- */
-function download(filename, text) {
-    console.debug(`download: ${filename}`)
-    const element = document.createElement('a')
-    element.setAttribute(
-        'href',
-        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
-    )
-    element.setAttribute('download', filename)
-    element.classList.add('d-none')
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
 }
 
 /**

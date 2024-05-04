@@ -41,9 +41,9 @@ async function onInstalled(details) {
         setDefaultOptions({
             linksDisplay: -1,
             flags: 'ig',
-            contextMenu: true,
             defaultFilter: true,
             sortLinks: true,
+            contextMenu: true,
             showUpdate: false,
         })
     )
@@ -207,7 +207,7 @@ function copyActiveElementText(ctx) {
     if (text?.length) {
         navigator.clipboard.writeText(text).then()
     } else {
-        console.warn('No Text to Copy.')
+        console.info('No Text to Copy.')
     }
 }
 
@@ -241,7 +241,7 @@ async function setDefaultOptions(defaultOptions) {
     // console.log('options, patterns:', options, patterns)
     options = options || {}
     if (!patterns) {
-        console.warn('Set patterns to empty array.')
+        console.info('Set patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }

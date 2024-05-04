@@ -50,6 +50,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Copy the Text from a Link via Context Menu
 *   Quick Filter Links with a Regular Expression
 *   Store Regular Expressions for Quick Filtering
+*   Import and Export Saved Regular Expressions
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
