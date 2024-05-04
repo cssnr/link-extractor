@@ -1,6 +1,11 @@
 // JS for options.html
 
-import { updateOptions } from './exports.js'
+import {
+    exportClick,
+    importChange,
+    importClick,
+    updateOptions,
+} from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
@@ -18,6 +23,11 @@ optionsForm.addEventListener('submit', (e) => e.preventDefault())
 optionsForm
     .querySelectorAll('input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
+
+// Data Import/Export
+document.getElementById('export-data').addEventListener('click', exportClick)
+document.getElementById('import-data').addEventListener('click', importClick)
+document.getElementById('import-input').addEventListener('change', importChange)
 
 /**
  * Initialize Options

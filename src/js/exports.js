@@ -63,3 +63,88 @@ export function updateOptions(options) {
         }
     }
 }
+
+/**
+ * Export Bookmark Click Callback
+ * @function exportClick
+ * @param {MouseEvent} event
+ */
+export async function exportClick(event) {
+    console.debug('exportClick:', event)
+    event.preventDefault()
+    const name = event.target.dataset.importName
+    console.debug('name:', name)
+    const display = event.target.dataset.importDisplay
+    console.debug('display:', display)
+    const data = await chrome.storage.sync.get()
+    console.debug('data:', data[name])
+    if (!data[name].length) {
+        return showToast(`No ${display} Found!`, 'warning')
+    }
+    const json = JSON.stringify(data[name])
+    textFileDownload(`${name}.txt`, json)
+}
+
+/**
+ * Import Bookmark Click Callback
+ * @function importClick
+ * @param {MouseEvent} event
+ */
+export async function importClick(event) {
+    console.debug('importClick:', event)
+    event.preventDefault()
+    const importInput = document.getElementById('import-input')
+    importInput.click()
+}
+
+/**
+ * Bookmark Input Change Callback
+ * @function importChange
+ * @param {InputEvent} event
+ */
+export async function importChange(event) {
+    console.debug('importChange:', event)
+    event.preventDefault()
+    const name = event.target.dataset.importName
+    console.debug('name:', name)
+    const display = event.target.dataset.importDisplay
+    console.debug('display:', display)
+    const importInput = document.getElementById('import-input')
+    const fileReader = new FileReader()
+    fileReader.onload = async function doImport() {
+        const result = JSON.parse(fileReader.result.toString())
+        console.debug('result:', result)
+        const data = await chrome.storage.sync.get()
+        console.debug('data:', data[name])
+        let count = 0
+        for (const pid of result) {
+            if (!data[name].includes(pid)) {
+                data[name].push(pid)
+                count += 1
+            }
+        }
+        showToast(`Imported ${count}/${result.length} ${display}.`, 'success')
+        await chrome.storage.sync.set(data)
+    }
+    fileReader.readAsText(importInput.files[0])
+}
+
+/**
+ * Text File Download
+ * @function textFileDownload
+ * @param {String} filename
+ * @param {String} text
+ */
+export function textFileDownload(filename, text) {
+    console.debug(`textFileDownload: ${filename}`)
+    const element = document.createElement('a')
+    element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    )
+    element.setAttribute('download', filename)
+    element.classList.add('d-none')
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+}

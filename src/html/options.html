@@ -73,15 +73,6 @@
         </div>
 
         <div class="form-check form-switch">
-            <input class="form-check-input form-control" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Enable Right Click Context Menu.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="defaultFilter">
             <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
                 Use Default Link Filtering
@@ -100,6 +91,15 @@
             </label>
         </div>
         <div class="form-check form-switch">
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="contextMenu">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Enable Right Click Context Menu.">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="showUpdate">
             <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
                 Show Release Notes on Update
@@ -111,15 +111,25 @@
     </form>
 
     <hr>
-    <form id="filters-form">
+    <form id="filters-form" class="mb-1">
         <label class="form-label" for="add-filter"><i class="fa-solid fa-filter me-2"></i> Filters</label>
-        <div class="input-group mb-3">
+        <div class="input-group">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
             <button class="btn btn-outline-success" type="submit" id="add-filter-btn">
                 Add <i class="fa-solid fa-plus ms-1"></i>
             </button>
         </div>
     </form>
+
+    <div class="mb-1">
+        <input type="file" id="import-input" data-import-name="patterns" data-import-display="Filters" style="display: none;" />
+        <a id="import-data" data-import-name="patterns" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
+            Import <i class="fa-solid fa-file-arrow-up ms-1"></i></a>
+        <span class="ms-2 me-1">/</span>
+        <a id="export-data" data-import-name="patterns" data-import-display="Filters" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
+            Export <i class="fa-solid fa-file-arrow-down ms-1"></i></a>
+    </div>
+
     <table id="filters-table" class="table table-sm table-hover bg-transparent">
         <caption>
             Saved Filters

@@ -66,7 +66,7 @@ function createFilterLink(number, value = '') {
 }
 
 /**
- * Popup Links Callback
+ * Popup Links Click Callback
  * Firefox requires a call to window.close()
  * @function popupLinks
  * @param {MouseEvent} event
@@ -75,12 +75,15 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    // console.debug(`anchor.href: ${anchor.href}`)
+    // console.debug(`anchor.href: ${anchor.href}`, anchor)
     let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
         return window.close()
-    } else if (anchor.href.startsWith('http')) {
+    } else if (
+        anchor.href.startsWith('http') ||
+        anchor.href.startsWith('chrome-extension')
+    ) {
         url = anchor.href
     } else {
         url = chrome.runtime.getURL(anchor.href)
@@ -91,7 +94,7 @@ async function popupLinks(event) {
 }
 
 /**
- * Filter Form Callback
+ * Filter Form Submit Callback
  * @function formSubmit
  * @param {SubmitEvent} event
  */
@@ -116,7 +119,7 @@ async function filterForm(event) {
 }
 
 /**
- * Links Form Callback
+ * Links Form Submit Callback
  * @function linksForm
  * @param {SubmitEvent} event
  */
@@ -149,7 +152,7 @@ async function linksForm(event) {
 }
 
 /**
- * Update Links Callback
+ * Update Links Input Callback
  * @function updateLinks
  * @param {InputEvent} event
  */
