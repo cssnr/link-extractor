@@ -3,26 +3,41 @@
 /**
  * Inject extract.js to Tab and Open links.html with params
  * @function processLinks
- * @param {String} filter Regex Filter
- * @param {Boolean} domains Only Domains
- * @param {Boolean} selection Only Selection
+ * @param {String} [filter] Regex Filter
+ * @param {Boolean} [domains] Only Domains
+ * @param {Boolean} [selection] Only Selection
+ * @param {chrome.tabs[]} tabs Tabs for Extraction
  */
 export async function injectTab({
     filter = null,
     domains = false,
     selection = false,
+    tabs = [],
 } = {}) {
-    console.log('injectTab:', filter, domains, selection)
+    console.log('injectTab:', filter, domains, selection, tabs)
+    const tabIds = []
 
-    // Get Current Tab
-    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    console.debug(`tab: ${tab.id}`, tab)
+    // Extract tabIds from tabs
+    if (!tabs.length) {
+        const [tab] = await chrome.tabs.query({
+            currentWindow: true,
+            active: true,
+        })
+        console.debug(`tab: ${tab.id}`, tab)
+        tabIds.push(tab.id)
+    } else {
+        for (const tab of tabs) {
+            console.debug(`tab: ${tab.id}`, tab)
+            tabIds.push(tab.id)
+        }
+    }
+    console.log('tabIds:', tabIds)
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('../html/links.html'))
 
     // Set URL searchParams
-    url.searchParams.set('tab', tab.id.toString())
+    url.searchParams.set('tabs', tabIds.join(','))
     if (filter) {
         url.searchParams.set('filter', filter)
     }
@@ -34,11 +49,13 @@ export async function injectTab({
     }
 
     // Inject extract.js which listens for messages
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['/js/extract.js'],
-    })
-
+    for (const tab of tabIds) {
+        console.debug(`injecting tab.id" ${tab}`)
+        await chrome.scripting.executeScript({
+            target: { tabId: tab },
+            files: ['/js/extract.js'],
+        })
+    }
     // Open Tab to links.html with desired params
     console.debug(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })

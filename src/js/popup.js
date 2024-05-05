@@ -19,6 +19,16 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
+document.getElementById('allTabs').addEventListener('click', allTabs)
+
+async function allTabs(event) {
+    console.debug('allTabs:', event)
+    event.preventDefault()
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    console.debug('tabs:', tabs)
+    await injectTab({ tabs: tabs })
+}
+
 /**
  * Initialize Popup
  * @function initOptions
