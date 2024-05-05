@@ -19,15 +19,15 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
-document.getElementById('allTabs').addEventListener('click', allTabs)
-
-async function allTabs(event) {
-    console.debug('allTabs:', event)
-    event.preventDefault()
-    const tabs = await chrome.tabs.query({ highlighted: true })
-    console.debug('tabs:', tabs)
-    await injectTab({ tabs: tabs })
-}
+// document.getElementById('allTabs').addEventListener('click', allTabs)
+//
+// async function allTabs(event) {
+//     console.debug('allTabs:', event)
+//     event.preventDefault()
+//     const tabs = await chrome.tabs.query({ highlighted: true })
+//     console.debug('tabs:', tabs)
+//     await injectTab({ tabs: tabs })
+// }
 
 /**
  * Initialize Popup
@@ -55,6 +55,12 @@ async function initPopup() {
     document.getElementById('homepage_url').href = manifest.homepage_url
 
     document.getElementById('filter-input').focus()
+
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    console.debug('tabs:', tabs)
+    if (tabs.length > 1) {
+        console.info('Multiple Tabs Selected')
+    }
 }
 
 /**
@@ -120,8 +126,13 @@ async function filterForm(event) {
         filter = filterInput.value
     }
     const domains = event.target.dataset.filter === 'domains'
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    console.debug('tabs:', tabs)
+    if (tabs.length > 1) {
+        console.info('Multiple Tabs Selected')
+    }
     try {
-        await injectTab({ filter, domains })
+        await injectTab({ filter, domains, tabs })
         window.close()
     } catch (e) {
         console.log('e:', e)
