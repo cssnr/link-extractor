@@ -239,7 +239,7 @@ function extractURLs(text) {
 
 /**
  * Grant Permissions Click Callback
- * Shared with Options and Home
+ * Promise from requestPerms is ignored so we can close the popup immediately
  * @function grantPerms
  * @param {MouseEvent} event
  */

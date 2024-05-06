@@ -254,6 +254,28 @@ export async function checkPerms() {
 }
 
 /**
+ * Revoke Permissions Click Callback
+ * NOTE: For many reasons Chrome will determine host_perms are required and
+ *       will ask for them at install time and not allow them to be revoked
+ * @function revokePerms
+ * @param {Event} event
+ */
+export async function revokePerms(event) {
+    console.debug('revokePerms:', event)
+    const permissions = await chrome.permissions.getAll()
+    console.debug('permissions:', permissions)
+    try {
+        await chrome.permissions.remove({
+            origins: permissions.origins,
+        })
+        await checkPerms()
+    } catch (e) {
+        console.log(e)
+        showToast(e.toString(), 'danger')
+    }
+}
+
+/**
  * Permissions On Added Callback
  * @param permissions
  */
@@ -268,22 +290,5 @@ export async function onAdded(permissions) {
  */
 export async function onRemoved(permissions) {
     console.debug('onRemoved', permissions)
-    await checkPerms()
-}
-
-/**
- * Revoke Permissions Button Click Callback
- * NOTE: For many reasons Chrome will determine host_perms are required and
- *       will ask for them at install time and not allow them to be revoked
- * @function revokePerms
- * @param {Event} event
- */
-export async function revokePerms(event) {
-    console.debug('revokePerms:', event)
-    const permissions = await chrome.permissions.getAll()
-    console.log('permissions:', permissions)
-    await chrome.permissions.remove({
-        origins: permissions.origins,
-    })
     await checkPerms()
 }

@@ -69,7 +69,7 @@ function showToast(message, type = 'success') {
  * @param {Function} fn
  * @param {Number} timeout
  */
-function debounce(fn, timeout = 300) {
+function debounce(fn, timeout = 250) {
     let timeoutID
     return (...args) => {
         clearTimeout(timeoutID)

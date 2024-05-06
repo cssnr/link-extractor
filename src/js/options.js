@@ -320,7 +320,6 @@ async function resetForm(event) {
 
 /**
  * Grant Permissions Click Callback
- * Shared with Options and Home
  * @function grantPerms
  * @param {MouseEvent} event
  */
