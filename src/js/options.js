@@ -1,20 +1,26 @@
 // JS for options.html
 
 import {
+    checkPerms,
+    grantPerms,
     exportClick,
     importChange,
     importClick,
+    onAdded,
     saveOptions,
     updateOptions,
 } from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
+chrome.permissions.onAdded.addListener(onAdded)
+
 document.addEventListener('DOMContentLoaded', initOptions)
 document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
+document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -53,6 +59,7 @@ async function initOptions() {
     document.getElementById('extractKey').textContent =
         commands.find((x) => x.name === 'extract').shortcut || 'Not Set'
 
+    await checkPerms()
     document.getElementById('add-filter').focus()
 }
 

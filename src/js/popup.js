@@ -1,11 +1,18 @@
 // JS for popup.html
 
-import { injectTab, saveOptions, updateOptions } from './exports.js'
+import {
+    checkPerms,
+    grantPerms,
+    injectTab,
+    saveOptions,
+    updateOptions,
+} from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
@@ -61,6 +68,8 @@ async function initPopup() {
     if (tabs.length > 1) {
         console.info('Multiple Tabs Selected')
     }
+
+    await checkPerms()
 }
 
 /**

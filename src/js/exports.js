@@ -215,3 +215,65 @@ export function textFileDownload(filename, text) {
     element.click()
     document.body.removeChild(element)
 }
+
+/**
+ * Grant Permissions Click Callback
+ * Shared with Options and Home
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+export async function grantPerms(event) {
+    console.debug('grantPerms:', event)
+    requestPerms()
+    const anchor = event.target.closest('a')
+    if (anchor.dataset.hasOwnProperty('close')) {
+        window.close()
+    }
+    await checkPerms()
+}
+
+/**
+ * Request Host Permissions
+ * @function requestPerms
+ * @return {chrome.permissions.request}
+ */
+export async function requestPerms() {
+    return await chrome.permissions.request({
+        origins: ['*://*/*'],
+    })
+}
+
+/**
+ * Check Host Permissions
+ * @function checkPerms
+ * @return {Boolean}
+ */
+export async function checkPerms() {
+    const hasPerms = await chrome.permissions.contains({
+        origins: ['*://*/*'],
+    })
+    console.debug('checkPerms:', hasPerms)
+    // Firefox still uses DOM Based Background Scripts
+    if (typeof document === 'undefined') {
+        return hasPerms
+    }
+    const hasPermsEl = document.querySelectorAll('.has-perms')
+    const grantPermsEl = document.querySelectorAll('.grant-perms')
+    if (hasPerms) {
+        hasPermsEl.forEach((el) => el.classList.remove('d-none'))
+        grantPermsEl.forEach((el) => el.classList.add('d-none'))
+    } else {
+        grantPermsEl.forEach((el) => el.classList.remove('d-none'))
+        hasPermsEl.forEach((el) => el.classList.add('d-none'))
+    }
+    return hasPerms
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    await checkPerms()
+}

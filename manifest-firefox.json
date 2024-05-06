@@ -1,4 +1,5 @@
 {
+  "optional_permissions": ["*://*/*"],
   "background": {
     "scripts": ["js/service-worker.js"]
   },
