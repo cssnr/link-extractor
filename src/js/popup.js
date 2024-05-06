@@ -2,8 +2,8 @@
 
 import {
     checkPerms,
-    grantPerms,
     injectTab,
+    requestPerms,
     saveOptions,
     updateOptions,
 } from './exports.js'
@@ -235,4 +235,16 @@ function extractURLs(text) {
         urls.push(match)
     }
     return urls
+}
+
+/**
+ * Grant Permissions Click Callback
+ * Shared with Options and Home
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+export async function grantPerms(event) {
+    console.debug('grantPerms:', event)
+    requestPerms()
+    window.close()
 }

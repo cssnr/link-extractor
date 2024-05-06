@@ -2,17 +2,20 @@
 
 import {
     checkPerms,
-    grantPerms,
     exportClick,
     importChange,
     importClick,
     onAdded,
+    onRemoved,
+    requestPerms,
+    revokePerms,
     saveOptions,
     updateOptions,
 } from './exports.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 chrome.permissions.onAdded.addListener(onAdded)
+chrome.permissions.onRemoved.addListener(onRemoved)
 
 document.addEventListener('DOMContentLoaded', initOptions)
 document.addEventListener('blur', filterClick)
@@ -21,15 +24,16 @@ document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
-document
-    .querySelectorAll('[data-bs-toggle="tooltip"]')
-    .forEach((el) => new bootstrap.Tooltip(el))
+document.getElementById('revoke-perms').addEventListener('click', revokePerms)
 
 const optionsForm = document.getElementById('options-form')
 optionsForm.addEventListener('submit', (e) => e.preventDefault())
 optionsForm
     .querySelectorAll('input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
 // Data Import/Export
 document.getElementById('export-data').addEventListener('click', exportClick)
@@ -312,4 +316,15 @@ async function resetForm(event) {
     input.classList.remove('is-invalid')
     input.focus()
     await saveOptions(event)
+}
+
+/**
+ * Grant Permissions Click Callback
+ * Shared with Options and Home
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+export async function grantPerms(event) {
+    console.debug('grantPerms:', event)
+    await requestPerms()
 }
