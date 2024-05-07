@@ -135,13 +135,8 @@ async function filterForm(event) {
         filter = filterInput.value
     }
     const domains = event.target.dataset.filter === 'domains'
-    const tabs = await chrome.tabs.query({ highlighted: true })
-    console.debug('tabs:', tabs)
-    if (tabs.length > 1) {
-        console.info('Multiple Tabs Selected')
-    }
     try {
-        await injectTab({ filter, domains, tabs })
+        await injectTab({ filter, domains })
         window.close()
     } catch (e) {
         console.log('e:', e)

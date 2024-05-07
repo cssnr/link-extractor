@@ -12,12 +12,12 @@ export async function injectTab({
     filter = null,
     domains = false,
     selection = false,
-    tabs = [],
 } = {}) {
-    console.log('injectTab:', filter, domains, selection, tabs)
+    console.log('injectTab:', filter, domains, selection)
     const tabIds = []
 
     // Extract tabIds from tabs
+    const tabs = await chrome.tabs.query({ highlighted: true })
     if (!tabs.length) {
         const [tab] = await chrome.tabs.query({
             currentWindow: true,
