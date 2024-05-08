@@ -124,6 +124,7 @@ function updateTable(data) {
     data.forEach((value, i) => {
         const row = tbody.insertRow()
         row.setAttribute('draggable', 'true')
+        row.id = i
 
         const button = document.createElement('a')
         const svg = document
@@ -155,6 +156,8 @@ function updateTable(data) {
 
         tbody.addEventListener('dragstart', dragStart)
         tbody.addEventListener('dragover', dragOver)
+        tbody.addEventListener('dragleave', dragEnd)
+        tbody.addEventListener('dragend', dragEnd)
         tbody.addEventListener('drop', drop)
     })
 }
@@ -163,15 +166,39 @@ function dragStart(event) {
     console.log('dragStart:', event)
 }
 
+let lastId = -1
+
 function dragOver(event) {
-    console.log('dragOver')
     event.preventDefault()
+    const tr = event.target.closest('tr')
+    // console.log('tr:', tr.id)
+    if (tr.id !== lastId) {
+        console.log(`Add: ${tr.id} -- Remove: ${lastId}`)
+        const last = document.getElementById(lastId)
+        last?.classList.remove('table-group-divider')
+        tr.classList.add('table-group-divider')
+        lastId = tr.id
+    }
     // console.log('onDragOver:', event)
+}
+
+// function dragLeave(event) {
+//     console.log('dragEnd:', event)
+// }
+
+function dragEnd(event) {
+    console.log('dragEnd:', event)
+    const last = document.getElementById(lastId)
+    last?.classList.remove('table-group-divider')
+    lastId = -1
 }
 
 function drop(event) {
     console.log('drop:', event)
     event.preventDefault()
+    const tr = event.target.closest('tr')
+    tr.classList.remove('table-group-divider')
+    lastId = -1
 }
 
 /**
