@@ -123,6 +123,7 @@ function updateTable(data) {
 
     data.forEach((value, i) => {
         const row = tbody.insertRow()
+        row.setAttribute('draggable', 'true')
 
         const button = document.createElement('a')
         const svg = document
@@ -145,7 +146,32 @@ function updateTable(data) {
         cell2.classList.add('text-break')
         cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
+
+        const cell3 = row.insertCell()
+        cell3.classList.add('text-center', 'align-middle', 'link-body-emphasis')
+        cell3.setAttribute('role', 'button')
+        const grip = document.querySelector('.fa-solid.fa-grip').cloneNode(true)
+        cell3.appendChild(grip)
+
+        tbody.addEventListener('dragstart', dragStart)
+        tbody.addEventListener('dragover', dragOver)
+        tbody.addEventListener('drop', drop)
     })
+}
+
+function dragStart(event) {
+    console.log('dragStart:', event)
+}
+
+function dragOver(event) {
+    console.log('dragOver')
+    event.preventDefault()
+    // console.log('onDragOver:', event)
+}
+
+function drop(event) {
+    console.log('drop:', event)
+    event.preventDefault()
 }
 
 /**
