@@ -1,11 +1,18 @@
 // JS for popup.html
 
-import { injectTab, saveOptions, updateOptions } from './exports.js'
+import {
+    checkPerms,
+    injectTab,
+    requestPerms,
+    saveOptions,
+    updateOptions,
+} from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
@@ -18,6 +25,16 @@ document
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
+
+// document.getElementById('allTabs').addEventListener('click', allTabs)
+//
+// async function allTabs(event) {
+//     console.debug('allTabs:', event)
+//     event.preventDefault()
+//     const tabs = await chrome.tabs.query({ highlighted: true })
+//     console.debug('tabs:', tabs)
+//     await injectTab({ tabs: tabs })
+// }
 
 /**
  * Initialize Popup
@@ -45,6 +62,14 @@ async function initPopup() {
     document.getElementById('homepage_url').href = manifest.homepage_url
 
     document.getElementById('filter-input').focus()
+
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    console.debug('tabs:', tabs)
+    if (tabs.length > 1) {
+        console.info('Multiple Tabs Selected')
+    }
+
+    await checkPerms()
 }
 
 /**
@@ -205,4 +230,16 @@ function extractURLs(text) {
         urls.push(match)
     }
     return urls
+}
+
+/**
+ * Grant Permissions Click Callback
+ * Promise from requestPerms is ignored so we can close the popup immediately
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+export async function grantPerms(event) {
+    console.debug('grantPerms:', event)
+    requestPerms()
+    window.close()
 }

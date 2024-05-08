@@ -39,18 +39,34 @@ const dtOptions = {
 async function initLinks() {
     console.log('initLinks: urlParams:', urlParams)
     try {
-        const tabId = parseInt(urlParams.get('tab'))
+        const tabIds = urlParams.get('tabs')
+        const tabs = tabIds.split(',')
+        console.log('tabs:', tabs)
         const selection = urlParams.has('selection')
-        console.debug(`tabId: ${tabId}, selection: ${selection}`)
+        // console.debug(`tabId: ${tabId}, selection: ${selection}`)
 
-        if (tabId) {
-            const action = selection ? 'selection' : 'all'
-            const links = await chrome.tabs.sendMessage(tabId, action)
-            await processLinks(links)
+        // TODO: Populate Links to links then processLinks
+        const allLinks = []
+        if (tabs.length) {
+            console.log('processing tabs:', tabs)
+            // const tabId = parseInt(tabs[0])
+            for (const tabId of tabs) {
+                console.log('tabId:', tabId)
+                const action = selection ? 'selection' : 'all'
+                console.log('action:', action)
+                const links = await chrome.tabs.sendMessage(
+                    parseInt(tabId),
+                    action
+                )
+                allLinks.push(...links)
+                // await processLinks(links)
+            }
         } else {
             const { links } = await chrome.storage.local.get(['links'])
-            await processLinks(links)
+            allLinks.push(...links)
+            // await processLinks(links)
         }
+        await processLinks(allLinks)
     } catch (e) {
         console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')

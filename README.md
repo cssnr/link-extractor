@@ -45,6 +45,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Extract All Links and Domains from Any Site
 *   Extract Links from Selected Text on any Site
 *   Extract Links from Clipboard or Any Text
+*   Extract Links from All Selected Tabs
 *   Open Multiple Links in Tabs from Text
 *   Download Links and Domains as a Text File
 *   Copy the Text from a Link via Context Menu

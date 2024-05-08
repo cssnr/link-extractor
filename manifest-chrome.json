@@ -1,4 +1,5 @@
 {
+  "optional_host_permissions": ["*://*/*"],
   "background": {
     "service_worker": "js/service-worker.js"
   },

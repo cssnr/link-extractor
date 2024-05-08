@@ -3,9 +3,10 @@
 /**
  * Inject extract.js to Tab and Open links.html with params
  * @function processLinks
- * @param {String} filter Regex Filter
- * @param {Boolean} domains Only Domains
- * @param {Boolean} selection Only Selection
+ * @param {String} [filter] Regex Filter
+ * @param {Boolean} [domains] Only Domains
+ * @param {Boolean} [selection] Only Selection
+ * @param {chrome.tabs[]} tabs Tabs for Extraction
  */
 export async function injectTab({
     filter = null,
@@ -13,16 +14,30 @@ export async function injectTab({
     selection = false,
 } = {}) {
     console.log('injectTab:', filter, domains, selection)
+    const tabIds = []
 
-    // Get Current Tab
-    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    console.debug(`tab: ${tab.id}`, tab)
+    // Extract tabIds from tabs
+    const tabs = await chrome.tabs.query({ highlighted: true })
+    if (!tabs.length) {
+        const [tab] = await chrome.tabs.query({
+            currentWindow: true,
+            active: true,
+        })
+        console.debug(`tab: ${tab.id}`, tab)
+        tabIds.push(tab.id)
+    } else {
+        for (const tab of tabs) {
+            console.debug(`tab: ${tab.id}`, tab)
+            tabIds.push(tab.id)
+        }
+    }
+    console.log('tabIds:', tabIds)
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('../html/links.html'))
 
     // Set URL searchParams
-    url.searchParams.set('tab', tab.id.toString())
+    url.searchParams.set('tabs', tabIds.join(','))
     if (filter) {
         url.searchParams.set('filter', filter)
     }
@@ -34,11 +49,13 @@ export async function injectTab({
     }
 
     // Inject extract.js which listens for messages
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['/js/extract.js'],
-    })
-
+    for (const tab of tabIds) {
+        console.debug(`injecting tab.id: ${tab}`)
+        await chrome.scripting.executeScript({
+            target: { tabId: tab },
+            files: ['/js/extract.js'],
+        })
+    }
     // Open Tab to links.html with desired params
     console.debug(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })
@@ -113,10 +130,9 @@ export async function exportClick(event) {
     event.preventDefault()
     const name = event.target.dataset.importName
     console.debug('name:', name)
-    const display = event.target.dataset.importDisplay
-    console.debug('display:', display)
+    const display = event.target.dataset.importDisplay || name
     const data = await chrome.storage.sync.get()
-    console.debug('data:', data[name])
+    // console.debug('data:', data[name])
     if (!data[name].length) {
         return showToast(`No ${display} Found!`, 'warning')
     }
@@ -146,8 +162,8 @@ export async function importChange(event) {
     event.preventDefault()
     const name = event.target.dataset.importName
     console.debug('name:', name)
-    const display = event.target.dataset.importDisplay
-    console.debug('display:', display)
+    const display = event.target.dataset.importDisplay || name
+    // console.debug('display:', display)
     const importInput = document.getElementById('import-input')
     if (!importInput.files?.length) {
         return console.debug('No importInput.files', importInput)
@@ -197,4 +213,81 @@ export function textFileDownload(filename, text) {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
+}
+
+/**
+ * Request Host Permissions
+ * @function requestPerms
+ * @return {chrome.permissions.request}
+ */
+export async function requestPerms() {
+    return await chrome.permissions.request({
+        origins: ['*://*/*'],
+    })
+}
+
+/**
+ * Check Host Permissions
+ * @function checkPerms
+ * @return {Boolean}
+ */
+export async function checkPerms() {
+    const hasPerms = await chrome.permissions.contains({
+        origins: ['*://*/*'],
+    })
+    console.debug('checkPerms:', hasPerms)
+    // Firefox still uses DOM Based Background Scripts
+    if (typeof document === 'undefined') {
+        return hasPerms
+    }
+    const hasPermsEl = document.querySelectorAll('.has-perms')
+    const grantPermsEl = document.querySelectorAll('.grant-perms')
+    if (hasPerms) {
+        hasPermsEl.forEach((el) => el.classList.remove('d-none'))
+        grantPermsEl.forEach((el) => el.classList.add('d-none'))
+    } else {
+        grantPermsEl.forEach((el) => el.classList.remove('d-none'))
+        hasPermsEl.forEach((el) => el.classList.add('d-none'))
+    }
+    return hasPerms
+}
+
+/**
+ * Revoke Permissions Click Callback
+ * NOTE: For many reasons Chrome will determine host_perms are required and
+ *       will ask for them at install time and not allow them to be revoked
+ * @function revokePerms
+ * @param {Event} event
+ */
+export async function revokePerms(event) {
+    console.debug('revokePerms:', event)
+    const permissions = await chrome.permissions.getAll()
+    console.debug('permissions:', permissions)
+    try {
+        await chrome.permissions.remove({
+            origins: permissions.origins,
+        })
+        await checkPerms()
+    } catch (e) {
+        console.log(e)
+        showToast(e.toString(), 'danger')
+    }
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    await checkPerms()
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onRemoved(permissions) {
+    console.debug('onRemoved', permissions)
+    await checkPerms()
 }
