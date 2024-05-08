@@ -50,7 +50,7 @@ export async function injectTab({
 
     // Inject extract.js which listens for messages
     for (const tab of tabIds) {
-        console.debug(`injecting tab.id" ${tab}`)
+        console.debug(`injecting tab.id: ${tab}`)
         await chrome.scripting.executeScript({
             target: { tabId: tab },
             files: ['/js/extract.js'],
@@ -130,10 +130,9 @@ export async function exportClick(event) {
     event.preventDefault()
     const name = event.target.dataset.importName
     console.debug('name:', name)
-    const display = event.target.dataset.importDisplay
-    console.debug('display:', display)
+    const display = event.target.dataset.importDisplay || name
     const data = await chrome.storage.sync.get()
-    console.debug('data:', data[name])
+    // console.debug('data:', data[name])
     if (!data[name].length) {
         return showToast(`No ${display} Found!`, 'warning')
     }
@@ -163,8 +162,8 @@ export async function importChange(event) {
     event.preventDefault()
     const name = event.target.dataset.importName
     console.debug('name:', name)
-    const display = event.target.dataset.importDisplay
-    console.debug('display:', display)
+    const display = event.target.dataset.importDisplay || name
+    // console.debug('display:', display)
     const importInput = document.getElementById('import-input')
     if (!importInput.files?.length) {
         return console.debug('No importInput.files', importInput)
