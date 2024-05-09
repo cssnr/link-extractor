@@ -176,11 +176,11 @@ function updateLinks(event) {
     text = text.filter((str) => str !== '')
     const urls = extractURLs(event.target.value)
     document
-        .querySelectorAll('.parse-lines')
-        .forEach((el) => updateElements(el, text))
-    document
         .querySelectorAll('.parse-links')
         .forEach((el) => updateElements(el, urls))
+    document
+        .querySelectorAll('.parse-lines')
+        .forEach((el) => updateElements(el, text))
 }
 
 /**
@@ -217,7 +217,7 @@ function extractURLs(text) {
         // urls += match + '\n'
         urls.push(match)
     }
-    return urls
+    return [...new Set(urls)]
 }
 
 /**
