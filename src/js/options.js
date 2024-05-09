@@ -124,7 +124,6 @@ function updateTable(data) {
     filtersTbody.innerHTML = ''
     data.forEach((value, i) => {
         const row = filtersTbody.insertRow()
-        row.setAttribute('draggable', 'true')
         // TODO: Use Better ID or Dataset
         row.id = i
 
@@ -159,8 +158,9 @@ function updateTable(data) {
         const grip = faGrip.cloneNode(true)
         grip.title = 'Drag'
         cell3.appendChild(grip)
+        cell3.setAttribute('draggable', 'true')
 
-        filtersTbody.addEventListener('dragstart', dragStart)
+        cell3.addEventListener('dragstart', dragStart)
         filtersTbody.addEventListener('dragover', dragOver)
         filtersTbody.addEventListener('dragleave', dragEnd)
         filtersTbody.addEventListener('dragend', dragEnd)
@@ -174,7 +174,7 @@ let last = -1
 function dragStart(event) {
     console.debug('dragStart:', event)
     editing = false
-    row = event.target
+    row = event.target.closest('tr')
 }
 
 function dragOver(event) {

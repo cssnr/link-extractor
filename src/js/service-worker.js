@@ -36,7 +36,7 @@ async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
     const installURL = 'https://link-extractor.cssnr.com/docs/'
-    const uninstallURL = 'https://link-extractor.cssnr.com/uninstall/'
+    const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await Promise.resolve(
         setDefaultOptions({
             linksDisplay: -1,
@@ -51,12 +51,12 @@ async function onInstalled(details) {
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
+    const manifest = chrome.runtime.getManifest()
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
-            const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
@@ -64,7 +64,9 @@ async function onInstalled(details) {
             }
         }
     }
-    await chrome.runtime.setUninstallURL(uninstallURL)
+    uninstallURL.searchParams.append('version', manifest.version)
+    console.log('uninstallURL:', uninstallURL.href)
+    await chrome.runtime.setUninstallURL(uninstallURL.href)
 }
 
 /**
