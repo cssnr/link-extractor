@@ -35,7 +35,6 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
-// Data Import/Export
 document.getElementById('export-data').addEventListener('click', exportClick)
 document.getElementById('import-data').addEventListener('click', importClick)
 document.getElementById('import-input').addEventListener('change', importChange)

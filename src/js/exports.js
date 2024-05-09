@@ -6,7 +6,6 @@
  * @param {String} [filter] Regex Filter
  * @param {Boolean} [domains] Only Domains
  * @param {Boolean} [selection] Only Selection
- * @param {chrome.tabs[]} tabs Tabs for Extraction
  */
 export async function injectTab({
     filter = null,
@@ -14,9 +13,9 @@ export async function injectTab({
     selection = false,
 } = {}) {
     console.log('injectTab:', filter, domains, selection)
-    const tabIds = []
 
     // Extract tabIds from tabs
+    const tabIds = []
     const tabs = await chrome.tabs.query({ highlighted: true })
     if (!tabs.length) {
         const [tab] = await chrome.tabs.query({
@@ -56,6 +55,7 @@ export async function injectTab({
             files: ['/js/extract.js'],
         })
     }
+
     // Open Tab to links.html with desired params
     console.debug(`url: ${url.toString()}`)
     await chrome.tabs.create({ active: true, url: url.toString() })

@@ -4,6 +4,7 @@ import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
+
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
@@ -12,7 +13,6 @@ document
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const urlParams = new URLSearchParams(window.location.search)
-
 const dtOptions = {
     info: false,
     processing: true,
