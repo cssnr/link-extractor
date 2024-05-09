@@ -40,6 +40,8 @@ document.getElementById('export-data').addEventListener('click', exportClick)
 document.getElementById('import-data').addEventListener('click', importClick)
 document.getElementById('import-input').addEventListener('change', importChange)
 
+const filtersTbody = document.querySelector('#filters-table tbody')
+
 /**
  * Initialize Options
  * @function initOptions
@@ -118,11 +120,11 @@ async function addFilter(event) {
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbody = document.querySelector('#filters-table tbody')
-    tbody.innerHTML = ''
+    // const tbody = document.querySelector('#filters-table tbody')
+    filtersTbody.innerHTML = ''
 
     data.forEach((value, i) => {
-        const row = tbody.insertRow()
+        const row = filtersTbody.insertRow()
         row.setAttribute('draggable', 'true')
         row.id = i
 
@@ -154,30 +156,31 @@ function updateTable(data) {
         const grip = document.querySelector('.fa-solid.fa-grip').cloneNode(true)
         cell3.appendChild(grip)
 
-        tbody.addEventListener('dragstart', dragStart)
-        tbody.addEventListener('dragover', dragOver)
-        tbody.addEventListener('dragleave', dragEnd)
-        tbody.addEventListener('dragend', dragEnd)
-        tbody.addEventListener('drop', drop)
+        filtersTbody.addEventListener('dragstart', dragStart)
+        filtersTbody.addEventListener('dragover', dragOver)
+        filtersTbody.addEventListener('dragleave', dragEnd)
+        filtersTbody.addEventListener('dragend', dragEnd)
+        filtersTbody.addEventListener('drop', drop)
     })
 }
 
+let row
+let last = -1
+
 function dragStart(event) {
     console.log('dragStart:', event)
+    row = event.target
 }
-
-let lastId = -1
 
 function dragOver(event) {
     event.preventDefault()
     const tr = event.target.closest('tr')
     // console.log('tr:', tr.id)
-    if (tr.id !== lastId) {
-        console.log(`Add: ${tr.id} -- Remove: ${lastId}`)
-        const last = document.getElementById(lastId)
-        last?.classList.remove('table-group-divider')
+    if (tr.id !== last) {
+        const el = document.getElementById(last)
+        el?.classList.remove('table-group-divider')
         tr.classList.add('table-group-divider')
-        lastId = tr.id
+        last = tr.id
     }
     // console.log('onDragOver:', event)
 }
@@ -188,17 +191,33 @@ function dragOver(event) {
 
 function dragEnd(event) {
     console.log('dragEnd:', event)
-    const last = document.getElementById(lastId)
-    last?.classList.remove('table-group-divider')
-    lastId = -1
+    const el = document.getElementById(last)
+    el?.classList.remove('table-group-divider')
+    last = -1
 }
 
-function drop(event) {
+async function drop(event) {
     console.log('drop:', event)
     event.preventDefault()
     const tr = event.target.closest('tr')
     tr.classList.remove('table-group-divider')
-    lastId = -1
+    last = -1
+    console.log('row:', row)
+    console.info(`Swap: ${row.id} with: ${tr.id}`)
+    if (row.id === tr.id) {
+        return console.debug('return on same row drop')
+    }
+    filtersTbody.removeChild(row)
+    filtersTbody.insertBefore(row, tr)
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    console.debug('patterns:', patterns)
+    // let s = parseInt(row.id)
+    // let d = parseInt(tr.id)
+    // const temp = patterns[s]
+    // patterns[s] = patterns[d]
+    // patterns[d] = temp
+    // console.debug('patterns:', patterns)
+    // await chrome.storage.sync.set({ patterns })
 }
 
 /**
