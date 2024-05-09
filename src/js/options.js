@@ -174,20 +174,15 @@ function dragStart(event) {
 
 function dragOver(event) {
     event.preventDefault()
+    // console.log('dragOver:', event)
     const tr = event.target.closest('tr')
-    // console.log('tr:', tr.id)
     if (tr.id !== last) {
         const el = document.getElementById(last)
         el?.classList.remove('table-group-divider')
         tr.classList.add('table-group-divider')
         last = tr.id
     }
-    // console.log('onDragOver:', event)
 }
-
-// function dragLeave(event) {
-//     console.log('dragEnd:', event)
-// }
 
 function dragEnd(event) {
     console.log('dragEnd:', event)
@@ -211,13 +206,31 @@ async function drop(event) {
     filtersTbody.insertBefore(row, tr)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     console.debug('patterns:', patterns)
-    // let s = parseInt(row.id)
-    // let d = parseInt(tr.id)
-    // const temp = patterns[s]
-    // patterns[s] = patterns[d]
-    // patterns[d] = temp
-    // console.debug('patterns:', patterns)
-    // await chrome.storage.sync.set({ patterns })
+    let source = parseInt(row.id)
+    let target = parseInt(tr.id)
+    if (source < target) {
+        target -= 1
+    }
+    console.debug(`source: ${source} -- target: ${target}`)
+    array_move(patterns, source, target)
+    console.debug('patterns:', patterns)
+    await chrome.storage.sync.set({ patterns })
+}
+
+/**
+ * WARNING: COPIED FROM STACK
+ * @param {Array} arr
+ * @param {Number} old_index
+ * @param {Number} new_index
+ */
+function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        let k = new_index - arr.length + 1
+        while (k--) {
+            arr.push(undefined)
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
 }
 
 /**
