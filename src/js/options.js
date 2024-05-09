@@ -169,6 +169,7 @@ let last = -1
 
 function dragStart(event) {
     console.log('dragStart:', event)
+    editing = false
     row = event.target
 }
 
