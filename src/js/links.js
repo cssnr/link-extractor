@@ -4,6 +4,7 @@ import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
+
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
@@ -12,7 +13,6 @@ document
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const urlParams = new URLSearchParams(window.location.search)
-
 const dtOptions = {
     info: false,
     processing: true,
@@ -37,17 +37,15 @@ const dtOptions = {
  * @function initLinks
  */
 async function initLinks() {
-    console.log('initLinks: urlParams:', urlParams)
+    console.log('initLinks:', urlParams)
     try {
         const tabIds = urlParams.get('tabs')
-        const tabs = tabIds.split(',')
+        const tabs = tabIds?.split(',')
         console.log('tabs:', tabs)
         const selection = urlParams.has('selection')
-        // console.debug(`tabId: ${tabId}, selection: ${selection}`)
 
-        // TODO: Populate Links to links then processLinks
         const allLinks = []
-        if (tabs.length) {
+        if (tabs?.length) {
             console.log('processing tabs:', tabs)
             // const tabId = parseInt(tabs[0])
             for (const tabId of tabs) {

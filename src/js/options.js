@@ -35,22 +35,24 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
-// Data Import/Export
 document.getElementById('export-data').addEventListener('click', exportClick)
 document.getElementById('import-data').addEventListener('click', importClick)
 document.getElementById('import-input').addEventListener('change', importChange)
+
+const filtersTbody = document.querySelector('#filters-table tbody')
+const faTrash = document.querySelector('.d-none .fa-trash-can')
+const faGrip = document.querySelector('.d-none .fa-grip')
 
 /**
  * Initialize Options
  * @function initOptions
  */
 async function initOptions() {
-    // console.debug('initOptions')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.debug('options, patterns:', options, patterns)
+    console.debug('initOptions:', options, patterns)
     updateOptions(options)
     updateTable(patterns)
 
@@ -76,11 +78,12 @@ async function initOptions() {
 function onChanged(changes, namespace) {
     // console.debug('onChanged:', changes, namespace)
     for (let [key, { newValue }] of Object.entries(changes)) {
-        if (namespace === 'sync' && key === 'options') {
-            updateOptions(newValue)
-        }
-        if (namespace === 'sync' && key === 'patterns') {
-            updateTable(newValue)
+        if (namespace === 'sync') {
+            if (key === 'options') {
+                updateOptions(newValue)
+            } else if (key === 'patterns') {
+                updateTable(newValue)
+            }
         }
     }
 }
@@ -91,25 +94,25 @@ function onChanged(changes, namespace) {
  * @param {SubmitEvent} event
  */
 async function addFilter(event) {
-    // console.debug('addFilter:', event)
+    console.debug('addFilter:', event)
     event.preventDefault()
-    const element = document.querySelector('#filters-form input')
-    const filter = element.value
+    const input = event.target.elements[0]
+    const filter = input.value
     if (filter) {
         console.log(`filter: ${filter}`)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         if (!patterns.includes(filter)) {
             patterns.push(filter)
-            console.debug('patterns:', patterns)
+            // console.debug('patterns:', patterns)
             await chrome.storage.sync.set({ patterns })
             updateTable(patterns)
+            input.value = ''
             showToast(`Added Filter: ${filter}`)
         } else {
             showToast(`Filter Exists: ${filter}`, 'warning')
         }
     }
-    element.value = ''
-    element.focus()
+    input.focus()
 }
 
 /**
@@ -118,16 +121,16 @@ async function addFilter(event) {
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbody = document.querySelector('#filters-table tbody')
-    tbody.innerHTML = ''
-
+    filtersTbody.innerHTML = ''
     data.forEach((value, i) => {
-        const row = tbody.insertRow()
+        const row = filtersTbody.insertRow()
+        row.setAttribute('draggable', 'true')
+        // TODO: Use Better ID or Dataset
+        row.id = i
 
+        // TRASH
         const button = document.createElement('a')
-        const svg = document
-            .querySelector('.fa-regular.fa-trash-can')
-            .cloneNode(true)
+        const svg = faTrash.cloneNode(true)
         button.appendChild(svg)
         button.title = 'Delete'
         button.dataset.value = value
@@ -138,14 +141,99 @@ function updateTable(data) {
         cell1.classList.add('text-center', 'align-middle')
         // cell1.dataset.idx = i.toString()
         cell1.appendChild(button)
+
+        // FILTER
         const link = genFilterLink(i.toString(), value)
         const cell2 = row.insertCell()
         cell2.id = `td-filter-${i}`
         cell2.dataset.idx = i.toString()
         cell2.classList.add('text-break')
+        cell2.title = 'Edit'
         cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
+
+        // GRIP
+        const cell3 = row.insertCell()
+        cell3.classList.add('text-center', 'align-middle', 'link-body-emphasis')
+        cell3.setAttribute('role', 'button')
+        const grip = faGrip.cloneNode(true)
+        grip.title = 'Drag'
+        cell3.appendChild(grip)
+
+        filtersTbody.addEventListener('dragstart', dragStart)
+        filtersTbody.addEventListener('dragover', dragOver)
+        filtersTbody.addEventListener('dragleave', dragEnd)
+        filtersTbody.addEventListener('dragend', dragEnd)
+        filtersTbody.addEventListener('drop', drop)
     })
+}
+
+let row
+let last = -1
+
+function dragStart(event) {
+    console.debug('dragStart:', event)
+    editing = false
+    row = event.target
+}
+
+function dragOver(event) {
+    event.preventDefault()
+    // console.debug('dragOver:', event)
+    const tr = event.target.closest('tr')
+    if (tr.id !== last) {
+        const el = document.getElementById(last)
+        el?.classList.remove('table-group-divider')
+        tr.classList.add('table-group-divider')
+        last = tr.id
+    }
+}
+
+function dragEnd(event) {
+    // console.debug('dragEnd:', event)
+    const el = document.getElementById(last)
+    el?.classList.remove('table-group-divider')
+    last = -1
+}
+
+async function drop(event) {
+    console.debug('drop:', event)
+    event.preventDefault()
+    const tr = event.target.closest('tr')
+    tr.classList.remove('table-group-divider')
+    last = -1
+    console.debug(`Source: ${row.id} Target: ${tr.id}`)
+    if (row.id === tr.id) {
+        return console.debug('return on same row drop')
+    }
+    filtersTbody.removeChild(row)
+    filtersTbody.insertBefore(row, tr)
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.debug('patterns:', patterns)
+    let source = parseInt(row.id)
+    let target = parseInt(tr.id)
+    if (source < target) {
+        target -= 1
+    }
+    array_move(patterns, source, target)
+    // console.debug('patterns:', patterns)
+    await chrome.storage.sync.set({ patterns })
+}
+
+/**
+ * WARNING: COPIED FROM STACK
+ * @param {Array} arr
+ * @param {Number} old_index
+ * @param {Number} new_index
+ */
+function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        let k = new_index - arr.length + 1
+        while (k--) {
+            arr.push(undefined)
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
 }
 
 /**
@@ -176,12 +264,12 @@ async function filterClick(event) {
         return event.preventDefault()
     }
     if (event.target?.classList?.contains('filter-edit')) {
-        return console.debug('Click on Input Detected.')
+        return console.debug('return on click in input')
     }
     let deleted
     let previous = editing
     if (editing !== false) {
-        console.debug(`-- saving: ${editing}`)
+        console.info(`-- saving: ${editing}`)
         deleted = await saveEditing(event, editing)
         editing = false
     }
@@ -192,7 +280,7 @@ async function filterClick(event) {
             if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
                 idx -= 1
             }
-            console.debug(`-- editing: ${idx}`)
+            console.info(`-- editing: ${idx}`)
             editing = idx
             beginEditing(event, editing)
         }
@@ -206,9 +294,8 @@ async function filterClick(event) {
  * @return {Boolean}
  */
 async function saveEditing(event, idx) {
-    console.debug(`saveEditInput: ${idx}`, event)
     const td = document.getElementById(`td-filter-${idx}`)
-    console.debug('td:', td)
+    console.debug(`saveEditInput: ${idx}`, event, td)
     if (!td) {
         console.info(`TD Not Found: #td-filter-${idx}`)
         return false
@@ -223,16 +310,16 @@ async function saveEditing(event, idx) {
     }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
-    console.debug('patterns:', patterns)
+    // console.debug('patterns:', patterns)
     if (value === patterns[idx]) {
-        console.info('Value Unchanged!')
+        console.info(`-- unchanged: ${idx}`)
     } else if (patterns.includes(value)) {
         showToast('Filter Already Exists!', 'warning')
-        console.info('Value Already Exists!')
+        console.debug('Value Already Exists!')
         value = patterns[idx]
     } else {
         console.info(
-            `Updated idx: ${idx} from "${patterns[idx]}" to "${value}"`
+            `Updated idx "${idx}" from "${patterns[idx]}" to "${value}"`
         )
         patterns[idx] = value
         await chrome.storage.sync.set({ patterns })
@@ -250,9 +337,8 @@ async function saveEditing(event, idx) {
  * @param {String} idx
  */
 function beginEditing(event, idx) {
-    console.debug(`addEditInput: ${idx}`, event)
     const td = document.getElementById(`td-filter-${idx}`)
-    console.debug('td:', td)
+    console.debug(`addEditInput: ${idx}`, event, td)
     if (!td) {
         return console.info(`TD Not Found: #td-filter-${idx}`)
     }
@@ -279,24 +365,24 @@ function beginEditing(event, idx) {
  * @param {String} index
  */
 async function deleteFilter(event, index = undefined) {
-    console.log('deleteFilter:', event)
+    console.debug('deleteFilter:', event)
     event.preventDefault()
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
     if (!index) {
         const anchor = event.target.closest('a')
         const filter = anchor?.dataset?.value
-        console.log(`filter: ${filter}`)
+        console.debug(`filter: ${filter}`)
         if (filter && patterns.includes(filter)) {
             index = patterns.indexOf(filter)
         }
     }
-    console.log(`index: ${index}`)
+    console.debug(`index: ${index}`)
     if (index !== undefined) {
         const name = patterns[index]
         patterns.splice(index, 1)
         await chrome.storage.sync.set({ patterns })
-        console.debug('patterns:', patterns)
+        // console.debug('patterns:', patterns)
         updateTable(patterns)
         document.getElementById('add-filter').focus()
         showToast(`Removed Filter: ${name}`, 'info')
@@ -309,7 +395,7 @@ async function deleteFilter(event, index = undefined) {
  * @param {InputEvent} event
  */
 async function resetForm(event) {
-    console.log('resetForm:', event)
+    console.debug('resetForm:', event)
     event.preventDefault()
     const input = document.getElementById('flags')
     input.value = 'ig'
