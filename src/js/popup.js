@@ -26,29 +26,21 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
-// document.getElementById('allTabs').addEventListener('click', allTabs)
-//
-// async function allTabs(event) {
-//     console.debug('allTabs:', event)
-//     event.preventDefault()
-//     const tabs = await chrome.tabs.query({ highlighted: true })
-//     console.debug('tabs:', tabs)
-//     await injectTab({ tabs: tabs })
-// }
+const filterInput = document.getElementById('filter-input')
 
 /**
  * Initialize Popup
  * @function initOptions
  */
 async function initPopup() {
-    // console.debug('initPopup')
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.debug('options, patterns:', options, patterns)
+    console.debug('initPopup:', options, patterns)
 
     updateOptions(options)
+
     // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
@@ -61,15 +53,14 @@ async function initPopup() {
     document.getElementById('version').textContent = manifest.version
     document.getElementById('homepage_url').href = manifest.homepage_url
 
-    document.getElementById('filter-input').focus()
-
-    const tabs = await chrome.tabs.query({ highlighted: true })
-    console.debug('tabs:', tabs)
-    if (tabs.length > 1) {
-        console.info('Multiple Tabs Selected')
-    }
-
+    filterInput.focus()
     await checkPerms()
+
+    // const tabs = await chrome.tabs.query({ highlighted: true })
+    // console.debug('tabs:', tabs)
+    // if (tabs.length > 1) {
+    //     console.info('Multiple Tabs Selected')
+    // }
 }
 
 /**
@@ -101,18 +92,16 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    // console.debug(`anchor.href: ${anchor.href}`, anchor)
+    const href = anchor.getAttribute('href').replace(/^\.+/g, '')
+    console.debug('href:', href)
     let url
-    if (anchor.href.endsWith('html/options.html')) {
+    if (href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
         return window.close()
-    } else if (
-        anchor.href.startsWith('http') ||
-        anchor.href.startsWith('chrome-extension')
-    ) {
-        url = anchor.href
+    } else if (href.startsWith('http')) {
+        url = href
     } else {
-        url = chrome.runtime.getURL(anchor.href)
+        url = chrome.runtime.getURL(href)
     }
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
@@ -127,7 +116,6 @@ async function popupLinks(event) {
 async function filterForm(event) {
     console.debug('filterForm:', event)
     event.preventDefault()
-    const filterInput = document.getElementById('filter-input')
     let filter
     if (event.target.classList.contains('dropdown-item')) {
         filter = event.target.dataset.pattern

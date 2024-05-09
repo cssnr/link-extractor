@@ -37,7 +37,7 @@ async function onInstalled(details) {
     const githubURL = 'https://github.com/cssnr/link-extractor'
     const installURL = 'https://link-extractor.cssnr.com/docs/'
     const uninstallURL = 'https://link-extractor.cssnr.com/uninstall/'
-    const [options, patterns] = await Promise.resolve(
+    const { options, patterns } = await Promise.resolve(
         setDefaultOptions({
             linksDisplay: -1,
             flags: 'ig',
@@ -238,13 +238,17 @@ async function setDefaultOptions(defaultOptions) {
         'options',
         'patterns',
     ])
-    // console.log('options, patterns:', options, patterns)
-    options = options || {}
+    console.debug('options, patterns:', options, patterns)
+
+    // patterns
     if (!patterns) {
         console.info('Set patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }
+
+    // options
+    options = options || {}
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
@@ -258,5 +262,6 @@ async function setDefaultOptions(defaultOptions) {
         await chrome.storage.sync.set({ options })
         console.log('changed:', options)
     }
-    return [options, patterns]
+
+    return { options, patterns }
 }
