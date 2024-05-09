@@ -147,6 +147,7 @@ function updateTable(data) {
         cell2.id = `td-filter-${i}`
         cell2.dataset.idx = i.toString()
         cell2.classList.add('text-break')
+        cell2.title = 'Edit'
         cell2.setAttribute('role', 'button')
         cell2.appendChild(link)
 
@@ -154,6 +155,7 @@ function updateTable(data) {
         cell3.classList.add('text-center', 'align-middle', 'link-body-emphasis')
         cell3.setAttribute('role', 'button')
         const grip = document.querySelector('.fa-solid.fa-grip').cloneNode(true)
+        grip.title = 'Drag'
         cell3.appendChild(grip)
 
         filtersTbody.addEventListener('dragstart', dragStart)
