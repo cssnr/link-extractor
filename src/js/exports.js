@@ -33,7 +33,7 @@ export async function injectTab({
     console.log('tabIds:', tabIds)
 
     // Create URL to links.html
-    const url = new URL(chrome.runtime.getURL('../html/links.html'))
+    const url = new URL(chrome.runtime.getURL('/html/links.html'))
 
     // Set URL searchParams
     url.searchParams.set('tabs', tabIds.join(','))

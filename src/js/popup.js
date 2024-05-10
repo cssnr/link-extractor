@@ -145,7 +145,7 @@ async function linksForm(event) {
         const text = document.getElementById('links-text')
         const links = extractURLs(text.value)
         await chrome.storage.local.set({ links })
-        const url = new URL(chrome.runtime.getURL('../html/links.html'))
+        const url = new URL(chrome.runtime.getURL('/html/links.html'))
         await chrome.tabs.create({ active: true, url: url.toString() })
         window.close()
     } else if (event.submitter.id === 'open-parsed') {
