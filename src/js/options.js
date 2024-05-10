@@ -60,11 +60,7 @@ async function initOptions() {
     document.querySelector('.version').textContent = manifest.version
     // document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
 
-    await setShortcuts({
-        mainKey: '_execute_action',
-        extractKey: 'extract',
-    })
-
+    await setShortcuts()
     await checkPerms()
     document.getElementById('add-filter').focus()
 }
@@ -388,20 +384,18 @@ function beginEditing(event, idx) {
 /**
  * Set Keyboard Shortcuts
  * @function setShortcuts
- * @param {Object} mapping { elementID: name }
+ * @param {String} selector
  */
-async function setShortcuts(mapping) {
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+    const tbody = document.querySelector(selector).querySelector('tbody')
     const commands = await chrome.commands.getAll()
-    for (const [elementID, name] of Object.entries(mapping)) {
-        // console.debug(`${elementID}: ${name}`)
-        const command = commands.find((x) => x.name === name)
-        if (command?.shortcut) {
-            console.debug(`${elementID}: ${command.shortcut}`)
-            const el = document.getElementById(elementID)
-            if (el) {
-                el.textContent = command.shortcut
-            }
-        }
+    const source = tbody.querySelector('tr.d-none').cloneNode(true)
+    source.classList.remove('d-none')
+    for (const command of commands) {
+        const row = source.cloneNode(true)
+        row.querySelector('.description').textContent = command.description
+        row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
+        tbody.appendChild(row)
     }
 }
 
