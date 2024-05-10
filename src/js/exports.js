@@ -121,7 +121,7 @@ export async function saveOptions(event) {
 }
 
 /**
- * Export Bookmark Click Callback
+ * Export Data Click Callback
  * @function exportClick
  * @param {MouseEvent} event
  */
@@ -141,7 +141,7 @@ export async function exportClick(event) {
 }
 
 /**
- * Import Bookmark Click Callback
+ * Import Data Click Callback
  * @function importClick
  * @param {MouseEvent} event
  */
@@ -153,7 +153,7 @@ export async function importClick(event) {
 }
 
 /**
- * Bookmark Input Change Callback
+ * Input Data Change Callback
  * @function importChange
  * @param {InputEvent} event
  */
