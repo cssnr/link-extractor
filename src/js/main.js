@@ -13,8 +13,8 @@ if (typeof ClipboardJS !== 'undefined') {
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
         // console.debug('clipboard.success:', event)
-        const text = event.text.trim()
-        console.debug(`text: "${text}"`)
+        // const text = event.text
+        // console.debug(`text: "${text}"`)
         if (event.trigger.dataset.toast) {
             showToast(event.trigger.dataset.toast)
         } else {

@@ -32,7 +32,7 @@
                 <span class="badge text-bg-primary w-100">Copy</span></a>
         </div>
     </div>
-</div>
+</div> <!-- floating-links -->
 
 <div class="container-fluid p-3">
     <h2 id="loading-message" class="user-select-none d-none">Loading...</h2>
@@ -55,7 +55,7 @@
 <!--        </div>-->
 <!--        <datalist id="savedFilters"></datalist>-->
 
-        <table id="links-table" class="table table-sm table-striped table-hover small" data-counter="links-count">
+        <table id="links-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="links-count" style="width:100%">
             <caption class="visually-hidden user-select-none">Links</caption>
             <thead class=""><tr><th>Link</th></tr></thead>
             <tbody id="links-body"></tbody>
@@ -74,13 +74,13 @@
             <span class="d-inline-block me-1 mb-2">
                 <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
         </div>
-        <table id="domains-table" class="table table-sm table-striped table-hover small" data-counter="domains-count">
+        <table id="domains-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="domains-count" style="width:100%">
             <caption class="visually-hidden user-select-none">Domains</caption>
             <thead class=""><tr><th>Domain</th></tr></thead>
             <tbody id="domains-body"></tbody>
         </table>
     </div>
-</div>
+</div> <!-- container-fluid -->
 
 <div id="keybinds-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
@@ -101,25 +101,25 @@
             </div>
         </div>
     </div>
-</div>
+</div> <!-- keybinds-modal -->
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div>
+</div> <!-- toast-container -->
 
 <div class="d-none">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
-</div>
+</div> <!-- d-none -->
 
 <button type="button" class="btn btn-outline-primary" id="back-to-top">
     <i class="fa-regular fa-square-caret-up"></i>
-</button>
+</button> <!-- back-to-top -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="../dist/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/dataTables.min.js"></script>
 <script type="text/javascript" src="../dist/datatables/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>

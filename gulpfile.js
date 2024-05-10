@@ -18,7 +18,7 @@ gulp.task('clipboard', () => {
 gulp.task('datatables', () => {
     return gulp
         .src([
-            'node_modules/datatables.net/js/jquery.dataTables.min.js',
+            'node_modules/datatables.net/js/dataTables.min.js',
             'node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js',
             'node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css',
         ])

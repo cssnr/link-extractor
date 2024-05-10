@@ -23,7 +23,7 @@
         <h1>Link Extractor</h1>
     </div>
     <div class="clearfix"></div>
-    <p class="text-center lead">v<span id="version"></span></p>
+    <p class="text-center lead">v<span class="version"></span></p>
 
     <table class="table table-sm table-borderless table-hover">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
@@ -111,17 +111,18 @@
     </form>
 
     <div class="d-none grant-perms my-3">
-        <a id="grant-perms" class="btn btn-sm btn-outline-success mb-2" role="button"
+        <button id="grant-perms" class="btn btn-sm btn-outline-success" type="button"
            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Allow Extracting Links from Multiple Selected Tabs.">
-            <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</a>
+            <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
     </div>
     <div class="d-none has-perms my-3">
-        <a id="revoke-perms" class="link-danger" role="button"
+        <button id="revoke-perms" class="link-danger btn btn-sm btn-link" type="button"
            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="No Longer Allow Extracting Links from Multiple Tabs.">
-            Remove Host Permissions</a>
+            Remove Host Permissions</button>
     </div>
 
     <hr>
+
     <form id="filters-form" class="mb-1">
         <label class="form-label" for="add-filter"><i class="fa-solid fa-filter me-2"></i> Filters</label>
         <div class="input-group">
@@ -174,7 +175,7 @@
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div>
+</div> <!-- toast-container -->
 
 <div class="d-none">
     <form id="update-filter" name="update-filter"><button type="submit"></button></form>
@@ -187,11 +188,11 @@
     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
         <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
     </svg>
-</div>
+</div> <!-- d-none -->
 
 <button type="button" class="btn btn-outline-primary" id="back-to-top">
     <i class="fa-regular fa-square-caret-up"></i>
-</button>
+</button> <!-- back-to-top -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

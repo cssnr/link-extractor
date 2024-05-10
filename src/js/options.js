@@ -56,17 +56,37 @@ async function initOptions() {
     updateOptions(options)
     updateTable(patterns)
 
-    document.getElementById('version').textContent =
-        chrome.runtime.getManifest().version
+    const manifest = chrome.runtime.getManifest()
+    document.querySelector('.version').textContent = manifest.version
+    // document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
 
-    const commands = await chrome.commands.getAll()
-    document.getElementById('mainKey').textContent =
-        commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
-    document.getElementById('extractKey').textContent =
-        commands.find((x) => x.name === 'extract').shortcut || 'Not Set'
+    await setShortcuts({
+        mainKey: '_execute_action',
+        extractKey: 'extract',
+    })
 
     await checkPerms()
     document.getElementById('add-filter').focus()
+}
+
+/**
+ * Set Keyboard Shortcuts
+ * @function setShortcuts
+ * @param {Object} mapping { elementID: name }
+ */
+async function setShortcuts(mapping) {
+    const commands = await chrome.commands.getAll()
+    for (const [elementID, name] of Object.entries(mapping)) {
+        // console.debug(`${elementID}: ${name}`)
+        const command = commands.find((x) => x.name === name)
+        if (command?.shortcut) {
+            console.debug(`${elementID}: ${command.shortcut}`)
+            const el = document.getElementById(elementID)
+            if (el) {
+                el.textContent = command.shortcut
+            }
+        }
+    }
 }
 
 /**
