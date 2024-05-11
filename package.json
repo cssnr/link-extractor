@@ -19,7 +19,7 @@
     "jquery": "^3.7.1"
   },
   "devDependencies": {
-    "eslint": "^9.2.0",
+    "eslint": "^8.57.0",
     "gulp": "^4.0.2",
     "json-merger": "^1.1.10",
     "prettier": "^3.2.5",
