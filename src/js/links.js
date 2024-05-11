@@ -274,6 +274,12 @@ function handleKeyboard(e) {
         document.getElementById('copy-links').click()
     } else if (['KeyD', 'KeyM'].includes(e.code)) {
         document.getElementById('copy-domains').click()
+    } else if (['KeyF', 'KeyJ'].includes(e.code)) {
+        document.getElementById('dt-search-0').focus()
+        e.preventDefault()
+    } else if (['KeyG', 'KeyH'].includes(e.code)) {
+        document.getElementById('dt-search-1').focus()
+        e.preventDefault()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
         chrome.runtime.openOptionsPage()
     }
