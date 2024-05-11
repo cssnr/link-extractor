@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "eslint": "^9.2.0",
-    "gulp": "^5.0.0",
+    "gulp": "^4.0.2",
     "json-merger": "^1.1.10",
     "prettier": "^3.2.5",
     "web-ext": "^7.11.0"
