@@ -10,6 +10,7 @@ import {
     requestPerms,
     revokePerms,
     saveOptions,
+    updateManifest,
     updateOptions,
 } from './exports.js'
 
@@ -56,63 +57,10 @@ async function initOptions() {
     updateOptions(options)
     updateTable(patterns)
 
-    document.getElementById('version').textContent =
-        chrome.runtime.getManifest().version
-
-    const commands = await chrome.commands.getAll()
-    document.getElementById('mainKey').textContent =
-        commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
-    document.getElementById('extractKey').textContent =
-        commands.find((x) => x.name === 'extract').shortcut || 'Not Set'
-
+    updateManifest()
+    await setShortcuts()
     await checkPerms()
     document.getElementById('add-filter').focus()
-}
-
-/**
- * On Changed Callback
- * @function onChanged
- * @param {Object} changes
- * @param {String} namespace
- */
-function onChanged(changes, namespace) {
-    // console.debug('onChanged:', changes, namespace)
-    for (let [key, { newValue }] of Object.entries(changes)) {
-        if (namespace === 'sync') {
-            if (key === 'options') {
-                updateOptions(newValue)
-            } else if (key === 'patterns') {
-                updateTable(newValue)
-            }
-        }
-    }
-}
-
-/**
- * Add Filter Callback
- * @function addFilter
- * @param {SubmitEvent} event
- */
-async function addFilter(event) {
-    console.debug('addFilter:', event)
-    event.preventDefault()
-    const input = event.target.elements[0]
-    const filter = input.value
-    if (filter) {
-        console.log(`filter: ${filter}`)
-        const { patterns } = await chrome.storage.sync.get(['patterns'])
-        if (!patterns.includes(filter)) {
-            patterns.push(filter)
-            // console.debug('patterns:', patterns)
-            await chrome.storage.sync.set({ patterns })
-            updateTable(patterns)
-            input.value = ''
-            showToast(`Added Filter: ${filter}`)
-        } else {
-            showToast(`Filter Exists: ${filter}`, 'warning')
-        }
-    }
-    input.focus()
 }
 
 /**
@@ -124,7 +72,6 @@ function updateTable(data) {
     filtersTbody.innerHTML = ''
     data.forEach((value, i) => {
         const row = filtersTbody.insertRow()
-        row.setAttribute('draggable', 'true')
         // TODO: Use Better ID or Dataset
         row.id = i
 
@@ -159,13 +106,87 @@ function updateTable(data) {
         const grip = faGrip.cloneNode(true)
         grip.title = 'Drag'
         cell3.appendChild(grip)
+        cell3.setAttribute('draggable', 'true')
 
-        filtersTbody.addEventListener('dragstart', dragStart)
+        cell3.addEventListener('dragstart', dragStart)
         filtersTbody.addEventListener('dragover', dragOver)
         filtersTbody.addEventListener('dragleave', dragEnd)
         filtersTbody.addEventListener('dragend', dragEnd)
         filtersTbody.addEventListener('drop', drop)
     })
+}
+
+/**
+ * Add Filter Callback
+ * @function addFilter
+ * @param {SubmitEvent} event
+ */
+async function addFilter(event) {
+    console.debug('addFilter:', event)
+    event.preventDefault()
+    const input = event.target.elements[0]
+    const filter = input.value
+    if (filter) {
+        console.log(`filter: ${filter}`)
+        const { patterns } = await chrome.storage.sync.get(['patterns'])
+        if (!patterns.includes(filter)) {
+            patterns.push(filter)
+            // console.debug('patterns:', patterns)
+            await chrome.storage.sync.set({ patterns })
+            updateTable(patterns)
+            input.value = ''
+            showToast(`Added Filter: ${filter}`)
+        } else {
+            showToast(`Filter Exists: ${filter}`, 'warning')
+        }
+    }
+    input.focus()
+}
+
+/**
+ * Delete Filter
+ * @function deleteFilter
+ * @param {MouseEvent} event
+ * @param {String} index
+ */
+async function deleteFilter(event, index = undefined) {
+    console.debug('deleteFilter:', event)
+    event.preventDefault()
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    // console.debug('patterns:', patterns)
+    if (!index) {
+        const anchor = event.target.closest('a')
+        const filter = anchor?.dataset?.value
+        console.debug(`filter: ${filter}`)
+        if (filter && patterns.includes(filter)) {
+            index = patterns.indexOf(filter)
+        }
+    }
+    console.debug(`index: ${index}`)
+    if (index !== undefined) {
+        const name = patterns[index]
+        patterns.splice(index, 1)
+        await chrome.storage.sync.set({ patterns })
+        // console.debug('patterns:', patterns)
+        updateTable(patterns)
+        document.getElementById('add-filter').focus()
+        showToast(`Removed Filter: ${name}`, 'info')
+    }
+}
+
+/**
+ * Reset Options Form Click Callback
+ * @function resetForm
+ * @param {InputEvent} event
+ */
+async function resetForm(event) {
+    console.debug('resetForm:', event)
+    event.preventDefault()
+    const input = document.getElementById('flags')
+    input.value = 'ig'
+    input.classList.remove('is-invalid')
+    input.focus()
+    await saveOptions(event)
 }
 
 let row
@@ -174,7 +195,7 @@ let last = -1
 function dragStart(event) {
     console.debug('dragStart:', event)
     editing = false
-    row = event.target
+    row = event.target.closest('tr')
 }
 
 function dragOver(event) {
@@ -359,49 +380,40 @@ function beginEditing(event, idx) {
 }
 
 /**
- * Delete Filter
- * @function deleteFilter
- * @param {MouseEvent} event
- * @param {String} index
+ * Set Keyboard Shortcuts
+ * @function setShortcuts
+ * @param {String} selector
  */
-async function deleteFilter(event, index = undefined) {
-    console.debug('deleteFilter:', event)
-    event.preventDefault()
-    const { patterns } = await chrome.storage.sync.get(['patterns'])
-    // console.debug('patterns:', patterns)
-    if (!index) {
-        const anchor = event.target.closest('a')
-        const filter = anchor?.dataset?.value
-        console.debug(`filter: ${filter}`)
-        if (filter && patterns.includes(filter)) {
-            index = patterns.indexOf(filter)
-        }
-    }
-    console.debug(`index: ${index}`)
-    if (index !== undefined) {
-        const name = patterns[index]
-        patterns.splice(index, 1)
-        await chrome.storage.sync.set({ patterns })
-        // console.debug('patterns:', patterns)
-        updateTable(patterns)
-        document.getElementById('add-filter').focus()
-        showToast(`Removed Filter: ${name}`, 'info')
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+    const tbody = document.querySelector(selector).querySelector('tbody')
+    const commands = await chrome.commands.getAll()
+    const source = tbody.querySelector('tr.d-none').cloneNode(true)
+    source.classList.remove('d-none')
+    for (const command of commands) {
+        const row = source.cloneNode(true)
+        row.querySelector('.description').textContent = command.description
+        row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
+        tbody.appendChild(row)
     }
 }
 
 /**
- * Reset Options Form Click Callback
- * @function resetForm
- * @param {InputEvent} event
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
  */
-async function resetForm(event) {
-    console.debug('resetForm:', event)
-    event.preventDefault()
-    const input = document.getElementById('flags')
-    input.value = 'ig'
-    input.classList.remove('is-invalid')
-    input.focus()
-    await saveOptions(event)
+function onChanged(changes, namespace) {
+    // console.debug('onChanged:', changes, namespace)
+    for (let [key, { newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync') {
+            if (key === 'options') {
+                updateOptions(newValue)
+            } else if (key === 'patterns') {
+                updateTable(newValue)
+            }
+        }
+    }
 }
 
 /**

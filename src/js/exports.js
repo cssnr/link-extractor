@@ -33,7 +33,7 @@ export async function injectTab({
     console.log('tabIds:', tabIds)
 
     // Create URL to links.html
-    const url = new URL(chrome.runtime.getURL('../html/links.html'))
+    const url = new URL(chrome.runtime.getURL('/html/links.html'))
 
     // Set URL searchParams
     url.searchParams.set('tabs', tabIds.join(','))
@@ -120,8 +120,18 @@ export async function saveOptions(event) {
     }
 }
 
+export function updateManifest() {
+    const manifest = chrome.runtime.getManifest()
+    document
+        .querySelectorAll('.version')
+        .forEach((el) => (el.textContent = manifest.version))
+    document
+        .querySelectorAll('[href="homepage_url"]')
+        .forEach((el) => (el.href = manifest.homepage_url))
+}
+
 /**
- * Export Bookmark Click Callback
+ * Export Data Click Callback
  * @function exportClick
  * @param {MouseEvent} event
  */
@@ -141,7 +151,7 @@ export async function exportClick(event) {
 }
 
 /**
- * Import Bookmark Click Callback
+ * Import Data Click Callback
  * @function importClick
  * @param {MouseEvent} event
  */
@@ -153,7 +163,7 @@ export async function importClick(event) {
 }
 
 /**
- * Bookmark Input Change Callback
+ * Input Data Change Callback
  * @function importChange
  * @param {InputEvent} event
  */

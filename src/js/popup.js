@@ -5,6 +5,7 @@ import {
     injectTab,
     requestPerms,
     saveOptions,
+    updateManifest,
     updateOptions,
 } from './exports.js'
 
@@ -39,9 +40,7 @@ async function initPopup() {
         'patterns',
     ])
     console.debug('initPopup:', options, patterns)
-
     updateOptions(options)
-
     // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
@@ -50,12 +49,9 @@ async function initPopup() {
         })
     }
 
-    const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').textContent = manifest.version
-    document.getElementById('homepage_url').href = manifest.homepage_url
-
-    filterInput.focus()
+    updateManifest()
     await checkPerms()
+    filterInput.focus()
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)
@@ -145,7 +141,7 @@ async function linksForm(event) {
         const text = document.getElementById('links-text')
         const links = extractURLs(text.value)
         await chrome.storage.local.set({ links })
-        const url = new URL(chrome.runtime.getURL('../html/links.html'))
+        const url = new URL(chrome.runtime.getURL('/html/links.html'))
         await chrome.tabs.create({ active: true, url: url.toString() })
         window.close()
     } else if (event.submitter.id === 'open-parsed') {

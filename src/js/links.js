@@ -17,7 +17,7 @@ const dtOptions = {
     info: false,
     processing: true,
     saveState: true,
-    bSort: true,
+    responsive: true,
     order: [],
     pageLength: -1,
     lengthMenu: [
@@ -30,6 +30,23 @@ const dtOptions = {
         search: 'Filter:',
         zeroRecords: '',
     },
+    columnDefs: [
+        {
+            targets: 0,
+            name: 'links',
+            render: genUrl,
+        },
+    ],
+}
+
+function genUrl(url) {
+    const link = document.createElement('a')
+    link.text = url
+    link.href = url
+    link.title = url
+    link.target = '_blank'
+    link.rel = 'noopener'
+    return link
 }
 
 /**
@@ -165,20 +182,36 @@ function getBaseURL(link) {
 /**
  * Update Table with URLs
  * @function updateTable
- * @param {Array} links
+ * @param {Array} data
  * @param {String} selector
  */
-function updateTable(links, selector) {
+function updateTable(data, selector) {
     console.debug(`updateTable: ${selector}`)
-    const tbody = document.querySelector(`${selector} tbody`)
-    links.forEach(function (url) {
-        const link = document.createElement('a')
-        link.text = url
-        link.href = url
-        link.target = '_blank'
-        tbody.insertRow().insertCell().appendChild(link)
+    const dataTables = new DataTable(selector, dtOptions)
+    $(selector).on('draw.dt', debounce(dtDraw, 150))
+    data.forEach(function (url) {
+        // const link = document.createElement('a')
+        // link.text = url
+        // link.href = url
+        // link.title = url
+        // link.target = '_blank'
+        // link.rel = 'noopener'
+        // dataTables.row.add([link]).draw()
+        dataTables.row.add([url]).draw()
     })
-    $(selector).on('draw.dt', debounce(dtDraw, 150)).DataTable(dtOptions)
+}
+
+function dtDraw(event) {
+    console.debug('dtDraw:', event)
+    const tbody = event.target.children[3]
+    let length = tbody.rows.length
+    if (tbody.rows.length === 1) {
+        if (!tbody.rows[0].textContent) {
+            length = 0
+        }
+    }
+    document.getElementById(event.target.dataset.counter).textContent =
+        length.toString()
 }
 
 /**
@@ -241,20 +274,13 @@ function handleKeyboard(e) {
         document.getElementById('copy-links').click()
     } else if (['KeyD', 'KeyM'].includes(e.code)) {
         document.getElementById('copy-domains').click()
+    } else if (['KeyF', 'KeyJ'].includes(e.code)) {
+        document.getElementById('dt-search-0').focus()
+        e.preventDefault()
+    } else if (['KeyG', 'KeyH'].includes(e.code)) {
+        document.getElementById('dt-search-1').focus()
+        e.preventDefault()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
         chrome.runtime.openOptionsPage()
     }
-}
-
-function dtDraw(event) {
-    console.debug('dtDraw:', event)
-    const tbody = event.target.querySelector('tbody')
-    let length = tbody.rows.length
-    if (tbody.rows.length === 1) {
-        if (!tbody.rows[0].textContent) {
-            length = 0
-        }
-    }
-    document.getElementById(event.target.dataset.counter).textContent =
-        length.toString()
 }
