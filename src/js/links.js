@@ -34,8 +34,17 @@ const dtOptions = {
         {
             targets: 0,
             name: 'links',
+            render: genUrl,
         },
     ],
+}
+
+function genUrl(data) {
+    const link = document.createElement('a')
+    link.text = data
+    link.href = data
+    link.target = '_blank'
+    return link
 }
 
 /**
@@ -170,6 +179,7 @@ function getBaseURL(link) {
 
 /**
  * Update Table with URLs
+ * TODO: Look into DataTables initialization
  * @function updateTable
  * @param {Array} data
  * @param {String} selector
@@ -179,12 +189,7 @@ function updateTable(data, selector) {
     const dataTables = new DataTable(selector, dtOptions)
     $(selector).on('draw.dt', debounce(dtDraw, 150))
     data.forEach(function (url) {
-        const link = document.createElement('a')
-        link.text = url
-        link.href = url
-        link.target = '_blank'
-        // tbody.insertRow().insertCell().appendChild(link)
-        dataTables.row.add([link.outerHTML]).draw()
+        dataTables.row.add([url]).draw()
     })
 }
 
