@@ -5,6 +5,7 @@ import {
     injectTab,
     requestPerms,
     saveOptions,
+    updateManifest,
     updateOptions,
 } from './exports.js'
 
@@ -39,9 +40,7 @@ async function initPopup() {
         'patterns',
     ])
     console.debug('initPopup:', options, patterns)
-
     updateOptions(options)
-
     // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
@@ -50,12 +49,9 @@ async function initPopup() {
         })
     }
 
-    const manifest = chrome.runtime.getManifest()
-    document.querySelector('.version').textContent = manifest.version
-    document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
-
-    filterInput.focus()
+    updateManifest()
     await checkPerms()
+    filterInput.focus()
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)

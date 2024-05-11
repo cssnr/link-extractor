@@ -10,6 +10,7 @@ import {
     requestPerms,
     revokePerms,
     saveOptions,
+    updateManifest,
     updateOptions,
 } from './exports.js'
 
@@ -56,10 +57,7 @@ async function initOptions() {
     updateOptions(options)
     updateTable(patterns)
 
-    const manifest = chrome.runtime.getManifest()
-    document.querySelector('.version').textContent = manifest.version
-    // document.querySelector('[href="homepage_url"]').href = manifest.homepage_url
-
+    updateManifest()
     await setShortcuts()
     await checkPerms()
     document.getElementById('add-filter').focus()

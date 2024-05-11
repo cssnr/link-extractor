@@ -120,6 +120,16 @@ export async function saveOptions(event) {
     }
 }
 
+export function updateManifest() {
+    const manifest = chrome.runtime.getManifest()
+    document
+        .querySelectorAll('.version')
+        .forEach((el) => (el.textContent = manifest.version))
+    document
+        .querySelectorAll('[href="homepage_url"]')
+        .forEach((el) => (el.href = manifest.homepage_url))
+}
+
 /**
  * Export Data Click Callback
  * @function exportClick
