@@ -166,6 +166,7 @@ async function onChanged(changes, namespace) {
 async function onInputEntered(text) {
     console.debug('onInputEntered:', text)
     const opts = {}
+    text = text.trim()
     if (text) opts.filter = text
     await injectTab(opts)
     // const hasPerms = await checkPerms()

@@ -36,6 +36,10 @@ export async function injectTab({
         }
     }
     console.log('tabIds:', tabIds)
+    // since we skip tabs with missing permissions, check if any have permissions
+    if (!tabIds.length) {
+        return console.info('No Tab IDs to Inject')
+    }
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('/html/links.html'))
