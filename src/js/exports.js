@@ -27,6 +27,11 @@ export async function injectTab({
     } else {
         for (const tab of tabs) {
             console.debug(`tab: ${tab.id}`, tab)
+            // tab.url undefined means we do not have permissions on this tab
+            if (!tab.url) {
+                chrome.runtime.openOptionsPage()
+                continue
+            }
             tabIds.push(tab.id)
         }
     }

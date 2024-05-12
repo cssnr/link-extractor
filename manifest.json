@@ -19,6 +19,9 @@
       "description": "Extract Links from Tab(s)"
     }
   },
+  "omnibox": {
+    "keyword": "link"
+  },
   "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
   "background": {
     "type": "module"

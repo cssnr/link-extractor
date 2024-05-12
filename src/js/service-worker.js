@@ -1,12 +1,15 @@
 // JS Background Service Worker
 
-import { injectTab } from './exports.js'
+import { checkPerms, injectTab } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
+chrome.omnibox.onInputEntered.addListener(onInputEntered)
+chrome.permissions.onAdded.addListener(onAdded)
+chrome.permissions.onRemoved.addListener(onRemoved)
 
 /**
  * On Startup Callback
@@ -67,6 +70,12 @@ async function onInstalled(details) {
     uninstallURL.searchParams.append('version', manifest.version)
     console.log('uninstallURL:', uninstallURL.href)
     await chrome.runtime.setUninstallURL(uninstallURL.href)
+    const hasPerms = await checkPerms()
+    if (hasPerms) {
+        await onAdded()
+    } else {
+        await onRemoved()
+    }
 }
 
 /**
@@ -147,6 +156,47 @@ async function onChanged(changes, namespace) {
             }
         }
     }
+}
+
+/**
+ * Omnibox Input Entered Callback
+ * @function onInputEntered
+ * @param {String} text
+ */
+async function onInputEntered(text) {
+    console.debug('onInputEntered:', text)
+    const opts = {}
+    if (text) opts.filter = text
+    await injectTab(opts)
+    // const hasPerms = await checkPerms()
+    // if (hasPerms) {
+    //     await injectTab(opts)
+    // } else {
+    //     chrome.runtime.openOptionsPage()
+    // }
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    chrome.omnibox.setDefaultSuggestion({
+        description: 'Link Extractor - Extract Links with Optional Filter',
+    })
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onRemoved(permissions) {
+    console.debug('onRemoved', permissions)
+    chrome.omnibox.setDefaultSuggestion({
+        description:
+            'Omnibox Usage Requires Host Permissions. See Popup/Options.',
+    })
 }
 
 /**
