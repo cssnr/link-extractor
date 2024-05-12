@@ -33,7 +33,6 @@ const dtOptions = {
     columnDefs: [
         {
             targets: 0,
-            name: 'links',
             render: genUrl,
         },
     ],
