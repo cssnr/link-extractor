@@ -27,6 +27,19 @@ export async function injectTab({
     } else {
         for (const tab of tabs) {
             console.debug(`tab: ${tab.id}`, tab)
+            // try {
+            //     await chrome.scripting.executeScript({
+            //         target: { tabId: tab.id },
+            //         injectImmediately: true,
+            //         func: function () {
+            //             return true
+            //         },
+            //     })
+            // } catch (e) {
+            //     console.log('executeScript Error:', e)
+            //     chrome.runtime.openOptionsPage()
+            //     continue
+            // }
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
                 chrome.runtime.openOptionsPage()

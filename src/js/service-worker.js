@@ -210,7 +210,7 @@ async function onInputChanged(text, suggest) {
 export async function onAdded(permissions) {
     console.debug('onAdded', permissions)
     chrome.omnibox.setDefaultSuggestion({
-        description: 'Link Extractor - Extract Links with Optional Filter',
+        description: 'Link Extractor - Extract All Links or Type in a Filter',
     })
 }
 
@@ -220,10 +220,14 @@ export async function onAdded(permissions) {
  */
 export async function onRemoved(permissions) {
     console.debug('onRemoved', permissions)
-    chrome.omnibox.setDefaultSuggestion({
-        description:
-            'Omnibox Usage Requires Host Permissions. See Popup/Options.',
-    })
+    if (typeof browser !== 'undefined') {
+        chrome.omnibox.setDefaultSuggestion({
+            description:
+                'Link Extractor - Omnibox Requires Host Permissions. See Popup/Options.',
+        })
+    } else {
+        await onAdded()
+    }
 }
 
 /**
