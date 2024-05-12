@@ -57,8 +57,8 @@ export async function injectTab({
     }
 
     // Open Tab to links.html with desired params
-    console.debug(`url: ${url.toString()}`)
-    await chrome.tabs.create({ active: true, url: url.toString() })
+    console.debug(`url: ${url.href}`)
+    await chrome.tabs.create({ active: true, url: url.href })
 }
 
 /**

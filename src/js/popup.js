@@ -135,31 +135,29 @@ async function filterForm(event) {
  * @param {SubmitEvent} event
  */
 async function linksForm(event) {
-    console.log('linksForm:', event)
+    console.debug('linksForm:', event)
     event.preventDefault()
+    const value = event.target.elements['links-text'].value
     if (event.submitter.id === 'parse-links') {
-        const text = document.getElementById('links-text')
-        const links = extractURLs(text.value)
-        await chrome.storage.local.set({ links })
-        const url = new URL(chrome.runtime.getURL('/html/links.html'))
-        await chrome.tabs.create({ active: true, url: url.toString() })
-        window.close()
+        const urls = extractURLs(value)
+        await chrome.storage.local.set({ links: urls })
+        const url = chrome.runtime.getURL('/html/links.html')
+        await chrome.tabs.create({ active: true, url })
     } else if (event.submitter.id === 'open-parsed') {
-        const urls = extractURLs(event.target[0].value)
+        const urls = extractURLs(value)
         urls.forEach(function (url) {
             chrome.tabs.create({ active: false, url })
         })
-        window.close()
-    } else if (event.submitter.id === 'open-lines') {
-        let text = event.target[0].value.split(/\r\n?|\n/g)
+    } else if (event.submitter.id === 'open-text') {
+        let text = value.split(/\r\n?|\n/g)
         text = text.filter((str) => str !== '')
         text.forEach(function (url) {
             chrome.tabs.create({ active: false, url })
         })
-        window.close()
     } else {
         console.error('Unknown event.submitter:', event.submitter)
     }
+    window.close()
 }
 
 /**
@@ -169,9 +167,10 @@ async function linksForm(event) {
  */
 function updateLinks(event) {
     // console.debug('updateLinks:', event)
-    let text = event.target.value.split(/\r\n?|\n/g)
-    text = text.filter((str) => str !== '')
     const urls = extractURLs(event.target.value)
+    const text = event.target.value.split(/(\s+)/).filter(function (e) {
+        return e.trim().length > 0
+    })
     document
         .querySelectorAll('.parse-links')
         .forEach((el) => updateElements(el, urls))
@@ -204,14 +203,13 @@ function updateElements(el, lines) {
  * @return {Array}
  */
 function extractURLs(text) {
-    // let urls = ''
+    // console.debug('extractURLs:', text)
     const urls = []
     let urlmatcharr
     const urlregex =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
     while ((urlmatcharr = urlregex.exec(text)) !== null) {
         const match = urlmatcharr[0]
-        // urls += match + '\n'
         urls.push(match)
     }
     return [...new Set(urls)]

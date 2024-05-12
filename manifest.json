@@ -16,7 +16,7 @@
       "suggested_key": {
         "default": "Alt+Shift+X"
       },
-      "description": "Extract Links from Tab"
+      "description": "Extract Links from Tab(s)"
     }
   },
   "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
