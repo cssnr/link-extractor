@@ -8,6 +8,7 @@ chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
 chrome.omnibox.onInputEntered.addListener(onInputEntered)
+chrome.omnibox.onInputChanged.addListener(onInputChanged)
 chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
@@ -167,14 +168,39 @@ async function onInputEntered(text) {
     console.debug('onInputEntered:', text)
     const opts = {}
     text = text.trim()
-    if (text) opts.filter = text
+    if (text) {
+        opts.filter = text
+    }
     await injectTab(opts)
+    // Permission are now being checked in injectTab
     // const hasPerms = await checkPerms()
     // if (hasPerms) {
     //     await injectTab(opts)
     // } else {
     //     chrome.runtime.openOptionsPage()
     // }
+}
+
+/**
+ * Omnibox Input Changed Callback
+ * @function onInputChanged
+ * @param {String} text
+ * @param {Function} suggest
+ */
+async function onInputChanged(text, suggest) {
+    console.debug('onInputChanged:', text, suggest)
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    const results = []
+    patterns.forEach((filter) => {
+        if (filter.toLowerCase().includes(text.toLowerCase())) {
+            const suggestResult = {
+                description: filter,
+                content: filter,
+            }
+            results.push(suggestResult)
+        }
+    })
+    suggest(results)
 }
 
 /**
