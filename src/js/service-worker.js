@@ -166,7 +166,7 @@ async function onChanged(changes, namespace) {
  * @param {Function} suggest
  */
 async function onInputChanged(text, suggest) {
-    console.debug('onInputChanged:', text, suggest)
+    // console.debug('onInputChanged:', text, suggest)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     const results = []
     patterns.forEach((filter) => {
