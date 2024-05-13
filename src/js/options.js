@@ -224,7 +224,10 @@ async function drop(event) {
     console.debug('drop:', event)
     event.preventDefault()
     const tr = event.target.closest('tr')
-    tr.classList.remove('table-group-divider')
+    if (!row || !tr) {
+        return console.debug('row or tr undefined')
+    }
+    tr.classList?.remove('table-group-divider')
     last = -1
     // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
     if (row.id === tr.id) {
