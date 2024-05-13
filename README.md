@@ -17,6 +17,7 @@ Website: https://link-extractor.cssnr.com/
 
 *   [Install](#install)
 *   [Features](#features)
+    -   [Upcoming](#planned-upcoming-features)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Building](#building)
@@ -55,13 +56,13 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
-[![Screenshot of Links and Popup](https://repository-images.githubusercontent.com/707614074/0944a60d-058b-4269-954c-8aec6ab59f4c)](https://link-extractor.cssnr.com/screenshots/)
+[![Link Extractor Screenshots](/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
 
 ## Planned Upcoming Features
 
 *   Option to Extract and Display Link Titles
-*   Option to Set Titles for Saved Filters
-*   Option to Rearrange Saved Filters
+*   Option to Set Names/Titles for Saved Filters
+*   Option to Extract Using Multiple Filters with AND/OR
 
 > [!TIP]
 > **Don't see your feature here?**
@@ -69,7 +70,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 # Configuration
 
-Documentation: https://link-extractor.cssnr.com/docs/
+**Documentation: https://link-extractor.cssnr.com/docs/**
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Link Extractor icon, then;  
 **Chrome,** click the `Pin` icon.  

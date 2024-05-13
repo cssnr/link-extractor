@@ -14,7 +14,7 @@ export async function injectTab({
 } = {}) {
     console.log('injectTab:', filter, domains, selection)
 
-    // Extract tabIds from tabs
+    // Extract tabIds from all highlighted tabs
     const tabIds = []
     const tabs = await chrome.tabs.query({ highlighted: true })
     if (!tabs.length) {
@@ -27,29 +27,16 @@ export async function injectTab({
     } else {
         for (const tab of tabs) {
             console.debug(`tab: ${tab.id}`, tab)
-            // try {
-            //     await chrome.scripting.executeScript({
-            //         target: { tabId: tab.id },
-            //         injectImmediately: true,
-            //         func: function () {
-            //             return true
-            //         },
-            //     })
-            // } catch (e) {
-            //     console.log('executeScript Error:', e)
-            //     chrome.runtime.openOptionsPage()
-            //     continue
-            // }
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
                 chrome.runtime.openOptionsPage()
-                continue
+                break // break operation if any tabs are missing permissions
             }
             tabIds.push(tab.id)
         }
     }
     console.log('tabIds:', tabIds)
-    // since we skip tabs with missing permissions, check if any have permissions
+    // confirm we have extracted tabIds to inject
     if (!tabIds.length) {
         return console.info('No Tab IDs to Inject')
     }

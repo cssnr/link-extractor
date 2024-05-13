@@ -389,13 +389,19 @@ function beginEditing(event, idx) {
  * @param {String} selector
  */
 async function setShortcuts(selector = '#keyboard-shortcuts') {
-    const tbody = document.querySelector(selector).querySelector('tbody')
+    const table = document.querySelector(selector)
+    const tbody = table.querySelector('tbody')
+    const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
-    const source = tbody.querySelector('tr.d-none').cloneNode(true)
-    source.classList.remove('d-none')
     for (const command of commands) {
+        // console.debug('command:', command)
         const row = source.cloneNode(true)
-        row.querySelector('.description').textContent = command.description
+        // TODO: Chrome does not parse the description for _execute_action in manifest.json
+        let description = command.description
+        if (!description && command.name === '_execute_action') {
+            description = 'Show Main Popup Action'
+        }
+        row.querySelector('.description').textContent = description
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
     }
