@@ -30,13 +30,12 @@ export async function injectTab({
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
                 chrome.runtime.openOptionsPage()
-                return // cancel operation if any tabs are missing permissions
+                return console.info('A Highlighted Tab is Missing Permissions')
             }
             tabIds.push(tab.id)
         }
     }
     console.log('tabIds:', tabIds)
-    // confirm we have extracted tabIds to inject
     if (!tabIds.length) {
         return console.info('No Tab IDs to Inject')
     }
