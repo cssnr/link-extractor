@@ -199,8 +199,11 @@ function dragStart(event) {
 }
 
 function dragOver(event) {
-    event.preventDefault()
     // console.debug('dragOver:', event)
+    event.preventDefault()
+    if (!row) {
+        return
+    }
     const tr = event.target.closest('tr')
     if (tr.id !== last) {
         const el = document.getElementById(last)
@@ -239,6 +242,7 @@ async function drop(event) {
     array_move(patterns, source, target)
     // console.debug('patterns:', patterns)
     await chrome.storage.sync.set({ patterns })
+    row = null
 }
 
 /**

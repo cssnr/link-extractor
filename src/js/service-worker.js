@@ -7,8 +7,8 @@ chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
-chrome.omnibox.onInputEntered.addListener(onInputEntered)
 chrome.omnibox.onInputChanged.addListener(onInputChanged)
+chrome.omnibox.onInputEntered.addListener(onInputEntered)
 chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
@@ -160,28 +160,6 @@ async function onChanged(changes, namespace) {
 }
 
 /**
- * Omnibox Input Entered Callback
- * @function onInputEntered
- * @param {String} text
- */
-async function onInputEntered(text) {
-    console.debug('onInputEntered:', text)
-    const opts = {}
-    text = text.trim()
-    if (text) {
-        opts.filter = text
-    }
-    await injectTab(opts)
-    // Permission are now being checked in injectTab
-    // const hasPerms = await checkPerms()
-    // if (hasPerms) {
-    //     await injectTab(opts)
-    // } else {
-    //     chrome.runtime.openOptionsPage()
-    // }
-}
-
-/**
  * Omnibox Input Changed Callback
  * @function onInputChanged
  * @param {String} text
@@ -201,6 +179,28 @@ async function onInputChanged(text, suggest) {
         }
     })
     suggest(results)
+}
+
+/**
+ * Omnibox Input Entered Callback
+ * @function onInputEntered
+ * @param {String} text
+ */
+async function onInputEntered(text) {
+    console.debug('onInputEntered:', text)
+    const opts = {}
+    text = text.trim()
+    if (text) {
+        opts.filter = text
+    }
+    await injectTab(opts)
+    // Permission are now being checked in injectTab
+    // const hasPerms = await checkPerms()
+    // if (hasPerms) {
+    //     await injectTab(opts)
+    // } else {
+    //     chrome.runtime.openOptionsPage()
+    // }
 }
 
 /**
