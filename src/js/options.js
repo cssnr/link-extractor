@@ -202,7 +202,7 @@ function dragOver(event) {
     // console.debug('dragOver:', event)
     event.preventDefault()
     if (!row) {
-        return
+        return // row not set on dragStart, so not a row being dragged
     }
     const tr = event.target.closest('tr')
     if (tr.id !== last) {
@@ -226,7 +226,7 @@ async function drop(event) {
     const tr = event.target.closest('tr')
     tr.classList.remove('table-group-divider')
     last = -1
-    console.debug(`Source: ${row.id} Target: ${tr.id}`)
+    // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
     if (row.id === tr.id) {
         return console.debug('return on same row drop')
     }
@@ -239,6 +239,7 @@ async function drop(event) {
     if (source < target) {
         target -= 1
     }
+    // console.debug(`Source: ${source} - Target: ${target}`)
     array_move(patterns, source, target)
     // console.debug('patterns:', patterns)
     await chrome.storage.sync.set({ patterns })
