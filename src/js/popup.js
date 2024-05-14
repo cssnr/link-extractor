@@ -155,12 +155,12 @@ async function linksForm(event) {
         })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
-        // console.debug('text:', text)
+        console.debug('text:', text)
         text.forEach(function (url) {
-            if (!url.includes('://')) {
+            // links without a : get prepended the web extension url by default
+            if (!url.includes(':')) {
                 url = `http://${url}`
             }
-            // console.debug('url:', url)
             chrome.tabs.create({ active: false, url })
         })
     } else {
