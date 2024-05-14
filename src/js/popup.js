@@ -29,6 +29,8 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const filterInput = document.getElementById('filter-input')
+const parseLinks = document.querySelectorAll('.parse-links')
+const parseLines = document.querySelectorAll('.parse-lines')
 
 /**
  * Initialize Popup
@@ -178,25 +180,21 @@ function updateLinks(event) {
     // console.debug('urls:', urls)
     const text = event.target.value.split(/\s+/).filter((s) => s !== '')
     // console.debug('text:', text)
-    document
-        .querySelectorAll('.parse-links')
-        .forEach((el) => updateElements(el, urls))
-    document
-        .querySelectorAll('.parse-lines')
-        .forEach((el) => updateElements(el, text))
+    parseLinks.forEach((el) => updateElements(el, urls.length))
+    parseLines.forEach((el) => updateElements(el, text.length))
 }
 
 /**
  * Update Elements based on Array lines
  * @function updateElements
  * @param {HTMLElement} el
- * @param {Array} lines
+ * @param {Number} length
  */
-function updateElements(el, lines) {
+function updateElements(el, length) {
     // console.debug('el, lines:', el, lines)
-    if (lines?.length > 0) {
+    if (length) {
         el.classList.remove('disabled')
-        el.textContent = `${el.dataset.text} (${lines.length})`
+        el.textContent = `${el.dataset.text} (${length})`
     } else {
         el.classList.add('disabled')
         el.textContent = `${el.dataset.text}`
