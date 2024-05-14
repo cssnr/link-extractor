@@ -29,6 +29,8 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const filterInput = document.getElementById('filter-input')
+const parseLinks = document.querySelectorAll('.parse-links')
+const parseLines = document.querySelectorAll('.parse-lines')
 
 /**
  * Initialize Popup
@@ -138,20 +140,27 @@ async function linksForm(event) {
     console.debug('linksForm:', event)
     event.preventDefault()
     const value = event.target.elements['links-text'].value
+    // console.debug('value:', value)
     if (event.submitter.id === 'parse-links') {
         const urls = extractURLs(value)
+        // console.debug('urls:', urls)
         await chrome.storage.local.set({ links: urls })
         const url = chrome.runtime.getURL('/html/links.html')
         await chrome.tabs.create({ active: true, url })
     } else if (event.submitter.id === 'open-parsed') {
         const urls = extractURLs(value)
+        // console.debug('urls:', urls)
         urls.forEach(function (url) {
             chrome.tabs.create({ active: false, url })
         })
     } else if (event.submitter.id === 'open-text') {
-        let text = value.split(/\r\n?|\n/g)
-        text = text.filter((str) => str !== '')
+        let text = value.split(/\s+/).filter((s) => s !== '')
+        // console.debug('text:', text)
         text.forEach(function (url) {
+            if (!url.includes('://')) {
+                url = `http://${url}`
+            }
+            // console.debug('url:', url)
             chrome.tabs.create({ active: false, url })
         })
     } else {
@@ -168,28 +177,24 @@ async function linksForm(event) {
 function updateLinks(event) {
     // console.debug('updateLinks:', event)
     const urls = extractURLs(event.target.value)
-    const text = event.target.value.split(/(\s+)/).filter(function (e) {
-        return e.trim().length > 0
-    })
-    document
-        .querySelectorAll('.parse-links')
-        .forEach((el) => updateElements(el, urls))
-    document
-        .querySelectorAll('.parse-lines')
-        .forEach((el) => updateElements(el, text))
+    // console.debug('urls:', urls)
+    const text = event.target.value.split(/\s+/).filter((s) => s !== '')
+    // console.debug('text:', text)
+    parseLinks.forEach((el) => updateElements(el, urls.length))
+    parseLines.forEach((el) => updateElements(el, text.length))
 }
 
 /**
  * Update Elements based on Array lines
  * @function updateElements
  * @param {HTMLElement} el
- * @param {Array} lines
+ * @param {Number} length
  */
-function updateElements(el, lines) {
+function updateElements(el, length) {
     // console.debug('el, lines:', el, lines)
-    if (lines?.length > 0) {
+    if (length) {
         el.classList.remove('disabled')
-        el.textContent = `${el.dataset.text} (${lines.length})`
+        el.textContent = `${el.dataset.text} (${length})`
     } else {
         el.classList.add('disabled')
         el.textContent = `${el.dataset.text}`
