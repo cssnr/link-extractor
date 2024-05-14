@@ -155,7 +155,7 @@ async function linksForm(event) {
         })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
-        console.debug('text:', text)
+        // console.debug('text:', text)
         text.forEach(function (url) {
             // links without a : get prepended the web extension url by default
             if (!url.includes(':')) {

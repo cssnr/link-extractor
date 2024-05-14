@@ -157,7 +157,7 @@ async function deleteFilter(event, index = undefined) {
     if (!index) {
         const anchor = event.target.closest('a')
         const filter = anchor?.dataset?.value
-        console.debug(`filter: ${filter}`)
+        console.log(`filter: ${filter}`)
         if (filter && patterns.includes(filter)) {
             index = patterns.indexOf(filter)
         }

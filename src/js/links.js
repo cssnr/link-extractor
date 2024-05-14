@@ -53,21 +53,19 @@ function genUrl(url) {
  * @function initLinks
  */
 async function initLinks() {
-    console.log('initLinks:', urlParams)
+    console.debug('initLinks:', urlParams)
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
-        console.log('tabs:', tabs)
+        console.debug('tabs:', tabs)
         const selection = urlParams.has('selection')
 
         const allLinks = []
         if (tabs?.length) {
-            console.log('processing tabs:', tabs)
+            console.debug('processing tabs:', tabs)
             // const tabId = parseInt(tabs[0])
             for (const tabId of tabs) {
-                console.log('tabId:', tabId)
                 const action = selection ? 'selection' : 'all'
-                console.log('action:', action)
                 const links = await chrome.tabs.sendMessage(
                     parseInt(tabId),
                     action
@@ -97,11 +95,10 @@ async function initLinks() {
 async function processLinks(links) {
     console.debug('processLinks:', links)
     const urlFilter = urlParams.get('filter')
+    // console.debug(`urlFilter: ${urlFilter}`)
     const onlyDomains = urlParams.has('domains')
-    console.debug(`urlFilter: ${urlFilter}`)
-    console.debug(`onlyDomains: ${onlyDomains}`)
+    // console.debug(`onlyDomains: ${onlyDomains}`)
     const { options } = await chrome.storage.sync.get(['options'])
-    console.debug('options:', options)
 
     // Filter links by :// if not disabled by user
     if (options.defaultFilter) {
@@ -201,7 +198,7 @@ function updateTable(data, selector) {
 }
 
 function dtDraw(event) {
-    console.debug('dtDraw:', event)
+    // console.debug('dtDraw:', event)
     const tbody = event.target.children[3]
     let length = tbody.rows.length
     if (tbody.rows.length === 1) {
@@ -245,7 +242,7 @@ function downloadFileClick(event) {
     let links = target?.innerText?.trim()
     const name =
         event.target.dataset.filename || target.dataset.filename || 'links.txt'
-    console.info('name', name)
+    console.log('name', name)
     if (links) {
         textFileDownload(name, links)
         showToast('Download Started.')
