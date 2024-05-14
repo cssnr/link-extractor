@@ -199,8 +199,11 @@ function dragStart(event) {
 }
 
 function dragOver(event) {
-    event.preventDefault()
     // console.debug('dragOver:', event)
+    event.preventDefault()
+    if (!row) {
+        return // row not set on dragStart, so not a row being dragged
+    }
     const tr = event.target.closest('tr')
     if (tr.id !== last) {
         const el = document.getElementById(last)
@@ -221,9 +224,12 @@ async function drop(event) {
     console.debug('drop:', event)
     event.preventDefault()
     const tr = event.target.closest('tr')
-    tr.classList.remove('table-group-divider')
+    if (!row || !tr) {
+        return console.debug('row or tr undefined')
+    }
+    tr.classList?.remove('table-group-divider')
     last = -1
-    console.debug(`Source: ${row.id} Target: ${tr.id}`)
+    // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
     if (row.id === tr.id) {
         return console.debug('return on same row drop')
     }
@@ -236,9 +242,11 @@ async function drop(event) {
     if (source < target) {
         target -= 1
     }
+    // console.debug(`Source: ${source} - Target: ${target}`)
     array_move(patterns, source, target)
     // console.debug('patterns:', patterns)
     await chrome.storage.sync.set({ patterns })
+    row = null
 }
 
 /**
@@ -385,13 +393,19 @@ function beginEditing(event, idx) {
  * @param {String} selector
  */
 async function setShortcuts(selector = '#keyboard-shortcuts') {
-    const tbody = document.querySelector(selector).querySelector('tbody')
+    const table = document.querySelector(selector)
+    const tbody = table.querySelector('tbody')
+    const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
-    const source = tbody.querySelector('tr.d-none').cloneNode(true)
-    source.classList.remove('d-none')
     for (const command of commands) {
+        // console.debug('command:', command)
         const row = source.cloneNode(true)
-        row.querySelector('.description').textContent = command.description
+        // TODO: Chrome does not parse the description for _execute_action in manifest.json
+        let description = command.description
+        if (!description && command.name === '_execute_action') {
+            description = 'Show Main Popup Action'
+        }
+        row.querySelector('.description').textContent = description
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
         tbody.appendChild(row)
     }

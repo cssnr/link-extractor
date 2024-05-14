@@ -1,12 +1,16 @@
 // JS Background Service Worker
 
-import { injectTab } from './exports.js'
+import { checkPerms, injectTab } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
+chrome.omnibox.onInputChanged.addListener(onInputChanged)
+chrome.omnibox.onInputEntered.addListener(onInputEntered)
+chrome.permissions.onAdded.addListener(onAdded)
+chrome.permissions.onRemoved.addListener(onRemoved)
 
 /**
  * On Startup Callback
@@ -67,6 +71,12 @@ async function onInstalled(details) {
     uninstallURL.searchParams.append('version', manifest.version)
     console.log('uninstallURL:', uninstallURL.href)
     await chrome.runtime.setUninstallURL(uninstallURL.href)
+    const hasPerms = await checkPerms()
+    if (hasPerms) {
+        await onAdded()
+    } else {
+        await onRemoved()
+    }
 }
 
 /**
@@ -146,6 +156,77 @@ async function onChanged(changes, namespace) {
                 createContextMenus(newValue)
             }
         }
+    }
+}
+
+/**
+ * Omnibox Input Changed Callback
+ * @function onInputChanged
+ * @param {String} text
+ * @param {Function} suggest
+ */
+async function onInputChanged(text, suggest) {
+    // console.debug('onInputChanged:', text, suggest)
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    const results = []
+    patterns.forEach((filter) => {
+        if (filter.toLowerCase().includes(text.toLowerCase())) {
+            const suggestResult = {
+                description: filter,
+                content: filter,
+            }
+            results.push(suggestResult)
+        }
+    })
+    suggest(results)
+}
+
+/**
+ * Omnibox Input Entered Callback
+ * @function onInputEntered
+ * @param {String} text
+ */
+async function onInputEntered(text) {
+    console.debug('onInputEntered:', text)
+    const opts = {}
+    text = text.trim()
+    if (text) {
+        opts.filter = text
+    }
+    await injectTab(opts)
+    // Permission are now being checked in injectTab
+    // const hasPerms = await checkPerms()
+    // if (hasPerms) {
+    //     await injectTab(opts)
+    // } else {
+    //     chrome.runtime.openOptionsPage()
+    // }
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    chrome.omnibox.setDefaultSuggestion({
+        description: 'Link Extractor - Extract All Links or Type in a Filter',
+    })
+}
+
+/**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+export async function onRemoved(permissions) {
+    console.debug('onRemoved', permissions)
+    if (typeof browser !== 'undefined') {
+        chrome.omnibox.setDefaultSuggestion({
+            description:
+                'Link Extractor - Omnibox Requires Host Permissions. See Popup/Options.',
+        })
+    } else {
+        await onAdded()
     }
 }
 

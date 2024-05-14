@@ -14,7 +14,7 @@ export async function injectTab({
 } = {}) {
     console.log('injectTab:', filter, domains, selection)
 
-    // Extract tabIds from tabs
+    // Extract tabIds from all highlighted tabs
     const tabIds = []
     const tabs = await chrome.tabs.query({ highlighted: true })
     if (!tabs.length) {
@@ -27,10 +27,18 @@ export async function injectTab({
     } else {
         for (const tab of tabs) {
             console.debug(`tab: ${tab.id}`, tab)
+            // tab.url undefined means we do not have permissions on this tab
+            if (!tab.url) {
+                chrome.runtime.openOptionsPage()
+                return console.info('A Highlighted Tab is Missing Permissions')
+            }
             tabIds.push(tab.id)
         }
     }
     console.log('tabIds:', tabIds)
+    if (!tabIds.length) {
+        return console.info('No Tab IDs to Inject')
+    }
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('/html/links.html'))

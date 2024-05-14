@@ -28,12 +28,13 @@
     <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-        <tbody>
-        <tr class="d-none">
+        <tbody></tbody>
+        <tfoot class="d-none">
+        <tr>
             <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
             <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
         </tr>
-        </tbody>
+        </tfoot>
     </table>
 
     <form id="options-form" class="mb-3">
@@ -80,7 +81,7 @@
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="sortLinks">
             <label class="form-check-label" for="sortLinks" aria-describedby="sortLinksHelp">
-                Automatically Sort Alphabetically
+                Auto Sort Alphabetically
                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Sort Links and Domains Alphabetically">
                     <i class="fa-solid fa-circle-info ms-1"></i>
                 </span>
@@ -124,7 +125,7 @@
     <form id="filters-form" class="mb-1">
         <label class="form-label" for="add-filter"><i class="fa-solid fa-filter me-2"></i> Filters</label>
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn">
+            <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn" required>
             <button class="btn btn-outline-success" type="submit" id="add-filter-btn">
                 Add <i class="fa-solid fa-plus ms-1"></i>
             </button>
