@@ -138,20 +138,27 @@ async function linksForm(event) {
     console.debug('linksForm:', event)
     event.preventDefault()
     const value = event.target.elements['links-text'].value
+    // console.debug('value:', value)
     if (event.submitter.id === 'parse-links') {
         const urls = extractURLs(value)
+        // console.debug('urls:', urls)
         await chrome.storage.local.set({ links: urls })
         const url = chrome.runtime.getURL('/html/links.html')
         await chrome.tabs.create({ active: true, url })
     } else if (event.submitter.id === 'open-parsed') {
         const urls = extractURLs(value)
+        // console.debug('urls:', urls)
         urls.forEach(function (url) {
             chrome.tabs.create({ active: false, url })
         })
     } else if (event.submitter.id === 'open-text') {
-        let text = value.split(/\r\n?|\n/g)
-        text = text.filter((str) => str !== '')
+        let text = value.split(/\s+/).filter((s) => s !== '')
+        // console.debug('text:', text)
         text.forEach(function (url) {
+            if (!url.includes('://')) {
+                url = `http://${url}`
+            }
+            // console.debug('url:', url)
             chrome.tabs.create({ active: false, url })
         })
     } else {
@@ -168,9 +175,9 @@ async function linksForm(event) {
 function updateLinks(event) {
     // console.debug('updateLinks:', event)
     const urls = extractURLs(event.target.value)
-    const text = event.target.value.split(/(\s+)/).filter(function (e) {
-        return e.trim().length > 0
-    })
+    // console.debug('urls:', urls)
+    const text = event.target.value.split(/\s+/).filter((s) => s !== '')
+    // console.debug('text:', text)
     document
         .querySelectorAll('.parse-links')
         .forEach((el) => updateElements(el, urls))
