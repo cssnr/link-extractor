@@ -215,7 +215,16 @@ function extractURLs(text) {
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
     while ((urlmatcharr = urlregex.exec(text)) !== null) {
         const match = urlmatcharr[0]
-        urls.push(match)
+        const data = {
+            text: null,
+            title: null,
+            label: null,
+            // class: null,
+            target: null,
+            rel: null,
+            href: match,
+        }
+        urls.push(data)
     }
     return [...new Set(urls)]
 }

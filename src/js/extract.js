@@ -78,7 +78,17 @@ function extractSelection() {
  */
 function pushElement(array, element) {
     try {
-        array.push(decodeURI(element.href))
+        const data = {
+            href: decodeURI(element.href),
+            text: element.textContent,
+            title: element.title,
+            label: element.ariaLabel,
+            // class: element.className,
+            rel: element.rel,
+            target: element.target,
+            origin: element.origin,
+        }
+        array.push(data)
     } catch (e) {
         console.log(e)
     }

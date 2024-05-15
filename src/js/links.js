@@ -102,21 +102,21 @@ async function processLinks(links) {
 
     // Filter links by :// if not disabled by user
     if (options.defaultFilter) {
-        links = links.filter((link) => link.lastIndexOf('://', 10) > 0)
+        links = links.filter((link) => link.href.lastIndexOf('://', 10) > 0)
     }
 
     // Remove duplicate and sort links
     let items = [...new Set(links)]
     if (options.sortLinks) {
         dtOptions.order = [[0, 'asc']]
-        items.sort()
+        // items.sort((a, b) => a.href.localeCompare(b.href))
     }
 
     // Filter links based on pattern
     if (urlFilter) {
         const re = new RegExp(urlFilter, options.flags)
         console.debug(`Filtering Links with re: ${re}`)
-        items = items.filter((item) => item.match(re))
+        items = items.filter((item) => item.href.match(re))
     }
 
     // If no items, alert and return
@@ -138,7 +138,7 @@ async function processLinks(links) {
     }
 
     // Extract domains from items, sort, and remove null
-    let domains = [...new Set(items.map((link) => getBaseURL(link)))]
+    let domains = [...new Set(items.map((link) => link.origin))]
     if (options.sortLinks) {
         domains.sort()
     }
@@ -157,23 +157,23 @@ async function processLinks(links) {
     document.getElementById('loading-message').classList.add('d-none')
 }
 
-/**
- * Get base URL of link
- * @function getBaseURL
- * @param {String} link
- * @return {String}
- */
-function getBaseURL(link) {
-    const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
-    const result = RegExp(reBaseURL).exec(link)
-    if (!result) {
-        return null
-    } else if (result[1]) {
-        return `${result[1]}/`
-    } else {
-        return `http://${result[2] || result[3]}/`
-    }
-}
+// /**
+//  * Get base URL of link
+//  * @function getBaseURL
+//  * @param {String} link
+//  * @return {String}
+//  */
+// function getBaseURL(link) {
+//     const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
+//     const result = RegExp(reBaseURL).exec(link)
+//     if (!result) {
+//         return null
+//     } else if (result[1]) {
+//         return `${result[1]}/`
+//     } else {
+//         return `http://${result[2] || result[3]}/`
+//     }
+// }
 
 /**
  * Update Table with URLs
@@ -182,19 +182,31 @@ function getBaseURL(link) {
  * @param {String} selector
  */
 function updateTable(data, selector) {
-    console.debug(`updateTable: ${selector}`)
-    const dataTables = new DataTable(selector, dtOptions)
+    console.debug(`updateTable: ${selector}`, data)
+    console.debug('dtOptions:', dtOptions)
+    let options = { ...dtOptions }
+    if (selector === '#links-table') {
+        options.columns = [
+            { data: 'href' },
+            { data: 'text' },
+            { data: 'title' },
+            { data: 'label' },
+            // { data: 'class' },
+            { data: 'rel' },
+            { data: 'target' },
+        ]
+    }
+    console.log('options:', options)
+    const dataTables = new DataTable(selector, options)
     $(selector).on('draw.dt', debounce(dtDraw, 150))
     data.forEach(function (url) {
-        // const link = document.createElement('a')
-        // link.text = url
-        // link.href = url
-        // link.title = url
-        // link.target = '_blank'
-        // link.rel = 'noopener'
-        // dataTables.row.add([link]).draw()
-        dataTables.row.add([url]).draw()
+        if (typeof url === 'string') {
+            dataTables.row.add([url]).draw()
+        } else {
+            dataTables.row.add(url).draw()
+        }
     })
+    window.dispatchEvent(new Event('resize'))
 }
 
 function dtDraw(event) {
