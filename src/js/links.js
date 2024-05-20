@@ -13,6 +13,7 @@ document
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 
 const urlParams = new URLSearchParams(window.location.search)
+
 const dtOptions = {
     info: false,
     processing: true,
@@ -30,13 +31,35 @@ const dtOptions = {
         search: 'Filter:',
         zeroRecords: '',
     },
-    columnDefs: [
-        {
-            targets: 0,
-            render: genUrl,
-        },
-    ],
+    columnDefs: [{ targets: 0, render: genUrl }],
 }
+
+const linksOptions = {
+    columns: [
+        { data: 'href' },
+        { data: 'text' },
+        { data: 'title' },
+        { data: 'label' },
+        // { data: 'class' },
+        { data: 'rel' },
+        { data: 'target' },
+    ],
+    columnDefs: [
+        { targets: 0, render: genUrl },
+        { targets: [0, 1], visible: true },
+        { targets: '_all', visible: false },
+    ],
+    stateSave: true,
+    layout: {
+        top2Start: {
+            buttons: ['columnsToggle'],
+        },
+        topStart: 'pageLength',
+    },
+}
+
+let linksTable
+let domainsTable
 
 function genUrl(url) {
     const link = document.createElement('a')
@@ -106,6 +129,7 @@ async function processLinks(links) {
     }
 
     // Remove duplicate and sort links
+    // TODO: Duplicates needs to be updated and also be an option
     let items = [...new Set(links)]
     if (options.sortLinks) {
         dtOptions.order = [[0, 'asc']]
@@ -134,14 +158,15 @@ async function processLinks(links) {
             items.length.toString()
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
-        updateTable(items, '#links-table')
+
+        let opts = { ...linksOptions, ...dtOptions }
+        linksTable = new DataTable('#links-table', opts)
+        updateTable(items, linksTable)
     }
 
     // Extract domains from items, sort, and remove null
+    // TODO: Duplicates needs to be updated and also be an option
     let domains = [...new Set(items.map((link) => link.origin))]
-    if (options.sortLinks) {
-        domains.sort()
-    }
     domains = domains.filter(function (el) {
         return el != null
     })
@@ -150,7 +175,8 @@ async function processLinks(links) {
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('d-none'))
-        updateTable(domains, '#domains-table')
+        domainsTable = new DataTable('#domains-table', dtOptions)
+        updateTable(domains, domainsTable)
     }
 
     // Hide Loading message
@@ -177,33 +203,19 @@ async function processLinks(links) {
 
 /**
  * Update Table with URLs
+ * TODO: Review This Function
  * @function updateTable
  * @param {Array} data
- * @param {String} selector
+ * @param {DataTable} table
  */
-function updateTable(data, selector) {
-    console.debug(`updateTable: ${selector}`, data)
-    console.debug('dtOptions:', dtOptions)
-    let options = { ...dtOptions }
-    if (selector === '#links-table') {
-        options.columns = [
-            { data: 'href' },
-            { data: 'text' },
-            { data: 'title' },
-            { data: 'label' },
-            // { data: 'class' },
-            { data: 'rel' },
-            { data: 'target' },
-        ]
-    }
-    console.log('options:', options)
-    const dataTables = new DataTable(selector, options)
-    $(selector).on('draw.dt', debounce(dtDraw, 150))
+function updateTable(data, table) {
+    console.debug('updateTable:', data, table)
+    table.on('draw.dt', debounce(dtDraw, 150))
     data.forEach(function (url) {
         if (typeof url === 'string') {
-            dataTables.row.add([url]).draw()
+            table.row.add([url]).draw()
         } else {
-            dataTables.row.add(url).draw()
+            table.row.add(url).draw()
         }
     })
     window.dispatchEvent(new Event('resize'))
