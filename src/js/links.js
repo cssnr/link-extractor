@@ -244,16 +244,9 @@ function updateTable(data, table) {
 }
 
 function dtDraw(event) {
-    // console.debug('dtDraw:', event)
-    const tbody = event.target.children[3]
-    let length = tbody.rows.length
-    if (tbody.rows.length === 1) {
-        if (!tbody.rows[0].textContent) {
-            length = 0
-        }
-    }
-    document.getElementById(event.target.dataset.counter).textContent =
-        length.toString()
+    document.getElementById(event.target.dataset.counter).textContent = event.dt
+        .rows(':visible')
+        .count()
 }
 
 /**
