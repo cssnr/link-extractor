@@ -23,8 +23,10 @@ gulp.task('datatables', () => {
             'node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css',
             'node_modules/datatables.net-buttons/js/buttons.colVis.min.js',
             'node_modules/datatables.net-buttons/js/dataTables.buttons.min.js',
-            'node_modules/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
-            'node_modules/datatables.net-buttons-bs/css/buttons.bootstrap.min.css',
+            'node_modules/datatables.net-buttons/js/buttons.html5.min.js',
+            'node_modules/datatables.net-buttons/js/buttons.print.min.js',
+            'node_modules/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js',
+            'node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css',
         ])
         .pipe(gulp.dest('src/dist/datatables'))
 })

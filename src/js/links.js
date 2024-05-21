@@ -17,7 +17,7 @@ const urlParams = new URLSearchParams(window.location.search)
 const dtOptions = {
     info: false,
     processing: true,
-    saveState: true,
+    stateSave: false,
     responsive: true,
     order: [],
     pageLength: -1,
@@ -31,7 +31,7 @@ const dtOptions = {
         search: 'Filter:',
         zeroRecords: '',
     },
-    columnDefs: [{ targets: 0, render: genUrl }],
+    columnDefs: [{ targets: 0, render: genUrl, visible: true }],
 }
 
 const linksOptions = {
@@ -45,14 +45,36 @@ const linksOptions = {
         { data: 'target' },
     ],
     columnDefs: [
-        { targets: 0, render: genUrl },
-        { targets: [0, 1], visible: true },
+        { targets: 0, render: genUrl, visible: true },
         { targets: '_all', visible: false },
+        // { targets: [0, 1], visible: true },
     ],
-    stateSave: true,
     layout: {
         top2Start: {
-            buttons: ['columnsToggle'],
+            buttons: [
+                {
+                    extend: 'colvis',
+                    text: 'Show Additional Data',
+                    columns: [1, 2, 3, 4, 5],
+                    postfixButtons: ['colvisRestore'],
+                },
+                {
+                    extend: 'copy',
+                    text: 'Copy Table',
+                    exportOptions: {
+                        orthogonal: 'export',
+                        columns: [':visible'],
+                    },
+                },
+                {
+                    extend: 'csv',
+                    text: 'CSV Export',
+                    exportOptions: {
+                        orthogonal: 'export',
+                        columns: [':visible'],
+                    },
+                },
+            ],
         },
         topStart: 'pageLength',
     },
@@ -159,7 +181,7 @@ async function processLinks(links) {
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
 
-        let opts = { ...linksOptions, ...dtOptions }
+        let opts = { ...dtOptions, ...linksOptions }
         linksTable = new DataTable('#links-table', opts)
         updateTable(items, linksTable)
     }
