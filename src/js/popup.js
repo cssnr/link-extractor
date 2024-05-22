@@ -29,8 +29,6 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const filterInput = document.getElementById('filter-input')
-const parseLinks = document.querySelectorAll('.parse-links')
-const parseLines = document.querySelectorAll('.parse-lines')
 
 /**
  * Initialize Popup
@@ -180,8 +178,12 @@ function updateLinks(event) {
     // console.debug('urls:', urls)
     const text = event.target.value.split(/\s+/).filter((s) => s !== '')
     // console.debug('text:', text)
-    parseLinks.forEach((el) => updateElements(el, urls.length))
-    parseLines.forEach((el) => updateElements(el, text.length))
+    document
+        .querySelectorAll('.parse-links')
+        .forEach((el) => updateElements(el, urls.length))
+    document
+        .querySelectorAll('.parse-lines')
+        .forEach((el) => updateElements(el, text.length))
 }
 
 /**
@@ -226,7 +228,8 @@ function extractURLs(text) {
         }
         urls.push(data)
     }
-    return [...new Set(urls)]
+    // return [...new Set(urls)]
+    return urls
 }
 
 /**

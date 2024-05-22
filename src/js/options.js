@@ -27,10 +27,11 @@ document.getElementById('reset-default').addEventListener('click', resetForm)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('revoke-perms').addEventListener('click', revokePerms)
 
-const optionsForm = document.getElementById('options-form')
-optionsForm.addEventListener('submit', (e) => e.preventDefault())
-optionsForm
-    .querySelectorAll('input, select')
+document
+    .getElementById('options-form')
+    .addEventListener('submit', (e) => e.preventDefault())
+document
+    .querySelectorAll('#options-form > input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
