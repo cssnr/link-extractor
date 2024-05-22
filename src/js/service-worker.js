@@ -47,7 +47,7 @@ async function onInstalled(details) {
             flags: 'ig',
             removeDuplicates: true,
             defaultFilter: true,
-            sortLinks: true,
+            saveState: true,
             contextMenu: true,
             showUpdate: false,
         })

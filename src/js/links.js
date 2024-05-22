@@ -177,10 +177,12 @@ async function processLinks(links) {
         })
     }
 
-    // TODO: Change Option to Enable Save State in DataTables
-    if (options.sortLinks) {
-        dtOptions.order = [[0, 'asc']]
-        // items.sort((a, b) => a.href.localeCompare(b.href))
+    // if (options.sortLinks) {
+    //     dtOptions.order = [[0, 'asc']]
+    //     // items.sort((a, b) => a.href.localeCompare(b.href))
+    // }
+    if (options.saveState) {
+        dtOptions.stateSave = true
     }
 
     // Filter links based on pattern
