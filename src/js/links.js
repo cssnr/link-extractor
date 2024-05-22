@@ -56,19 +56,21 @@ const linksOptions = {
             buttons: {
                 dom: {
                     button: {
-                        className: 'btn btn-sm btn-primary',
+                        className: 'btn btn-sm',
                     },
                 },
                 buttons: [
                     {
                         extend: 'colvis',
                         text: 'Show Additional Data',
+                        className: 'btn-primary',
                         columns: [1, 2, 3, 4, 5],
                         postfixButtons: ['colvisRestore'],
                     },
                     {
                         extend: 'copy',
                         text: 'Copy Table',
+                        className: 'btn-outline-primary',
                         exportOptions: {
                             orthogonal: 'export',
                             columns: [':visible'],
@@ -77,6 +79,7 @@ const linksOptions = {
                     {
                         extend: 'csv',
                         text: 'CSV Export',
+                        className: 'btn-outline-primary',
                         title: 'links',
                         exportOptions: {
                             orthogonal: 'export',
