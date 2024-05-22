@@ -22,7 +22,6 @@ const dtOptions = {
     processing: true,
     stateSave: false,
     responsive: true,
-    order: [],
     pageLength: -1,
     lengthMenu: [
         [-1, 10, 25, 50, 100, 250, 500, 1000],
@@ -30,8 +29,9 @@ const dtOptions = {
     ],
     language: {
         emptyTable: '',
-        lengthMenu: '_MENU_ links',
+        lengthMenu: '_MENU_ Links',
         search: 'Filter:',
+        searchPlaceholder: 'Type to Filter...',
         zeroRecords: '',
     },
     columnDefs: [{ targets: 0, render: genUrl, visible: true }],
@@ -91,6 +91,7 @@ const linksOptions = {
             },
         },
         topStart: 'pageLength',
+        topEnd: 'search',
     },
 }
 
