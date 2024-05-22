@@ -69,6 +69,7 @@ const linksOptions = {
                 {
                     extend: 'csv',
                     text: 'CSV Export',
+                    title: 'links',
                     exportOptions: {
                         orthogonal: 'export',
                         columns: [':visible'],
@@ -140,9 +141,7 @@ async function initLinks() {
 async function processLinks(links) {
     console.debug('processLinks:', links)
     const urlFilter = urlParams.get('filter')
-    // console.debug(`urlFilter: ${urlFilter}`)
     const onlyDomains = urlParams.has('domains')
-    // console.debug(`onlyDomains: ${onlyDomains}`)
     const { options } = await chrome.storage.sync.get(['options'])
 
     // Filter links by :// if not disabled by user
@@ -151,8 +150,19 @@ async function processLinks(links) {
     }
 
     // Remove duplicate and sort links
-    // TODO: Duplicates needs to be updated and also be an option
-    let items = [...new Set(links)]
+    if (options.removeDuplicates) {
+        const hrefs = []
+        links = links.filter((value) => {
+            if (hrefs.includes(value.href)) {
+                return false
+            } else {
+                hrefs.push(value.href)
+                return true
+            }
+        })
+    }
+
+    // TODO: Change Option to Enable Save State in DataTables
     if (options.sortLinks) {
         dtOptions.order = [[0, 'asc']]
         // items.sort((a, b) => a.href.localeCompare(b.href))
@@ -162,11 +172,11 @@ async function processLinks(links) {
     if (urlFilter) {
         const re = new RegExp(urlFilter, options.flags)
         console.debug(`Filtering Links with re: ${re}`)
-        items = items.filter((item) => item.href.match(re))
+        links = links.filter((item) => item.href.match(re))
     }
 
     // If no items, alert and return
-    if (!items.length) {
+    if (!links.length) {
         alert('No Results')
         return window.close()
     }
@@ -177,18 +187,17 @@ async function processLinks(links) {
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
         document.getElementById('links-total').textContent =
-            items.length.toString()
+            links.length.toString()
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
 
         let opts = { ...dtOptions, ...linksOptions }
         linksTable = new DataTable('#links-table', opts)
-        updateTable(items, linksTable)
+        updateTable(links, linksTable)
     }
 
     // Extract domains from items, sort, and remove null
-    // TODO: Duplicates needs to be updated and also be an option
-    let domains = [...new Set(items.map((link) => link.origin))]
+    let domains = [...new Set(links.map((link) => link.origin))]
     domains = domains.filter(function (el) {
         return el != null
     })

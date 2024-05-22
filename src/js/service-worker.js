@@ -45,6 +45,7 @@ async function onInstalled(details) {
         setDefaultOptions({
             linksDisplay: -1,
             flags: 'ig',
+            removeDuplicates: true,
             defaultFilter: true,
             sortLinks: true,
             contextMenu: true,

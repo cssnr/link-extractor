@@ -48,6 +48,15 @@
 
         <form id="options-form">
             <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
+                <label class="form-check-label" for="removeDuplicates" aria-describedby="removeDuplicatesHelp">
+                    Remove Duplicate Links
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Filter Out Links with the same URL">
+                        <i class="fa-solid fa-circle-info ms-1"></i>
+                    </span>
+                </label>
+            </div>
+            <div class="form-check form-switch">
                 <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
                 <label class="form-check-label" for="defaultFilter" aria-describedby="defaultFilterHelp">
                     Use Default Link Filtering
