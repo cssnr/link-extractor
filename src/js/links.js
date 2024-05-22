@@ -1,6 +1,6 @@
 // JS for links.html
 
-import { textFileDownload } from './exports.js'
+// import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
@@ -11,6 +11,8 @@ document
 document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
+
+document.getElementById('copy-links').addEventListener('click', copyLinksClick)
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -235,6 +237,26 @@ function dtDraw(event) {
     document.getElementById(event.target.dataset.counter).textContent = event.dt
         .rows(':visible')
         .count()
+}
+
+/**
+ * Copy links Button Click Callback
+ * @function copyLinksClick
+ * @param {MouseEvent} event
+ */
+function copyLinksClick(event) {
+    console.debug('copyLinksClick:', event)
+    const table = document.querySelector('#links-table')
+    const urls = []
+    for (const row of table.rows) {
+        if (row.role) continue
+        urls.push(row.cells[0].textContent)
+    }
+    // console.debug('urls:', urls)
+    const text = urls.join('\n')
+    // console.debug('text:', text)
+    navigator.clipboard.writeText(text).then()
+    showToast('Links Copied', 'success')
 }
 
 /**
