@@ -106,6 +106,13 @@ function genUrl(url) {
  */
 async function initLinks() {
     console.debug('initLinks:', urlParams)
+    // Manually Set Theme for DataTables
+    let prefers = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+    let html = document.querySelector('html')
+    html.classList.add(prefers)
+    html.setAttribute('data-bs-theme', prefers)
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
