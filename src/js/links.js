@@ -71,6 +71,7 @@ const linksOptions = {
                         extend: 'copy',
                         text: 'Copy Table',
                         className: 'btn-outline-primary',
+                        title: null,
                         exportOptions: {
                             orthogonal: 'export',
                             columns: [':visible'],
