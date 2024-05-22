@@ -47,35 +47,41 @@ const linksOptions = {
     columnDefs: [
         { targets: 0, render: genUrl, visible: true },
         { targets: '_all', visible: false },
-        // { targets: [0, 1], visible: true },
     ],
     layout: {
         top2Start: {
-            buttons: [
-                {
-                    extend: 'colvis',
-                    text: 'Show Additional Data',
-                    columns: [1, 2, 3, 4, 5],
-                    postfixButtons: ['colvisRestore'],
-                },
-                {
-                    extend: 'copy',
-                    text: 'Copy Table',
-                    exportOptions: {
-                        orthogonal: 'export',
-                        columns: [':visible'],
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-sm btn-primary',
                     },
                 },
-                {
-                    extend: 'csv',
-                    text: 'CSV Export',
-                    title: 'links',
-                    exportOptions: {
-                        orthogonal: 'export',
-                        columns: [':visible'],
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Show Additional Data',
+                        columns: [1, 2, 3, 4, 5],
+                        postfixButtons: ['colvisRestore'],
                     },
-                },
-            ],
+                    {
+                        extend: 'copy',
+                        text: 'Copy Table',
+                        exportOptions: {
+                            orthogonal: 'export',
+                            columns: [':visible'],
+                        },
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV Export',
+                        title: 'links',
+                        exportOptions: {
+                            orthogonal: 'export',
+                            columns: [':visible'],
+                        },
+                    },
+                ],
+            },
         },
         topStart: 'pageLength',
     },
@@ -103,13 +109,11 @@ async function initLinks() {
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
-        console.debug('tabs:', tabs)
         const selection = urlParams.has('selection')
 
         const allLinks = []
         if (tabs?.length) {
-            console.debug('processing tabs:', tabs)
-            // const tabId = parseInt(tabs[0])
+            console.debug('tabs:', tabs)
             for (const tabId of tabs) {
                 const action = selection ? 'selection' : 'all'
                 const links = await chrome.tabs.sendMessage(
@@ -117,12 +121,10 @@ async function initLinks() {
                     action
                 )
                 allLinks.push(...links)
-                // await processLinks(links)
             }
         } else {
             const { links } = await chrome.storage.local.get(['links'])
             allLinks.push(...links)
-            // await processLinks(links)
         }
         await processLinks(allLinks)
     } catch (e) {
@@ -171,7 +173,7 @@ async function processLinks(links) {
     // Filter links based on pattern
     if (urlFilter) {
         const re = new RegExp(urlFilter, options.flags)
-        console.debug(`Filtering Links with re: ${re}`)
+        console.debug(`Filtering with regex: ${re} / ${options.flags}`)
         links = links.filter((item) => item.href.match(re))
     }
 
@@ -193,7 +195,9 @@ async function processLinks(links) {
 
         let opts = { ...dtOptions, ...linksOptions }
         linksTable = new DataTable('#links-table', opts)
-        updateTable(links, linksTable)
+        console.debug('links:', links)
+        linksTable.on('draw.dt', debounce(dtDraw, 150))
+        linksTable.rows.add(links).draw()
     }
 
     // Extract domains from items, sort, and remove null
@@ -201,54 +205,22 @@ async function processLinks(links) {
     domains = domains.filter(function (el) {
         return el != null
     })
+    domains = domains.map((domain) => [domain])
     document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('d-none'))
         domainsTable = new DataTable('#domains-table', dtOptions)
-        updateTable(domains, domainsTable)
+        console.debug('domains:', domains)
+        domainsTable.on('draw.dt', debounce(dtDraw, 150))
+        domainsTable.rows.add(domains).draw()
     }
 
     // Hide Loading message
     document.getElementById('loading-message').classList.add('d-none')
-}
 
-// /**
-//  * Get base URL of link
-//  * @function getBaseURL
-//  * @param {String} link
-//  * @return {String}
-//  */
-// function getBaseURL(link) {
-//     const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
-//     const result = RegExp(reBaseURL).exec(link)
-//     if (!result) {
-//         return null
-//     } else if (result[1]) {
-//         return `${result[1]}/`
-//     } else {
-//         return `http://${result[2] || result[3]}/`
-//     }
-// }
-
-/**
- * Update Table with URLs
- * TODO: Review This Function
- * @function updateTable
- * @param {Array} data
- * @param {DataTable} table
- */
-function updateTable(data, table) {
-    console.debug('updateTable:', data, table)
-    table.on('draw.dt', debounce(dtDraw, 150))
-    data.forEach(function (url) {
-        if (typeof url === 'string') {
-            table.row.add([url]).draw()
-        } else {
-            table.row.add(url).draw()
-        }
-    })
+    // Trigger resize event to force datatables to update responsive width
     window.dispatchEvent(new Event('resize'))
 }
 
