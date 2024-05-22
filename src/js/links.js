@@ -1,6 +1,6 @@
 // JS for links.html
 
-// import { textFileDownload } from './exports.js'
+import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
@@ -11,8 +11,9 @@ document
 document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
-
-document.getElementById('copy-links').addEventListener('click', copyLinksClick)
+document
+    .querySelectorAll('.copy-links')
+    .forEach((el) => el.addEventListener('click', copyLinksClick))
 
 const urlParams = new URLSearchParams(window.location.search)
 
