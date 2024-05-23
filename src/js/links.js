@@ -230,6 +230,7 @@ async function processLinks(links) {
         linksTable = new DataTable('#links-table', opts)
         console.debug('links:', links)
         linksTable.on('draw.dt', debounce(dtDraw, 150))
+        linksTable.on('column-visibility.dt', dtVisibility)
         linksTable.rows.add(links).draw()
     }
 
@@ -261,6 +262,11 @@ function dtDraw(event) {
     document.getElementById(event.target.dataset.counter).textContent = event.dt
         .rows(':visible')
         .count()
+}
+
+function dtVisibility(e, settings, column, state) {
+    settings.aoColumns[column].bSearchable = state
+    linksTable.rows().invalidate().draw()
 }
 
 /**
