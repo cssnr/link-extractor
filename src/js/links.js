@@ -111,19 +111,20 @@ function genUrl(url) {
     return link
 }
 
+// Manually Set Theme for DataTables
+let prefers = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light'
+let html = document.querySelector('html')
+html.classList.add(prefers)
+html.setAttribute('data-bs-theme', prefers)
+
 /**
  * Initialize Links
  * @function initLinks
  */
 async function initLinks() {
     console.debug('initLinks:', urlParams)
-    // Manually Set Theme for DataTables
-    let prefers = window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-    let html = document.querySelector('html')
-    html.classList.add(prefers)
-    html.setAttribute('data-bs-theme', prefers)
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
@@ -149,6 +150,24 @@ async function initLinks() {
         console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')
         window.close()
+    }
+
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (patterns.length) {
+        const datalist = document.createElement('datalist')
+        datalist.id = 'filters-list'
+        for (const filter of patterns) {
+            console.log('filter:', filter)
+            const option = document.createElement('option')
+            option.value = filter
+            datalist.appendChild(option)
+        }
+        document.body.appendChild(datalist)
+        const inputs = document.querySelectorAll('.dt-search > input')
+        for (const input of inputs) {
+            console.log('input:', input)
+            input.setAttribute('list', 'filters-list')
+        }
     }
 }
 
