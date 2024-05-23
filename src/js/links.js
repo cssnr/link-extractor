@@ -6,14 +6,14 @@ window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 
 document
-    .querySelectorAll('.open-in-tabs')
-    .forEach((el) => el.addEventListener('click', openLinksClick))
+    .querySelectorAll('.copy-links')
+    .forEach((el) => el.addEventListener('click', copyLinksClick))
 document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
 document
-    .querySelectorAll('.copy-links')
-    .forEach((el) => el.addEventListener('click', copyLinksClick))
+    .querySelectorAll('.open-in-tabs')
+    .forEach((el) => el.addEventListener('click', openLinksClick))
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -164,7 +164,7 @@ async function processLinks(links) {
     const onlyDomains = urlParams.has('domains')
     const { options } = await chrome.storage.sync.get(['options'])
 
-    // Filter links by :// if not disabled by user
+    // Filter links by ://
     if (options.defaultFilter) {
         links = links.filter((link) => link.href.lastIndexOf('://', 10) > 0)
     }
@@ -182,6 +182,7 @@ async function processLinks(links) {
         })
     }
 
+    // Enable stateSave in datatables
     if (options.saveState) {
         dtOptions.stateSave = true
     }
@@ -198,9 +199,6 @@ async function processLinks(links) {
         alert('No Results')
         return window.close()
     }
-
-    // Custom DataTables Options
-    dtOptions.pageLength = options.linksDisplay || -1
 
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
@@ -253,37 +251,10 @@ function dtDraw(event) {
  */
 function copyLinksClick(event) {
     console.debug('copyLinksClick:', event)
-    const table = document.querySelector('#links-table')
-    const urls = []
-    for (const row of table.rows) {
-        if (row.role) continue
-        urls.push(row.cells[0].textContent)
-    }
-    // console.debug('urls:', urls)
-    const text = urls.join('\n')
-    // console.debug('text:', text)
-    navigator.clipboard.writeText(text).then()
+    const links = getTableLinks('#links-body')
+    // console.debug('links:', links)
+    navigator.clipboard.writeText(links).then()
     showToast('Links Copied', 'success')
-}
-
-/**
- * Open links Button Click Callback
- * @function openLinksClick
- * @param {MouseEvent} event
- */
-function openLinksClick(event) {
-    console.debug('openLinksClick:', event)
-    const closest = event.target?.closest('button')
-    const target = document.querySelector(closest?.dataset?.target)
-    let links = target?.innerText?.trim()
-    console.debug('links:', links)
-    if (links) {
-        links.split('\n').forEach(function (url) {
-            chrome.tabs.create({ active: false, url }).then()
-        })
-    } else {
-        showToast('No Links to Open.', 'warning')
-    }
 }
 
 /**
@@ -294,17 +265,51 @@ function openLinksClick(event) {
 function downloadFileClick(event) {
     console.debug('downloadFileClick:', event)
     const closest = event.target?.closest('button')
-    const target = document.querySelector(closest?.dataset?.target)
-    let links = target?.innerText?.trim()
-    const name =
-        event.target.dataset.filename || target.dataset.filename || 'links.txt'
-    console.log('name', name)
+    const links = getTableLinks(closest?.dataset?.target)
+    // console.debug('links:', links)
+    const name = closest.dataset.filename || 'links.txt'
+    console.debug('name:', name)
     if (links) {
         textFileDownload(name, links)
         showToast('Download Started.')
     } else {
         showToast('Nothing to Download.', 'warning')
     }
+}
+
+/**
+ * Open links Button Click Callback
+ * @function openLinksClick
+ * @param {MouseEvent} event
+ */
+function openLinksClick(event) {
+    console.debug('openLinksClick:', event)
+    const closest = event.target?.closest('button')
+    const links = getTableLinks(closest?.dataset?.target)
+    // console.debug('links:', links)
+    if (links) {
+        links.split('\n').forEach(function (url) {
+            chrome.tabs.create({ active: false, url }).then()
+        })
+    } else {
+        showToast('No Links to Open.', 'warning')
+    }
+}
+
+/**
+ * Open links Button Click Callback
+ * @function getTableLinks
+ * @param {String} selector
+ * @return {String}
+ */
+function getTableLinks(selector) {
+    console.debug('getTableLinks:', selector)
+    const table = document.querySelector(selector)
+    const urls = []
+    for (const row of table.rows) {
+        urls.push(row.cells[0].textContent.trim())
+    }
+    return urls.join('\n').trim()
 }
 
 /**
@@ -316,6 +321,9 @@ function handleKeyboard(e) {
     // console.debug('handleKeyboard:', e)
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
         return
+    }
+    if (e.code === 'Escape') {
+        e.target.blur()
     }
     if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
         return
