@@ -20,8 +20,7 @@
             <a href="#links"><span class="badge text-bg-success w-100">Links</span></a>
         </div>
         <div class="col">
-            <a role="button" class="copy-links">
-                <span class="badge text-bg-success w-100">Copy</span></a>
+            <a href="javascript:void(0);" class="copy-links"><span class="badge text-bg-success w-100">Copy</span></a>
         </div>
     </div>
     <div class="row g-1 domains d-none">
@@ -29,7 +28,7 @@
             <a href="#domains"><span class="badge text-bg-primary w-100">Domains</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+            <a href="javascript:void(0);" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
                 <span class="badge text-bg-primary w-100">Copy</span></a>
         </div>
     </div>
@@ -40,12 +39,12 @@
     <div class="links d-none">
         <div class="user-select-none">
             <h2 id="links">Links <span class="badge bg-success-subtle"><span id="links-count">0</span>/<span id="links-total"></span></span></h2>
-            <a id="copy-links" class="btn btn-sm btn-success me-1 mb-2 copy-links" role="button">
-                Copy Links <i class="fa-solid fa-copy ms-1"></i></a>
-            <a id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#links-body" data-filename="links.txt">
-                Download <i class="fa-solid fa-download m-1"></i></a>
-            <a id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#links-body">
-                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
+            <button id="copy-links" class="btn btn-sm btn-success me-1 mb-2 copy-links" type="button">
+                Copy Links <i class="fa-solid fa-copy ms-1"></i></button>
+            <button id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#links-body" data-filename="links.txt">
+                Download <i class="fa-solid fa-download m-1"></i></button>
+            <button id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#links-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
                 <kbd>C</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>L</kbd> to Copy Links.</span>
             <span class="d-inline-block me-1 mt-md-1 float-end">
@@ -73,12 +72,12 @@
     <div class="domains d-none">
         <div class="user-select-none">
             <h2 id="domains">Domains <span class="badge bg-primary-subtle"><span id="domains-count">0</span>/<span id="domains-total"></span></span></h2>
-            <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
-                Copy Domains <i class="fa-solid fa-copy ms-1"></i></a>
-            <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body" data-filename="domains.txt">
-                Download <i class="fa-solid fa-download ms-1"></i></a>
-            <a id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#domains-body">
-                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
+            <button id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" type="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+                Copy Domains <i class="fa-solid fa-copy ms-1"></i></button>
+            <button id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#domains-body" data-filename="domains.txt">
+                Download <i class="fa-solid fa-download ms-1"></i></button>
+            <button id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#domains-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
                 <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
         </div>

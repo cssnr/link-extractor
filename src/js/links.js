@@ -20,7 +20,6 @@ const urlParams = new URLSearchParams(window.location.search)
 const dtOptions = {
     info: false,
     processing: true,
-    stateSave: false,
     responsive: true,
     pageLength: -1,
     lengthMenu: [
@@ -35,6 +34,10 @@ const dtOptions = {
         zeroRecords: '',
     },
     columnDefs: [{ targets: 0, render: genUrl, visible: true }],
+    stateSave: false,
+    stateSaveParams: function (settings, data) {
+        data.search.search = ''
+    },
 }
 
 const linksOptions = {
@@ -179,10 +182,6 @@ async function processLinks(links) {
         })
     }
 
-    // if (options.sortLinks) {
-    //     dtOptions.order = [[0, 'asc']]
-    //     // items.sort((a, b) => a.href.localeCompare(b.href))
-    // }
     if (options.saveState) {
         dtOptions.stateSave = true
     }
@@ -274,7 +273,7 @@ function copyLinksClick(event) {
  */
 function openLinksClick(event) {
     console.debug('openLinksClick:', event)
-    const closest = event.target?.closest('a')
+    const closest = event.target?.closest('button')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
     console.debug('links:', links)
@@ -294,7 +293,7 @@ function openLinksClick(event) {
  */
 function downloadFileClick(event) {
     console.debug('downloadFileClick:', event)
-    const closest = event.target?.closest('a')
+    const closest = event.target?.closest('button')
     const target = document.querySelector(closest?.dataset?.target)
     let links = target?.innerText?.trim()
     const name =
