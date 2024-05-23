@@ -77,7 +77,7 @@ const linksOptions = {
                         title: null,
                         exportOptions: {
                             orthogonal: 'export',
-                            columns: [':visible'],
+                            columns: ':visible',
                         },
                     },
                     {
@@ -87,7 +87,7 @@ const linksOptions = {
                         title: 'links',
                         exportOptions: {
                             orthogonal: 'export',
-                            columns: [':visible'],
+                            columns: ':visible',
                         },
                     },
                 ],
