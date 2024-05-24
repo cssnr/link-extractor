@@ -367,11 +367,17 @@ function handleKeyboard(e) {
     } else if (['KeyD', 'KeyM'].includes(e.code)) {
         document.getElementById('copy-domains').click()
     } else if (['KeyF', 'KeyJ'].includes(e.code)) {
-        document.getElementById('dt-search-0').focus()
         e.preventDefault()
+        const input = document.getElementById('dt-search-0')
+        input?.scrollIntoView()
+        input?.focus()
+        input?.select()
     } else if (['KeyG', 'KeyH'].includes(e.code)) {
-        document.getElementById('dt-search-1').focus()
         e.preventDefault()
+        const input = document.getElementById('dt-search-1')
+        input?.scrollIntoView()
+        input?.focus()
+        input?.select()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
         chrome.runtime.openOptionsPage()
     }
