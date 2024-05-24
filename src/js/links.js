@@ -355,6 +355,7 @@ function handleKeyboard(e) {
         return
     }
     if (e.code === 'Escape') {
+        e.preventDefault()
         e.target.blur()
     }
     if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
