@@ -279,9 +279,13 @@ function dtVisibility(e, settings, column, state) {
 function copyLinksClick(event) {
     console.debug('copyLinksClick:', event)
     const links = getTableLinks('#links-body')
-    // console.debug('links:', links)
-    navigator.clipboard.writeText(links).then()
-    showToast('Links Copied', 'success')
+    console.debug('links:', links)
+    if (links) {
+        navigator.clipboard.writeText(links).then()
+        showToast('Links Copied', 'success')
+    } else {
+        showToast('No Links to Copy', 'warning')
+    }
 }
 
 /**
