@@ -278,8 +278,9 @@ function dtVisibility(e, settings, column, state) {
  */
 function copyLinksClick(event) {
     console.debug('copyLinksClick:', event)
+    event.preventDefault()
     const links = getTableLinks('#links-body')
-    console.debug('links:', links)
+    // console.debug('links:', links)
     if (links) {
         navigator.clipboard.writeText(links).then()
         showToast('Links Copied', 'success')
@@ -299,7 +300,7 @@ function downloadFileClick(event) {
     const links = getTableLinks(closest?.dataset?.target)
     // console.debug('links:', links)
     const name = closest.dataset.filename || 'links.txt'
-    console.debug('name:', name)
+    // console.debug('name:', name)
     if (links) {
         textFileDownload(name, links)
         showToast('Download Started.')
