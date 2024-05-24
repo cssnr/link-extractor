@@ -49,7 +49,6 @@ const linksOptions = {
         { data: 'text' },
         { data: 'title' },
         { data: 'label' },
-        // { data: 'class' },
         { data: 'rel' },
         { data: 'target' },
     ],

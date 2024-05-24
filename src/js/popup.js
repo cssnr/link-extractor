@@ -221,7 +221,6 @@ function extractURLs(text) {
             text: null,
             title: null,
             label: null,
-            // class: null,
             target: null,
             rel: null,
             href: match,

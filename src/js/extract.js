@@ -83,7 +83,6 @@ function pushElement(array, element) {
             text: element.textContent,
             title: element.title,
             label: element.ariaLabel,
-            // class: element.className,
             rel: element.rel,
             target: element.target,
             origin: element.origin,
