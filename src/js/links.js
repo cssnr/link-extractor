@@ -34,6 +34,9 @@ const dtOptions = {
         zeroRecords: '',
     },
     columnDefs: [{ targets: 0, render: genUrl, visible: true }],
+    search: {
+        regex: true,
+    },
     stateSave: false,
     stateSaveParams: function (settings, data) {
         data.search.search = ''
@@ -157,7 +160,7 @@ async function initLinks() {
         const datalist = document.createElement('datalist')
         datalist.id = 'filters-list'
         for (const filter of patterns) {
-            console.log('filter:', filter)
+            // console.debug('filter:', filter)
             const option = document.createElement('option')
             option.value = filter
             datalist.appendChild(option)
@@ -165,7 +168,7 @@ async function initLinks() {
         document.body.appendChild(datalist)
         const inputs = document.querySelectorAll('.dt-search > input')
         for (const input of inputs) {
-            console.log('input:', input)
+            // console.debug('input:', input)
             input.setAttribute('list', 'filters-list')
         }
     }
