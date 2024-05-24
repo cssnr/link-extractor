@@ -27,10 +27,11 @@ document.getElementById('reset-default').addEventListener('click', resetForm)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('revoke-perms').addEventListener('click', revokePerms)
 
-const optionsForm = document.getElementById('options-form')
-optionsForm.addEventListener('submit', (e) => e.preventDefault())
-optionsForm
-    .querySelectorAll('input, select')
+document
+    .getElementById('options-form')
+    .addEventListener('submit', (e) => e.preventDefault())
+document
+    .querySelectorAll('#options-form > input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -192,12 +193,24 @@ async function resetForm(event) {
 let row
 let last = -1
 
-function dragStart(event) {
+/**
+ * Drag Start Event Callback
+ * Trigger filterClick to prevent dragging while editing
+ * @function dragStart
+ * @param {MouseEvent} event
+ */
+async function dragStart(event) {
     console.debug('dragStart:', event)
-    editing = false
+    // editing = false
+    await filterClick(event)
     row = event.target.closest('tr')
 }
 
+/**
+ * Drag Over Event Callback
+ * @function dragOver
+ * @param {MouseEvent} event
+ */
 function dragOver(event) {
     // console.debug('dragOver:', event)
     event.preventDefault()
@@ -323,6 +336,7 @@ async function filterClick(event) {
  * @return {Boolean}
  */
 async function saveEditing(event, idx) {
+    event.preventDefault() // block dragStart if editing
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug(`saveEditInput: ${idx}`, event, td)
     if (!td) {

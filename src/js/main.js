@@ -10,6 +10,11 @@ if (backToTop) {
 }
 
 if (typeof ClipboardJS !== 'undefined') {
+    document
+        .querySelectorAll('.clip')
+        .forEach((el) =>
+            el.addEventListener('click', (e) => e.preventDefault())
+        )
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
         // console.debug('clipboard.success:', event)

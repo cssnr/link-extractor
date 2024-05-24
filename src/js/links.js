@@ -6,19 +6,21 @@ window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 
 document
-    .querySelectorAll('.open-in-tabs')
-    .forEach((el) => el.addEventListener('click', openLinksClick))
+    .querySelectorAll('.copy-links')
+    .forEach((el) => el.addEventListener('click', copyLinksClick))
 document
     .querySelectorAll('.download-file')
     .forEach((el) => el.addEventListener('click', downloadFileClick))
+document
+    .querySelectorAll('.open-in-tabs')
+    .forEach((el) => el.addEventListener('click', openLinksClick))
 
 const urlParams = new URLSearchParams(window.location.search)
+
 const dtOptions = {
     info: false,
     processing: true,
-    saveState: true,
     responsive: true,
-    order: [],
     pageLength: -1,
     lengthMenu: [
         [-1, 10, 25, 50, 100, 250, 500, 1000],
@@ -26,17 +28,80 @@ const dtOptions = {
     ],
     language: {
         emptyTable: '',
-        lengthMenu: '_MENU_ links',
+        lengthMenu: '_MENU_ Links',
         search: 'Filter:',
+        searchPlaceholder: 'Type to Filter...',
         zeroRecords: '',
     },
-    columnDefs: [
-        {
-            targets: 0,
-            render: genUrl,
-        },
-    ],
+    columnDefs: [{ targets: 0, render: genUrl, visible: true }],
+    search: {
+        regex: true,
+    },
+    stateSave: false,
+    stateSaveParams: function (settings, data) {
+        data.search.search = ''
+    },
 }
+
+const linksOptions = {
+    columns: [
+        { data: 'href' },
+        { data: 'text' },
+        { data: 'title' },
+        { data: 'label' },
+        { data: 'rel' },
+        { data: 'target' },
+    ],
+    columnDefs: [
+        { targets: 0, render: genUrl, visible: true },
+        { targets: '_all', visible: false },
+    ],
+    layout: {
+        top2Start: {
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn btn-sm',
+                    },
+                },
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Show Additional Data',
+                        className: 'btn-primary',
+                        columns: [1, 2, 3, 4, 5],
+                        postfixButtons: ['colvisRestore'],
+                    },
+                    {
+                        extend: 'copy',
+                        text: 'Copy Table',
+                        className: 'btn-outline-primary',
+                        title: null,
+                        exportOptions: {
+                            orthogonal: 'export',
+                            columns: ':visible',
+                        },
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV Export',
+                        className: 'btn-outline-primary',
+                        title: 'links',
+                        exportOptions: {
+                            orthogonal: 'export',
+                            columns: ':visible',
+                        },
+                    },
+                ],
+            },
+        },
+        topStart: 'pageLength',
+        topEnd: 'search',
+    },
+}
+
+let linksTable
+let domainsTable
 
 function genUrl(url) {
     const link = document.createElement('a')
@@ -48,6 +113,14 @@ function genUrl(url) {
     return link
 }
 
+// Manually Set Theme for DataTables
+let prefers = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light'
+let html = document.querySelector('html')
+html.classList.add(prefers)
+html.setAttribute('data-bs-theme', prefers)
+
 /**
  * Initialize Links
  * @function initLinks
@@ -57,13 +130,11 @@ async function initLinks() {
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
-        console.debug('tabs:', tabs)
         const selection = urlParams.has('selection')
 
         const allLinks = []
         if (tabs?.length) {
-            console.debug('processing tabs:', tabs)
-            // const tabId = parseInt(tabs[0])
+            console.debug('tabs:', tabs)
             for (const tabId of tabs) {
                 const action = selection ? 'selection' : 'all'
                 const links = await chrome.tabs.sendMessage(
@@ -71,18 +142,34 @@ async function initLinks() {
                     action
                 )
                 allLinks.push(...links)
-                // await processLinks(links)
             }
         } else {
             const { links } = await chrome.storage.local.get(['links'])
             allLinks.push(...links)
-            // await processLinks(links)
         }
         await processLinks(allLinks)
     } catch (e) {
         console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')
         window.close()
+    }
+
+    const { patterns } = await chrome.storage.sync.get(['patterns'])
+    if (patterns.length) {
+        const datalist = document.createElement('datalist')
+        datalist.id = 'filters-list'
+        for (const filter of patterns) {
+            // console.debug('filter:', filter)
+            const option = document.createElement('option')
+            option.value = filter
+            datalist.appendChild(option)
+        }
+        document.body.appendChild(datalist)
+        const inputs = document.querySelectorAll('.dt-search > input')
+        for (const input of inputs) {
+            // console.debug('input:', input)
+            input.setAttribute('list', 'filters-list')
+        }
     }
 }
 
@@ -95,138 +182,110 @@ async function initLinks() {
 async function processLinks(links) {
     console.debug('processLinks:', links)
     const urlFilter = urlParams.get('filter')
-    // console.debug(`urlFilter: ${urlFilter}`)
     const onlyDomains = urlParams.has('domains')
-    // console.debug(`onlyDomains: ${onlyDomains}`)
     const { options } = await chrome.storage.sync.get(['options'])
 
-    // Filter links by :// if not disabled by user
+    // Filter links by ://
     if (options.defaultFilter) {
-        links = links.filter((link) => link.lastIndexOf('://', 10) > 0)
+        links = links.filter((link) => link.href.lastIndexOf('://', 10) > 0)
     }
 
     // Remove duplicate and sort links
-    let items = [...new Set(links)]
-    if (options.sortLinks) {
-        dtOptions.order = [[0, 'asc']]
-        items.sort()
+    if (options.removeDuplicates) {
+        const hrefs = []
+        links = links.filter((value) => {
+            if (hrefs.includes(value.href)) {
+                return false
+            } else {
+                hrefs.push(value.href)
+                return true
+            }
+        })
+    }
+
+    // Enable stateSave in datatables
+    if (options.saveState) {
+        dtOptions.stateSave = true
     }
 
     // Filter links based on pattern
     if (urlFilter) {
         const re = new RegExp(urlFilter, options.flags)
-        console.debug(`Filtering Links with re: ${re}`)
-        items = items.filter((item) => item.match(re))
+        console.debug(`Filtering with regex: ${re} / ${options.flags}`)
+        links = links.filter((item) => item.href.match(re))
     }
 
     // If no items, alert and return
-    if (!items.length) {
+    if (!links.length) {
         alert('No Results')
         return window.close()
     }
 
-    // Custom DataTables Options
-    dtOptions.pageLength = options.linksDisplay || -1
-
     // Update links if onlyDomains is not set
     if (!onlyDomains) {
         document.getElementById('links-total').textContent =
-            items.length.toString()
+            links.length.toString()
         const linksElements = document.querySelectorAll('.links')
         linksElements.forEach((el) => el.classList.remove('d-none'))
-        updateTable(items, '#links-table')
+
+        let opts = { ...dtOptions, ...linksOptions }
+        linksTable = new DataTable('#links-table', opts)
+        console.debug('links:', links)
+        linksTable.on('draw.dt', debounce(dtDraw, 150))
+        linksTable.on('column-visibility.dt', dtVisibility)
+        linksTable.rows.add(links).draw()
     }
 
     // Extract domains from items, sort, and remove null
-    let domains = [...new Set(items.map((link) => getBaseURL(link)))]
-    if (options.sortLinks) {
-        domains.sort()
-    }
+    let domains = [...new Set(links.map((link) => link.origin))]
     domains = domains.filter(function (el) {
         return el != null
     })
+    domains = domains.map((domain) => [domain])
     document.getElementById('domains-total').textContent =
         domains.length.toString()
     if (domains.length) {
         const domainsElements = document.querySelectorAll('.domains')
         domainsElements.forEach((el) => el.classList.remove('d-none'))
-        updateTable(domains, '#domains-table')
+        domainsTable = new DataTable('#domains-table', dtOptions)
+        console.debug('domains:', domains)
+        domainsTable.on('draw.dt', debounce(dtDraw, 150))
+        domainsTable.rows.add(domains).draw()
     }
 
     // Hide Loading message
     document.getElementById('loading-message').classList.add('d-none')
-}
 
-/**
- * Get base URL of link
- * @function getBaseURL
- * @param {String} link
- * @return {String}
- */
-function getBaseURL(link) {
-    const reBaseURL = /(^\w+:\/\/[^/]+)|(^[A-Za-z0-9.-]+)\/|(^[A-Za-z0-9.-]+$)/
-    const result = RegExp(reBaseURL).exec(link)
-    if (!result) {
-        return null
-    } else if (result[1]) {
-        return `${result[1]}/`
-    } else {
-        return `http://${result[2] || result[3]}/`
-    }
-}
-
-/**
- * Update Table with URLs
- * @function updateTable
- * @param {Array} data
- * @param {String} selector
- */
-function updateTable(data, selector) {
-    console.debug(`updateTable: ${selector}`)
-    const dataTables = new DataTable(selector, dtOptions)
-    $(selector).on('draw.dt', debounce(dtDraw, 150))
-    data.forEach(function (url) {
-        // const link = document.createElement('a')
-        // link.text = url
-        // link.href = url
-        // link.title = url
-        // link.target = '_blank'
-        // link.rel = 'noopener'
-        // dataTables.row.add([link]).draw()
-        dataTables.row.add([url]).draw()
-    })
+    // Trigger resize event to force datatables to update responsive width
+    window.dispatchEvent(new Event('resize'))
 }
 
 function dtDraw(event) {
-    // console.debug('dtDraw:', event)
-    const tbody = event.target.children[3]
-    let length = tbody.rows.length
-    if (tbody.rows.length === 1) {
-        if (!tbody.rows[0].textContent) {
-            length = 0
-        }
-    }
-    document.getElementById(event.target.dataset.counter).textContent =
-        length.toString()
+    document.getElementById(event.target.dataset.counter).textContent = event.dt
+        .rows(':visible')
+        .count()
+}
+
+function dtVisibility(e, settings, column, state) {
+    settings.aoColumns[column].bSearchable = state
+    linksTable.rows().invalidate().draw()
 }
 
 /**
- * Open links Button Click Callback
- * @function openLinksClick
+ * Copy links Button Click Callback
+ * @function copyLinksClick
  * @param {MouseEvent} event
  */
-function openLinksClick(event) {
-    console.debug('openLinksClick:', event)
-    const closest = event.target?.closest('a')
-    const target = document.querySelector(closest?.dataset?.target)
-    let links = target?.innerText?.trim()
-    console.debug('links:', links)
+function copyLinksClick(event) {
+    console.debug('copyLinksClick:', event)
+    event.preventDefault()
+    const links = getTableLinks('#links-body')
+    // console.debug('links:', links)
     if (links) {
-        links.split('\n').forEach(function (url) {
-            chrome.tabs.create({ active: false, url }).then()
-        })
+        navigator.clipboard.writeText(links).then()
+        showToast('Links Copied', 'success')
     } else {
-        showToast('No Links to Open.', 'warning')
+        showToast('No Links to Copy', 'warning')
     }
 }
 
@@ -237,18 +296,52 @@ function openLinksClick(event) {
  */
 function downloadFileClick(event) {
     console.debug('downloadFileClick:', event)
-    const closest = event.target?.closest('a')
-    const target = document.querySelector(closest?.dataset?.target)
-    let links = target?.innerText?.trim()
-    const name =
-        event.target.dataset.filename || target.dataset.filename || 'links.txt'
-    console.log('name', name)
+    const closest = event.target?.closest('button')
+    const links = getTableLinks(closest?.dataset?.target)
+    // console.debug('links:', links)
+    const name = closest.dataset.filename || 'links.txt'
+    // console.debug('name:', name)
     if (links) {
         textFileDownload(name, links)
         showToast('Download Started.')
     } else {
         showToast('Nothing to Download.', 'warning')
     }
+}
+
+/**
+ * Open links Button Click Callback
+ * @function openLinksClick
+ * @param {MouseEvent} event
+ */
+function openLinksClick(event) {
+    console.debug('openLinksClick:', event)
+    const closest = event.target?.closest('button')
+    const links = getTableLinks(closest?.dataset?.target)
+    // console.debug('links:', links)
+    if (links) {
+        links.split('\n').forEach(function (url) {
+            chrome.tabs.create({ active: false, url }).then()
+        })
+    } else {
+        showToast('No Links to Open.', 'warning')
+    }
+}
+
+/**
+ * Open links Button Click Callback
+ * @function getTableLinks
+ * @param {String} selector
+ * @return {String}
+ */
+function getTableLinks(selector) {
+    console.debug('getTableLinks:', selector)
+    const table = document.querySelector(selector)
+    const urls = []
+    for (const row of table.rows) {
+        urls.push(row.cells[0].textContent.trim())
+    }
+    return urls.join('\n').trim()
 }
 
 /**
@@ -261,6 +354,10 @@ function handleKeyboard(e) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.repeat) {
         return
     }
+    if (e.code === 'Escape') {
+        e.preventDefault()
+        e.target?.blur()
+    }
     if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'].includes(e.target.tagName)) {
         return
     }
@@ -271,11 +368,17 @@ function handleKeyboard(e) {
     } else if (['KeyD', 'KeyM'].includes(e.code)) {
         document.getElementById('copy-domains').click()
     } else if (['KeyF', 'KeyJ'].includes(e.code)) {
-        document.getElementById('dt-search-0').focus()
         e.preventDefault()
+        const input = document.getElementById('dt-search-0')
+        input?.scrollIntoView()
+        input?.focus()
+        input?.select()
     } else if (['KeyG', 'KeyH'].includes(e.code)) {
-        document.getElementById('dt-search-1').focus()
         e.preventDefault()
+        const input = document.getElementById('dt-search-1')
+        input?.scrollIntoView()
+        input?.focus()
+        input?.select()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
         chrome.runtime.openOptionsPage()
     }

@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/datatables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/datatables/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/links.css">
     <script type="text/javascript" src="../js/theme.js"></script>
@@ -19,7 +20,7 @@
             <a href="#links"><span class="badge text-bg-success w-100">Links</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#links-body" data-toast="Copied Links">
+            <a href="#" class="copy-links">
                 <span class="badge text-bg-success w-100">Copy</span></a>
         </div>
     </div>
@@ -28,7 +29,7 @@
             <a href="#domains"><span class="badge text-bg-primary w-100">Domains</span></a>
         </div>
         <div class="col">
-            <a role="button" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+            <a href="#" class="clip" data-clipboard-target="#domains-body" data-toast="Copied Domains">
                 <span class="badge text-bg-primary w-100">Copy</span></a>
         </div>
     </div>
@@ -39,47 +40,50 @@
     <div class="links d-none">
         <div class="user-select-none">
             <h2 id="links">Links <span class="badge bg-success-subtle"><span id="links-count">0</span>/<span id="links-total"></span></span></h2>
-            <a id="copy-links" class="btn btn-sm btn-success clip me-1 mb-2" role="button" data-clipboard-target="#links-body" data-toast="Copied Links">
-                Copy Links <i class="fa-solid fa-copy ms-1"></i></a>
-            <a id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#links-body" data-filename="links.txt">
-                Download <i class="fa-solid fa-download m-1"></i></a>
-            <a id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#links-body">
-                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
+            <button id="copy-links" class="btn btn-sm btn-success me-1 mb-2 copy-links" type="button">
+                Copy Links <i class="fa-solid fa-copy ms-1"></i></button>
+            <button id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#links-body" data-filename="links.txt">
+                Download <i class="fa-solid fa-download m-1"></i></button>
+            <button id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#links-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
                 <kbd>C</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>L</kbd> to Copy Links.</span>
-        </div>
-
-<!--        <div class="input-group mb-2">-->
-<!--            <input id="filter-links" type="text" class="form-control filter-input" list="savedFilters" placeholder="Press F and Type to Filter..." aria-label="Filter" aria-describedby="reset-button">-->
-<!--            <button class="btn btn-outline-secondary" type="button" id="reset-button">Reset</button>-->
-<!--        </div>-->
-<!--        <datalist id="savedFilters"></datalist>-->
-
+            <span class="d-inline-block me-1 mt-md-1 float-end">
+                <kbd>K</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>Z</kbd> Keyboard Shortcuts.
+            </span>
+        </div> <!-- links-buttons -->
         <table id="links-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="links-count" style="width:100%">
-            <caption class="visually-hidden user-select-none">Links</caption>
-            <thead class=""><tr><th>Link</th></tr></thead>
+            <thead class="">
+                <tr>
+                    <th>Link</th>
+                    <th>Text</th>
+                    <th>Title</th>
+                    <th>Label</th>
+                    <th>Rel</th>
+                    <th>Target</th>
+                </tr>
+            </thead>
             <tbody id="links-body"></tbody>
-        </table>
-    </div>
+        </table> <!-- links-table -->
+    </div> <!-- links -->
 
     <div class="domains d-none">
         <div class="user-select-none">
             <h2 id="domains">Domains <span class="badge bg-primary-subtle"><span id="domains-count">0</span>/<span id="domains-total"></span></span></h2>
-            <a id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" role="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
-                Copy Domains <i class="fa-solid fa-copy ms-1"></i></a>
-            <a id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" role="button" data-target="#domains-body" data-filename="domains.txt">
-                Download <i class="fa-solid fa-download ms-1"></i></a>
-            <a id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#domains-body">
-                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
+            <button id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" type="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+                Copy Domains <i class="fa-solid fa-copy ms-1"></i></button>
+            <button id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#domains-body" data-filename="domains.txt">
+                Download <i class="fa-solid fa-download ms-1"></i></button>
+            <button id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#domains-body">
+                Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
             <span class="d-inline-block me-1 mb-2">
                 <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
-        </div>
+        </div> <!-- domains-buttons -->
         <table id="domains-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="domains-count" style="width:100%">
-            <caption class="visually-hidden user-select-none">Domains</caption>
             <thead class=""><tr><th>Domain</th></tr></thead>
             <tbody id="domains-body"></tbody>
-        </table>
-    </div>
+        </table> <!-- domains-table -->
+    </div> <!-- domains -->
 </div> <!-- container-fluid -->
 
 <div id="keybinds-modal" class="modal" tabindex="-1">
@@ -98,6 +102,7 @@
                         <p><kbd>G</kbd> or <kbd>H</kbd> Focus Domains Filter</p>
                         <p><kbd>T</kbd> or <kbd>O</kbd> Open Options</p>
                         <p><kbd>Z</kbd> or <kbd>K</kbd> Keyboard Shortcuts</p>
+                        <p><kbd class="me-1">Escape</kbd> Unfocus Filter Input</p>
                     </div>
                 </div>
             </div>
@@ -123,6 +128,10 @@
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../dist/datatables/dataTables.min.js"></script>
 <script type="text/javascript" src="../dist/datatables/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/buttons.bootstrap5.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="../dist/datatables/buttons.html5.min.js"></script>
 <script type="text/javascript" src="../dist/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="../js/main.js"></script>
 <script type="module" src="../js/links.js"></script>
