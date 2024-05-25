@@ -31,7 +31,7 @@ document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
 document
-    .querySelectorAll('#options-form > input, select')
+    .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
