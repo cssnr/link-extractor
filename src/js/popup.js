@@ -3,6 +3,7 @@
 import {
     checkPerms,
     injectTab,
+    openURL,
     requestPerms,
     saveOptions,
     updateManifest,
@@ -139,6 +140,7 @@ async function linksForm(event) {
     event.preventDefault()
     const value = event.target.elements['links-text'].value
     // console.debug('value:', value)
+    const { options } = await chrome.storage.sync.get(['options'])
     if (event.submitter.id === 'parse-links') {
         const urls = extractURLs(value)
         // console.debug('urls:', urls)
@@ -149,7 +151,8 @@ async function linksForm(event) {
         const urls = extractURLs(value)
         // console.debug('urls:', urls)
         urls.forEach(function (url) {
-            chrome.tabs.create({ active: false, url })
+            openURL(url.href, options.lazyLoad)
+            // chrome.tabs.create({ active: false, url })
         })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
@@ -159,7 +162,8 @@ async function linksForm(event) {
             if (!url.includes(':')) {
                 url = `http://${url}`
             }
-            chrome.tabs.create({ active: false, url })
+            openURL(url, options.lazyLoad)
+            // chrome.tabs.create({ active: false, url })
         })
     } else {
         console.error('Unknown event.submitter:', event.submitter)
