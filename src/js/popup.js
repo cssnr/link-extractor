@@ -152,7 +152,6 @@ async function linksForm(event) {
         // console.debug('urls:', urls)
         urls.forEach(function (url) {
             openURL(url.href, options.lazyLoad)
-            // chrome.tabs.create({ active: false, url })
         })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
@@ -163,7 +162,6 @@ async function linksForm(event) {
                 url = `http://${url}`
             }
             openURL(url, options.lazyLoad)
-            // chrome.tabs.create({ active: false, url })
         })
     } else {
         console.error('Unknown event.submitter:', event.submitter)

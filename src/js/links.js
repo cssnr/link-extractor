@@ -323,7 +323,6 @@ async function openLinksClick(event) {
     if (links) {
         links.split('\n').forEach(function (url) {
             openURL(url, options.lazyLoad)
-            // chrome.tabs.create({ active: false, url }).then()
         })
     } else {
         showToast('No Links to Open.', 'warning')
