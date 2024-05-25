@@ -128,6 +128,27 @@ export async function saveOptions(event) {
     }
 }
 
+/**
+ * Open URL
+ * @function openURL
+ * @param {String} url
+ * @param {Boolean} [lazy]
+ */
+export function openURL(url, lazy = false) {
+    // console.debug('openLink:', url, lazy)
+    if (!url.includes('://')) {
+        url = `http://${url}`
+    }
+    // console.debug('url:', url)
+    if (lazy) {
+        const lazyURL = new URL(chrome.runtime.getURL('/html/lazy.html'))
+        lazyURL.searchParams.append('url', url)
+        chrome.tabs.create({ active: false, url: lazyURL.href })
+    } else {
+        chrome.tabs.create({ active: false, url })
+    }
+}
+
 export function updateManifest() {
     const manifest = chrome.runtime.getManifest()
     document

@@ -45,6 +45,7 @@ async function onInstalled(details) {
         setDefaultOptions({
             linksDisplay: -1,
             flags: 'ig',
+            lazyLoad: true,
             removeDuplicates: true,
             defaultFilter: true,
             saveState: true,

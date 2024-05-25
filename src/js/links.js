@@ -1,6 +1,6 @@
 // JS for links.html
 
-import { textFileDownload } from './exports.js'
+import { openURL, textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
@@ -314,14 +314,15 @@ function downloadFileClick(event) {
  * @function openLinksClick
  * @param {MouseEvent} event
  */
-function openLinksClick(event) {
+async function openLinksClick(event) {
     console.debug('openLinksClick:', event)
     const closest = event.target?.closest('button')
     const links = getTableLinks(closest?.dataset?.target)
     // console.debug('links:', links)
+    const { options } = await chrome.storage.sync.get(['options'])
     if (links) {
         links.split('\n').forEach(function (url) {
-            chrome.tabs.create({ active: false, url }).then()
+            openURL(url, options.lazyLoad)
         })
     } else {
         showToast('No Links to Open.', 'warning')
