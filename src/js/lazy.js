@@ -10,7 +10,7 @@ link.rel = 'icon'
 link.href = `${url.origin}/favicon.ico`
 document.head.appendChild(link)
 
-document.addEventListener('focus', () => {
+window.addEventListener('focus', () => {
     console.log('url:', url)
     window.location = url.href
 })
