@@ -158,9 +158,6 @@ async function linksForm(event) {
         // console.debug('text:', text)
         text.forEach(function (url) {
             // links without a : get prepended the web extension url by default
-            if (!url.includes(':')) {
-                url = `http://${url}`
-            }
             openURL(url, options.lazyLoad)
         })
     } else {

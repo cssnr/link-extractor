@@ -136,10 +136,14 @@ export async function saveOptions(event) {
  */
 export function openURL(url, lazy = false) {
     // console.debug('openLink:', url, lazy)
+    if (!url.includes('://')) {
+        url = `http://${url}`
+    }
+    // console.debug('url:', url)
     if (lazy) {
-        const lazyUrl = new URL(chrome.runtime.getURL('/html/lazy.html'))
-        lazyUrl.searchParams.append('url', url)
-        chrome.tabs.create({ active: false, url: lazyUrl.href })
+        const lazyURL = new URL(chrome.runtime.getURL('/html/lazy.html'))
+        lazyURL.searchParams.append('url', url)
+        chrome.tabs.create({ active: false, url: lazyURL.href })
     } else {
         chrome.tabs.create({ active: false, url })
     }
