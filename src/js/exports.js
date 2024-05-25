@@ -132,13 +132,12 @@ export async function saveOptions(event) {
  * Open URL
  * @function openURL
  * @param {String} url
- * @param {Boolean} lazy
+ * @param {Boolean} [lazy]
  */
-export function openURL(url, lazy) {
+export function openURL(url, lazy = false) {
     // console.debug('openLink:', url, lazy)
     if (lazy) {
         const lazyUrl = new URL(chrome.runtime.getURL('/html/lazy.html'))
-        // console.debug('lazyUrl:', lazyUrl)
         lazyUrl.searchParams.append('url', url)
         chrome.tabs.create({ active: false, url: lazyUrl.href })
     } else {
