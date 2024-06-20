@@ -85,11 +85,7 @@ For more information on regex, see: https://regex101.com/
 
 **Quick Start**
 
-First, clone (or download) this repository and change into the directory:
-```shell
-git clone https://github.com/django-files/web-extension.git
-cd web-extension
-```
+First, clone (or download) this repository and change into the directory.
 
 Second, install the dependencies:
 ```shell
