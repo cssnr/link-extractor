@@ -61,7 +61,7 @@ async function initOptions() {
     updateManifest()
     await setShortcuts()
     await checkPerms()
-    document.getElementById('add-filter').focus()
+    // document.getElementById('add-filter').focus()
 }
 
 /**
