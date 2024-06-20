@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Link Extractor Options</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
@@ -25,7 +26,7 @@
     <div class="clearfix"></div>
     <p class="text-center lead">v<span class="version"></span></p>
 
-    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover">
+    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover d-none">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
         <tbody></tbody>
@@ -134,7 +135,7 @@
     </form>
 
     <div class="mb-1">
-        <input type="file" id="import-input" data-import-name="patterns" data-import-display="Filters" style="display: none;" />
+        <input type="file" id="import-input" data-import-name="patterns" data-import-display="Filters" class="d-none"/>
         <a id="import-data" data-import-name="patterns" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
             Import <i class="fa-solid fa-file-arrow-up ms-1"></i></a>
         <span class="ms-2 me-1">/</span>

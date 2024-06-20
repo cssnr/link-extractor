@@ -407,7 +407,11 @@ function beginEditing(event, idx) {
  * @param {String} selector
  */
 async function setShortcuts(selector = '#keyboard-shortcuts') {
+    if (!chrome.commands) {
+        return console.debug('Skipping: chrome.commands')
+    }
     const table = document.querySelector(selector)
+    table.classList.remove('d-none')
     const tbody = table.querySelector('tbody')
     const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
