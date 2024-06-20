@@ -13,21 +13,16 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
-
-      - name: "Release Version Check"
-        if: ${{ github.event_name == 'release' }}
-        run: |
-          export version="$(jq '.version' < manifest.json | tr -d '"')"
-          if [ "${{ github.ref_name }}" != "${version}" ];then
-            echo "Manifest Version ${version} does not match release tag ${{ github.ref_name }}"
-            exit 1
-          fi
+        uses: actions/checkout@v4
 
       - name: "Setup Node"
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: "Update Manifest Version"
+        uses: cssnr/update-json-value-action@v1
+        if: ${{ github.event_name == 'release' }}
 
       - name: "Build All"
         run: |
@@ -35,7 +30,7 @@ jobs:
           npm run build
 
       - name: "Upload to Actions"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: web-ext-artifacts/
