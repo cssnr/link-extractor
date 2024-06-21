@@ -49,6 +49,8 @@ async function onInstalled(details) {
             removeDuplicates: true,
             defaultFilter: true,
             saveState: true,
+            linksTruncate: true,
+            linksNoWrap: true,
             contextMenu: true,
             showUpdate: false,
         })

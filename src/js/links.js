@@ -33,7 +33,10 @@ const dtOptions = {
         searchPlaceholder: 'Type to Filter...',
         zeroRecords: '',
     },
-    columnDefs: [{ targets: 0, render: genUrl, visible: true }],
+    columnDefs: [
+        { targets: 0, render: genUrl, visible: true, className: '' },
+        { targets: '_all', visible: false },
+    ],
     search: {
         regex: true,
     },
@@ -51,10 +54,6 @@ const linksOptions = {
         { data: 'label' },
         { data: 'rel' },
         { data: 'target' },
-    ],
-    columnDefs: [
-        { targets: 0, render: genUrl, visible: true },
-        { targets: '_all', visible: false },
     ],
     layout: {
         top2Start: {
@@ -171,15 +170,8 @@ async function initLinks() {
             input.setAttribute('list', 'filters-list')
         }
     }
-    // window.addEventListener('resize', windowResize)
     window.dispatchEvent(new Event('resize'))
 }
-
-// function windowResize() {
-//     console.log('Window was resized!')
-//     linksTable.columns.adjust().draw()
-//     domainsTable.columns.adjust().draw()
-// }
 
 /**
  * Process Links
@@ -192,6 +184,25 @@ async function processLinks(links) {
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
     const { options } = await chrome.storage.sync.get(['options'])
+    // console.debug('options:', options)
+
+    // Set Table Options
+    if (options.linksTruncate) {
+        // console.debug('linksTruncate')
+        dtOptions.columnDefs[0].className += ' truncate'
+        window.addEventListener('resize', windowResize)
+        document.querySelectorAll('table').forEach((table) => {
+            table.style.tableLayout = 'fixed'
+        })
+    }
+    if (options.linksNoWrap) {
+        // console.debug('linksNoWrap')
+        dtOptions.columnDefs[0].className += ' text-nowrap'
+    }
+    // console.debug('table-responsive')
+    // document.querySelectorAll('.table-wrapper').forEach((el) => {
+    //     el.classList.add('table-responsive')
+    // })
 
     // Filter links by ://
     if (options.defaultFilter) {
@@ -263,9 +274,12 @@ async function processLinks(links) {
 
     // Hide Loading message
     document.getElementById('loading-message').classList.add('d-none')
+}
 
-    // Trigger resize event - MOVED to end of initLinks
-    // window.dispatchEvent(new Event('resize'))
+function windowResize() {
+    // console.debug('windowResize')
+    linksTable.columns.adjust().draw()
+    domainsTable.columns.adjust().draw()
 }
 
 function dtDraw(event) {

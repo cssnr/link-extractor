@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<div id="floating-links" class="position-fixed top-0 end-0 mt-2 me-2 user-select-none">
+<div id="floating-links" class="position-fixed top-0 end-0 mt-1 me-2 user-select-none">
     <div class="row g-1 links d-none">
         <div class="col">
             <a href="#links"><span class="badge text-bg-success w-100">Links</span></a>
@@ -58,19 +58,21 @@
                 </div>
             </div>
         </div> <!-- links-buttons -->
-        <table id="links-table" class="table table-sm table-striped table-hover small w-100" data-counter="links-count">
-            <thead class="">
-                <tr>
-                    <th>Link</th>
-                    <th>Text</th>
-                    <th>Title</th>
-                    <th>Label</th>
-                    <th>Rel</th>
-                    <th>Target</th>
-                </tr>
-            </thead>
-            <tbody id="links-body"></tbody>
-        </table> <!-- links-table -->
+        <div class="table-wrapper">
+            <table id="links-table" class="table table-sm table-striped table-hover small w-100" data-counter="links-count">
+                <thead class="">
+                    <tr>
+                        <th>Link</th>
+                        <th>Text</th>
+                        <th>Title</th>
+                        <th>Label</th>
+                        <th>Rel</th>
+                        <th>Target</th>
+                    </tr>
+                </thead>
+                <tbody id="links-body"></tbody>
+            </table> <!-- links-table -->
+        </div> <!-- table-wrapper -->
     </div> <!-- links -->
 
     <div class="domains pt-2 d-none">
@@ -87,10 +89,12 @@
             <span class="d-inline-block me-1">
                 <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
         </div> <!-- domains-buttons -->
-        <table id="domains-table" class="table table-sm table-striped table-hover small w-100" data-counter="domains-count">
-            <thead class=""><tr><th>Domain</th></tr></thead>
-            <tbody id="domains-body"></tbody>
-        </table> <!-- domains-table -->
+        <div class="table-wrapper">
+            <table id="domains-table" class="table table-sm table-striped table-hover small w-100" data-counter="domains-count">
+                <thead class=""><tr><th>Domain</th></tr></thead>
+                <tbody id="domains-body"></tbody>
+            </table> <!-- domains-table -->
+        </div> <!-- table-wrapper -->
     </div> <!-- domains -->
 </div> <!-- container-fluid -->
 

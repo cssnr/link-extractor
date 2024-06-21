@@ -11,17 +11,12 @@ a:visited {
     z-index: 10;
 }
 
-.toast-container {
+#toast-container {
     max-width: 260px;
     width: 100%;
 }
 
-/*table {*/
-/*    table-layout: fixed;*/
-/*}*/
-
-/*td {*/
-/*    white-space: nowrap;*/
-/*    overflow: hidden;*/
-/*    text-overflow: ellipsis;*/
-/*}*/
+td.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
