@@ -15,3 +15,13 @@ a:visited {
     max-width: 260px;
     width: 100%;
 }
+
+/*table {*/
+/*    table-layout: fixed;*/
+/*}*/
+
+/*td {*/
+/*    white-space: nowrap;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*}*/

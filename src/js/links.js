@@ -171,7 +171,15 @@ async function initLinks() {
             input.setAttribute('list', 'filters-list')
         }
     }
+    // window.addEventListener('resize', windowResize)
+    window.dispatchEvent(new Event('resize'))
 }
+
+// function windowResize() {
+//     console.log('Window was resized!')
+//     linksTable.columns.adjust().draw()
+//     domainsTable.columns.adjust().draw()
+// }
 
 /**
  * Process Links
@@ -256,8 +264,8 @@ async function processLinks(links) {
     // Hide Loading message
     document.getElementById('loading-message').classList.add('d-none')
 
-    // Trigger resize event to force datatables to update responsive width
-    window.dispatchEvent(new Event('resize'))
+    // Trigger resize event - MOVED to end of initLinks
+    // window.dispatchEvent(new Event('resize'))
 }
 
 function dtDraw(event) {
