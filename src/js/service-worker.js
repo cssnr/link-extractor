@@ -75,6 +75,7 @@ async function onInstalled(details) {
     uninstallURL.searchParams.append('version', manifest.version)
     console.log('uninstallURL:', uninstallURL.href)
     await chrome.runtime.setUninstallURL(uninstallURL.href)
+    // Check Permissions for Firefox Omnibox Usage
     const hasPerms = await checkPerms()
     if (hasPerms) {
         await onAdded()
