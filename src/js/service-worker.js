@@ -50,7 +50,7 @@ async function onInstalled(details) {
             defaultFilter: true,
             saveState: true,
             linksTruncate: true,
-            linksNoWrap: true,
+            linksNoWrap: false,
             contextMenu: true,
             showUpdate: false,
         })
