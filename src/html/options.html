@@ -38,7 +38,7 @@
         </tfoot>
     </table>
 
-    <form id="options-form" class="mb-3">
+    <form id="options-form">
         <div class="row">
             <div class="col-12 mb-2">
                 <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
@@ -46,7 +46,7 @@
                 <input id="flags" type="text" class="form-control" autocomplete="off">
                 <div class="form-text" id="flagsHelp">
                     Regex Flags for Filtering.
-                    <a target="_blank" rel="noopener" class="ms-1 text-decoration-none"
+                    <a class="ms-1 text-decoration-none" target="_blank" rel="noopener"
                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags">
                         More Info <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
@@ -126,6 +126,12 @@
             </label>
         </div>
     </form>
+
+    <p class="text-muted small my-2">
+        More about Options
+        <a href="https://link-extractor.cssnr.com/docs/#options" class="text-decoration-none" target="_blank" rel="noopener">
+            on the Docs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    </p>
 
     <div class="d-none grant-perms my-3">
         <button id="grant-perms" class="btn btn-sm btn-outline-success" type="button"

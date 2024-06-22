@@ -274,6 +274,18 @@ async function processLinks(links) {
 
     // Hide Loading message
     document.getElementById('loading-message').classList.add('d-none')
+
+    // Modifications for Android
+    const platform = await chrome.runtime.getPlatformInfo()
+    if (platform.os === 'android') {
+        // Consider always applying table-responsive to table-wrapper
+        document.querySelectorAll('.table-wrapper').forEach((el) => {
+            el.classList.add('table-responsive')
+        })
+        document.querySelectorAll('.keyboard').forEach((el) => {
+            el.classList.add('d-none')
+        })
+    }
 }
 
 function windowResize() {

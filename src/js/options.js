@@ -125,7 +125,7 @@ function updateTable(data) {
 async function addFilter(event) {
     console.debug('addFilter:', event)
     event.preventDefault()
-    const input = event.target.elements[0]
+    const input = event.target.elements['add-filter']
     const filter = input.value
     if (filter) {
         console.log(`filter: ${filter}`)
@@ -170,7 +170,7 @@ async function deleteFilter(event, index = undefined) {
         await chrome.storage.sync.set({ patterns })
         // console.debug('patterns:', patterns)
         updateTable(patterns)
-        document.getElementById('add-filter').focus()
+        // document.getElementById('add-filter').focus()
         showToast(`Removed Filter: ${name}`, 'info')
     }
 }
