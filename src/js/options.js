@@ -19,6 +19,8 @@ chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
 document.addEventListener('DOMContentLoaded', initOptions)
+// document.addEventListener('drop', drop)
+// document.addEventListener('dragover', dragOver)
 document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
@@ -110,11 +112,11 @@ function updateTable(data) {
         cell3.setAttribute('draggable', 'true')
 
         cell3.addEventListener('dragstart', dragStart)
-        filtersTbody.addEventListener('dragover', dragOver)
-        filtersTbody.addEventListener('dragleave', dragEnd)
-        filtersTbody.addEventListener('dragend', dragEnd)
-        filtersTbody.addEventListener('drop', drop)
     })
+    filtersTbody.addEventListener('dragover', dragOver)
+    filtersTbody.addEventListener('dragleave', dragEnd)
+    filtersTbody.addEventListener('dragend', dragEnd)
+    filtersTbody.addEventListener('drop', drop)
 }
 
 /**
@@ -213,12 +215,16 @@ async function dragStart(event) {
  */
 function dragOver(event) {
     // console.debug('dragOver:', event)
+    // if (event.target.tagName === 'INPUT') {
+    //     return
+    // }
     event.preventDefault()
     if (!row) {
         return // row not set on dragStart, so not a row being dragged
     }
     const tr = event.target.closest('tr')
-    if (tr.id !== last) {
+    // console.debug('tr:', tr)
+    if (tr?.id && tr.id !== last) {
         const el = document.getElementById(last)
         el?.classList.remove('table-group-divider')
         tr.classList.add('table-group-divider')
@@ -235,15 +241,20 @@ function dragEnd(event) {
 
 async function drop(event) {
     console.debug('drop:', event)
+    // if (event.target.tagName === 'INPUT') {
+    //     return
+    // }
     event.preventDefault()
     const tr = event.target.closest('tr')
     if (!row || !tr) {
+        row = null
         return console.debug('row or tr undefined')
     }
     tr.classList?.remove('table-group-divider')
     last = -1
     // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
     if (row.id === tr.id) {
+        row = null
         return console.debug('return on same row drop')
     }
     filtersTbody.removeChild(row)
