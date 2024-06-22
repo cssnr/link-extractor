@@ -58,10 +58,14 @@ export async function injectTab({
     // Inject extract.js which listens for messages
     for (const tab of tabIds) {
         console.debug(`injecting tab.id: ${tab}`)
-        await chrome.scripting.executeScript({
-            target: { tabId: tab },
-            files: ['/js/extract.js'],
-        })
+        try {
+            await chrome.scripting.executeScript({
+                target: { tabId: tab },
+                files: ['/js/extract.js'],
+            })
+        } catch (e) {
+            return console.info(e)
+        }
     }
 
     // Open Tab to links.html with desired params
