@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Link Extractor</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
@@ -14,7 +15,7 @@
 </head>
 <body>
 
-<div id="floating-links" class="position-fixed top-0 end-0 user-select-none">
+<div id="floating-links" class="position-fixed top-0 end-0 mt-1 me-2 user-select-none">
     <div class="row g-1 links d-none">
         <div class="col">
             <a href="#links"><span class="badge text-bg-success w-100">Links</span></a>
@@ -40,49 +41,60 @@
     <div class="links d-none">
         <div class="user-select-none">
             <h2 id="links">Links <span class="badge bg-success-subtle"><span id="links-count">0</span>/<span id="links-total"></span></span></h2>
-            <button id="copy-links" class="btn btn-sm btn-success me-1 mb-2 copy-links" type="button">
+            <div class="mb-1">
+            <button id="copy-links" class="btn btn-sm btn-success mb-1 me-1 copy-links" type="button">
                 Copy Links <i class="fa-solid fa-copy ms-1"></i></button>
-            <button id="down-links" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#links-body" data-filename="links.txt">
-                Download <i class="fa-solid fa-download m-1"></i></button>
-            <button id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#links-body">
+            <button id="down-links" class="btn btn-sm btn-outline-info download-file mb-1 me-1" type="button" data-target="#links-body" data-filename="links.txt">
+                Download <i class="fa-solid fa-download ms-1"></i></button>
+            <button id="open-links" class="btn btn-sm btn-outline-warning open-in-tabs position-relative mb-1 me-2" type="button" data-target="#links-body">
                 Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
-            <span class="d-inline-block me-1 mb-2">
-                <kbd>C</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>L</kbd> to Copy Links.</span>
-            <span class="d-inline-block me-1 mt-md-1 float-end">
-                <kbd>K</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>Z</kbd> Keyboard Shortcuts.
-            </span>
+            </div>
+            <div class="row keyboard">
+                <div class="col-12 col-sm-6">
+                    <kbd>C</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>L</kbd> to Copy Links.
+                </div>
+                <div class="col-12 col-sm-6 text-sm-end">
+                    <kbd>K</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>Z</kbd> Keyboard Shortcuts.
+                </div>
+            </div>
         </div> <!-- links-buttons -->
-        <table id="links-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="links-count" style="width:100%">
-            <thead class="">
-                <tr>
-                    <th>Link</th>
-                    <th>Text</th>
-                    <th>Title</th>
-                    <th>Label</th>
-                    <th>Rel</th>
-                    <th>Target</th>
-                </tr>
-            </thead>
-            <tbody id="links-body"></tbody>
-        </table> <!-- links-table -->
+        <div class="table-wrapper">
+            <table id="links-table" class="table table-sm table-striped table-hover small w-100" data-counter="links-count">
+                <thead class="">
+                    <tr>
+                        <th>Link</th>
+                        <th>Text</th>
+                        <th>Title</th>
+                        <th>Label</th>
+                        <th>Rel</th>
+                        <th>Target</th>
+                    </tr>
+                </thead>
+                <tbody id="links-body"></tbody>
+            </table> <!-- links-table -->
+        </div> <!-- table-wrapper -->
     </div> <!-- links -->
 
-    <div class="domains d-none">
+    <div class="domains pt-2 d-none">
         <div class="user-select-none">
             <h2 id="domains">Domains <span class="badge bg-primary-subtle"><span id="domains-count">0</span>/<span id="domains-total"></span></span></h2>
-            <button id="copy-domains" class="btn btn-sm btn-primary clip me-1 mb-2" type="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
+
+            <button id="copy-domains" class="btn btn-sm btn-primary clip mb-1 me-1" type="button" data-clipboard-target="#domains-body" data-toast="Copied Domains">
                 Copy Domains <i class="fa-solid fa-copy ms-1"></i></button>
-            <button id="down-domains" class="btn btn-sm btn-outline-info download-file me-1 mb-2" type="button" data-target="#domains-body" data-filename="domains.txt">
+            <button id="down-domains" class="btn btn-sm btn-outline-info download-file mb-1 me-1" type="button" data-target="#domains-body" data-filename="domains.txt">
                 Download <i class="fa-solid fa-download ms-1"></i></button>
-            <button id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative me-2 mb-2" type="button" data-target="#domains-body">
+            <button id="open-domains" class="btn btn-sm btn-outline-warning open-in-tabs position-relative mb-1 me-2" type="button" data-target="#domains-body">
                 Open <i class="fa-solid fa-up-right-from-square ms-1"></i></button>
-            <span class="d-inline-block me-1 mb-2">
+
+            <span class="d-inline-block me-1 keyboard">
                 <kbd>D</kbd> <i class="fa-regular fa-keyboard"></i> <kbd>M</kbd> to Copy Domains.</span>
         </div> <!-- domains-buttons -->
-        <table id="domains-table" class="table table-sm table-striped table-hover table-responsive small" data-counter="domains-count" style="width:100%">
-            <thead class=""><tr><th>Domain</th></tr></thead>
-            <tbody id="domains-body"></tbody>
-        </table> <!-- domains-table -->
+        <div class="table-wrapper">
+            <table id="domains-table" class="table table-sm table-striped table-hover small w-100" data-counter="domains-count">
+                <thead class=""><tr><th>Domain</th></tr></thead>
+                <tbody id="domains-body"></tbody>
+            </table> <!-- domains-table -->
+        </div> <!-- table-wrapper -->
     </div> <!-- domains -->
 </div> <!-- container-fluid -->
 

@@ -4,11 +4,11 @@ import { checkPerms, injectTab } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
-chrome.contextMenus.onClicked.addListener(onClicked)
-chrome.commands.onCommand.addListener(onCommand)
+chrome.contextMenus?.onClicked.addListener(onClicked)
+chrome.commands?.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
-chrome.omnibox.onInputChanged.addListener(onInputChanged)
-chrome.omnibox.onInputEntered.addListener(onInputEntered)
+chrome.omnibox?.onInputChanged.addListener(onInputChanged)
+chrome.omnibox?.onInputEntered.addListener(onInputEntered)
 chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
@@ -49,6 +49,8 @@ async function onInstalled(details) {
             removeDuplicates: true,
             defaultFilter: true,
             saveState: true,
+            linksTruncate: true,
+            linksNoWrap: true,
             contextMenu: true,
             showUpdate: false,
         })
@@ -238,6 +240,9 @@ export async function onRemoved(permissions) {
  * @param {Array} patterns
  */
 function createContextMenus(patterns) {
+    if (!chrome.contextMenus) {
+        return console.debug('Skipping: chrome.contextMenus')
+    }
     console.debug('createContextMenus:', patterns)
     chrome.contextMenus.removeAll()
     const ctx = ['all']

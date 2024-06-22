@@ -11,7 +11,12 @@ a:visited {
     z-index: 10;
 }
 
-.toast-container {
+#toast-container {
     max-width: 260px;
     width: 100%;
+}
+
+td.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

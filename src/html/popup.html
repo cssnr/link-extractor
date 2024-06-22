@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Link Extractor</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
@@ -83,6 +84,24 @@
                     </span>
                 </label>
             </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="linksTruncate">
+                <label class="form-check-label" for="linksTruncate" aria-describedby="linksTruncateHelp">
+                    Truncate Long Links
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Truncate Display of Long Links with Ellipsis">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+                </label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="linksNoWrap">
+                <label class="form-check-label" for="linksNoWrap" aria-describedby="linksNoWrapHelp">
+                    Don't Wrap Long Links
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Force Long Links to Display on a Single Line">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+                </label>
+            </div>
         </form>
 
         <div class="d-none grant-perms">
@@ -93,7 +112,7 @@
         </div>
 
         <a class="btn btn-sm btn-outline-info" role="button" href="../html/options.html">
-            <i class="fa-solid fa-sliders me-1"></i> Options</a>
+            <i class="fa-solid fa-sliders me-1"></i> More Options</a>
         <div class="d-flex justify-content-center align-items-center text-center small">
             <img class="" src="../images/logo16.png" width="16" height="16" alt="Link Extractor" title="Link Extractor">
             <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
