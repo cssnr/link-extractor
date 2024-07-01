@@ -1,0 +1,1 @@
+["docs","\\.[a-z0-9]+$","\\.(jpg|jpeg|png|gif)$","\\.(jpg|jpeg|png|gif|bmp|webp)$"]

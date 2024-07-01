@@ -38,7 +38,8 @@ All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
 
 Mobile browser support available for
-[Firefox](https://addons.mozilla.org/addon/link-extractor).
+[Firefox](https://addons.mozilla.org/addon/link-extractor) and
+[Yandex](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
 
 # Features
 
