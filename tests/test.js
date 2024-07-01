@@ -56,13 +56,14 @@ async function getPage(name, log, size) {
 }
 
 async function scrollPage() {
-    return await page.evaluate(() => {
+    await page.evaluate(() => {
         window.scrollBy({
             top: window.innerHeight,
             left: 0,
             behavior: 'instant',
         })
     })
+    await new Promise((resolve) => setTimeout(resolve, 500))
 }
 
 ;(async () => {
