@@ -55,6 +55,16 @@ async function getPage(name, log, size) {
     return page
 }
 
+async function scrollPage() {
+    return await page.evaluate(() => {
+        window.scrollBy({
+            top: window.innerHeight,
+            left: 0,
+            behavior: 'instant',
+        })
+    })
+}
+
 ;(async () => {
     fs.rmSync(screenshotsDir, { recursive: true, force: true })
     fs.mkdirSync(screenshotsDir)
@@ -90,8 +100,10 @@ async function getPage(name, log, size) {
     console.log('page:', page)
     await page.waitForNetworkIdle()
     await screenshot('popup')
-    // await page.locator('#filter-input').fill('test')
-    // await screenshot('popup')
+
+    await page.locator('#linksNoWrap').click()
+    await screenshot('popup')
+
     // await page.locator('[href="../html/options.html"]').click()
     await page.evaluate((selector) => {
         document.querySelector(selector).click()
@@ -102,7 +114,7 @@ async function getPage(name, log, size) {
     //     .click()
 
     // Options
-    page = await getPage('options.html', true)
+    page = await getPage('options.html', true, '768x920')
     console.log('page:', page)
     await page.waitForNetworkIdle()
     await screenshot('options')
@@ -113,6 +125,7 @@ async function getPage(name, log, size) {
         page.click('#import-data'), // some button that triggers file selection
     ])
     await fileChooser.accept(['./tests/patterns.txt'])
+    await scrollPage()
     await screenshot('options')
 
     // // This does not accept the permission dialog
@@ -136,10 +149,9 @@ async function getPage(name, log, size) {
     await worker.evaluate('chrome.action.openPopup();')
     let popupPage = await getPage('popup.html', true)
     console.log('popupPage:', popupPage)
-    await popupPage.locator('#linksNoWrap').click()
     await popupPage.locator('a[data-filter=""]').click()
 
-    page = await getPage('links.html', true)
+    page = await getPage('links.html', true, '768x920')
     console.log('page:', page)
     await page.waitForNetworkIdle()
     await screenshot('links')
