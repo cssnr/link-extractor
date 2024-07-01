@@ -28,6 +28,7 @@ document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('revoke-perms').addEventListener('click', revokePerms)
+document.getElementById('copy-support').addEventListener('click', copySupport)
 
 document
     .getElementById('options-form')
@@ -232,7 +233,7 @@ function dragOver(event) {
     }
 }
 
-function dragEnd(event) {
+function dragEnd() {
     // console.debug('dragEnd:', event)
     const el = document.getElementById(last)
     el?.classList.remove('table-group-divider')
@@ -467,4 +468,30 @@ function onChanged(changes, namespace) {
 export async function grantPerms(event) {
     console.debug('grantPerms:', event)
     await requestPerms()
+}
+
+/**
+ * Copy Support/Debugging Information
+ * @function copySupport
+ * @param {MouseEvent} event
+ */
+async function copySupport(event) {
+    console.debug('copySupport:', event)
+    event.preventDefault()
+    const manifest = chrome.runtime.getManifest()
+    const { options } = await chrome.storage.sync.get(['options'])
+    const permissions = await chrome.permissions.getAll()
+    const local = window.localStorage
+    const result = [
+        '```',
+        `${manifest.name} - ${manifest.version}`,
+        navigator.userAgent,
+        `permissions.origins: ${JSON.stringify(permissions.origins)}`,
+        `options: ${JSON.stringify(options)}`,
+        `links-table: ${local['DataTables_links-table_/html/links.html']}`,
+        `domains-table: ${local['DataTables_domains-table_/html/links.html']}`,
+        '```',
+    ]
+    await navigator.clipboard.writeText(result.join('\n'))
+    showToast('Support Information Copied.')
 }

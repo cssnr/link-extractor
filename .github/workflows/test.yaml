@@ -1,0 +1,48 @@
+name: "Test"
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ !contains(github.event.head_commit.message, '#notest') }}
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: "Install"
+        run: |
+          npm install
+
+      - name: "Lint"
+        run: |
+          npm run lint
+
+      - name: "Test"
+        run: |
+          npm run test
+
+      - name: "Push Artifacts"
+        uses: cssnr/push-artifacts-action@master
+        with:
+          path: "tests/screenshots/"
+          host: ${{ secrets.RSYNC_HOST }}
+          user: ${{ secrets.RSYNC_USER }}
+          pass: ${{ secrets.RSYNC_PASS }}
+          port: ${{ secrets.RSYNC_PORT }}
+          base: "/static"
+          webhost: "https://artifacts.hosted-domains.com"
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
