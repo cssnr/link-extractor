@@ -218,11 +218,11 @@ function extractURLs(text) {
         const match = urlmatcharr[0]
         const url = new URL(match)
         const data = {
-            text: null,
-            title: null,
-            label: null,
-            target: null,
-            rel: null,
+            text: '',
+            title: '',
+            label: '',
+            target: '',
+            rel: '',
             href: url.href,
             origin: url.origin,
         }

@@ -77,12 +77,13 @@ function extractSelection() {
  * @param {HTMLAnchorElement} element
  */
 function pushElement(array, element) {
+    // console.debug('element:', element)
     try {
         const data = {
             href: decodeURI(element.href),
-            text: element.textContent,
+            text: element.textContent?.trim(),
             title: element.title,
-            label: element.ariaLabel,
+            label: element.ariaLabel || '',
             rel: element.rel,
             target: element.target,
             origin: element.origin,
