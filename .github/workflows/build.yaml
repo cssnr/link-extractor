@@ -21,8 +21,8 @@ jobs:
           node-version: 20
 
       - name: "Update Manifest Version"
-        uses: cssnr/update-json-value-action@v1
         if: ${{ github.event_name == 'release' }}
+        uses: cssnr/update-json-value-action@v1
 
       - name: "Build All"
         run: |
@@ -36,6 +36,7 @@ jobs:
           path: web-ext-artifacts/
 
       - name: "Upload to Release"
+        if: ${{ github.event_name == 'release' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
