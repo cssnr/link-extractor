@@ -103,6 +103,7 @@ async function scrollPage() {
     await screenshot('popup')
 
     await page.locator('#linksNoWrap').click()
+    await new Promise((resolve) => setTimeout(resolve, 500))
     await screenshot('popup')
 
     // await page.locator('[href="../html/options.html"]').click()
