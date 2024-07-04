@@ -1,6 +1,5 @@
 name: "⚠️ Report an Issue"
 description: "Something Not Working Right? Please let us know..."
-title: "[Bug] "
 labels: ["bug"]
 assignees:
   - smashedr
