@@ -5,11 +5,6 @@ assignees:
   - smashedr
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        All bugs that we can verify will be fixed. Thank you for taking the time to make this report!
-
   - type: input
     id: website
     validations:
@@ -33,6 +28,11 @@ body:
     validations:
       required: true
     attributes:
-      label: Paste Support Information
+      label: Support Information
       description: Open the extension options, scroll to the bottom, click Copy Support Information and paste below.
       render: shell
+
+  - type: markdown
+    attributes:
+      value: |
+        All issues/bugs that we can verify will be fixed. Thank you for taking the time to make this report!
