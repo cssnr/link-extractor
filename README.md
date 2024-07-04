@@ -1,12 +1,14 @@
-[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white&label=google%20users)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-[![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/link-extractor)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white&label=users)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=users)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Rating](https://img.shields.io/amo/rating/link-extractor?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
-[![Build](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
+[![Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
+[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
+[![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Link Extractor
 
 Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse, or open all links/domains from a site or text with optional filters.
@@ -18,6 +20,7 @@ Website: https://link-extractor.cssnr.com/
 *   [Features](#features)
     -   [Upcoming](#planned-upcoming-features)
 *   [Configuration](#configuration)
+*   [Support](#support)
 *   [Development](#development)
     -   [Building](#building)
 
@@ -50,6 +53,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Extract Links from Selected Text on any Site
 *   Extract Links from Clipboard or Any Text
 *   Extract Links from All Selected Tabs
+*   Display Additional Link Details and Text
 *   Open Multiple Links in Tabs from Text
 *   Download Links and Domains as a Text File
 *   Copy the Text from a Link via Context Menu
@@ -63,7 +67,6 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ## Planned Upcoming Features
 
-*   Option to Extract and Display Link Titles
 *   Option to Set Names/Titles for Saved Filters
 *   Option to Extract Using Multiple Filters with AND/OR
 
@@ -73,7 +76,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 # Configuration
 
-**Full Documentation:** https://link-extractor.cssnr.com/docs/
+- [View Configuration Documentation on Website](https://link-extractor.cssnr.com/docs/#configure)
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Link Extractor icon, then;  
 **Chrome,** click the `Pin` icon.  
@@ -85,6 +88,25 @@ Here you can set flags and add as many saved regular expressions as you would li
 Make sure to click`Save Options` when finished.
 
 For more information on regex, see: https://regex101.com/  
+
+# Support
+
+For help using the web extension, utilize any these resources:
+
+- Documentation: https://link-extractor.cssnr.com/docs/
+- Q&A Discussion: https://github.com/cssnr/link-extractor/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/link-extractor/discussions/categories/feature-requests
+
+If you are experiencing an issue/bug or getting unexpected results, use:
+
+- Report an Issue: https://github.com/cssnr/link-extractor/issues
+- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+
+Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and; 
+Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 

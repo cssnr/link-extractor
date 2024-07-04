@@ -483,14 +483,12 @@ async function copySupport(event) {
     const permissions = await chrome.permissions.getAll()
     const local = window.localStorage
     const result = [
-        '```',
         `${manifest.name} - ${manifest.version}`,
         navigator.userAgent,
         `permissions.origins: ${JSON.stringify(permissions.origins)}`,
         `options: ${JSON.stringify(options)}`,
         `links-table: ${local['DataTables_links-table_/html/links.html']}`,
         `domains-table: ${local['DataTables_domains-table_/html/links.html']}`,
-        '```',
     ]
     await navigator.clipboard.writeText(result.join('\n'))
     showToast('Support Information Copied.')

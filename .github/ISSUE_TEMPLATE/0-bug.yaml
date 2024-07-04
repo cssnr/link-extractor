@@ -1,0 +1,39 @@
+name: "⚠️ Report an Issue"
+description: "Something Not Working Right? Please let us know..."
+title: "[Bug] "
+labels: ["bug"]
+assignees:
+  - smashedr
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        All bugs that we can verify will be fixed. Thank you for taking the time to make this report!
+
+  - type: input
+    id: website
+    validations:
+      required: false
+    attributes:
+      label: Site Link
+      description: Please provide a link to the site you are having issues on if possible.
+      placeholder: https://example.com/
+
+  - type: textarea
+    id: description
+    validations:
+      required: true
+    attributes:
+      label: Details
+      description: Please describe the issue you are experiencing and how to reproduce.
+      placeholder: Provide as many details as you can...
+
+  - type: textarea
+    id: logs
+    validations:
+      required: true
+    attributes:
+      label: Paste Support Information
+      description: Open the extension options, scroll to the bottom, click Copy Support Information and paste below.
+      render: shell
