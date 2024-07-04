@@ -32,12 +32,36 @@ function onMessage(message, sender, sendResponse) {
 function extractAllLinks() {
     console.debug('extractAllLinks')
     const links = []
-    for (const element of document.links) {
-        if (element.href) {
-            pushElement(links, element)
-        }
-    }
+    // for (const element of document.links) {
+    //     if (element.href) {
+    //         pushElement(links, element)
+    //     }
+    // }
+    const allLinks = findLinks(document)
+    console.debug('allLinks:', allLinks)
+    allLinks.forEach((el) => pushElement(links, el))
     console.debug('links:', links)
+    return links
+}
+
+/**
+ * Find All Links
+ * TODO: Simplify usage with extractAllLinks
+ * @function findLinks
+ * @param {Document|ShadowRoot} root
+ * @return {Array}
+ */
+function findLinks(root) {
+    let links = []
+    if (root.querySelectorAll) {
+        links = Array.from(root.querySelectorAll('a'))
+    }
+    const shadowRoots = Array.from(root.querySelectorAll('*')).filter(
+        (el) => el.shadowRoot
+    )
+    shadowRoots.forEach((el) => {
+        links = links.concat(findLinks(el.shadowRoot))
+    })
     return links
 }
 
