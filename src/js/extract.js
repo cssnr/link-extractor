@@ -24,6 +24,23 @@ function onMessage(message, sender, sendResponse) {
     }
 }
 
+// /**
+//  * Extract links
+//  * @function extractAllLinks
+//  * @return {Array}
+//  */
+// function extractAllLinks() {
+//     console.debug('extractAllLinks')
+//     const links = []
+//     for (const element of document.links) {
+//         if (element.href) {
+//             pushElement(links, element)
+//         }
+//     }
+//     console.debug('links:', links)
+//     return links
+// }
+
 /**
  * Extract links
  * @function extractAllLinks
@@ -31,36 +48,30 @@ function onMessage(message, sender, sendResponse) {
  */
 function extractAllLinks() {
     console.debug('extractAllLinks')
-    const links = []
-    // for (const element of document.links) {
-    //     if (element.href) {
-    //         pushElement(links, element)
-    //     }
-    // }
-    const allLinks = findLinks(document)
-    console.debug('allLinks:', allLinks)
-    allLinks.forEach((el) => pushElement(links, el))
+    const links = findLinks(document)
     console.debug('links:', links)
     return links
 }
 
 /**
- * Find All Links
- * TODO: Simplify usage with extractAllLinks
+ * Recursively Find Links from shadowRoot
  * @function findLinks
  * @param {Document|ShadowRoot} root
  * @return {Array}
  */
 function findLinks(root) {
-    let links = []
+    console.debug('findLinks:', root)
+    const links = []
     if (root.querySelectorAll) {
-        links = Array.from(root.querySelectorAll('a'))
+        root.querySelectorAll('a').forEach((el) => {
+            pushElement(links, el)
+        })
     }
-    const shadowRoots = Array.from(root.querySelectorAll('*')).filter(
+    const roots = Array.from(root.querySelectorAll('*')).filter(
         (el) => el.shadowRoot
     )
-    shadowRoots.forEach((el) => {
-        links = links.concat(findLinks(el.shadowRoot))
+    roots.forEach((el) => {
+        links.push(...findLinks(el.shadowRoot))
     })
     return links
 }
