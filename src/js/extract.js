@@ -24,6 +24,23 @@ function onMessage(message, sender, sendResponse) {
     }
 }
 
+// /**
+//  * Extract links
+//  * @function extractAllLinks
+//  * @return {Array}
+//  */
+// function extractAllLinks() {
+//     console.debug('extractAllLinks')
+//     const links = []
+//     for (const element of document.links) {
+//         if (element.href) {
+//             pushElement(links, element)
+//         }
+//     }
+//     console.debug('links:', links)
+//     return links
+// }
+
 /**
  * Extract links
  * @function extractAllLinks
@@ -31,13 +48,31 @@ function onMessage(message, sender, sendResponse) {
  */
 function extractAllLinks() {
     console.debug('extractAllLinks')
-    const links = []
-    for (const element of document.links) {
-        if (element.href) {
-            pushElement(links, element)
-        }
-    }
+    const links = findLinks(document)
     console.debug('links:', links)
+    return links
+}
+
+/**
+ * Recursively Find Links from shadowRoot
+ * @function findLinks
+ * @param {Document|ShadowRoot} root
+ * @return {Array}
+ */
+function findLinks(root) {
+    console.debug('findLinks:', root)
+    const links = []
+    if (root.querySelectorAll) {
+        root.querySelectorAll('a').forEach((el) => {
+            pushElement(links, el)
+        })
+    }
+    const roots = Array.from(root.querySelectorAll('*')).filter(
+        (el) => el.shadowRoot
+    )
+    roots.forEach((el) => {
+        links.push(...findLinks(el.shadowRoot))
+    })
     return links
 }
 
