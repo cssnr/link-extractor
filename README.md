@@ -20,6 +20,7 @@ Website: https://link-extractor.cssnr.com/
 *   [Features](#features)
     -   [Upcoming](#planned-upcoming-features)
 *   [Configuration](#configuration)
+*   [Support](#support)
 *   [Development](#development)
     -   [Building](#building)
 
@@ -52,6 +53,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Extract Links from Selected Text on any Site
 *   Extract Links from Clipboard or Any Text
 *   Extract Links from All Selected Tabs
+*   Display Additional Link Details and Text
 *   Open Multiple Links in Tabs from Text
 *   Download Links and Domains as a Text File
 *   Copy the Text from a Link via Context Menu
@@ -65,7 +67,6 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ## Planned Upcoming Features
 
-*   Option to Extract and Display Link Titles
 *   Option to Set Names/Titles for Saved Filters
 *   Option to Extract Using Multiple Filters with AND/OR
 
@@ -75,7 +76,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 # Configuration
 
-**Full Documentation:** https://link-extractor.cssnr.com/docs/
+- [View Configuration Documentation on Website](https://link-extractor.cssnr.com/docs/#configure)
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Link Extractor icon, then;  
 **Chrome,** click the `Pin` icon.  
@@ -87,6 +88,25 @@ Here you can set flags and add as many saved regular expressions as you would li
 Make sure to click`Save Options` when finished.
 
 For more information on regex, see: https://regex101.com/  
+
+# Support
+
+For help using the web extension, utilize any these resources:
+
+- Documentation: https://link-extractor.cssnr.com/docs/
+- Q&A Discussion: https://github.com/cssnr/link-extractor/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/link-extractor/discussions/categories/feature-requests
+
+If you are experiencing an issue/bug or getting unexpected results, use:
+
+- Report an Issue: https://github.com/cssnr/link-extractor/issues
+- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+
+Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and; 
+Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 
