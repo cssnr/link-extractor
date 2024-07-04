@@ -14,22 +14,49 @@ let timeout = 10000
 let count = 1
 
 /**
- * @function screenshot
- * @param {String} name
- * @return {Promise<void>}
+ * @function getBrowser
+ * @return {puppeteer.Browser}
  */
-async function screenshot(name) {
-    const n = count.toString().padStart(2, '0')
-    await page.screenshot({ path: `${screenshotsDir}/${n}_${name}.png` })
-    count++
+async function getBrowser() {
+    const pathToExtension = path.join(process.cwd(), sourceDir)
+    console.log('pathToExtension:', pathToExtension)
+    return await puppeteer.launch({
+        args: [
+            `--disable-extensions-except=${pathToExtension}`,
+            `--load-extension=${pathToExtension}`,
+            // '--disable-blink-features=AutomationControlled',
+            // '--disable-features=ChromeUserPermPrompt',
+        ],
+        dumpio: true,
+        // headless: false,
+        // slowMo: 50,
+    })
+}
+
+/**
+ * @function getWorker
+ * @global browser
+ * @global timeout
+ * @return {puppeteer.Page}
+ */
+async function getWorker() {
+    const workerTarget = await browser.waitForTarget(
+        (target) =>
+            target.type() === 'service_worker' &&
+            target.url().endsWith('service-worker.js'),
+        { timeout }
+    )
+    return await workerTarget.worker()
 }
 
 /**
  * @function getPage
+ * @global browser
+ * @global timeout
  * @param {String} name
  * @param {Boolean=} log
  * @param {String=} size
- * @return {import('puppeteer').Page}
+ * @return {puppeteer.Page}
  */
 async function getPage(name, log, size) {
     console.debug(`getPage: ${name}`, log, size)
@@ -37,22 +64,35 @@ async function getPage(name, log, size) {
         (target) => target.type() === 'page' && target.url().includes(name),
         { timeout }
     )
-    page = await target.asPage()
-    await page.emulateMediaFeatures([
+    const newPage = await target.asPage()
+    await newPage.emulateMediaFeatures([
         { name: 'prefers-color-scheme', value: 'dark' },
     ])
-    page.setDefaultTimeout(timeout)
+    newPage.setDefaultTimeout(timeout)
     if (size) {
         const [width, height] = size.split('x').map((x) => parseInt(x))
-        await page.setViewport({ width, height })
+        await newPage.setViewport({ width, height })
     }
     if (log) {
         console.debug(`Adding Logger: ${name}`)
-        page.on('console', (msg) =>
+        newPage.on('console', (msg) =>
             console.log(`console: ${name}:`, msg.text())
         )
     }
-    return page
+    return newPage
+}
+
+/**
+ * @function screenshot
+ * @global count
+ * @global page
+ * @param {String} name
+ * @return {Promise<void>}
+ */
+async function screenshot(name) {
+    const n = count.toString().padStart(2, '0')
+    await page.screenshot({ path: `${screenshotsDir}/${n}_${name}.png` })
+    count++
 }
 
 async function scrollPage() {
@@ -70,29 +110,12 @@ async function scrollPage() {
     fs.rmSync(screenshotsDir, { recursive: true, force: true })
     fs.mkdirSync(screenshotsDir)
 
-    const pathToExtension = path.join(process.cwd(), sourceDir)
-    console.log('pathToExtension:', pathToExtension)
-    browser = await puppeteer.launch({
-        args: [
-            `--disable-extensions-except=${pathToExtension}`,
-            `--load-extension=${pathToExtension}`,
-            '--disable-blink-features=AutomationControlled',
-            '--disable-features=ChromeUserPermPrompt',
-        ],
-        dumpio: true,
-        // headless: false,
-        // slowMo: 50,
-    })
+    // Get Browser
+    browser = await getBrowser()
     console.log('browser:', browser)
 
     // Get Service Worker
-    const workerTarget = await browser.waitForTarget(
-        (target) =>
-            target.type() === 'service_worker' &&
-            target.url().endsWith('service-worker.js'),
-        { timeout }
-    )
-    const worker = await workerTarget.worker()
+    const worker = await getWorker()
     console.log('worker:', worker)
 
     // Popup
