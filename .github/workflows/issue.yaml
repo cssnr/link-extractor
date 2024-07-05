@@ -1,0 +1,86 @@
+name: "Issue"
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  issue:
+    name: "Issue"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Debug Issue"
+        run: |
+          echo Issue number: '${{ github.event.issue.number }}'
+          echo Issue title: '${{ github.event.issue.title }}'
+          echo Issue body: '${{ github.event.issue.body }}'
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: "Parse Issue"
+        id: issue
+        uses: cssnr/parse-issue-form-action@master
+        with:
+          body: ${{ github.event.issue.body }}
+
+      - name: "Debug Parsed Issue"
+        run: |
+          echo Site Link: '${{ steps.issue.outputs.site_link }}'
+          echo Details: '${{ steps.issue.outputs.details }}'
+          echo Support Information: '${{ steps.issue.outputs.support_information }}'
+
+      - name: "Install"
+        run: |
+          npm install
+
+      - name: "Process Issue"
+        env:
+          URL: ${{ steps.issue.outputs.site_link }}
+        run: |
+          npm run issue
+
+      - name: "Debug Files"
+        run: |
+          ls -lah tests/screenshots
+
+      - name: "Upload Image"
+        id: image
+        uses: McCzarny/upload-image@v1.0.0
+        with:
+          path: tests/screenshots/links.png
+          uploadMethod: imgbb
+          apiKey: ${{ secrets.IMGBB_API_KEY }}
+
+      - name: "Read Logs"
+        id: logs
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: tests/screenshots/logs.txt
+
+      - name: "Debug Logs"
+        run: echo "${{ steps.logs.outputs.content }}"
+
+      - name: "Add Comment"
+        run: gh issue comment "$NUMBER" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          BODY: |
+            Link Extractor Results for: [${{ steps.issue.outputs.site_link }}](${{ steps.issue.outputs.site_link }})  
+
+            ![0](${{steps.image.outputs.url}})
+
+            Logs:
+            ```json
+            ${{ steps.logs.outputs.content }}
+            ```
