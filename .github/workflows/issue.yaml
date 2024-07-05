@@ -26,12 +26,6 @@ jobs:
         with:
           node-version: 20
 
-      #- name: "Parse Issue"
-      #  id: parse
-      #  uses: onmax/issue-form-parser@v1.5
-      #  with:
-      #    issue_number: ${{ github.event.issue.number }}
-
       - name: "Parse Issue"
         id: issue
         uses: cssnr/parse-issue-form-action@master
@@ -64,7 +58,7 @@ jobs:
         with:
           path: tests/screenshots/links.png
           uploadMethod: imgbb
-          apiKey: "${{ secrets.IMGBB_API_KEY }}"
+          apiKey: ${{ secrets.IMGBB_API_KEY }}
 
       - name: "Read Logs"
         id: logs

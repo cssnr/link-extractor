@@ -79,6 +79,21 @@ async function getPage(name, log, size) {
     return newPage
 }
 
+async function addLogger(page, results, name) {
+    page.on('console', async (msg) => {
+        const text = msg.text()
+        if (text.startsWith('links:')) {
+            const value = await msg.args()[1].jsonValue()
+            results.unshift(`links count: ${value.length}`)
+        } else if (text.startsWith('domains:')) {
+            const value = await msg.args()[1].jsonValue()
+            results.unshift(`domains count: ${value.length}`)
+        } else {
+            results.push(`${name}: ${text}`)
+        }
+    })
+}
+
 ;(async () => {
     console.log('process.env.URL:', process.env.URL)
 
@@ -100,23 +115,23 @@ async function getPage(name, log, size) {
     const logs = []
 
     page = await browser.newPage()
+    // page.on('console', (msg) => logs.push(msg.text()))
+    await addLogger(page, logs, 'site')
     await page.goto(url.href)
-    page.on('console', (msg) => {
-        logs.push(msg)
-        console.log(`console: site:`, msg.text())
-    })
     await page.bringToFront()
     await page.waitForNetworkIdle()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     await worker.evaluate('chrome.action.openPopup();')
-    page = await getPage('popup.html', true)
-    page.on('console', (msg) => logs.push(msg.text()))
+    page = await getPage('popup.html')
+    // page.on('console', (msg) => logs.push(msg.text()))
+    await addLogger(page, logs, 'popup')
     await page.locator('a[data-filter=""]').click()
 
-    page = await getPage('links.html', true, '768x920')
-    page.on('console', (msg) => logs.push(msg.text()))
+    page = await getPage('links.html', false, '768x1024')
+    // page.on('console', (msg) => logs.push(msg.text()))
+    await addLogger(page, logs, 'links')
     await page.waitForNetworkIdle()
-    // await screenshot('links')
     await page.screenshot({ path: `${screenshotsDir}/links.png` })
 
     await browser.close()
