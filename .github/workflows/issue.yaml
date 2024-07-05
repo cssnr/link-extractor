@@ -26,23 +26,31 @@ jobs:
         with:
           node-version: 20
 
+      #- name: "Parse Issue"
+      #  id: parse
+      #  uses: onmax/issue-form-parser@v1.5
+      #  with:
+      #    issue_number: ${{ github.event.issue.number }}
+
       - name: "Parse Issue"
-        id: parse
-        uses: onmax/issue-form-parser@v1.5
+        id: issue
+        uses: cssnr/parse-issue-form-action@master
         with:
-          issue_number: ${{ github.event.issue.number }}
+          body: ${{ github.event.issue.body }}
 
       - name: "Debug Parsed Issue"
         run: |
-          echo '${{ steps.parse.outputs.payload }}'
+          echo Site Link: '${{ steps.issue.outputs.site_link }}'
+          echo Details: '${{ steps.issue.outputs.details }}'
+          echo Support Information: '${{ steps.issue.outputs.support_information }}'
 
       - name: "Install"
         run: |
           npm install
 
-      - name: "Test Issue"
+      - name: "Process Issue"
         env:
-          PAYLOAD: ${{ steps.parse.outputs.payload }}
+          URL: ${{ steps.issue.outputs.site_link }}
         run: |
           npm run issue
 
@@ -51,7 +59,7 @@ jobs:
           ls -lah tests/screenshots
 
       - name: "Upload Image"
-        id: upload-image-0
+        id: image
         uses: McCzarny/upload-image@v1.0.0
         with:
           path: tests/screenshots/links.png
@@ -74,8 +82,10 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           BODY: |
-            Link Extractor Results:  
-            ![0](${{steps.upload-image-0.outputs.url}})
+            Link Extractor Results for: [${{ steps.issue.outputs.site_link }}](${{ steps.issue.outputs.site_link }})  
+
+            ![0](${{steps.image.outputs.url}})
+
             Logs:
             ```json
             ${{ steps.logs.outputs.content }}

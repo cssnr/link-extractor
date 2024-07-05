@@ -80,12 +80,9 @@ async function getPage(name, log, size) {
 }
 
 ;(async () => {
-    const payload = process.env.PAYLOAD
-    console.log('payload:', payload)
-    const data = JSON.parse(payload)
-    console.log('data:', data)
+    console.log('process.env.URL:', process.env.URL)
 
-    const url = new URL(data['Site Link'])
+    const url = new URL(process.env.URL)
     console.log('url:', url)
     console.log('url.href:', url.href)
 
