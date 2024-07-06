@@ -70,14 +70,31 @@ async function screenshot(name) {
 
     // Links
     await worker.evaluate('chrome.action.openPopup();')
-    let popupPage = await getPage(browser, 'popup.html', true)
-    console.log('popupPage:', popupPage)
-    await popupPage.locator('a[data-filter=""]').click()
+    let popup1 = await getPage(browser, 'popup.html', true)
+    console.log('popup1:', popup1)
+    await popup1.locator('a[data-filter=""]').click()
 
     page = await getPage(browser, 'links.html', true, '768x920')
     console.log('page:', page)
     await page.waitForNetworkIdle()
-    await screenshot('links')
+    await screenshot('link-extractor')
+
+    // Page
+    await page.goto('https://archive.org/')
+    page.on('console', (msg) => console.log(`console: page:`, msg.text()))
+    await page.bringToFront()
+    await page.waitForNetworkIdle()
+
+    // Links
+    await worker.evaluate('chrome.action.openPopup();')
+    let popup2 = await getPage(browser, 'popup.html', true)
+    console.log('popup2:', popup2)
+    await popup2.locator('a[data-filter=""]').click()
+
+    page = await getPage(browser, 'links.html', true, '768x920')
+    console.log('page:', page)
+    await page.waitForNetworkIdle()
+    await screenshot('archive.org')
 
     await browser.close()
 })()

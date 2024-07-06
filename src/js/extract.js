@@ -95,12 +95,12 @@ function extractSelection() {
         if (ancestor.nodeName === '#text') {
             continue
         }
-        links.push(...findLinks(ancestor))
-        // ancestor.querySelectorAll('a, area').forEach((element) => {
-        //     if (selection.containsNode(element, true)) {
-        //         pushElement(links, element)
-        //     }
-        // })
+        ancestor.querySelectorAll('a, area').forEach((el) => {
+            if (selection.containsNode(el, true)) {
+                // console.debug('el:', el)
+                pushElement(links, el)
+            }
+        })
     }
     console.debug('links:', links)
     return links
