@@ -60,10 +60,10 @@ function extractAllLinks() {
  * @return {Array}
  */
 function findLinks(root) {
-    console.debug('findLinks:', root)
+    // console.debug('findLinks:', root)
     const links = []
     if (root.querySelectorAll) {
-        root.querySelectorAll('a').forEach((el) => {
+        root.querySelectorAll('a, area').forEach((el) => {
             pushElement(links, el)
         })
     }
@@ -95,9 +95,10 @@ function extractSelection() {
         if (ancestor.nodeName === '#text') {
             continue
         }
-        ancestor.querySelectorAll('a').forEach((element) => {
-            if (selection.containsNode(element, true)) {
-                pushElement(links, element)
+        ancestor.querySelectorAll('a, area').forEach((el) => {
+            if (selection.containsNode(el, true)) {
+                // console.debug('el:', el)
+                pushElement(links, el)
             }
         })
     }
@@ -114,16 +115,18 @@ function extractSelection() {
 function pushElement(array, element) {
     // console.debug('element:', element)
     try {
-        const data = {
-            href: decodeURI(element.href),
-            text: element.textContent?.trim(),
-            title: element.title,
-            label: element.ariaLabel || '',
-            rel: element.rel,
-            target: element.target,
-            origin: element.origin,
+        if (element.href) {
+            const data = {
+                href: decodeURI(element.href),
+                text: element.textContent?.trim(),
+                title: element.title,
+                label: element.ariaLabel || '',
+                rel: element.rel,
+                target: element.target,
+                origin: element.origin,
+            }
+            array.push(data)
         }
-        array.push(data)
     } catch (e) {
         console.log(e)
     }
