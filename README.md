@@ -101,7 +101,7 @@ If you are experiencing an issue/bug or getting unexpected results, use:
 
 - Report an Issue: https://github.com/cssnr/link-extractor/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General Feedback: https://cssnr.github.io/feedback/
+- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Link%20Extractor)
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and; 
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
