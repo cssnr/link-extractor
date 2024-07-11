@@ -101,12 +101,10 @@ If you are experiencing an issue/bug or getting unexpected results, use:
 
 - Report an Issue: https://github.com/cssnr/link-extractor/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+- Provide General Feedback: https://cssnr.github.io/feedback/
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and; 
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
-
-Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 
