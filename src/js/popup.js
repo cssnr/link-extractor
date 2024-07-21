@@ -234,12 +234,11 @@ function extractURLs(text) {
 
 /**
  * Grant Permissions Click Callback
- * Promise from requestPerms is ignored so we can close the popup immediately
  * @function grantPerms
  * @param {MouseEvent} event
  */
 export async function grantPerms(event) {
     console.debug('grantPerms:', event)
-    requestPerms()
+    requestPerms() // promise ignored so we can call window.close()
     window.close()
 }

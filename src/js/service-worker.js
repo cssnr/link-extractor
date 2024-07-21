@@ -39,22 +39,20 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
-    const installURL = 'https://link-extractor.cssnr.com/docs/'
+    const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
     const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
-    const { options, patterns } = await Promise.resolve(
-        setDefaultOptions({
-            linksDisplay: -1,
-            flags: 'ig',
-            lazyLoad: true,
-            removeDuplicates: true,
-            defaultFilter: true,
-            saveState: true,
-            linksTruncate: true,
-            linksNoWrap: false,
-            contextMenu: true,
-            showUpdate: false,
-        })
-    )
+    const { options, patterns } = await setDefaultOptions({
+        linksDisplay: -1,
+        flags: 'ig',
+        lazyLoad: true,
+        removeDuplicates: true,
+        defaultFilter: true,
+        saveState: true,
+        linksTruncate: true,
+        linksNoWrap: false,
+        contextMenu: true,
+        showUpdate: false,
+    })
     console.log('options, patterns:', options, patterns)
     if (options.contextMenu) {
         createContextMenus(patterns)
@@ -321,7 +319,7 @@ async function injectFunction(func, args) {
  * Set Default Options
  * @function setDefaultOptions
  * @param {Object} defaultOptions
- * @return {Object}
+ * @return {Promise<*|Object>}
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions', defaultOptions)

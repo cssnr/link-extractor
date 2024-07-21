@@ -2,12 +2,15 @@
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=users)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Rating](https://img.shields.io/amo/rating/link-extractor?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/link-extractor)
+[![GitHub Repo stars](https://img.shields.io/github/stars/cssnr/link-extractor?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/link-extractor/stargazers)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/link-extractor/graphs/commit-activity)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Link Extractor
 
@@ -23,6 +26,7 @@ Website: https://link-extractor.cssnr.com/
 *   [Support](#support)
 *   [Development](#development)
     -   [Building](#building)
+*   [Contributing](#Contributing)
 
 # Install
 
@@ -61,7 +65,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Store Regular Expressions for Quick Filtering
 *   Import and Export Saved Regular Expressions
 *   Automatic Dark/Light Mode based on Browser Setting
-*   Activate from Icon, Context Menu, or Keyboard Shortcuts
+*   Activate from Popup, Context Menu, Keyboard Shortcuts or Omnibox
 
 [![Link Extractor Screenshots](/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
 
@@ -91,13 +95,13 @@ For more information on regex, see: https://regex101.com/
 
 # Support
 
-For help using the web extension, utilize any these resources:
+For help using the web extension or to request features, see:
 
 - Documentation: https://link-extractor.cssnr.com/docs/
 - Q&A Discussion: https://github.com/cssnr/link-extractor/discussions/categories/q-a
 - Request a Feature: https://github.com/cssnr/link-extractor/discussions/categories/feature-requests
 
-If you are experiencing an issue/bug or getting unexpected results, use:
+If you are experiencing an issue/bug or getting unexpected results, you can:
 
 - Report an Issue: https://github.com/cssnr/link-extractor/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
@@ -105,6 +109,8 @@ If you are experiencing an issue/bug or getting unexpected results, use:
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and; 
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+To support this project, see the [Contributing](#Contributing) section at the bottom.
 
 # Development
 
@@ -175,3 +181,22 @@ You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension
 1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
+
+# Contributing
+
+Currently, the best way to contribute to this project is to give a 5-star rating on 
+[Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp) or 
+[Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+
+Other Web Extensions I have created and published:
+
+- [Link Extractor](https://github.com/cssnr/link-extractor)
+- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
+- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
+- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
+- [ASN Plus](https://github.com/cssnr/asn-plus)
+- [Aviation Tools](https://github.com/cssnr/aviation-tools)
+- [Text Formatter](https://github.com/cssnr/text-formatter)
+
+For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)
