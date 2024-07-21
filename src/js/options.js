@@ -345,7 +345,7 @@ async function filterClick(event) {
  * @function saveEditing
  * @param {MouseEvent} event
  * @param {String} idx
- * @return {Boolean}
+ * @return {Promise<*|Boolean>}
  */
 async function saveEditing(event, idx) {
     event.preventDefault() // block dragStart if editing
