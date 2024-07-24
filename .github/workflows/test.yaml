@@ -44,11 +44,12 @@ jobs:
       - name: "Push Artifacts"
         uses: cssnr/push-artifacts-action@master
         with:
-          path: "tests/screenshots/"
+          source: "tests/screenshots/"
+          dest: "/static"
           host: ${{ secrets.RSYNC_HOST }}
           user: ${{ secrets.RSYNC_USER }}
           pass: ${{ secrets.RSYNC_PASS }}
           port: ${{ secrets.RSYNC_PORT }}
-          base: "/static"
           webhost: "https://artifacts.hosted-domains.com"
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          token: ${{ secrets.GITHUB_TOKEN }}

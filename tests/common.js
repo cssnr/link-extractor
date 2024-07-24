@@ -1,5 +1,5 @@
-import * as puppeteer from 'puppeteer'
-import * as path from 'path'
+const puppeteer = require('puppeteer')
+const path = require('path')
 
 const sourceDir = 'src'
 const timeout = 10000
@@ -8,7 +8,7 @@ const timeout = 10000
  * @function getBrowser
  * @return {puppeteer.Browser}
  */
-export async function getBrowser() {
+async function getBrowser() {
     const pathToExtension = path.join(process.cwd(), sourceDir)
     console.log('pathToExtension:', pathToExtension)
     return await puppeteer.launch({
@@ -30,7 +30,7 @@ export async function getBrowser() {
  * @global timeout
  * @return {puppeteer.Page}
  */
-export async function getWorker(browser) {
+async function getWorker(browser) {
     const workerTarget = await browser.waitForTarget(
         (target) =>
             target.type() === 'service_worker' &&
@@ -50,7 +50,7 @@ export async function getWorker(browser) {
  * @param {String=} size
  * @return {puppeteer.Page}
  */
-export async function getPage(browser, name, log, size) {
+async function getPage(browser, name, log, size) {
     console.debug(`getPage: ${name}`, log, size)
     const target = await browser.waitForTarget(
         (target) => target.type() === 'page' && target.url().includes(name),
@@ -74,7 +74,7 @@ export async function getPage(browser, name, log, size) {
     return newPage
 }
 
-export async function scrollPage(page) {
+async function scrollPage(page) {
     await page.evaluate(() => {
         window.scrollBy({
             top: window.innerHeight,
@@ -84,3 +84,5 @@ export async function scrollPage(page) {
     })
     await new Promise((resolve) => setTimeout(resolve, 500))
 }
+
+module.exports = { getBrowser, getWorker, getPage, scrollPage }

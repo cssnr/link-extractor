@@ -2,7 +2,7 @@
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=users)](https://addons.mozilla.org/addon/link-extractor)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Rating](https://img.shields.io/amo/rating/link-extractor?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/link-extractor)
-[![GitHub Repo stars](https://img.shields.io/github/stars/cssnr/link-extractor?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/link-extractor/stargazers)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/link-extractor?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/link-extractor/stargazers)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
@@ -19,16 +19,16 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 
 Website: https://link-extractor.cssnr.com/
 
-*   [Install](#install)
-*   [Features](#features)
-    -   [Upcoming](#planned-upcoming-features)
-*   [Configuration](#configuration)
-*   [Support](#support)
-*   [Development](#development)
-    -   [Building](#building)
+*   [Install](#Install)
+*   [Features](#Features)
+    -   [Upcoming Features](#Upcoming-Features)
+*   [Configuration](#Configuration)
+*   [Support](#Support)
+*   [Development](#Development)
+    -   [Building](#Building)
 *   [Contributing](#Contributing)
 
-# Install
+## Install
 
 *   [Google Chrome Web Store](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
@@ -36,8 +36,8 @@ Website: https://link-extractor.cssnr.com/
 [![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://addons.mozilla.org/addon/link-extractor)
 [![Edge](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/edge_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-[![Brave](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/brave_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Opera](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/opera_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+[![Brave](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/brave_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Chromium](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chromium_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Yandex](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/yandex_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 
@@ -48,7 +48,7 @@ Mobile browser support available for
 [Firefox](https://addons.mozilla.org/addon/link-extractor) and
 [Yandex](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
 
-# Features
+## Features
 
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for new features.  
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).  
@@ -69,7 +69,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 [![Link Extractor Screenshots](/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
 
-## Planned Upcoming Features
+### Upcoming Features
 
 *   Option to Set Names/Titles for Saved Filters
 *   Option to Extract Using Multiple Filters with AND/OR
@@ -78,7 +78,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 > **Don't see your feature here?**
 > Request one on the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
 
-# Configuration
+## Configuration
 
 - [View Configuration Documentation on Website](https://link-extractor.cssnr.com/docs/#configure)
 
@@ -93,7 +93,7 @@ Make sure to click`Save Options` when finished.
 
 For more information on regex, see: https://regex101.com/  
 
-# Support
+## Support
 
 For help using the web extension or to request features, see:
 
@@ -159,7 +159,7 @@ npm run build:firefox
 
 For more information on building, see the scripts section in the [package.json](package.json) file.
 
-## Chrome Setup
+### Chrome Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -167,7 +167,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-## Firefox Setup
+### Firefox Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
