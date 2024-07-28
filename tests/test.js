@@ -1,5 +1,5 @@
-import * as fs from 'fs'
-import { getBrowser, getPage, getWorker, scrollPage } from './common.mjs'
+const fs = require('fs')
+const { getBrowser, getPage, getWorker, scrollPage } = require('./common')
 
 const screenshotsDir = 'tests/screenshots'
 let count = 1
