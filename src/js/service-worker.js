@@ -110,6 +110,9 @@ async function onClicked(ctx, tab) {
     } else if (ctx.menuItemId === 'copy') {
         console.debug('injectFunction: copy')
         await injectFunction(copyActiveElementText, [ctx])
+    } else if (ctx.menuItemId === 'copyLinks') {
+        console.debug('injectFunction: copyLinks')
+        // await injectFunction(copyActiveElementText, [ctx])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -236,7 +239,7 @@ export async function onRemoved(permissions) {
 /**
  * Create Context Menus
  * @function createContextMenus
- * @param {Array} patterns
+ * @param {String[]} [patterns]
  */
 function createContextMenus(patterns) {
     if (!chrome.contextMenus) {
@@ -244,35 +247,51 @@ function createContextMenus(patterns) {
     }
     console.debug('createContextMenus:', patterns)
     chrome.contextMenus.removeAll()
-    const ctx = ['all']
     const contexts = [
-        [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
-        [['selection'], 'selection', 'normal', 'Extract from Selection'],
-        [['selection', 'link'], 'separator-1', 'separator', 'separator'],
-        [ctx, 'filters', 'normal', 'Extract with Filter'],
-        [ctx, 'links', 'normal', 'Extract All Links'],
-        [ctx, 'domains', 'normal', 'Extract All Domains'],
-        [ctx, 'separator-2', 'separator', 'separator'],
-        [ctx, 'options', 'normal', 'Open Options'],
+        [['link'], 'copy', 'Copy Link Text to Clipboard'],
+        [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
+        [['selection'], 'selection', 'Extract from Selection'],
+        [['selection', 'link'], '1', '', 'separator'],
+        // [['selection', 'link'], 'separator'],
+        [['all'], 'filters', 'Extract with Filter'],
+        [['all'], 'links', 'Extract All Links'],
+        [['all'], 'domains', 'Extract All Domains'],
+        [['selection', 'link'], '2', '', 'separator'],
+        // [['selection', 'link'], 'separator'],
+        [['all'], 'options', 'Open Options'],
     ]
-    contexts.forEach((context) => {
+    contexts.forEach(addContext)
+    if (patterns) {
+        patterns.forEach((pattern, i) => {
+            console.debug(`pattern: ${i}: ${pattern}`)
+            chrome.contextMenus.create({
+                contexts: ['all'],
+                id: `filter-${i}`,
+                title: pattern,
+                parentId: 'filters',
+            })
+        })
+    }
+}
+
+/**
+ * Add Context from Array
+ * @function addContext
+ * @param {[[ContextType],String,String,String]} context
+ * @param {String} [parentId]
+ */
+function addContext(context, parentId) {
+    try {
+        console.debug('addContext:', context)
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
-            type: context[2],
-            title: context[3],
+            title: context[2],
+            type: context[3],
+            // parentId,
         })
-    })
-    if (patterns) {
-        patterns.forEach((pattern, i) => {
-            // console.log(`pattern: ${i}: ${pattern}`)
-            chrome.contextMenus.create({
-                parentId: 'filters',
-                title: pattern,
-                contexts: ctx,
-                id: `filter-${i}`,
-            })
-        })
+    } catch (e) {
+        console.log(`Error Adding Context: ${e.message}`, e)
     }
 }
 
@@ -340,7 +359,7 @@ async function setDefaultOptions(defaultOptions) {
     options = options || {}
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
-        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        // console.debug(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
             changed = true
             options[key] = value
@@ -349,7 +368,7 @@ async function setDefaultOptions(defaultOptions) {
     }
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.log('changed:', options)
+        console.debug('changed:', options)
     }
 
     return { options, patterns }
