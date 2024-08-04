@@ -89,8 +89,8 @@ function createFilterLink(number, value = '') {
 async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
-    const anchor = event.target.closest('a')
-    const href = anchor.getAttribute('href').replace(/^\.+/g, '')
+    // const anchor = event.target.closest('a')
+    const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
     console.debug('href:', href)
     let url
     if (href.endsWith('html/options.html')) {
