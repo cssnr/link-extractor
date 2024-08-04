@@ -4,6 +4,13 @@ const { getBrowser, getPage, getWorker } = require('./common')
 const screenshotsDir = 'tests/screenshots'
 let page
 
+/**
+ * @function addLogger
+ * @param {Page} page
+ * @param {String[]} results
+ * @param {String} name
+ * @return {Promise<void>}
+ */
 async function addLogger(page, results, name) {
     page.on('console', async (msg) => {
         const text = msg.text()
