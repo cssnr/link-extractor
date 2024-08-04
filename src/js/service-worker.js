@@ -108,11 +108,15 @@ async function onClicked(ctx, tab) {
         console.debug(`filter: ${patterns[i]}`)
         await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
-        console.debug('injectFunction: copy')
+        console.debug('injectFunction: copy: copyActiveElementText')
         await injectFunction(copyActiveElementText, [ctx])
     } else if (ctx.menuItemId === 'copyLinks') {
-        console.debug('injectFunction: copyLinks')
-        // await injectFunction(copyActiveElementText, [ctx])
+        console.debug('injectFunction: copyLinks: copySelectionLinks', tab)
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['/js/extract.js'],
+        })
+        await injectFunction(copySelectionLinks, [])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -251,13 +255,11 @@ function createContextMenus(patterns) {
         [['link'], 'copy', 'Copy Link Text to Clipboard'],
         [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
         [['selection'], 'selection', 'Extract from Selection'],
-        [['selection', 'link'], '1', '', 'separator'],
-        // [['selection', 'link'], 'separator'],
+        [['selection', 'link'], 'separator'],
         [['all'], 'filters', 'Extract with Filter'],
         [['all'], 'links', 'Extract All Links'],
         [['all'], 'domains', 'Extract All Domains'],
-        [['selection', 'link'], '2', '', 'separator'],
-        // [['selection', 'link'], 'separator'],
+        [['selection', 'link'], 'separator'],
         [['all'], 'options', 'Open Options'],
     ]
     contexts.forEach(addContext)
@@ -278,17 +280,19 @@ function createContextMenus(patterns) {
  * Add Context from Array
  * @function addContext
  * @param {[[ContextType],String,String,String]} context
- * @param {String} [parentId]
  */
-function addContext(context, parentId) {
+function addContext(context) {
     try {
         console.debug('addContext:', context)
+        if (context[1] === 'separator') {
+            context[1] = Math.random().toString().substring(2, 7)
+            context.push('separator', 'separator')
+        }
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
             title: context[2],
             type: context[3],
-            // parentId,
         })
     } catch (e) {
         console.log(`Error Adding Context: ${e.message}`, e)
@@ -316,6 +320,28 @@ function copyActiveElementText(ctx) {
         navigator.clipboard.writeText(text).then()
     } else {
         console.info('No Text to Copy.')
+    }
+}
+
+/**
+ * Copy All Selected Links
+ * @function copySelectionLinks
+ */
+function copySelectionLinks() {
+    console.debug('copySelectionLinks')
+    const links = extractSelection()
+    console.debug('links:', links)
+    const results = []
+    for (const link of links) {
+        results.push(link.href)
+    }
+    console.debug('results:', results)
+    const text = results.join('\n')
+    console.debug('text:', text)
+    if (text?.length) {
+        navigator.clipboard.writeText(text).then()
+    } else {
+        console.info('No Links to Copy.')
     }
 }
 
