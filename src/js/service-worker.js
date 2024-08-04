@@ -254,7 +254,7 @@ function createContextMenus(patterns) {
     const contexts = [
         [['link'], 'copy', 'Copy Link Text to Clipboard'],
         [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
-        [['selection'], 'selection', 'Extract from Selection'],
+        [['selection'], 'selection', 'Extract Links from Selection'],
         [['selection', 'link'], 'separator'],
         [['all'], 'filters', 'Extract with Filter'],
         [['all'], 'links', 'Extract All Links'],
@@ -328,14 +328,14 @@ function copyActiveElementText(ctx) {
  * @function copySelectionLinks
  */
 function copySelectionLinks() {
-    console.debug('copySelectionLinks')
+    // console.debug('copySelectionLinks')
     const links = extractSelection()
-    console.debug('links:', links)
+    // console.debug('links:', links)
     const results = []
     for (const link of links) {
         results.push(link.href)
     }
-    console.debug('results:', results)
+    // console.debug('results:', results)
     const text = results.join('\n')
     console.debug('text:', text)
     if (text?.length) {
