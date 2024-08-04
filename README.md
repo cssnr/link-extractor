@@ -60,6 +60,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 * Extract Links from Selected Text on any Site
 * Extract Links from Clipboard or Any Text
 * Extract Links from All Selected Tabs
+* Copy Selected Links with right-click Menu
 * Display Additional Link Details and Text
 * Open Multiple Links in Tabs from Text
 * Download Links and Domains as a Text File
