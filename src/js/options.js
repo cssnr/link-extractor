@@ -159,8 +159,8 @@ async function deleteFilter(event, index = undefined) {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
     if (!index) {
-        const anchor = event.target.closest('a')
-        const filter = anchor?.dataset?.value
+        // const anchor = event.target.closest('a')
+        const filter = event.currentTarget?.dataset?.value
         console.log(`filter: ${filter}`)
         if (filter && patterns.includes(filter)) {
             index = patterns.indexOf(filter)

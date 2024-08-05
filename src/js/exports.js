@@ -101,6 +101,7 @@ export async function saveOptions(event) {
     let value
     if (['flags', 'reset-default'].includes(event.target.id)) {
         key = 'flags'
+        /** @type {HTMLInputElement} */
         const element = document.getElementById(key)
         let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
         flags = new Set(flags)
@@ -175,7 +176,7 @@ export async function exportClick(event) {
     if (!data[name].length) {
         return showToast(`No ${display} Found!`, 'warning')
     }
-    const json = JSON.stringify(data[name])
+    const json = JSON.stringify(data[name], null, 2)
     textFileDownload(`${name}.txt`, json)
 }
 

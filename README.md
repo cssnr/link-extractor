@@ -24,6 +24,7 @@ Website: https://link-extractor.cssnr.com/
 * [Install](#Install)
 * [Features](#Features)
     - [Upcoming Features](#Upcoming-Features)
+    - [Known Issues](#Known-Issues)
 * [Configuration](#Configuration)
 * [Support](#Support)
 * [Development](#Development)
@@ -60,6 +61,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 * Extract Links from Selected Text on any Site
 * Extract Links from Clipboard or Any Text
 * Extract Links from All Selected Tabs
+* Copy Selected Links with right-click Menu
 * Display Additional Link Details and Text
 * Open Multiple Links in Tabs from Text
 * Download Links and Domains as a Text File
@@ -81,6 +83,11 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 > **Don't see your feature here?**
 > Request one on
 > the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
+
+### Known Issues
+
+* Attempting to extract links from multiple selected tabs without granting host permissions opens the options page and
+  does not display any error message. If you encounter this, grant host permissions to the extension and try again.
 
 ## Configuration
 

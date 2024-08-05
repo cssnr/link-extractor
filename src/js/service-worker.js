@@ -108,8 +108,15 @@ async function onClicked(ctx, tab) {
         console.debug(`filter: ${patterns[i]}`)
         await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
-        console.debug('injectFunction: copy')
+        console.debug('injectFunction: copy: copyActiveElementText')
         await injectFunction(copyActiveElementText, [ctx])
+    } else if (ctx.menuItemId === 'copyLinks') {
+        console.debug('injectFunction: copyLinks: copySelectionLinks', tab)
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['/js/extract.js'],
+        })
+        await injectFunction(copySelectionLinks, [])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -236,7 +243,7 @@ export async function onRemoved(permissions) {
 /**
  * Create Context Menus
  * @function createContextMenus
- * @param {Array} patterns
+ * @param {String[]} [patterns]
  */
 function createContextMenus(patterns) {
     if (!chrome.contextMenus) {
@@ -244,35 +251,51 @@ function createContextMenus(patterns) {
     }
     console.debug('createContextMenus:', patterns)
     chrome.contextMenus.removeAll()
-    const ctx = ['all']
     const contexts = [
-        [['link'], 'copy', 'normal', 'Copy Link Text to Clipboard'],
-        [['selection'], 'selection', 'normal', 'Extract from Selection'],
-        [['selection', 'link'], 'separator-1', 'separator', 'separator'],
-        [ctx, 'filters', 'normal', 'Extract with Filter'],
-        [ctx, 'links', 'normal', 'Extract All Links'],
-        [ctx, 'domains', 'normal', 'Extract All Domains'],
-        [ctx, 'separator-2', 'separator', 'separator'],
-        [ctx, 'options', 'normal', 'Open Options'],
+        [['link'], 'copy', 'Copy Link Text to Clipboard'],
+        [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
+        [['selection'], 'selection', 'Extract Links from Selection'],
+        [['selection', 'link'], 'separator'],
+        [['all'], 'filters', 'Extract with Filter'],
+        [['all'], 'links', 'Extract All Links'],
+        [['all'], 'domains', 'Extract All Domains'],
+        [['selection', 'link'], 'separator'],
+        [['all'], 'options', 'Open Options'],
     ]
-    contexts.forEach((context) => {
+    contexts.forEach(addContext)
+    if (patterns) {
+        patterns.forEach((pattern, i) => {
+            console.debug(`pattern: ${i}: ${pattern}`)
+            chrome.contextMenus.create({
+                contexts: ['all'],
+                id: `filter-${i}`,
+                title: pattern,
+                parentId: 'filters',
+            })
+        })
+    }
+}
+
+/**
+ * Add Context from Array
+ * @function addContext
+ * @param {[[ContextType],String,String,String]} context
+ */
+function addContext(context) {
+    try {
+        console.debug('addContext:', context)
+        if (context[1] === 'separator') {
+            context[1] = Math.random().toString().substring(2, 7)
+            context.push('separator', 'separator')
+        }
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
-            type: context[2],
-            title: context[3],
+            title: context[2],
+            type: context[3],
         })
-    })
-    if (patterns) {
-        patterns.forEach((pattern, i) => {
-            // console.log(`pattern: ${i}: ${pattern}`)
-            chrome.contextMenus.create({
-                parentId: 'filters',
-                title: pattern,
-                contexts: ctx,
-                id: `filter-${i}`,
-            })
-        })
+    } catch (e) {
+        console.log(`Error Adding Context: ${e.message}`, e)
     }
 }
 
@@ -297,6 +320,28 @@ function copyActiveElementText(ctx) {
         navigator.clipboard.writeText(text).then()
     } else {
         console.info('No Text to Copy.')
+    }
+}
+
+/**
+ * Copy All Selected Links
+ * @function copySelectionLinks
+ */
+function copySelectionLinks() {
+    // console.debug('copySelectionLinks')
+    const links = extractSelection()
+    // console.debug('links:', links)
+    const results = []
+    for (const link of links) {
+        results.push(link.href)
+    }
+    // console.debug('results:', results)
+    const text = results.join('\n')
+    console.debug('text:', text)
+    if (text?.length) {
+        navigator.clipboard.writeText(text).then()
+    } else {
+        console.info('No Links to Copy.')
     }
 }
 
@@ -340,7 +385,7 @@ async function setDefaultOptions(defaultOptions) {
     options = options || {}
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
-        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        // console.debug(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
             changed = true
             options[key] = value
@@ -349,7 +394,7 @@ async function setDefaultOptions(defaultOptions) {
     }
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.log('changed:', options)
+        console.debug('changed:', options)
     }
 
     return { options, patterns }
