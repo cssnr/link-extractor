@@ -1,6 +1,6 @@
 {
   "name": "Link Extractor",
-  "description": "Easily extract, parse, or open all links/domains from a site or text with optional filters.",
+  "description": "Easily extract all links/domains from tabs/text with optional filters. Allows opening, copying, sorting, downloading, and more...",
   "homepage_url": "https://link-extractor.cssnr.com/",
   "author": "Shane",
   "version": "0.0.1",
