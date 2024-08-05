@@ -63,6 +63,7 @@ async function screenshot(name) {
     await screenshot('options')
 
     // Page
+    console.log('Testing: https://link-extractor.cssnr.com/')
     await page.goto('https://link-extractor.cssnr.com/')
     page.on('console', (msg) => console.log(`console: page:`, msg.text()))
     await page.bringToFront()
@@ -80,10 +81,12 @@ async function screenshot(name) {
     await screenshot('link-extractor')
 
     // Page
+    console.log('Testing: https://archive.org/')
     await page.goto('https://archive.org/')
     page.on('console', (msg) => console.log(`console: page:`, msg.text()))
     await page.bringToFront()
-    await page.waitForNetworkIdle()
+    // await page.waitForNetworkIdle()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     // Links
     await worker.evaluate('chrome.action.openPopup();')
