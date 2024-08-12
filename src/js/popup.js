@@ -10,6 +10,8 @@ import {
     updateOptions,
 } from './exports.js'
 
+import { fetchAndParsePDF } from './pdf.js'
+
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
@@ -54,11 +56,33 @@ async function initPopup() {
     await checkPerms()
     filterInput.focus()
 
+    const [tab] = await chrome.tabs.query({ active: true })
+    console.log('tab:', tab)
+    if (tab?.url.endsWith('.pdf')) {
+        const pdfBtn = document.getElementById('parse-pdf')
+        pdfBtn.dataset.pdfUrl = tab.url
+        pdfBtn.classList.remove('d-none')
+        pdfBtn.addEventListener('click', processPDF)
+    }
+
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)
     // if (tabs.length > 1) {
     //     console.info('Multiple Tabs Selected')
     // }
+}
+
+async function processPDF(event) {
+    const pdfUrl = event.currentTarget.dataset.pdfUrl
+    console.debug('pdfUrl:', pdfUrl)
+    const data = await fetchAndParsePDF(pdfUrl)
+    console.debug('data:', data)
+    const urls = extractURLs(data.join('\n'))
+    console.debug('urls:', urls)
+    await chrome.storage.local.set({ links: urls })
+    const url = chrome.runtime.getURL('/html/links.html')
+    await chrome.tabs.create({ active: true, url })
+    window.close()
 }
 
 /**
