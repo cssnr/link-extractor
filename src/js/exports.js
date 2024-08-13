@@ -310,7 +310,7 @@ export async function revokePerms(event) {
         await checkPerms()
     } catch (e) {
         console.log(e)
-        showToast(e.toString(), 'danger')
+        showToast(e.message, 'danger')
     }
 }
 

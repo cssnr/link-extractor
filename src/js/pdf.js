@@ -7,8 +7,8 @@ export async function fetchAndParsePDF(url) {
     const arrayBuffer = await response.arrayBuffer()
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
     const lines = []
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        const page = await pdf.getPage(pageNum)
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i)
         const textContent = await page.getTextContent()
         textContent.items.forEach((item) => {
             if (item.str) {

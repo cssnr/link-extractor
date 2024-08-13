@@ -38,12 +38,17 @@ const filterInput = document.getElementById('filter-input')
  * @function initOptions
  */
 async function initPopup() {
+    filterInput.focus()
+    updateManifest()
+    await checkPerms()
+
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
     console.debug('initPopup:', options, patterns)
     updateOptions(options)
+
     // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
@@ -51,10 +56,6 @@ async function initPopup() {
             createFilterLink(i.toString(), value)
         })
     }
-
-    updateManifest()
-    await checkPerms()
-    filterInput.focus()
 
     const [tab] = await chrome.tabs.query({ active: true })
     console.log('tab:', tab)
@@ -73,16 +74,21 @@ async function initPopup() {
 }
 
 async function processPDF(event) {
-    const pdfUrl = event.currentTarget.dataset.pdfUrl
-    console.debug('pdfUrl:', pdfUrl)
-    const data = await fetchAndParsePDF(pdfUrl)
-    console.debug('data:', data)
-    const urls = extractURLs(data.join('\n'))
-    console.debug('urls:', urls)
-    await chrome.storage.local.set({ links: urls })
-    const url = chrome.runtime.getURL('/html/links.html')
-    await chrome.tabs.create({ active: true, url })
-    window.close()
+    try {
+        const pdfUrl = event.currentTarget.dataset.pdfUrl
+        console.debug('pdfUrl:', pdfUrl)
+        const data = await fetchAndParsePDF(pdfUrl)
+        console.debug('data:', data)
+        const urls = extractURLs(data.join('\n'))
+        console.debug('urls:', urls)
+        await chrome.storage.local.set({ links: urls })
+        const url = chrome.runtime.getURL('/html/links.html')
+        await chrome.tabs.create({ active: true, url })
+        window.close()
+    } catch (e) {
+        console.log('e:', e)
+        showToast(e.message, 'danger')
+    }
 }
 
 /**
@@ -150,7 +156,7 @@ async function filterForm(event) {
         window.close()
     } catch (e) {
         console.log('e:', e)
-        showToast(e.toString(), 'danger')
+        showToast(e.message, 'danger')
     }
 }
 
