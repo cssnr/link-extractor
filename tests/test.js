@@ -29,6 +29,7 @@ async function screenshot(name) {
     console.log('worker:', worker)
 
     // Popup
+    console.log('Activate Popup')
     await worker.evaluate('chrome.action.openPopup();')
     page = await getPage(browser, 'popup.html', true)
     console.log('page:', page)
@@ -70,6 +71,7 @@ async function screenshot(name) {
     await page.waitForNetworkIdle()
 
     // Links
+    console.log('Activate Popup')
     await worker.evaluate('chrome.action.openPopup();')
     let popup1 = await getPage(browser, 'popup.html', true)
     console.log('popup1:', popup1)
@@ -89,6 +91,7 @@ async function screenshot(name) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     // Links
+    console.log('Activate Popup')
     await worker.evaluate('chrome.action.openPopup();')
     let popup2 = await getPage(browser, 'popup.html', true)
     console.log('popup2:', popup2)
