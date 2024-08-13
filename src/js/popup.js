@@ -10,7 +10,7 @@ import {
     updateOptions,
 } from './exports.js'
 
-import { fetchAndParsePDF } from './pdf.js'
+import { fetchPDF } from './pdf.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
@@ -77,7 +77,7 @@ async function processPDF(event) {
     try {
         const pdfUrl = event.currentTarget.dataset.pdfUrl
         console.debug('pdfUrl:', pdfUrl)
-        const data = await fetchAndParsePDF(pdfUrl)
+        const data = await fetchPDF(pdfUrl)
         console.debug('data:', data)
         const urls = extractURLs(data.join('\n'))
         console.debug('urls:', urls)
@@ -245,18 +245,24 @@ function extractURLs(text) {
     const urlregex =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
     while ((urlmatcharr = urlregex.exec(text)) !== null) {
-        const match = urlmatcharr[0]
-        const url = new URL(match)
-        const data = {
-            text: '',
-            title: '',
-            label: '',
-            target: '',
-            rel: '',
-            href: url.href,
-            origin: url.origin,
+        try {
+            let match = urlmatcharr[0]
+            match = match.includes('://') ? match : `http://${match}`
+            console.log('match:', match)
+            const url = new URL(match)
+            const data = {
+                text: '',
+                title: '',
+                label: '',
+                target: '',
+                rel: '',
+                href: url.href,
+                origin: url.origin,
+            }
+            urls.push(data)
+        } catch (e) {
+            console.log('Error Processing Matches:', urlmatcharr)
         }
-        urls.push(data)
     }
     // return [...new Set(urls)]
     return urls
