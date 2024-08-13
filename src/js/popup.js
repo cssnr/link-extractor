@@ -58,9 +58,9 @@ async function initPopup() {
     }
 
     const [tab] = await chrome.tabs.query({ active: true })
-    // console.debug('tab:', tab)
-    if (tab?.url.endsWith('.pdf')) {
-        console.debug('PDF Detected:', tab)
+    console.debug('tab:', tab)
+    if (tab?.url.toLowerCase().endsWith('.pdf')) {
+        console.debug(`Detected PDF: ${tab.url}`)
         const pdfBtn = document.getElementById('parse-pdf')
         pdfBtn.dataset.pdfUrl = tab.url
         pdfBtn.classList.remove('d-none')

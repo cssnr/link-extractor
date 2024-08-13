@@ -38,26 +38,27 @@ export async function getPDF(url) {
     return lines
 }
 
-/**
- * @function fetchPDF
- * @param {String} pdfUrl
- * @return {Promise<Response>}
- */
-async function fetchPDF(pdfUrl) {
-    try {
-        return await fetch(pdfUrl)
-    } catch (e) {
-        if (pdfUrl.startsWith('file://')) {
-            throw e
-        }
-        console.log(`%cPDF Fetch Error: ${e.message}`, 'color: Yellow')
-        const { options } = await chrome.storage.sync.get(['options'])
-        if (!options.proxyUrl) {
-            throw e
-        }
-        const url = new URL(options.proxyUrl)
-        url.searchParams.append('url', pdfUrl)
-        console.log(`%cTrying Proxy URL: ${url.href}`, 'color: LimeGreen')
-        return await fetch(url.href)
-    }
-}
+// /**
+//  * @function fetchPDF
+//  * @param {String} pdfUrl
+//  * @return {Promise<Response>}
+//  */
+// async function fetchPDF(pdfUrl) {
+//     console.debug(`fetchPDF: ${pdfUrl}`)
+//     try {
+//         return await fetch(pdfUrl)
+//     } catch (e) {
+//         if (pdfUrl.startsWith('file://')) {
+//             throw e
+//         }
+//         console.log(`%cPDF Fetch Error: ${e.message}`, 'color: OrangeRed')
+//         const { options } = await chrome.storage.sync.get(['options'])
+//         if (!options.proxyUrl) {
+//             throw e
+//         }
+//         const url = new URL(options.proxyUrl)
+//         url.searchParams.append('url', pdfUrl)
+//         console.log(`%cTrying Proxy URL: ${url.href}`, 'color: LimeGreen')
+//         return await fetch(url.href)
+//     }
+// }
