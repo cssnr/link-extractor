@@ -32,6 +32,8 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const filterInput = document.getElementById('filter-input')
+const pdfBtn = document.getElementById('pdf-btn')
+const pdfIcon = document.getElementById('pdf-icon')
 
 /**
  * Initialize Popup
@@ -57,14 +59,19 @@ async function initPopup() {
         })
     }
 
-    const [tab] = await chrome.tabs.query({ active: true })
-    console.debug('tab:', tab)
-    if (tab?.url.toLowerCase().endsWith('.pdf')) {
-        console.debug(`Detected PDF: ${tab.url}`)
-        const pdfBtn = document.getElementById('parse-pdf')
-        pdfBtn.dataset.pdfUrl = tab.url
-        pdfBtn.classList.remove('d-none')
-        pdfBtn.addEventListener('click', extractPDF)
+    try {
+        const [tab] = await chrome.tabs.query({ active: true })
+        console.debug('tab:', tab)
+        const url = new URL(tab.url)
+        console.debug('url:', url)
+        if (url.pathname.toLowerCase().endsWith('.pdf')) {
+            console.debug(`Detected PDF: ${url.href}`)
+            pdfBtn.dataset.pdfUrl = url.href
+            pdfBtn.classList.remove('d-none')
+            pdfBtn.addEventListener('click', extractPDF)
+        }
+    } catch (e) {
+        console.debug(e)
     }
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
@@ -76,6 +83,9 @@ async function initPopup() {
 
 async function extractPDF(event) {
     try {
+        pdfBtn.classList.add('disabled')
+        pdfIcon.classList.remove('fa-flask')
+        pdfIcon.classList.add('fa-sync', 'fa-spin')
         const pdfUrl = event.currentTarget.dataset.pdfUrl
         console.debug('pdfUrl:', pdfUrl)
         const data = await getPDF(pdfUrl)
@@ -89,6 +99,10 @@ async function extractPDF(event) {
     } catch (e) {
         console.log('e:', e)
         showToast(e.message, 'danger')
+    } finally {
+        pdfIcon.classList.remove('fa-sync', 'fa-spin')
+        pdfIcon.classList.add('fa-flask')
+        pdfBtn.classList.remove('disabled')
     }
 }
 

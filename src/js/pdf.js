@@ -56,6 +56,7 @@ export async function getPDF(url) {
 //         if (!options.proxyUrl) {
 //             throw e
 //         }
+//         showToast('Fetch Failed, Trying Proxy...', 'primary')
 //         const url = new URL(options.proxyUrl)
 //         url.searchParams.append('url', pdfUrl)
 //         console.log(`%cTrying Proxy URL: ${url.href}`, 'color: LimeGreen')
