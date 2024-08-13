@@ -42,6 +42,7 @@ async function onInstalled(details) {
     const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
     const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
+        // proxyUrl: 'https://pdf-proxy.cssnr.com/',
         linksDisplay: -1,
         flags: 'ig',
         lazyLoad: true,
@@ -364,7 +365,7 @@ async function injectFunction(func, args) {
  * Set Default Options
  * @function setDefaultOptions
  * @param {Object} defaultOptions
- * @return {Promise<*|Object>}
+ * @return {Promise<Object>}
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions', defaultOptions)

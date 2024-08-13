@@ -3,9 +3,11 @@
 /**
  * Inject extract.js to Tab and Open links.html with params
  * @function processLinks
- * @param {String} [filter] Regex Filter
- * @param {Boolean} [domains] Only Domains
- * @param {Boolean} [selection] Only Selection
+ * @param {Object} injectOptions Inject Tab Options
+ * @param {String} [injectOptions.filter] Regex Filter
+ * @param {Boolean} [injectOptions.domains] Only Domains
+ * @param {Boolean} [injectOptions.selection] Only Selection
+ * @return {Promise<void>}
  */
 export async function injectTab({
     filter = null,
@@ -30,15 +32,17 @@ export async function injectTab({
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
                 chrome.runtime.openOptionsPage()
-                return console.info('A Highlighted Tab is Missing Permissions')
+                console.log('%cHost/Tab Permissions Error', 'color: OrangeRed')
+                return
             }
             tabIds.push(tab.id)
         }
     }
-    console.log('tabIds:', tabIds)
     if (!tabIds.length) {
-        return console.info('No Tab IDs to Inject')
+        console.log('%cNo Tab IDs to Inject', 'color: Yellow')
+        return
     }
+    console.log('tabIds:', tabIds)
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('/html/links.html'))
@@ -110,7 +114,8 @@ export async function saveOptions(event) {
         for (const flag of flags) {
             if (!'dgimsuvy'.includes(flag)) {
                 element.classList.add('is-invalid')
-                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+                showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+                return
             }
         }
         element.value = flags
@@ -124,7 +129,7 @@ export async function saveOptions(event) {
     }
     if (value !== undefined) {
         options[key] = value
-        console.info(`Set: ${key}:`, value)
+        console.log(`Set: ${key}:`, value)
         await chrome.storage.sync.set({ options })
     }
 }
@@ -216,8 +221,9 @@ export async function importChange(event) {
         try {
             result = JSON.parse(fileReader.result.toString())
         } catch (e) {
+            console.debug(e)
             showToast('Unable to parse file contents.', 'danger')
-            return console.debug(e)
+            return
         }
         console.debug('result:', result)
         const data = await chrome.storage.sync.get()
@@ -258,7 +264,7 @@ export function textFileDownload(filename, text) {
 /**
  * Request Host Permissions
  * @function requestPerms
- * @return {Promise<*|chrome.permissions.request>}
+ * @return {Promise<chrome.permissions.request>}
  */
 export async function requestPerms() {
     return await chrome.permissions.request({
@@ -269,7 +275,7 @@ export async function requestPerms() {
 /**
  * Check Host Permissions
  * @function checkPerms
- * @return {Promise<*|Boolean>}
+ * @return {Promise<Boolean>}
  */
 export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({

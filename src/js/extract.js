@@ -44,7 +44,7 @@ function onMessage(message, sender, sendResponse) {
 /**
  * Extract links
  * @function extractAllLinks
- * @return {Array}
+ * @return {Object[]}
  */
 function extractAllLinks() {
     console.debug('extractAllLinks')
@@ -57,7 +57,7 @@ function extractAllLinks() {
  * Recursively Find Links from shadowRoot
  * @function findLinks
  * @param {Document|ShadowRoot} root
- * @return {Array}
+ * @return {Object[]}
  */
 function findLinks(root) {
     // console.debug('findLinks:', root)
@@ -79,7 +79,7 @@ function findLinks(root) {
 /**
  * A Function
  * @function extractSelection
- * @return {Array}
+ * @return {Object[]}
  */
 function extractSelection() {
     console.debug('extractSelection')
@@ -109,7 +109,7 @@ function extractSelection() {
 /**
  * Add Element to Array
  * @function pushElement
- * @param {Array} array
+ * @param {Object[]} array
  * @param {HTMLAnchorElement} element
  */
 function pushElement(array, element) {

@@ -6,7 +6,7 @@ const timeout = 10000
 
 /**
  * @function getBrowser
- * @return {Promise<*|puppeteer.Browser>}
+ * @return {Promise<puppeteer.Browser>}
  */
 async function getBrowser() {
     const pathToExtension = path.join(process.cwd(), sourceDir)
@@ -28,7 +28,7 @@ async function getBrowser() {
  * @function getWorker
  * @global browser
  * @global timeout
- * @return {Promise<*|puppeteer.Page>}
+ * @return {Promise<puppeteer.Page>}
  */
 async function getWorker(browser) {
     const workerTarget = await browser.waitForTarget(
@@ -48,7 +48,7 @@ async function getWorker(browser) {
  * @param {String} name
  * @param {Boolean=} log
  * @param {String=} size
- * @return {Promise<*|puppeteer.Page>}
+ * @return {Promise<puppeteer.Page>}
  */
 async function getPage(browser, name, log, size) {
     console.debug(`getPage: ${name}`, log, size)

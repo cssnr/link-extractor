@@ -10,7 +10,7 @@ import {
     updateOptions,
 } from './exports.js'
 
-import { fetchPDF } from './pdf.js'
+import { getPDF } from './pdf.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
@@ -58,12 +58,13 @@ async function initPopup() {
     }
 
     const [tab] = await chrome.tabs.query({ active: true })
-    console.log('tab:', tab)
+    // console.debug('tab:', tab)
     if (tab?.url.endsWith('.pdf')) {
+        console.debug('PDF Detected:', tab)
         const pdfBtn = document.getElementById('parse-pdf')
         pdfBtn.dataset.pdfUrl = tab.url
         pdfBtn.classList.remove('d-none')
-        pdfBtn.addEventListener('click', processPDF)
+        pdfBtn.addEventListener('click', extractPDF)
     }
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
@@ -73,11 +74,11 @@ async function initPopup() {
     // }
 }
 
-async function processPDF(event) {
+async function extractPDF(event) {
     try {
         const pdfUrl = event.currentTarget.dataset.pdfUrl
         console.debug('pdfUrl:', pdfUrl)
-        const data = await fetchPDF(pdfUrl)
+        const data = await getPDF(pdfUrl)
         console.debug('data:', data)
         const urls = extractURLs(data.join('\n'))
         console.debug('urls:', urls)
@@ -248,7 +249,7 @@ function extractURLs(text) {
         try {
             let match = urlmatcharr[0]
             match = match.includes('://') ? match : `http://${match}`
-            console.log('match:', match)
+            // console.debug('match:', match)
             const url = new URL(match)
             const data = {
                 text: '',
@@ -261,7 +262,7 @@ function extractURLs(text) {
             }
             urls.push(data)
         } catch (e) {
-            console.log('Error Processing Matches:', urlmatcharr)
+            console.debug('Error Processing Matches:', urlmatcharr)
         }
     }
     // return [...new Set(urls)]
