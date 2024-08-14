@@ -142,7 +142,7 @@ async function addFilter(event) {
             await chrome.storage.sync.set({ patterns })
             updateTable(patterns)
             input.value = ''
-            showToast(`Added Filter: ${filter}`)
+            showToast(`Added Filter: ${filter}`, 'success')
         } else {
             showToast(`Filter Exists: ${filter}`, 'warning')
         }
@@ -484,5 +484,5 @@ async function copySupport(event) {
         `domains-table: ${local['DataTables_domains-table_/html/links.html']}`,
     ]
     await navigator.clipboard.writeText(result.join('\n'))
-    showToast('Support Information Copied.')
+    showToast('Support Information Copied.', 'success')
 }

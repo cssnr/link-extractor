@@ -8,8 +8,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '../dist/pdfjs/pdf.worker.min.mjs'
  * @return {Promise<String[]>}
  */
 export async function getPDF(url) {
-    const response = await fetch(url)
     // const response = await fetchPDF(url)
+    const response = await fetch(url)
     const arrayBuffer = await response.arrayBuffer()
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
     const lines = []
@@ -56,7 +56,7 @@ export async function getPDF(url) {
 //         if (!options.proxyUrl) {
 //             throw e
 //         }
-//         showToast('Fetch Failed, Trying Proxy...', 'primary')
+//         showToast('Fetch Failed, Trying Proxy...')
 //         const url = new URL(options.proxyUrl)
 //         url.searchParams.append('url', pdfUrl)
 //         console.log(`%cTrying Proxy URL: ${url.href}`, 'color: LimeGreen')

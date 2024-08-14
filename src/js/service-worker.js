@@ -42,7 +42,6 @@ async function onInstalled(details) {
     const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
     const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
-        // proxyUrl: 'https://pdf-proxy.cssnr.com/',
         linksDisplay: -1,
         flags: 'ig',
         lazyLoad: true,
@@ -277,7 +276,7 @@ function createContextMenus(patterns) {
  */
 function addContext(context) {
     try {
-        console.debug('addContext:', context)
+        // console.debug('addContext:', context)
         if (context[1] === 'separator') {
             context[1] = Math.random().toString().substring(2, 7)
             context.push('separator', 'separator')
@@ -289,7 +288,7 @@ function addContext(context) {
             type: context[3],
         })
     } catch (e) {
-        console.log(`Error Adding Context: ${e.message}`, e)
+        console.warn(`Error Adding Context: ${e.message}`, e)
     }
 }
 

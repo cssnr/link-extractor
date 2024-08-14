@@ -61,18 +61,15 @@ async function initPopup() {
         })
     }
 
+    // PDF Check
     try {
         const [tab] = await chrome.tabs.query({ active: true })
-        console.debug('tab:', tab)
+        // console.debug('tab:', tab)
         const url = new URL(tab.url)
-        console.debug('url:', url)
+        // console.debug('url:', url)
         if (url.pathname.toLowerCase().endsWith('.pdf')) {
             if (typeof browser !== 'undefined') {
                 if (url.protocol === 'file:') {
-                    console.log(
-                        '%cFirefox does not support file access.',
-                        'color: OrangeRed'
-                    )
                     document
                         .getElementById('firefox-files')
                         .classList.remove('d-none')
@@ -300,7 +297,7 @@ function extractURLs(text) {
             }
             urls.push(data)
         } catch (e) {
-            console.debug('Error Processing Matches:', urlmatcharr)
+            console.debug('Error Processing match:', urlmatcharr)
         }
     }
     // return [...new Set(urls)]

@@ -227,7 +227,7 @@ export async function importChange(event) {
         try {
             result = JSON.parse(fileReader.result.toString())
         } catch (e) {
-            console.debug(e)
+            console.log(e)
             showToast('Unable to parse file contents.', 'danger')
             return
         }
