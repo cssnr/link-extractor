@@ -44,7 +44,7 @@ const pdfIcon = document.getElementById('pdf-icon')
 async function initPopup() {
     filterInput.focus()
     updateManifest()
-    await checkPerms()
+    const hasPerms = await checkPerms()
 
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
@@ -67,15 +67,23 @@ async function initPopup() {
         const url = new URL(tab.url)
         console.debug('url:', url)
         if (url.pathname.toLowerCase().endsWith('.pdf')) {
-            if (typeof browser !== 'undefined' && url.protocol === 'file:') {
-                console.log(
-                    '%cFirefox does not support file access.',
-                    'color: OrangeRed'
-                )
-                document
-                    .getElementById('firefox-files')
-                    .classList.remove('d-none')
-                return
+            if (typeof browser !== 'undefined') {
+                if (url.protocol === 'file:') {
+                    console.log(
+                        '%cFirefox does not support file access.',
+                        'color: OrangeRed'
+                    )
+                    document
+                        .getElementById('firefox-files')
+                        .classList.remove('d-none')
+                    return
+                }
+                if (!hasPerms) {
+                    document
+                        .getElementById('firefox-pdf')
+                        .classList.remove('d-none')
+                    return
+                }
             }
             console.debug(`Detected PDF: ${url.href}`)
             pdfBtn.dataset.pdfUrl = url.href
@@ -153,7 +161,10 @@ async function popupLinks(event) {
     let url
     if (href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
-        return window.close()
+        window.close()
+        return
+    } else if (href === '#') {
+        return
     } else if (href.startsWith('http')) {
         url = href
     } else {
@@ -161,7 +172,7 @@ async function popupLinks(event) {
     }
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
-    return window.close()
+    window.close()
 }
 
 /**
