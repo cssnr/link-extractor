@@ -39,7 +39,7 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
-    const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
+    const installURL = 'https://link-extractor.cssnr.com/docs/?install=true'
     const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,

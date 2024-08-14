@@ -2,6 +2,7 @@
 
 import {
     checkPerms,
+    detectBrowser,
     grantPerms,
     injectTab,
     openURL,
@@ -64,16 +65,19 @@ async function initPopup() {
     // PDF Check
     try {
         const [tab] = await chrome.tabs.query({ active: true })
-        // console.debug('tab:', tab)
+        console.debug('tab:', tab)
         const url = new URL(tab.url)
-        // console.debug('url:', url)
+        console.debug('url:', url)
+        const browser = detectBrowser()
+        console.debug('browser:', browser)
         if (url.pathname.toLowerCase().endsWith('.pdf')) {
-            if (typeof browser !== 'undefined') {
-                // Firefox
+            console.debug(`Detected PDF: ${url.href}`)
+            if (['firefox', 'edge'].includes(browser.id)) {
+                // Firefox or Edge
                 if (url.protocol === 'file:') {
-                    document
-                        .getElementById('firefox-files')
-                        .classList.remove('d-none')
+                    const el = document.getElementById('file-access')
+                    el.querySelector('span').textContent = browser.name
+                    el.classList.remove('d-none')
                     return
                 }
                 if (!hasPerms) {
@@ -87,6 +91,7 @@ async function initPopup() {
                 if (url.protocol === 'file:') {
                     const fileAccess =
                         await chrome.extension.isAllowedFileSchemeAccess()
+                    console.debug('fileAccess:', fileAccess)
                     if (!fileAccess) {
                         document
                             .getElementById('chrome-files')
@@ -95,7 +100,6 @@ async function initPopup() {
                     }
                 }
             }
-            console.debug(`Detected PDF: ${url.href}`)
             pdfBtn.dataset.pdfUrl = url.href
             pdfBtn.classList.remove('d-none')
             pdfBtn.addEventListener('click', extractPDF)

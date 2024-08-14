@@ -357,3 +357,36 @@ export async function onRemoved(permissions) {
     console.debug('onRemoved', permissions)
     await checkPerms()
 }
+
+/**
+ * @function detectBrowser
+ * @typedef {Object} Browser
+ * @property {String} Browser.name
+ * @property {String} Browser.id
+ * @property {String} Browser.class
+ * @return {Browser}
+ */
+export function detectBrowser() {
+    const browser = {}
+    if (!navigator?.userAgent) {
+        return browser
+    }
+    if (navigator.userAgent.includes('Firefox/')) {
+        console.debug('Detected Browser: Firefox')
+        browser.name = 'Firefox'
+        browser.id = 'firefox'
+    } else if (navigator.userAgent.includes('Edg/')) {
+        console.debug('Detected Browser: Edge')
+        browser.name = 'Edge'
+        browser.id = 'edge'
+    } else if (navigator.userAgent.includes('OPR/')) {
+        console.debug('Detected Browser: Opera')
+        browser.name = 'Opera'
+        browser.id = 'chrome'
+    } else {
+        console.debug('Detected Browser: Chrome')
+        browser.name = 'Chrome'
+        browser.id = 'chrome'
+    }
+    return browser
+}
