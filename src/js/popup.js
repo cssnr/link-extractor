@@ -72,7 +72,9 @@ async function initPopup() {
                     '%cFirefox does not support file access.',
                     'color: OrangeRed'
                 )
-                // TODO: Display Warning in Popup
+                document
+                    .getElementById('firefox-files')
+                    .classList.remove('d-none')
                 return
             }
             console.debug(`Detected PDF: ${url.href}`)
