@@ -3,11 +3,11 @@
 import {
     checkPerms,
     exportClick,
+    grantPerms,
     importChange,
     importClick,
     onAdded,
     onRemoved,
-    requestPerms,
     revokePerms,
     saveOptions,
     updateManifest,
@@ -26,10 +26,13 @@ document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
-document.getElementById('revoke-perms').addEventListener('click', revokePerms)
 document.getElementById('copy-support').addEventListener('click', copySupport)
-
+document
+    .querySelectorAll('.revoke-permissions')
+    .forEach((el) => el.addEventListener('click', revokePerms))
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', grantPerms))
 document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
@@ -458,16 +461,6 @@ function onChanged(changes, namespace) {
             }
         }
     }
-}
-
-/**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-export async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    await requestPerms()
 }
 
 /**

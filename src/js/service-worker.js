@@ -205,13 +205,6 @@ async function onInputEntered(text) {
         opts.filter = text
     }
     await injectTab(opts)
-    // Permission are now being checked in injectTab
-    // const hasPerms = await checkPerms()
-    // if (hasPerms) {
-    //     await injectTab(opts)
-    // } else {
-    //     chrome.runtime.openOptionsPage()
-    // }
 }
 
 /**

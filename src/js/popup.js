@@ -2,9 +2,9 @@
 
 import {
     checkPerms,
+    grantPerms,
     injectTab,
     openURL,
-    requestPerms,
     saveOptions,
     updateManifest,
     updateOptions,
@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
 
 document
     .querySelectorAll('a[href]')
@@ -65,6 +67,14 @@ async function initPopup() {
         const url = new URL(tab.url)
         console.debug('url:', url)
         if (url.pathname.toLowerCase().endsWith('.pdf')) {
+            if (typeof browser !== 'undefined' && url.protocol === 'file:') {
+                console.log(
+                    '%cFirefox does not support file access.',
+                    'color: OrangeRed'
+                )
+                // TODO: Display Warning in Popup
+                return
+            }
             console.debug(`Detected PDF: ${url.href}`)
             pdfBtn.dataset.pdfUrl = url.href
             pdfBtn.classList.remove('d-none')
@@ -83,6 +93,7 @@ async function initPopup() {
 
 async function extractPDF(event) {
     try {
+        // TODO: Add Check for Host Permissions in Firefox
         pdfBtn.classList.add('disabled')
         pdfIcon.classList.remove('fa-flask')
         pdfIcon.classList.add('fa-sync', 'fa-spin')
@@ -281,15 +292,4 @@ function extractURLs(text) {
     }
     // return [...new Set(urls)]
     return urls
-}
-
-/**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-export async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    requestPerms() // promise ignored so we can call window.close()
-    window.close()
 }

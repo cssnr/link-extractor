@@ -31,7 +31,13 @@ export async function injectTab({
             console.debug(`tab: ${tab.id}`, tab)
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
-                chrome.runtime.openOptionsPage()
+                // chrome.runtime.openOptionsPage()
+                const url = new URL(
+                    chrome.runtime.getURL('/html/permissions.html')
+                )
+                const message = `Missing permissions for one or more selected tabs: ${tab.id}`
+                url.searchParams.append('message', message)
+                await chrome.tabs.create({ active: true, url: url.href })
                 console.log('%cHost/Tab Permissions Error', 'color: OrangeRed')
                 return
             }
@@ -259,6 +265,20 @@ export function textFileDownload(filename, text) {
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
+}
+
+/**
+ * Grant Permissions Click Callback
+ * @function grantPerms
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function grantPerms(event, close = false) {
+    console.debug('grantPerms:', event)
+    requestPerms() // Firefox: Do NOT await so that we can call window.close()
+    if (close) {
+        window.close()
+    }
 }
 
 /**
