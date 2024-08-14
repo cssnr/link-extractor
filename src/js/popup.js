@@ -69,6 +69,7 @@ async function initPopup() {
         // console.debug('url:', url)
         if (url.pathname.toLowerCase().endsWith('.pdf')) {
             if (typeof browser !== 'undefined') {
+                // Firefox
                 if (url.protocol === 'file:') {
                     document
                         .getElementById('firefox-files')
@@ -80,6 +81,18 @@ async function initPopup() {
                         .getElementById('firefox-pdf')
                         .classList.remove('d-none')
                     return
+                }
+            } else {
+                // Chrome
+                if (url.protocol === 'file:') {
+                    const fileAccess =
+                        await chrome.extension.isAllowedFileSchemeAccess()
+                    if (!fileAccess) {
+                        document
+                            .getElementById('chrome-files')
+                            .classList.remove('d-none')
+                        return
+                    }
                 }
             }
             console.debug(`Detected PDF: ${url.href}`)
@@ -100,7 +113,6 @@ async function initPopup() {
 
 async function extractPDF(event) {
     try {
-        // TODO: Add Check for Host Permissions in Firefox
         pdfBtn.classList.add('disabled')
         pdfIcon.classList.remove('fa-flask')
         pdfIcon.classList.add('fa-sync', 'fa-spin')
