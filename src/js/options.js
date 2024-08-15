@@ -3,11 +3,11 @@
 import {
     checkPerms,
     exportClick,
+    grantPerms,
     importChange,
     importClick,
     onAdded,
     onRemoved,
-    requestPerms,
     revokePerms,
     saveOptions,
     updateManifest,
@@ -26,10 +26,13 @@ document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('reset-default').addEventListener('click', resetForm)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
-document.getElementById('revoke-perms').addEventListener('click', revokePerms)
 document.getElementById('copy-support').addEventListener('click', copySupport)
-
+document
+    .querySelectorAll('.revoke-permissions')
+    .forEach((el) => el.addEventListener('click', revokePerms))
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', grantPerms))
 document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
@@ -139,7 +142,7 @@ async function addFilter(event) {
             await chrome.storage.sync.set({ patterns })
             updateTable(patterns)
             input.value = ''
-            showToast(`Added Filter: ${filter}`)
+            showToast(`Added Filter: ${filter}`, 'success')
         } else {
             showToast(`Filter Exists: ${filter}`, 'warning')
         }
@@ -345,7 +348,7 @@ async function filterClick(event) {
  * @function saveEditing
  * @param {MouseEvent} event
  * @param {String} idx
- * @return {Promise<*|Boolean>}
+ * @return {Promise<Boolean>}
  */
 async function saveEditing(event, idx) {
     event.preventDefault() // block dragStart if editing
@@ -461,16 +464,6 @@ function onChanged(changes, namespace) {
 }
 
 /**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-export async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    await requestPerms()
-}
-
-/**
  * Copy Support/Debugging Information
  * @function copySupport
  * @param {MouseEvent} event
@@ -491,5 +484,5 @@ async function copySupport(event) {
         `domains-table: ${local['DataTables_domains-table_/html/links.html']}`,
     ]
     await navigator.clipboard.writeText(result.join('\n'))
-    showToast('Support Information Copied.')
+    showToast('Support Information Copied.', 'success')
 }

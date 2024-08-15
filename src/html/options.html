@@ -131,17 +131,18 @@
     <p class="text-muted small my-2">
         More about Options
         <a href="https://link-extractor.cssnr.com/docs/#options" class="text-decoration-none" target="_blank" rel="noopener">
-            on the Docs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            on the Docs <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
     </p>
 
     <div class="d-none grant-perms my-3">
-        <button id="grant-perms" class="btn btn-sm btn-outline-success" type="button"
+        <button class="btn btn-sm btn-outline-success me-2 grant-permissions" type="button"
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                 data-bs-title="Allow Extracting Links from Multiple Selected Tabs.">
             <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
+        <span class="text-center d-inline-block"><a href="../html/permissions.html">More about Permissions</a></span>
     </div>
     <div class="d-none has-perms my-3">
-        <button id="revoke-perms" class="link-danger btn btn-sm btn-link" type="button"
+        <button class="link-danger btn btn-sm btn-link revoke-permissions" type="button"
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                 data-bs-title="No Longer Allow Extracting Links from Multiple Tabs.">
             Remove Host Permissions</button>
@@ -191,11 +192,11 @@
 
     <div class="text-center">
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-           href="https://link-extractor.cssnr.com/docs/">View Docs</a>
-        <svg><use xlink:href="#bi-dot" /></svg>
+           href="https://link-extractor.cssnr.com/docs/">Documentation</a>
+        <span class="mx-2">&bull;</span>
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
-           href="https://github.com/cssnr/link-extractor/discussions/categories/feature-requests">Request Feature</a>
-        <svg><use xlink:href="#bi-dot" /></svg>
+           href="https://link-extractor.cssnr.com/faq/">FAQ</a>
+        <span class="mx-2">&bull;</span>
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
            href="https://github.com/cssnr/link-extractor/issues">Report Issue</a>
     </div>
@@ -217,9 +218,6 @@
     </div>
     <i class="fa-regular fa-trash-can"></i>
     <i class="fa-solid fa-grip"></i>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
-        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-    </svg>
 </div> <!-- d-none -->
 
 <button type="button" class="btn btn-outline-primary" id="back-to-top">

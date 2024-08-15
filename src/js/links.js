@@ -337,7 +337,7 @@ function downloadFileClick(event) {
     // console.debug('name:', name)
     if (links) {
         textFileDownload(name, links)
-        showToast('Download Started.')
+        showToast('Download Started.', 'success')
     } else {
         showToast('Nothing to Download.', 'warning')
     }

@@ -32,6 +32,19 @@
         </form>
         <a role="button" class="btn btn-sm btn-primary" data-filter="domains">
             <i class="fa-solid fa-globe me-1"></i> Only Domains</a>
+        <a role="button" class="btn btn-sm btn-outline-warning d-none" id="pdf-btn"
+           data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature">
+            <i class="fa-solid fa-file-pdf me-1"></i> Extract from PDF
+            <i class="fa-solid fa-flask" id="pdf-icon" style="min-width: 22px;"></i></a>
+        <div id="file-access" class="alert alert-warning text-center p-1 my-0 d-none">
+            <span>Browser</span> does <b>not</b> allow access to files.
+        </div>
+        <div id="firefox-pdf" class="alert alert-warning text-center p-1 my-0 d-none">
+            PDF Extraction Requires <a href="#" class="alert-link grant-permissions">Host Permissions</a>.
+        </div>
+        <div id="chrome-files" class="alert alert-warning text-center p-1 my-0 d-none">
+            PDF files require <a href="https://link-extractor.cssnr.com/faq/#fileAccess" class="alert-link">file access</a>.
+        </div>
         <hr class="my-0">
         <form id="links-form" class="my-0">
             <label for="links-text" class="form-label visually-hidden">Open Links</label>
@@ -105,7 +118,7 @@
         </form>
 
         <div class="d-none grant-perms">
-            <button id="grant-perms" class="btn btn-sm btn-outline-success w-100" type="button"
+            <button class="btn btn-sm btn-outline-success w-100 grant-permissions" type="button"
                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                     data-bs-title="Allow Extracting Links from Multiple Selected Tabs.">
                 <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>

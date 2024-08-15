@@ -21,9 +21,9 @@ if (typeof ClipboardJS !== 'undefined') {
         // const text = event.text
         // console.debug(`text: "${text}"`)
         if (event.trigger.dataset.toast) {
-            showToast(event.trigger.dataset.toast)
+            showToast(event.trigger.dataset.toast, 'success')
         } else {
-            showToast('Copied to Clipboard')
+            showToast('Copied to Clipboard', 'success')
         }
     })
     clipboard.on('error', function (event) {
@@ -57,7 +57,7 @@ function onScroll() {
  * @param {String} message
  * @param {String} type
  */
-function showToast(message, type = 'success') {
+function showToast(message, type = 'primary') {
     console.debug(`showToast: ${type}: ${message}`)
     const clone = document.querySelector('.d-none .toast')
     const container = document.getElementById('toast-container')

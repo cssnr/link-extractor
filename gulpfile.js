@@ -49,6 +49,15 @@ gulp.task('jquery', () => {
         .pipe(gulp.dest('src/dist/jquery'))
 })
 
+gulp.task('pdfjs', () => {
+    return gulp
+        .src([
+            'node_modules/pdfjs-dist/build/pdf.min.mjs',
+            'node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
+        ])
+        .pipe(gulp.dest('src/dist/pdfjs'))
+})
+
 gulp.task(
     'default',
     gulp.parallel(
@@ -56,6 +65,7 @@ gulp.task(
         'clipboard',
         'datatables',
         'fontawesome',
-        'jquery'
+        'jquery',
+        'pdfjs'
     )
 )

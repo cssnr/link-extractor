@@ -3,9 +3,11 @@
 /**
  * Inject extract.js to Tab and Open links.html with params
  * @function processLinks
- * @param {String} [filter] Regex Filter
- * @param {Boolean} [domains] Only Domains
- * @param {Boolean} [selection] Only Selection
+ * @param {Object} injectOptions Inject Tab Options
+ * @param {String} [injectOptions.filter] Regex Filter
+ * @param {Boolean} [injectOptions.domains] Only Domains
+ * @param {Boolean} [injectOptions.selection] Only Selection
+ * @return {Promise<void>}
  */
 export async function injectTab({
     filter = null,
@@ -29,16 +31,24 @@ export async function injectTab({
             console.debug(`tab: ${tab.id}`, tab)
             // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
-                chrome.runtime.openOptionsPage()
-                return console.info('A Highlighted Tab is Missing Permissions')
+                // chrome.runtime.openOptionsPage()
+                const url = new URL(
+                    chrome.runtime.getURL('/html/permissions.html')
+                )
+                const message = `Missing permissions for one or more selected tabs: ${tab.id}`
+                url.searchParams.append('message', message)
+                await chrome.tabs.create({ active: true, url: url.href })
+                console.log('%cHost/Tab Permissions Error', 'color: OrangeRed')
+                return
             }
             tabIds.push(tab.id)
         }
     }
-    console.log('tabIds:', tabIds)
     if (!tabIds.length) {
-        return console.info('No Tab IDs to Inject')
+        console.log('%cNo Tab IDs to Inject', 'color: Yellow')
+        return
     }
+    console.log('tabIds:', tabIds)
 
     // Create URL to links.html
     const url = new URL(chrome.runtime.getURL('/html/links.html'))
@@ -110,7 +120,8 @@ export async function saveOptions(event) {
         for (const flag of flags) {
             if (!'dgimsuvy'.includes(flag)) {
                 element.classList.add('is-invalid')
-                return showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+                showToast(`Invalid Regex Flag: ${flag}`, 'danger')
+                return
             }
         }
         element.value = flags
@@ -124,7 +135,7 @@ export async function saveOptions(event) {
     }
     if (value !== undefined) {
         options[key] = value
-        console.info(`Set: ${key}:`, value)
+        console.log(`Set: ${key}:`, value)
         await chrome.storage.sync.set({ options })
     }
 }
@@ -216,8 +227,9 @@ export async function importChange(event) {
         try {
             result = JSON.parse(fileReader.result.toString())
         } catch (e) {
+            console.log(e)
             showToast('Unable to parse file contents.', 'danger')
-            return console.debug(e)
+            return
         }
         console.debug('result:', result)
         const data = await chrome.storage.sync.get()
@@ -256,9 +268,23 @@ export function textFileDownload(filename, text) {
 }
 
 /**
+ * Grant Permissions Click Callback
+ * @function grantPerms
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function grantPerms(event, close = false) {
+    console.debug('grantPerms:', event)
+    requestPerms() // Firefox: Do NOT await so that we can call window.close()
+    if (close) {
+        window.close()
+    }
+}
+
+/**
  * Request Host Permissions
  * @function requestPerms
- * @return {Promise<*|chrome.permissions.request>}
+ * @return {Promise<chrome.permissions.request>}
  */
 export async function requestPerms() {
     return await chrome.permissions.request({
@@ -269,7 +295,7 @@ export async function requestPerms() {
 /**
  * Check Host Permissions
  * @function checkPerms
- * @return {Promise<*|Boolean>}
+ * @return {Promise<Boolean>}
  */
 export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({
@@ -310,7 +336,7 @@ export async function revokePerms(event) {
         await checkPerms()
     } catch (e) {
         console.log(e)
-        showToast(e.toString(), 'danger')
+        showToast(e.message, 'danger')
     }
 }
 
@@ -330,4 +356,37 @@ export async function onAdded(permissions) {
 export async function onRemoved(permissions) {
     console.debug('onRemoved', permissions)
     await checkPerms()
+}
+
+/**
+ * @function detectBrowser
+ * @typedef {Object} Browser
+ * @property {String} Browser.name
+ * @property {String} Browser.id
+ * @property {String} Browser.class
+ * @return {Browser}
+ */
+export function detectBrowser() {
+    const browser = {}
+    if (!navigator?.userAgent) {
+        return browser
+    }
+    if (navigator.userAgent.includes('Firefox/')) {
+        // console.debug('Detected Browser: Firefox')
+        browser.name = 'Firefox'
+        browser.id = 'firefox'
+    } else if (navigator.userAgent.includes('Edg/')) {
+        // console.debug('Detected Browser: Edge')
+        browser.name = 'Edge'
+        browser.id = 'edge'
+    } else if (navigator.userAgent.includes('OPR/')) {
+        // console.debug('Detected Browser: Opera')
+        browser.name = 'Opera'
+        browser.id = 'chrome'
+    } else {
+        // console.debug('Detected Browser: Chrome')
+        browser.name = 'Chrome'
+        browser.id = 'chrome'
+    }
+    return browser
 }

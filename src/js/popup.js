@@ -2,19 +2,24 @@
 
 import {
     checkPerms,
+    detectBrowser,
+    grantPerms,
     injectTab,
     openURL,
-    requestPerms,
     saveOptions,
     updateManifest,
     updateOptions,
 } from './exports.js'
 
+import { getPDF } from './pdf.js'
+
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
 
 document
     .querySelectorAll('a[href]')
@@ -30,18 +35,25 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const filterInput = document.getElementById('filter-input')
+const pdfBtn = document.getElementById('pdf-btn')
+const pdfIcon = document.getElementById('pdf-icon')
 
 /**
  * Initialize Popup
  * @function initOptions
  */
 async function initPopup() {
+    filterInput.focus()
+    updateManifest()
+    const hasPerms = await checkPerms()
+
     const { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
     ])
-    console.debug('initPopup:', options, patterns)
+    console.debug('options, patterns:', options, patterns)
     updateOptions(options)
+
     // updatePatterns
     if (patterns?.length) {
         document.getElementById('no-filters').remove()
@@ -50,15 +62,82 @@ async function initPopup() {
         })
     }
 
-    updateManifest()
-    await checkPerms()
-    filterInput.focus()
+    // PDF Check
+    try {
+        await checkPDF(hasPerms)
+    } catch (e) {
+        console.debug(e)
+    }
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)
     // if (tabs.length > 1) {
     //     console.info('Multiple Tabs Selected')
     // }
+}
+
+async function checkPDF(hasPerms) {
+    const [tab] = await chrome.tabs.query({ active: true })
+    console.debug('tab:', tab)
+    const url = new URL(tab.url)
+    // console.debug('url:', url)
+    const browser = detectBrowser()
+    // console.debug('browser:', browser)
+    if (url.pathname.toLowerCase().endsWith('.pdf')) {
+        console.debug(`Detected PDF: ${url.href}`)
+        if (['firefox', 'edge'].includes(browser.id)) {
+            if (url.protocol === 'file:') {
+                const el = document.getElementById('file-access')
+                el.querySelector('span').textContent = browser.name
+                el.classList.remove('d-none')
+                return
+            }
+            if (!hasPerms) {
+                document
+                    .getElementById('firefox-pdf')
+                    .classList.remove('d-none')
+                return
+            }
+        } else if (url.protocol === 'file:') {
+            const fileAccess =
+                await chrome.extension.isAllowedFileSchemeAccess()
+            console.debug('fileAccess:', fileAccess)
+            if (!fileAccess) {
+                document
+                    .getElementById('chrome-files')
+                    .classList.remove('d-none')
+                return
+            }
+        }
+        pdfBtn.dataset.pdfUrl = url.href
+        pdfBtn.classList.remove('d-none')
+        pdfBtn.addEventListener('click', extractPDF)
+    }
+}
+
+async function extractPDF(event) {
+    try {
+        pdfBtn.classList.add('disabled')
+        pdfIcon.classList.remove('fa-flask')
+        pdfIcon.classList.add('fa-sync', 'fa-spin')
+        const pdfUrl = event.currentTarget.dataset.pdfUrl
+        console.debug('pdfUrl:', pdfUrl)
+        const data = await getPDF(pdfUrl)
+        console.debug('data:', data)
+        const urls = extractURLs(data.join('\n'))
+        console.debug('urls:', urls)
+        await chrome.storage.local.set({ links: urls })
+        const url = chrome.runtime.getURL('/html/links.html')
+        await chrome.tabs.create({ active: true, url })
+        window.close()
+    } catch (e) {
+        console.log('e:', e)
+        showToast(e.message, 'danger')
+    } finally {
+        pdfIcon.classList.remove('fa-sync', 'fa-spin')
+        pdfIcon.classList.add('fa-flask')
+        pdfBtn.classList.remove('disabled')
+    }
 }
 
 /**
@@ -95,7 +174,10 @@ async function popupLinks(event) {
     let url
     if (href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
-        return window.close()
+        window.close()
+        return
+    } else if (href === '#') {
+        return
     } else if (href.startsWith('http')) {
         url = href
     } else {
@@ -103,7 +185,7 @@ async function popupLinks(event) {
     }
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
-    return window.close()
+    window.close()
 }
 
 /**
@@ -126,7 +208,7 @@ async function filterForm(event) {
         window.close()
     } catch (e) {
         console.log('e:', e)
-        showToast(e.toString(), 'danger')
+        showToast(e.message, 'danger')
     }
 }
 
@@ -215,30 +297,25 @@ function extractURLs(text) {
     const urlregex =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
     while ((urlmatcharr = urlregex.exec(text)) !== null) {
-        const match = urlmatcharr[0]
-        const url = new URL(match)
-        const data = {
-            text: '',
-            title: '',
-            label: '',
-            target: '',
-            rel: '',
-            href: url.href,
-            origin: url.origin,
+        try {
+            let match = urlmatcharr[0]
+            match = match.includes('://') ? match : `http://${match}`
+            // console.debug('match:', match)
+            const url = new URL(match)
+            const data = {
+                text: '',
+                title: '',
+                label: '',
+                target: '',
+                rel: '',
+                href: url.href,
+                origin: url.origin,
+            }
+            urls.push(data)
+        } catch (e) {
+            console.debug('Error Processing match:', urlmatcharr)
         }
-        urls.push(data)
     }
     // return [...new Set(urls)]
     return urls
-}
-
-/**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-export async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    requestPerms() // promise ignored so we can call window.close()
-    window.close()
 }

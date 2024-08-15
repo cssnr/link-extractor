@@ -39,7 +39,7 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
-    const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
+    const installURL = 'https://link-extractor.cssnr.com/docs/?install=true'
     const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
@@ -204,13 +204,6 @@ async function onInputEntered(text) {
         opts.filter = text
     }
     await injectTab(opts)
-    // Permission are now being checked in injectTab
-    // const hasPerms = await checkPerms()
-    // if (hasPerms) {
-    //     await injectTab(opts)
-    // } else {
-    //     chrome.runtime.openOptionsPage()
-    // }
 }
 
 /**
@@ -283,7 +276,7 @@ function createContextMenus(patterns) {
  */
 function addContext(context) {
     try {
-        console.debug('addContext:', context)
+        // console.debug('addContext:', context)
         if (context[1] === 'separator') {
             context[1] = Math.random().toString().substring(2, 7)
             context.push('separator', 'separator')
@@ -295,7 +288,7 @@ function addContext(context) {
             type: context[3],
         })
     } catch (e) {
-        console.log(`Error Adding Context: ${e.message}`, e)
+        console.warn(`Error Adding Context: ${e.message}`, e)
     }
 }
 
@@ -364,7 +357,7 @@ async function injectFunction(func, args) {
  * Set Default Options
  * @function setDefaultOptions
  * @param {Object} defaultOptions
- * @return {Promise<*|Object>}
+ * @return {Promise<Object>}
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions', defaultOptions)
