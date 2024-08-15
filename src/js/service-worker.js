@@ -320,6 +320,7 @@ function copyActiveElementText(ctx) {
 /**
  * Copy All Selected Links
  * @function copySelectionLinks
+ * @param {Boolean} removeDuplicates
  */
 function copySelectionLinks(removeDuplicates) {
     // console.debug('copySelectionLinks:', removeDuplicates)
