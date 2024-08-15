@@ -102,5 +102,27 @@ async function screenshot(name) {
     await page.waitForNetworkIdle()
     await screenshot('archive.org')
 
+    // Page
+    console.log('Testing: https://link-extractor.cssnr.com/media/test/test.pdf')
+    await page.goto('https://df.cssnr.com/raw/test.pdf')
+    page.on('console', (msg) => console.log(`console: page:`, msg.text()))
+    await page.bringToFront()
+    // await page.waitForNetworkIdle()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    // Links
+    console.log('Activate Popup')
+    await worker.evaluate('chrome.action.openPopup();')
+    let popup3 = await getPage(browser, 'popup.html', true)
+    console.log('popup3:', popup3)
+    page = await getPage(browser, 'popup.html', true)
+    await screenshot('pdf-popup')
+    await popup3.locator('#pdf-btn').click()
+
+    page = await getPage(browser, 'links.html', true, '768x920')
+    console.log('page:', page)
+    await page.waitForNetworkIdle()
+    await screenshot('pdf-links')
+
     await browser.close()
 })()

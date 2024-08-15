@@ -51,7 +51,7 @@ async function initPopup() {
         'options',
         'patterns',
     ])
-    console.debug('initPopup:', options, patterns)
+    console.debug('options, patterns:', options, patterns)
     updateOptions(options)
 
     // updatePatterns
@@ -64,46 +64,7 @@ async function initPopup() {
 
     // PDF Check
     try {
-        const [tab] = await chrome.tabs.query({ active: true })
-        console.debug('tab:', tab)
-        const url = new URL(tab.url)
-        console.debug('url:', url)
-        const browser = detectBrowser()
-        console.debug('browser:', browser)
-        if (url.pathname.toLowerCase().endsWith('.pdf')) {
-            console.debug(`Detected PDF: ${url.href}`)
-            if (['firefox', 'edge'].includes(browser.id)) {
-                // Firefox or Edge
-                if (url.protocol === 'file:') {
-                    const el = document.getElementById('file-access')
-                    el.querySelector('span').textContent = browser.name
-                    el.classList.remove('d-none')
-                    return
-                }
-                if (!hasPerms) {
-                    document
-                        .getElementById('firefox-pdf')
-                        .classList.remove('d-none')
-                    return
-                }
-            } else {
-                // Chrome
-                if (url.protocol === 'file:') {
-                    const fileAccess =
-                        await chrome.extension.isAllowedFileSchemeAccess()
-                    console.debug('fileAccess:', fileAccess)
-                    if (!fileAccess) {
-                        document
-                            .getElementById('chrome-files')
-                            .classList.remove('d-none')
-                        return
-                    }
-                }
-            }
-            pdfBtn.dataset.pdfUrl = url.href
-            pdfBtn.classList.remove('d-none')
-            pdfBtn.addEventListener('click', extractPDF)
-        }
+        await checkPDF(hasPerms)
     } catch (e) {
         console.debug(e)
     }
@@ -113,6 +74,45 @@ async function initPopup() {
     // if (tabs.length > 1) {
     //     console.info('Multiple Tabs Selected')
     // }
+}
+
+async function checkPDF(hasPerms) {
+    const [tab] = await chrome.tabs.query({ active: true })
+    console.debug('tab:', tab)
+    const url = new URL(tab.url)
+    // console.debug('url:', url)
+    const browser = detectBrowser()
+    // console.debug('browser:', browser)
+    if (url.pathname.toLowerCase().endsWith('.pdf')) {
+        console.debug(`Detected PDF: ${url.href}`)
+        if (['firefox', 'edge'].includes(browser.id)) {
+            if (url.protocol === 'file:') {
+                const el = document.getElementById('file-access')
+                el.querySelector('span').textContent = browser.name
+                el.classList.remove('d-none')
+                return
+            }
+            if (!hasPerms) {
+                document
+                    .getElementById('firefox-pdf')
+                    .classList.remove('d-none')
+                return
+            }
+        } else if (url.protocol === 'file:') {
+            const fileAccess =
+                await chrome.extension.isAllowedFileSchemeAccess()
+            console.debug('fileAccess:', fileAccess)
+            if (!fileAccess) {
+                document
+                    .getElementById('chrome-files')
+                    .classList.remove('d-none')
+                return
+            }
+        }
+        pdfBtn.dataset.pdfUrl = url.href
+        pdfBtn.classList.remove('d-none')
+        pdfBtn.addEventListener('click', extractPDF)
+    }
 }
 
 async function extractPDF(event) {

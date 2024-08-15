@@ -372,19 +372,19 @@ export function detectBrowser() {
         return browser
     }
     if (navigator.userAgent.includes('Firefox/')) {
-        console.debug('Detected Browser: Firefox')
+        // console.debug('Detected Browser: Firefox')
         browser.name = 'Firefox'
         browser.id = 'firefox'
     } else if (navigator.userAgent.includes('Edg/')) {
-        console.debug('Detected Browser: Edge')
+        // console.debug('Detected Browser: Edge')
         browser.name = 'Edge'
         browser.id = 'edge'
     } else if (navigator.userAgent.includes('OPR/')) {
-        console.debug('Detected Browser: Opera')
+        // console.debug('Detected Browser: Opera')
         browser.name = 'Opera'
         browser.id = 'chrome'
     } else {
-        console.debug('Detected Browser: Chrome')
+        // console.debug('Detected Browser: Chrome')
         browser.name = 'Chrome'
         browser.id = 'chrome'
     }
