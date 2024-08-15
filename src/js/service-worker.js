@@ -116,7 +116,8 @@ async function onClicked(ctx, tab) {
             target: { tabId: tab.id },
             files: ['/js/extract.js'],
         })
-        await injectFunction(copySelectionLinks, [])
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copySelectionLinks, [options.removeDuplicates])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -320,13 +321,16 @@ function copyActiveElementText(ctx) {
  * Copy All Selected Links
  * @function copySelectionLinks
  */
-function copySelectionLinks() {
-    // console.debug('copySelectionLinks')
+function copySelectionLinks(removeDuplicates) {
+    // console.debug('copySelectionLinks:', removeDuplicates)
     const links = extractSelection()
     // console.debug('links:', links)
-    const results = []
+    let results = []
     for (const link of links) {
         results.push(link.href)
+    }
+    if (removeDuplicates) {
+        results = [...new Set(results)]
     }
     // console.debug('results:', results)
     const text = results.join('\n')
