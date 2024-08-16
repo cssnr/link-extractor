@@ -154,22 +154,22 @@ async function addFilter(event) {
  * Delete Filter
  * @function deleteFilter
  * @param {MouseEvent} event
- * @param {String} index
+ * @param {String} [index]
  */
 async function deleteFilter(event, index = undefined) {
-    console.debug('deleteFilter:', event)
+    console.debug('deleteFilter:', index, event)
     event.preventDefault()
+    const filter = event.currentTarget?.dataset?.value
+    console.debug('filter:', filter)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
     if (!index) {
         // const anchor = event.target.closest('a')
-        const filter = event.currentTarget?.dataset?.value
-        console.log(`filter: ${filter}`)
         if (filter && patterns.includes(filter)) {
             index = patterns.indexOf(filter)
         }
     }
-    console.debug(`index: ${index}`)
+    console.debug('index:', index)
     if (index !== undefined) {
         const name = patterns[index]
         patterns.splice(index, 1)
