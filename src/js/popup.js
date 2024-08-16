@@ -64,7 +64,7 @@ async function initPopup() {
 
     // PDF Check
     try {
-        await checkPDF(hasPerms)
+        await processFileTypes(hasPerms)
     } catch (e) {
         console.debug(e)
     }
@@ -76,7 +76,7 @@ async function initPopup() {
     // }
 }
 
-async function checkPDF(hasPerms) {
+async function processFileTypes(hasPerms) {
     const [tab] = await chrome.tabs.query({ active: true })
     console.debug('tab:', tab)
     const url = new URL(tab.url)
@@ -85,27 +85,26 @@ async function checkPDF(hasPerms) {
     // console.debug('browser:', browser)
     if (url.pathname.toLowerCase().endsWith('.pdf')) {
         console.debug(`Detected PDF: ${url.href}`)
-        if (['firefox', 'edge'].includes(browser.id)) {
-            if (url.protocol === 'file:') {
-                const el = document.getElementById('file-access')
+        if (url.protocol === 'file:') {
+            if (browser.id === 'firefox') {
+                const el = document.getElementById('no-file-access')
                 el.querySelector('span').textContent = browser.name
                 el.classList.remove('d-none')
                 return
             }
-            if (!hasPerms) {
-                document
-                    .getElementById('firefox-pdf')
-                    .classList.remove('d-none')
-                return
-            }
-        } else if (url.protocol === 'file:') {
             const fileAccess =
                 await chrome.extension.isAllowedFileSchemeAccess()
             console.debug('fileAccess:', fileAccess)
             if (!fileAccess) {
                 document
-                    .getElementById('chrome-files')
+                    .getElementById('file-access')
                     .classList.remove('d-none')
+                return
+            }
+        }
+        if (!hasPerms) {
+            if (browser.id === 'firefox') {
+                document.getElementById('pdf-perms').classList.remove('d-none')
                 return
             }
         }
@@ -132,7 +131,11 @@ async function extractPDF(event) {
         window.close()
     } catch (e) {
         console.log('e:', e)
-        showToast(e.message, 'danger')
+        if (e.message === 'Promise.withResolvers is not a function') {
+            showToast('This browser does not support pdf.js', 'danger')
+        } else {
+            showToast(e.message, 'danger')
+        }
     } finally {
         pdfIcon.classList.remove('fa-sync', 'fa-spin')
         pdfIcon.classList.add('fa-flask')
