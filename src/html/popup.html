@@ -36,14 +36,14 @@
            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature">
             <i class="fa-solid fa-file-pdf me-1"></i> Extract from PDF
             <i class="fa-solid fa-flask" id="pdf-icon" style="min-width: 22px;"></i></a>
-        <div id="file-access" class="alert alert-warning text-center p-1 my-0 d-none">
+        <div id="no-file-access" class="alert alert-warning text-center p-1 my-0 d-none">
             <span>Browser</span> does <b>not</b> allow access to files.
         </div>
-        <div id="firefox-pdf" class="alert alert-warning text-center p-1 my-0 d-none">
-            PDF Extraction Requires <a href="#" class="alert-link grant-permissions">Host Permissions</a>.
-        </div>
-        <div id="chrome-files" class="alert alert-warning text-center p-1 my-0 d-none">
+        <div id="file-access" class="alert alert-warning text-center p-1 my-0 d-none">
             PDF files require <a href="https://link-extractor.cssnr.com/faq/#fileAccess" class="alert-link">file access</a>.
+        </div>
+        <div id="pdf-perms" class="alert alert-warning text-center p-1 my-0 d-none">
+            PDF extraction needs <a href="#" class="alert-link grant-permissions">host permissions</a>.
         </div>
         <hr class="my-0">
         <form id="links-form" class="my-0">
