@@ -290,8 +290,8 @@ async function processLinks(links) {
 
 function windowResize() {
     // console.debug('windowResize')
-    linksTable.columns.adjust().draw()
-    domainsTable.columns.adjust().draw()
+    linksTable?.columns.adjust().draw()
+    domainsTable?.columns.adjust().draw()
 }
 
 function dtDraw(event) {

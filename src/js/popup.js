@@ -198,14 +198,16 @@ async function popupLinks(event) {
  */
 async function filterForm(event) {
     console.debug('filterForm:', event)
+    const target = event.currentTarget
+    console.debug('target:', target)
     event.preventDefault()
     let filter
-    if (event.target.classList.contains('dropdown-item')) {
-        filter = event.target.dataset.pattern
+    if (target.classList.contains('dropdown-item')) {
+        filter = target.dataset.pattern
     } else if (filterInput?.value) {
         filter = filterInput.value
     }
-    const domains = event.target.dataset.filter === 'domains'
+    const domains = target.dataset.filter === 'domains'
     try {
         await injectTab({ filter, domains })
         window.close()
