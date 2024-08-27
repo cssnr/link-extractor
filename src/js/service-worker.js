@@ -65,6 +65,7 @@ async function onInstalled(details) {
  */
 async function onStartup() {
     console.log('onStartup')
+    // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
         console.log('Firefox Startup Workarounds')
         const { options, patterns } = await chrome.storage.sync.get([
@@ -90,7 +91,7 @@ function setUninstallURL() {
 /**
  * Context Menus On Clicked Callback
  * @function onClicked
- * @param {OnClickData} ctx
+ * @param {chrome.contextMenus.OnClickData} ctx
  * @param {chrome.tabs.Tab} tab
  */
 async function onClicked(ctx, tab) {
@@ -229,6 +230,7 @@ export async function onAdded(permissions) {
  */
 export async function onRemoved(permissions) {
     console.debug('onRemoved:', permissions)
+    // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
         chrome.omnibox.setDefaultSuggestion({
             description:
@@ -304,10 +306,11 @@ function addContext(context) {
  *  Mozilla adds support for document.activeElement
  *  Chromium adds supports ctx.linkText
  * @function copyActiveElementText
- * @param {Object} ctx
+ * @param {chrome.contextMenus.OnClickData} ctx
  */
 function copyActiveElementText(ctx) {
     // console.log('document.activeElement:', document.activeElement)
+    // noinspection JSUnresolvedReference
     let text =
         ctx.linkText?.trim() ||
         document.activeElement.innerText?.trim() ||
@@ -316,7 +319,8 @@ function copyActiveElementText(ctx) {
         document.activeElement.ariaLabel?.trim()
     console.log(`text: "${text}"`)
     if (text?.length) {
-        navigator.clipboard.writeText(text).then()
+        // noinspection JSIgnoredPromiseFromCall
+        navigator.clipboard.writeText(text)
     } else {
         console.info('No Text to Copy.')
     }
@@ -342,7 +346,8 @@ function copySelectionLinks(removeDuplicates) {
     const text = results.join('\n')
     console.debug('text:', text)
     if (text?.length) {
-        navigator.clipboard.writeText(text).then()
+        // noinspection JSIgnoredPromiseFromCall
+        navigator.clipboard.writeText(text)
     } else {
         console.info('No Links to Copy.')
     }

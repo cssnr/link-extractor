@@ -9,18 +9,22 @@ if (backToTop) {
     })
 }
 
+// noinspection TypeScriptUMDGlobal
 if (typeof ClipboardJS !== 'undefined') {
     document
         .querySelectorAll('.clip')
         .forEach((el) =>
             el.addEventListener('click', (e) => e.preventDefault())
         )
+    // noinspection TypeScriptUMDGlobal
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
         // console.debug('clipboard.success:', event)
         // const text = event.text
         // console.debug(`text: "${text}"`)
+        // noinspection JSUnresolvedReference
         if (event.trigger.dataset.toast) {
+            // noinspection JSUnresolvedReference
             showToast(event.trigger.dataset.toast, 'success')
         } else {
             showToast('Copied to Clipboard', 'success')

@@ -16,7 +16,9 @@ document
  */
 async function initPermissions() {
     console.debug('initPermissions')
+    // noinspection ES6MissingAwait
     updateManifest()
+    // noinspection ES6MissingAwait
     checkPerms()
     const url = new URL(window.location)
     const message = url.searchParams.get('message')

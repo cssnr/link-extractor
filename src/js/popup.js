@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
@@ -45,6 +46,7 @@ const pdfIcon = document.getElementById('pdf-icon')
 async function initPopup() {
     console.debug('initPopup')
     filterInput.focus()
+    // noinspection ES6MissingAwait
     updateManifest()
     chrome.storage.sync.get(['options', 'patterns']).then((items) => {
         console.debug('options:', items.options)
@@ -282,6 +284,7 @@ function updateElements(el, length) {
 
 /**
  * Extract URLs from text
+ * TODO: Improve Function and Simplify Regular Expression
  * @function extractURLs
  * @param {String} text
  * @return {Array}
@@ -289,12 +292,12 @@ function updateElements(el, length) {
 function extractURLs(text) {
     // console.debug('extractURLs:', text)
     const urls = []
-    let urlmatcharr
-    const urlregex =
+    let urlmatch
+    const regex =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
-    while ((urlmatcharr = urlregex.exec(text)) !== null) {
+    while ((urlmatch = regex.exec(text)) !== null) {
         try {
-            let match = urlmatcharr[0]
+            let match = urlmatch[0]
             match = match.includes('://') ? match : `http://${match}`
             // console.debug('match:', match)
             const url = new URL(match)
@@ -309,7 +312,7 @@ function extractURLs(text) {
             }
             urls.push(data)
         } catch (e) {
-            console.debug('Error Processing match:', urlmatcharr)
+            console.debug('Error Processing match:', urlmatch)
         }
     }
     // return [...new Set(urls)]

@@ -157,8 +157,10 @@ export function openURL(url, lazy = false) {
     if (lazy) {
         const lazyURL = new URL(chrome.runtime.getURL('/html/lazy.html'))
         lazyURL.searchParams.append('url', url)
+        // noinspection JSIgnoredPromiseFromCall
         chrome.tabs.create({ active: false, url: lazyURL.href })
     } else {
+        // noinspection JSIgnoredPromiseFromCall
         chrome.tabs.create({ active: false, url })
     }
 }
@@ -274,6 +276,7 @@ export function textFileDownload(filename, text) {
  */
 export async function grantPerms(event, close = false) {
     console.debug('grantPerms:', event)
+    // noinspection ES6MissingAwait
     requestPerms()
     if (close) {
         window.close()
