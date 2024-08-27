@@ -56,7 +56,7 @@ async function addLogger(page, results, name) {
     page = await getPage(browser, 'popup.html')
     // page.on('console', (msg) => logs.push(msg.text()))
     await addLogger(page, logs, 'popup')
-    await page.locator('a[data-filter=""]').click()
+    await page.locator('[data-filter=""]').click()
 
     page = await getPage(browser, 'links.html', false, '768x1024')
     // page.on('console', (msg) => logs.push(msg.text()))
