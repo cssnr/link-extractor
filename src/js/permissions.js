@@ -17,7 +17,7 @@ document
 async function initPermissions() {
     console.debug('initPermissions')
     updateManifest()
-    await checkPerms()
+    checkPerms()
     const url = new URL(window.location)
     const message = url.searchParams.get('message')
     if (message) {

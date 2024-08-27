@@ -1,6 +1,6 @@
 // JS Background Service Worker
 
-import { checkPerms, injectTab } from './exports.js'
+import { checkPerms, injectTab, githubURL } from './exports.js'
 
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
@@ -13,34 +13,12 @@ chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
 /**
- * On Startup Callback
- * @function onStartup
- */
-async function onStartup() {
-    console.log('onStartup')
-    if (typeof browser !== 'undefined') {
-        console.log('Firefox Startup Workarounds')
-        const { options, patterns } = await chrome.storage.sync.get([
-            'options',
-            'patterns',
-        ])
-        console.debug('options:', options)
-        if (options.contextMenu) {
-            console.debug('Calling: createContextMenus')
-            createContextMenus(patterns)
-        }
-        setUninstallURL()
-    }
-}
-
-/**
  * On Installed Callback
  * @function onInstalled
  * @param {chrome.runtime.InstalledDetails} details
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const githubURL = 'https://github.com/cssnr/link-extractor'
     const installURL = 'https://link-extractor.cssnr.com/docs/?install=true'
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
@@ -56,7 +34,6 @@ async function onInstalled(details) {
     })
     console.log('options, patterns:', options, patterns)
     if (options.contextMenu) {
-        console.debug('Calling: createContextMenus')
         createContextMenus(patterns)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
@@ -73,14 +50,6 @@ async function onInstalled(details) {
         }
     }
     setUninstallURL()
-    // Check Permissions for Firefox Omnibox Usage
-    // const hasPerms = await checkPerms()
-    // if (hasPerms) {
-    //     await onAdded()
-    // } else {
-    //     await onRemoved()
-    // }
-    console.debug('Calling: checkPerms')
     checkPerms().then((hasPerms) => {
         if (hasPerms) {
             onAdded()
@@ -88,6 +57,26 @@ async function onInstalled(details) {
             onRemoved()
         }
     })
+}
+
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox Startup Workarounds')
+        const { options, patterns } = await chrome.storage.sync.get([
+            'options',
+            'patterns',
+        ])
+        console.debug('options:', options)
+        if (options.contextMenu) {
+            createContextMenus(patterns)
+        }
+        setUninstallURL()
+    }
 }
 
 function setUninstallURL() {
@@ -170,7 +159,6 @@ async function onChanged(changes, namespace) {
                     const { patterns } = await chrome.storage.sync.get([
                         'patterns',
                     ])
-                    console.debug('Calling: createContextMenus')
                     createContextMenus(patterns)
                 } else {
                     console.log('Disabled contextMenu...')
