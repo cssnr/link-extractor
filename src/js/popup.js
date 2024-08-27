@@ -39,35 +39,26 @@ const pdfBtn = document.getElementById('pdf-btn')
 const pdfIcon = document.getElementById('pdf-icon')
 
 /**
- * Initialize Popup
+ * DOMContentLoaded - Initialize Popup
  * @function initOptions
  */
 async function initPopup() {
+    console.debug('initPopup')
     filterInput.focus()
     updateManifest()
-    const hasPerms = await checkPerms()
-
-    const { options, patterns } = await chrome.storage.sync.get([
-        'options',
-        'patterns',
-    ])
-    console.debug('options, patterns:', options, patterns)
-    updateOptions(options)
-
-    // updatePatterns
-    if (patterns?.length) {
-        document.getElementById('no-filters').remove()
-        patterns.forEach(function (value, i) {
-            createFilterLink(i.toString(), value)
-        })
-    }
-
-    // PDF Check
-    try {
-        await processFileTypes(hasPerms)
-    } catch (e) {
-        console.debug(e)
-    }
+    chrome.storage.sync.get(['options', 'patterns']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        if (items.patterns?.length) {
+            document.getElementById('no-filters').remove()
+            items.patterns.forEach(function (value, i) {
+                createFilterLink(i.toString(), value)
+            })
+        }
+    })
+    checkPerms().then((hasPerms) => {
+        processFileTypes(hasPerms).catch((e) => console.debug(e))
+    })
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)

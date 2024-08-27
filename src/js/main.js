@@ -65,7 +65,7 @@ function showToast(message, type = 'primary') {
         return console.warn('Missing clone or container:', clone, container)
     }
     const element = clone.cloneNode(true)
-    element.querySelector('.toast-body').innerHTML = message
+    element.querySelector('.toast-body').textContent = message
     element.classList.add(`text-bg-${type}`)
     container.appendChild(element)
     const toast = new bootstrap.Toast(element)

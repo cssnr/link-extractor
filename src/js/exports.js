@@ -161,7 +161,7 @@ export function openURL(url, lazy = false) {
     }
 }
 
-export function updateManifest() {
+export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
     document
         .querySelectorAll('.version')
@@ -199,8 +199,7 @@ export async function exportClick(event) {
 export async function importClick(event) {
     console.debug('importClick:', event)
     event.preventDefault()
-    const importInput = document.getElementById('import-input')
-    importInput.click()
+    document.getElementById('import-input').click()
 }
 
 /**
@@ -214,37 +213,28 @@ export async function importChange(event) {
     const name = event.target.dataset.importName
     console.debug('name:', name)
     const display = event.target.dataset.importDisplay || name
-    // console.debug('display:', display)
-    const importInput = document.getElementById('import-input')
-    if (!importInput.files?.length) {
-        return console.debug('No importInput.files', importInput)
-    }
-    const file = importInput.files[0]
-    importInput.value = ''
-    const fileReader = new FileReader()
-    fileReader.onload = async function doImport() {
-        let result
-        try {
-            result = JSON.parse(fileReader.result.toString())
-        } catch (e) {
-            console.log(e)
-            showToast('Unable to parse file contents.', 'danger')
-            return
-        }
-        console.debug('result:', result)
-        const data = await chrome.storage.sync.get()
-        console.debug('data:', data[name])
+    console.debug('display:', display)
+    try {
+        const file = event.target.files.item(0)
+        const text = await file.text()
+        const data = JSON.parse(text)
+        console.debug('data:', data)
+        const storage = await chrome.storage.sync.get()
+        console.debug(`storage[${name}]:`, storage[name])
         let count = 0
-        for (const pid of result) {
-            if (!data[name].includes(pid)) {
-                data[name].push(pid)
+        for (const item of data) {
+            console.debug('item:', item)
+            if (!storage[name].includes(item)) {
+                storage[name].push(item)
                 count += 1
             }
         }
-        showToast(`Imported ${count}/${result.length} ${display}.`, 'success')
-        await chrome.storage.sync.set(data)
+        await chrome.storage.sync.set(storage)
+        showToast(`Imported ${count}/${data.length} ${display}.`, 'success')
+    } catch (e) {
+        console.log(e)
+        showToast(`Import Error: ${e.message}.`, 'danger')
     }
-    fileReader.readAsText(file)
 }
 
 /**
@@ -275,7 +265,7 @@ export function textFileDownload(filename, text) {
  */
 export async function grantPerms(event, close = false) {
     console.debug('grantPerms:', event)
-    requestPerms() // Firefox: Do NOT await so that we can call window.close()
+    requestPerms()
     if (close) {
         window.close()
     }
@@ -284,7 +274,7 @@ export async function grantPerms(event, close = false) {
 /**
  * Request Host Permissions
  * @function requestPerms
- * @return {Promise<chrome.permissions.request>}
+ * @return {Promise<Boolean>}
  */
 export async function requestPerms() {
     return await chrome.permissions.request({
@@ -320,8 +310,7 @@ export async function checkPerms() {
 
 /**
  * Revoke Permissions Click Callback
- * NOTE: For many reasons Chrome will determine host_perms are required and
- *       will ask for them at install time and not allow them to be revoked
+ * NOTE: Chrome does not allow revoking required permissions with this method
  * @function revokePerms
  * @param {Event} event
  */

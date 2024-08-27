@@ -52,22 +52,19 @@ const faTrash = document.querySelector('.d-none .fa-trash-can')
 const faGrip = document.querySelector('.d-none .fa-grip')
 
 /**
- * Initialize Options
+ * DOMContentLoaded - Initialize Options
  * @function initOptions
  */
 async function initOptions() {
-    const { options, patterns } = await chrome.storage.sync.get([
-        'options',
-        'patterns',
-    ])
-    console.debug('initOptions:', options, patterns)
-    updateOptions(options)
-    updateTable(patterns)
-
+    console.debug('initOptions')
     updateManifest()
-    await setShortcuts()
-    await checkPerms()
-    // document.getElementById('add-filter').focus()
+    setShortcuts()
+    checkPerms()
+    chrome.storage.sync.get(['options', 'patterns']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        updateTable(items.patterns)
+    })
 }
 
 /**
@@ -278,7 +275,7 @@ async function drop(event) {
 }
 
 /**
- * WARNING: COPIED FROM STACK
+ * Note: Copied from Stack Overflow
  * @param {Array} arr
  * @param {Number} old_index
  * @param {Number} new_index

@@ -121,7 +121,7 @@ html.classList.add(prefers)
 html.setAttribute('data-bs-theme', prefers)
 
 /**
- * Initialize Links
+ * DOMContentLoaded - Initialize Links
  * @function initLinks
  */
 async function initLinks() {

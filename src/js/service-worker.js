@@ -19,28 +19,29 @@ chrome.permissions.onRemoved.addListener(onRemoved)
 async function onStartup() {
     console.log('onStartup')
     if (typeof browser !== 'undefined') {
-        console.log('Firefox CTX Menu Workaround')
+        console.log('Firefox Startup Workarounds')
         const { options, patterns } = await chrome.storage.sync.get([
             'options',
             'patterns',
         ])
         console.debug('options:', options)
         if (options.contextMenu) {
+            console.debug('Calling: createContextMenus')
             createContextMenus(patterns)
         }
+        setUninstallURL()
     }
 }
 
 /**
  * On Installed Callback
  * @function onInstalled
- * @param {InstalledDetails} details
+ * @param {chrome.runtime.InstalledDetails} details
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/link-extractor'
     const installURL = 'https://link-extractor.cssnr.com/docs/?install=true'
-    const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
         flags: 'ig',
@@ -55,14 +56,15 @@ async function onInstalled(details) {
     })
     console.log('options, patterns:', options, patterns)
     if (options.contextMenu) {
+        console.debug('Calling: createContextMenus')
         createContextMenus(patterns)
     }
-    const manifest = chrome.runtime.getManifest()
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
@@ -70,16 +72,30 @@ async function onInstalled(details) {
             }
         }
     }
-    uninstallURL.searchParams.append('version', manifest.version)
-    console.log('uninstallURL:', uninstallURL.href)
-    await chrome.runtime.setUninstallURL(uninstallURL.href)
+    setUninstallURL()
     // Check Permissions for Firefox Omnibox Usage
-    const hasPerms = await checkPerms()
-    if (hasPerms) {
-        await onAdded()
-    } else {
-        await onRemoved()
-    }
+    // const hasPerms = await checkPerms()
+    // if (hasPerms) {
+    //     await onAdded()
+    // } else {
+    //     await onRemoved()
+    // }
+    console.debug('Calling: checkPerms')
+    checkPerms().then((hasPerms) => {
+        if (hasPerms) {
+            onAdded()
+        } else {
+            onRemoved()
+        }
+    })
+}
+
+function setUninstallURL() {
+    const manifest = chrome.runtime.getManifest()
+    const url = new URL('https://link-extractor.cssnr.com/uninstall/')
+    url.searchParams.append('version', manifest.version)
+    chrome.runtime.setUninstallURL(url.href)
+    console.debug(`setUninstallURL: ${url.href}`)
 }
 
 /**
@@ -154,6 +170,7 @@ async function onChanged(changes, namespace) {
                     const { patterns } = await chrome.storage.sync.get([
                         'patterns',
                     ])
+                    console.debug('Calling: createContextMenus')
                     createContextMenus(patterns)
                 } else {
                     console.log('Disabled contextMenu...')
@@ -212,7 +229,7 @@ async function onInputEntered(text) {
  * @param permissions
  */
 export async function onAdded(permissions) {
-    console.debug('onAdded', permissions)
+    console.debug('onAdded:', permissions)
     chrome.omnibox.setDefaultSuggestion({
         description: 'Link Extractor - Extract All Links or Type in a Filter',
     })
@@ -223,7 +240,7 @@ export async function onAdded(permissions) {
  * @param permissions
  */
 export async function onRemoved(permissions) {
-    console.debug('onRemoved', permissions)
+    console.debug('onRemoved:', permissions)
     if (typeof browser !== 'undefined') {
         chrome.omnibox.setDefaultSuggestion({
             description:
