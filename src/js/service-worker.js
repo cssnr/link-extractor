@@ -2,8 +2,8 @@
 
 import { checkPerms, injectTab, githubURL } from './exports.js'
 
-chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.contextMenus?.onClicked.addListener(onClicked)
 chrome.commands?.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
@@ -219,7 +219,7 @@ async function onInputEntered(text) {
  */
 export async function onAdded(permissions) {
     console.debug('onAdded:', permissions)
-    chrome.omnibox.setDefaultSuggestion({
+    chrome.omnibox?.setDefaultSuggestion({
         description: 'Link Extractor - Extract All Links or Type in a Filter',
     })
 }
@@ -232,7 +232,7 @@ export async function onRemoved(permissions) {
     console.debug('onRemoved:', permissions)
     // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
-        chrome.omnibox.setDefaultSuggestion({
+        chrome.omnibox?.setDefaultSuggestion({
             description:
                 'Link Extractor - Omnibox Requires Host Permissions. See Popup/Options.',
         })
@@ -317,12 +317,12 @@ function copyActiveElementText(ctx) {
         document.activeElement.title?.trim() ||
         document.activeElement.firstElementChild?.alt?.trim() ||
         document.activeElement.ariaLabel?.trim()
-    console.log(`text: "${text}"`)
+    console.log('text:', text)
     if (text?.length) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.info('No Text to Copy.')
+        console.log('No Text to Copy.', 'color: Yellow')
     }
 }
 
@@ -397,7 +397,7 @@ async function setDefaultOptions(defaultOptions) {
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set ${key}:`, value)
+            console.log(`Set %c${key}:`, 'color: Khaki', value)
         }
     }
     if (changed) {
