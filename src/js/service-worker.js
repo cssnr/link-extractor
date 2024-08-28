@@ -135,7 +135,7 @@ async function onClicked(ctx, tab) {
  * @param {String} command
  */
 async function onCommand(command) {
-    console.log(`onCommand: ${command}`)
+    console.log('onCommand:', command)
     if (command === 'extract') {
         await injectTab()
     } else {
