@@ -20,7 +20,10 @@ export async function injectTab({
 
     // Extract tabIds from all highlighted tabs
     const tabIds = []
-    const tabs = await chrome.tabs.query({ highlighted: true })
+    const tabs = await chrome.tabs.query({
+        currentWindow: true,
+        highlighted: true,
+    })
     if (!tabs.length) {
         const [tab] = await chrome.tabs.query({
             currentWindow: true,
