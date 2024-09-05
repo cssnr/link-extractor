@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
@@ -39,35 +40,27 @@ const pdfBtn = document.getElementById('pdf-btn')
 const pdfIcon = document.getElementById('pdf-icon')
 
 /**
- * Initialize Popup
+ * DOMContentLoaded - Initialize Popup
  * @function initOptions
  */
 async function initPopup() {
+    console.debug('initPopup')
     filterInput.focus()
+    // noinspection ES6MissingAwait
     updateManifest()
-    const hasPerms = await checkPerms()
-
-    const { options, patterns } = await chrome.storage.sync.get([
-        'options',
-        'patterns',
-    ])
-    console.debug('options, patterns:', options, patterns)
-    updateOptions(options)
-
-    // updatePatterns
-    if (patterns?.length) {
-        document.getElementById('no-filters').remove()
-        patterns.forEach(function (value, i) {
-            createFilterLink(i.toString(), value)
-        })
-    }
-
-    // PDF Check
-    try {
-        await processFileTypes(hasPerms)
-    } catch (e) {
-        console.debug(e)
-    }
+    chrome.storage.sync.get(['options', 'patterns']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        if (items.patterns?.length) {
+            document.getElementById('no-filters').remove()
+            items.patterns.forEach(function (value, i) {
+                createFilterLink(i.toString(), value)
+            })
+        }
+    })
+    checkPerms().then((hasPerms) => {
+        processFileTypes(hasPerms).catch((e) => console.debug(e))
+    })
 
     // const tabs = await chrome.tabs.query({ highlighted: true })
     // console.debug('tabs:', tabs)
@@ -291,6 +284,7 @@ function updateElements(el, length) {
 
 /**
  * Extract URLs from text
+ * TODO: Improve Function and Simplify Regular Expression
  * @function extractURLs
  * @param {String} text
  * @return {Array}
@@ -298,12 +292,12 @@ function updateElements(el, length) {
 function extractURLs(text) {
     // console.debug('extractURLs:', text)
     const urls = []
-    let urlmatcharr
-    const urlregex =
+    let urlmatch
+    const regex =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
-    while ((urlmatcharr = urlregex.exec(text)) !== null) {
+    while ((urlmatch = regex.exec(text)) !== null) {
         try {
-            let match = urlmatcharr[0]
+            let match = urlmatch[0]
             match = match.includes('://') ? match : `http://${match}`
             // console.debug('match:', match)
             const url = new URL(match)
@@ -318,7 +312,7 @@ function extractURLs(text) {
             }
             urls.push(data)
         } catch (e) {
-            console.debug('Error Processing match:', urlmatcharr)
+            console.debug('Error Processing match:', urlmatch)
         }
     }
     // return [...new Set(urls)]

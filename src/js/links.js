@@ -17,6 +17,7 @@ document
 
 const urlParams = new URLSearchParams(window.location.search)
 
+// noinspection JSUnusedGlobalSymbols
 const dtOptions = {
     info: false,
     processing: true,
@@ -42,6 +43,7 @@ const dtOptions = {
     },
     stateSave: false,
     stateSaveParams: function (settings, data) {
+        // noinspection JSValidateTypes
         data.search.search = ''
     },
 }
@@ -121,7 +123,7 @@ html.classList.add(prefers)
 html.setAttribute('data-bs-theme', prefers)
 
 /**
- * Initialize Links
+ * DOMContentLoaded - Initialize Links
  * @function initLinks
  */
 async function initLinks() {
@@ -316,7 +318,8 @@ function copyLinksClick(event) {
     const links = getTableLinks('#links-body')
     // console.debug('links:', links)
     if (links) {
-        navigator.clipboard.writeText(links).then()
+        // noinspection JSIgnoredPromiseFromCall
+        navigator.clipboard.writeText(links)
         showToast('Links Copied', 'success')
     } else {
         showToast('No Links to Copy', 'warning')
@@ -374,6 +377,7 @@ function getTableLinks(selector) {
     const table = document.querySelector(selector)
     const urls = []
     for (const row of table.rows) {
+        // noinspection JSUnresolvedReference
         urls.push(row.cells[0].textContent.trim())
     }
     return urls.join('\n').trim()

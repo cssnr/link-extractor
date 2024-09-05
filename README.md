@@ -77,6 +77,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ### Upcoming Features
 
+* Option to Extract Links from All Text Files (PDF Extraction currently in Beta)
 * Option to Set Names/Titles for Saved Filters
 * Option to Extract Using Multiple Filters with AND/OR
 
@@ -87,8 +88,9 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ### Known Issues
 
-* Attempting to extract links from multiple selected tabs without granting host permissions opens the options page and
-  does not display any error message. If you encounter this, grant host permissions to the extension and try again.
+- Unable to grant host permissions on Kiwi Browser (Kiwi is expected to update before the end of the year). 
+
+For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
 
 ## Configuration
 
@@ -212,6 +214,8 @@ Other Web Extensions I have created and published:
 
 - [Link Extractor](https://github.com/cssnr/link-extractor)
 - [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+- [Auto Auth](https://github.com/cssnr/auto-auth)
+- [Cache Cleaner](https://github.com/cssnr/cache-cleaner)
 - [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
 - [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
 - [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)

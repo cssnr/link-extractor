@@ -1,9 +1,9 @@
 // JS Background Service Worker
 
-import { checkPerms, injectTab } from './exports.js'
+import { checkPerms, injectTab, githubURL } from './exports.js'
 
-chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.contextMenus?.onClicked.addListener(onClicked)
 chrome.commands?.onCommand.addListener(onCommand)
 chrome.storage.onChanged.addListener(onChanged)
@@ -13,34 +13,13 @@ chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
 /**
- * On Startup Callback
- * @function onStartup
- */
-async function onStartup() {
-    console.log('onStartup')
-    if (typeof browser !== 'undefined') {
-        console.log('Firefox CTX Menu Workaround')
-        const { options, patterns } = await chrome.storage.sync.get([
-            'options',
-            'patterns',
-        ])
-        console.debug('options:', options)
-        if (options.contextMenu) {
-            createContextMenus(patterns)
-        }
-    }
-}
-
-/**
  * On Installed Callback
  * @function onInstalled
- * @param {InstalledDetails} details
+ * @param {chrome.runtime.InstalledDetails} details
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const githubURL = 'https://github.com/cssnr/link-extractor'
     const installURL = 'https://link-extractor.cssnr.com/docs/?install=true'
-    const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
         flags: 'ig',
@@ -57,12 +36,12 @@ async function onInstalled(details) {
     if (options.contextMenu) {
         createContextMenus(patterns)
     }
-    const manifest = chrome.runtime.getManifest()
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.runtime.openOptionsPage()
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
@@ -70,22 +49,49 @@ async function onInstalled(details) {
             }
         }
     }
-    uninstallURL.searchParams.append('version', manifest.version)
-    console.log('uninstallURL:', uninstallURL.href)
-    await chrome.runtime.setUninstallURL(uninstallURL.href)
-    // Check Permissions for Firefox Omnibox Usage
-    const hasPerms = await checkPerms()
-    if (hasPerms) {
-        await onAdded()
-    } else {
-        await onRemoved()
+    setUninstallURL()
+    checkPerms().then((hasPerms) => {
+        if (hasPerms) {
+            onAdded()
+        } else {
+            onRemoved()
+        }
+    })
+}
+
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    // noinspection JSUnresolvedReference
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox Startup Workarounds')
+        const { options, patterns } = await chrome.storage.sync.get([
+            'options',
+            'patterns',
+        ])
+        console.debug('options:', options)
+        if (options.contextMenu) {
+            createContextMenus(patterns)
+        }
+        setUninstallURL()
     }
+}
+
+function setUninstallURL() {
+    const manifest = chrome.runtime.getManifest()
+    const url = new URL('https://link-extractor.cssnr.com/uninstall/')
+    url.searchParams.append('version', manifest.version)
+    chrome.runtime.setUninstallURL(url.href)
+    console.debug(`setUninstallURL: ${url.href}`)
 }
 
 /**
  * Context Menus On Clicked Callback
  * @function onClicked
- * @param {OnClickData} ctx
+ * @param {chrome.contextMenus.OnClickData} ctx
  * @param {chrome.tabs.Tab} tab
  */
 async function onClicked(ctx, tab) {
@@ -129,7 +135,7 @@ async function onClicked(ctx, tab) {
  * @param {String} command
  */
 async function onCommand(command) {
-    console.log(`onCommand: ${command}`)
+    console.log('onCommand:', command)
     if (command === 'extract') {
         await injectTab()
     } else {
@@ -212,8 +218,8 @@ async function onInputEntered(text) {
  * @param permissions
  */
 export async function onAdded(permissions) {
-    console.debug('onAdded', permissions)
-    chrome.omnibox.setDefaultSuggestion({
+    console.debug('onAdded:', permissions)
+    chrome.omnibox?.setDefaultSuggestion({
         description: 'Link Extractor - Extract All Links or Type in a Filter',
     })
 }
@@ -223,9 +229,10 @@ export async function onAdded(permissions) {
  * @param permissions
  */
 export async function onRemoved(permissions) {
-    console.debug('onRemoved', permissions)
+    console.debug('onRemoved:', permissions)
+    // noinspection JSUnresolvedReference
     if (typeof browser !== 'undefined') {
-        chrome.omnibox.setDefaultSuggestion({
+        chrome.omnibox?.setDefaultSuggestion({
             description:
                 'Link Extractor - Omnibox Requires Host Permissions. See Popup/Options.',
         })
@@ -299,21 +306,23 @@ function addContext(context) {
  *  Mozilla adds support for document.activeElement
  *  Chromium adds supports ctx.linkText
  * @function copyActiveElementText
- * @param {Object} ctx
+ * @param {chrome.contextMenus.OnClickData} ctx
  */
 function copyActiveElementText(ctx) {
     // console.log('document.activeElement:', document.activeElement)
+    // noinspection JSUnresolvedReference
     let text =
         ctx.linkText?.trim() ||
         document.activeElement.innerText?.trim() ||
         document.activeElement.title?.trim() ||
         document.activeElement.firstElementChild?.alt?.trim() ||
         document.activeElement.ariaLabel?.trim()
-    console.log(`text: "${text}"`)
+    console.log('text:', text)
     if (text?.length) {
-        navigator.clipboard.writeText(text).then()
+        // noinspection JSIgnoredPromiseFromCall
+        navigator.clipboard.writeText(text)
     } else {
-        console.info('No Text to Copy.')
+        console.log('No Text to Copy.', 'color: Yellow')
     }
 }
 
@@ -337,7 +346,8 @@ function copySelectionLinks(removeDuplicates) {
     const text = results.join('\n')
     console.debug('text:', text)
     if (text?.length) {
-        navigator.clipboard.writeText(text).then()
+        // noinspection JSIgnoredPromiseFromCall
+        navigator.clipboard.writeText(text)
     } else {
         console.info('No Links to Copy.')
     }
@@ -387,7 +397,7 @@ async function setDefaultOptions(defaultOptions) {
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set ${key}:`, value)
+            console.log(`Set %c${key}:`, 'color: Khaki', value)
         }
     }
     if (changed) {

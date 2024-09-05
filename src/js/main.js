@@ -9,18 +9,22 @@ if (backToTop) {
     })
 }
 
+// noinspection TypeScriptUMDGlobal
 if (typeof ClipboardJS !== 'undefined') {
     document
         .querySelectorAll('.clip')
         .forEach((el) =>
             el.addEventListener('click', (e) => e.preventDefault())
         )
+    // noinspection TypeScriptUMDGlobal
     const clipboard = new ClipboardJS('.clip')
     clipboard.on('success', function (event) {
         // console.debug('clipboard.success:', event)
         // const text = event.text
         // console.debug(`text: "${text}"`)
+        // noinspection JSUnresolvedReference
         if (event.trigger.dataset.toast) {
+            // noinspection JSUnresolvedReference
             showToast(event.trigger.dataset.toast, 'success')
         } else {
             showToast('Copied to Clipboard', 'success')
@@ -65,7 +69,7 @@ function showToast(message, type = 'primary') {
         return console.warn('Missing clone or container:', clone, container)
     }
     const element = clone.cloneNode(true)
-    element.querySelector('.toast-body').innerHTML = message
+    element.querySelector('.toast-body').textContent = message
     element.classList.add(`text-bg-${type}`)
     container.appendChild(element)
     const toast = new bootstrap.Toast(element)

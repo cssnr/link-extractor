@@ -1,5 +1,6 @@
 import * as pdfjsLib from '../dist/pdfjs/pdf.min.mjs'
 
+// noinspection JSUnresolvedReference
 pdfjsLib.GlobalWorkerOptions.workerSrc = '../dist/pdfjs/pdf.worker.min.mjs'
 
 /**

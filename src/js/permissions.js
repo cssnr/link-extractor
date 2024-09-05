@@ -5,19 +5,21 @@ import { checkPerms, grantPerms, onRemoved, updateManifest } from './exports.js'
 chrome.permissions.onAdded.addListener(onAdded)
 chrome.permissions.onRemoved.addListener(onRemoved)
 
-document.addEventListener('DOMContentLoaded', domContentLoaded)
+document.addEventListener('DOMContentLoaded', initPermissions)
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', grantPerms))
 
 /**
- * DOMContentLoaded
- * @function domContentLoaded
+ * DOMContentLoaded - Initialize Permissions
+ * @function initPermissions
  */
-async function domContentLoaded() {
-    console.debug('domContentLoaded')
+async function initPermissions() {
+    console.debug('initPermissions')
+    // noinspection ES6MissingAwait
     updateManifest()
-    await checkPerms()
+    // noinspection ES6MissingAwait
+    checkPerms()
     const url = new URL(window.location)
     const message = url.searchParams.get('message')
     if (message) {
