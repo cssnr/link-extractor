@@ -70,7 +70,7 @@ async function initPopup() {
 }
 
 async function processFileTypes(hasPerms) {
-    const [tab] = await chrome.tabs.query({ active: true })
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.debug('tab:', tab)
     const url = new URL(tab.url)
     // console.debug('url:', url)
