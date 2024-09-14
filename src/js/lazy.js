@@ -16,7 +16,6 @@ if (!theme || theme === 'auto') {
         ? 'dark'
         : 'light'
 }
-console.debug('theme:', theme)
 if (theme === 'dark') {
     document.body.style.backgroundColor = '#1c1b21'
 } else {
