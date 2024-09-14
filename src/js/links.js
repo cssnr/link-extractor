@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', initLinks)
 document.getElementById('findReplace').addEventListener('submit', findReplace)
 document.getElementById('reReset').addEventListener('click', reResetClick)
 document
+    .getElementsByName('reType')
+    .forEach((el) => el.addEventListener('change', reTypeChange))
+document
     .querySelectorAll('.copy-links')
     .forEach((el) => el.addEventListener('click', copyLinksClick))
 document
@@ -18,6 +21,16 @@ document
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
+
+const findCollapse = document.getElementById('findCollapse')
+findCollapse.addEventListener('show.bs.collapse', (event) => {
+    console.debug('Show Collapse')
+    localStorage.setItem('findCollapse', 'shown')
+})
+findCollapse.addEventListener('hide.bs.collapse', (event) => {
+    console.debug('Hide Collapse')
+    localStorage.setItem('findCollapse', 'hidden')
+})
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -158,6 +171,20 @@ async function initLinks() {
         console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')
         window.close()
+    }
+
+    const collapse = localStorage.getItem('findCollapse')
+    console.debug('collapse:', collapse)
+    if (collapse === 'shown') {
+        const bsCollapse = new bootstrap.Collapse(findCollapse, {
+            toggle: false,
+        })
+        bsCollapse.show()
+    }
+    const type = localStorage.getItem('reType')
+    console.debug('type:', type)
+    if (type) {
+        document.getElementById(type).checked = true
     }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
@@ -376,6 +403,17 @@ async function reResetClick(event) {
             el.href = el.dataset.original
             el.textContent = el.dataset.original
         })
+}
+
+/**
+ * Regex Type Change Callback
+ * @function reTypeChange
+ * @param {InputEvent} event
+ */
+async function reTypeChange(event) {
+    // console.debug('reTypeChange:', event)
+    console.debug('reTypeChange id:', event.target.id)
+    localStorage.setItem('reType', event.target.id)
 }
 
 /**
