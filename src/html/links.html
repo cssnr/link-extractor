@@ -59,40 +59,42 @@
             </div>
         </div> <!-- links-buttons -->
 
-        <form id="findReplace" name="findReplace" class="my-2">
+        <div class="my-2">
             <a class="link-body-emphasis" data-bs-toggle="collapse" href="#findCollapse" aria-expanded="false" aria-controls="findCollapse">
                 <i class="fa-solid fa-magnifying-glass pe-2"></i>Find and Replace
             </a>
-            <div id="findCollapse" class="collapse">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="reType" id="reNormal" value="normal" checked>
-                    <label class="form-check-label me-1" for="reNormal">Normal</label>
-                    <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="Normal Text Find and Replace"></i>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="reType" id="reRegex" value="regex">
-                    <label class="form-check-label me-1" for="reRegex">Normal w/ Regex</label>
-                    <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="Normal Regex Find and Replace"></i>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="reType" id="reGroups" value="groups">
-                    <label class="form-check-label me-1" for="reGroups">Regex w/ Match Groups</label>
-                    <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="Regex Find and Replace w/ Match Groups: $1, $2, etc."></i>
-                </div>
+            <form id="findReplace" name="findReplace" class="my-2">
+                <div id="findCollapse" class="collapse">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reType" id="reNormal" value="normal" checked>
+                        <label class="form-check-label me-1" for="reNormal">Normal</label>
+                        <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           data-bs-title="Normal Text Find and Replace"></i>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reType" id="reRegex" value="regex">
+                        <label class="form-check-label me-1" for="reRegex">Normal w/ Regex</label>
+                        <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           data-bs-title="Normal Regex Find and Replace"></i>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reType" id="reGroups" value="groups">
+                        <label class="form-check-label me-1" for="reGroups">Regex w/ Match Groups</label>
+                        <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           data-bs-title="Regex Find and Replace w/ Match Groups: $1, $2, etc."></i>
+                    </div>
 
-                <div class="input-group">
-                    <span class="input-group-text">Find</span>
-                    <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
-                    <span class="input-group-text">Replace</span>
-                    <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
-                    <button class="btn btn-outline-warning" type="submit">Execute</button>
-                    <button id="reReset" class="btn btn-outline-danger" type="button">Reset</button>
+                    <div class="input-group">
+                        <span class="input-group-text">Find</span>
+                        <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
+                        <span class="input-group-text">Replace</span>
+                        <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
+                        <button class="btn btn-outline-warning" type="submit">Execute</button>
+                        <button id="reReset" class="btn btn-outline-danger" type="button">Reset</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
 
         <div class="table-wrapper">
             <table id="links-table" class="table table-sm table-striped table-hover small w-100" data-counter="links-count">
