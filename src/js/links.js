@@ -5,6 +5,7 @@ import { openURL, textFileDownload } from './exports.js'
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 document.getElementById('reExecute').addEventListener('click', reExecuteClick)
+document.getElementById('reReset').addEventListener('click', reResetClick)
 document
     .querySelectorAll('.copy-links')
     .forEach((el) => el.addEventListener('click', copyLinksClick))
@@ -109,6 +110,7 @@ function genUrl(url) {
     link.text = url
     link.href = url
     link.title = url
+    link.dataset.original = url
     link.target = '_blank'
     link.rel = 'noopener'
     return link
@@ -308,7 +310,7 @@ function dtVisibility(e, settings, column, state) {
 }
 
 /**
- * Copy links Button Click Callback
+ * Execute Regex Click Callback
  * @function reExecuteClick
  * @param {MouseEvent} event
  */
@@ -321,19 +323,52 @@ async function reExecuteClick(event) {
     console.debug('replace:', replace)
     const re = new RegExp(find, options.flags)
     console.debug('re:', re)
+    const type = document.querySelector('input[name="reType"]:checked').value
+    console.debug('type:', type)
     const links = document.getElementById('links-body').querySelectorAll('a')
     for (const link of links) {
         console.debug('href:', link.href)
-        const matches = link.href.match(re)
-        console.debug('matches:', matches)
-        matches.forEach((match, i) => {
-            console.debug(`match ${i}:`, match)
-            const result = replace.replace(`$${i + 1}`, match)
+        if (type === 'normal') {
+            const result = link.href.replace(find, replace)
             console.debug('result:', result)
             link.href = result
             link.textContent = result
-        })
+        } else if (type === 'regex') {
+            const matches = link.href.match(re)
+            console.debug(`match:`, matches[0])
+            const result = link.href.replace(matches[0], replace)
+            console.debug('result:', result)
+            link.href = result
+            link.textContent = result
+        } else if (type === 'groups') {
+            const matches = link.href.match(re)
+            console.debug('matches:', matches)
+            matches.forEach((match, i) => {
+                console.debug(`match ${i}:`, match)
+                const result = replace.replace(`$${i + 1}`, match)
+                console.debug('result:', result)
+                link.href = result
+                link.textContent = result
+            })
+        }
     }
+}
+
+/**
+ * Reset Regex Click Callback
+ * @function reResetClick
+ * @param {MouseEvent} event
+ */
+async function reResetClick(event) {
+    console.debug('reResetClick:', event)
+    document
+        .getElementById('links-body')
+        .querySelectorAll('a')
+        .forEach((el) => {
+            console.debug('el.dataset.original:', el.dataset.original)
+            el.href = el.dataset.original
+            el.textContent = el.dataset.original
+        })
 }
 
 /**

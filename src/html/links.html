@@ -59,12 +59,28 @@
             </div>
         </div> <!-- links-buttons -->
 
-        <div class="input-group my-2">
-            <span class="input-group-text">Find</span>
-            <input id="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
-            <span class="input-group-text">Replace</span>
-            <input id="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
-            <button id="reExecute" class="btn btn-outline-warning" type="button">Execute</button>
+        <div class="my-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="reType" id="reNormal" value="normal" checked>
+                <label class="form-check-label" for="reNormal">Normal</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="reType" id="reRegex" value="regex">
+                <label class="form-check-label" for="reRegex">Normal w/ Regex</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="reType" id="reGroups" value="groups">
+                <label class="form-check-label" for="reGroups">Regex w/ Match Groups</label>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Find</span>
+                <input id="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
+                <span class="input-group-text">Replace</span>
+                <input id="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
+                <button id="reExecute" class="btn btn-outline-warning" type="button">Execute</button>
+                <button id="reReset" class="btn btn-outline-danger" type="button">Reset</button>
+            </div>
         </div>
 
         <div class="table-wrapper">
