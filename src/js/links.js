@@ -23,11 +23,11 @@ document
     .forEach((el) => new bootstrap.Tooltip(el))
 
 const findCollapse = document.getElementById('findCollapse')
-findCollapse.addEventListener('show.bs.collapse', (event) => {
+findCollapse.addEventListener('show.bs.collapse', () => {
     console.debug('Show Collapse')
     localStorage.setItem('findCollapse', 'shown')
 })
-findCollapse.addEventListener('hide.bs.collapse', (event) => {
+findCollapse.addEventListener('hide.bs.collapse', () => {
     console.debug('Hide Collapse')
     localStorage.setItem('findCollapse', 'hidden')
 })
@@ -354,14 +354,20 @@ async function findReplace(event) {
     const replace = event.target.elements.reReplace.value
     console.debug('find:', find)
     console.debug('replace:', replace)
+    if (!find) {
+        showToast('You must enter a find value.', 'danger')
+        return
+    }
     const re = new RegExp(find, options.flags)
     console.debug('re:', re)
     // const type = document.querySelector('input[name="reType"]:checked').value
     const type = event.target.elements.reType.value
     console.debug('type:', type)
     const links = document.getElementById('links-body').querySelectorAll('a')
+    let count = 0
     for (const link of links) {
         console.debug('href:', link.href)
+        const before = link.href
         if (type === 'normal') {
             const result = link.href.replace(find, replace)
             console.debug('result:', result)
@@ -369,23 +375,32 @@ async function findReplace(event) {
             link.textContent = result
         } else if (type === 'regex') {
             const matches = link.href.match(re)
-            console.debug(`match:`, matches[0])
-            const result = link.href.replace(matches[0], replace)
-            console.debug('result:', result)
-            link.href = result
-            link.textContent = result
-        } else if (type === 'groups') {
-            const matches = link.href.match(re)
-            console.debug('matches:', matches)
-            matches.forEach((match, i) => {
-                console.debug(`match ${i}:`, match)
-                const result = replace.replace(`$${i + 1}`, match)
+            if (matches) {
+                console.debug(`match:`, matches[0])
+                const result = link.href.replace(matches[0], replace)
                 console.debug('result:', result)
                 link.href = result
                 link.textContent = result
-            })
+            }
+        } else if (type === 'groups') {
+            const matches = link.href.match(re)
+            console.debug('matches:', matches)
+            if (matches) {
+                matches.forEach((match, i) => {
+                    console.debug(`match ${i}:`, match)
+                    const result = replace.replace(`$${i + 1}`, match)
+                    console.debug('result:', result)
+                    link.href = result
+                    link.textContent = result
+                })
+            }
+        }
+        if (link.href !== before) {
+            count++
         }
     }
+    const status = count ? 'success' : 'warning'
+    showToast(`Updated ${count} Links.`, status)
 }
 
 /**
@@ -403,6 +418,7 @@ async function reResetClick(event) {
             el.href = el.dataset.original
             el.textContent = el.dataset.original
         })
+    showToast('Links reset to original values.')
 }
 
 /**
