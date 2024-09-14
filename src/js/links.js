@@ -4,7 +4,7 @@ import { openURL, textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
-document.getElementById('reExecute').addEventListener('click', reExecuteClick)
+document.getElementById('findReplace').addEventListener('submit', findReplace)
 document.getElementById('reReset').addEventListener('click', reResetClick)
 document
     .querySelectorAll('.copy-links')
@@ -15,6 +15,9 @@ document
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -310,20 +313,24 @@ function dtVisibility(e, settings, column, state) {
 }
 
 /**
- * Execute Regex Click Callback
- * @function reExecuteClick
- * @param {MouseEvent} event
+ * Find and Replace Submit Callback
+ * @function findReplace
+ * @param {SubmitEvent} event
  */
-async function reExecuteClick(event) {
-    console.debug('reExecuteClick:', event)
+async function findReplace(event) {
+    console.debug('findReplace:', event)
+    event.preventDefault()
     const { options } = await chrome.storage.sync.get(['options'])
-    const find = document.getElementById('reFind').value
-    const replace = document.getElementById('reReplace').value
+    // const find = document.getElementById('reFind').value
+    const find = event.target.elements.reFind.value
+    // const replace = document.getElementById('reReplace').value
+    const replace = event.target.elements.reReplace.value
     console.debug('find:', find)
     console.debug('replace:', replace)
     const re = new RegExp(find, options.flags)
     console.debug('re:', re)
-    const type = document.querySelector('input[name="reType"]:checked').value
+    // const type = document.querySelector('input[name="reType"]:checked').value
+    const type = event.target.elements.reType.value
     console.debug('type:', type)
     const links = document.getElementById('links-body').querySelectorAll('a')
     for (const link of links) {
