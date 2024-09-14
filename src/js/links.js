@@ -4,7 +4,7 @@ import { openURL, textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
-
+document.getElementById('reExecute').addEventListener('click', reExecuteClick)
 document
     .querySelectorAll('.copy-links')
     .forEach((el) => el.addEventListener('click', copyLinksClick))
@@ -305,6 +305,35 @@ function dtDraw(event) {
 function dtVisibility(e, settings, column, state) {
     settings.aoColumns[column].bSearchable = state
     linksTable.rows().invalidate().draw()
+}
+
+/**
+ * Copy links Button Click Callback
+ * @function reExecuteClick
+ * @param {MouseEvent} event
+ */
+async function reExecuteClick(event) {
+    console.debug('reExecuteClick:', event)
+    const { options } = await chrome.storage.sync.get(['options'])
+    const find = document.getElementById('reFind').value
+    const replace = document.getElementById('reReplace').value
+    console.debug('find:', find)
+    console.debug('replace:', replace)
+    const re = new RegExp(find, options.flags)
+    console.debug('re:', re)
+    const links = document.getElementById('links-body').querySelectorAll('a')
+    for (const link of links) {
+        console.debug('href:', link.href)
+        const matches = link.href.match(re)
+        console.debug('matches:', matches)
+        matches.forEach((match, i) => {
+            console.debug(`match ${i}:`, match)
+            const result = replace.replace(`$${i + 1}`, match)
+            console.debug('result:', result)
+            link.href = result
+            link.textContent = result
+        })
+    }
 }
 
 /**
