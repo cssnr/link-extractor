@@ -401,6 +401,9 @@ async function findReplace(event) {
     }
     const status = count ? 'success' : 'warning'
     showToast(`Updated ${count} Links.`, status)
+    if (count) {
+        document.getElementById('reReset').classList.remove('disabled')
+    }
 }
 
 /**
@@ -410,6 +413,7 @@ async function findReplace(event) {
  */
 async function reResetClick(event) {
     console.debug('reResetClick:', event)
+    event.currentTarget.classList.add('disabled')
     document
         .getElementById('links-body')
         .querySelectorAll('a')
