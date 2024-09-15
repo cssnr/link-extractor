@@ -63,8 +63,8 @@
             <a class="link-body-emphasis" data-bs-toggle="collapse" href="#findCollapse" aria-expanded="false" aria-controls="findCollapse">
                 <i class="fa-solid fa-magnifying-glass pe-2"></i>Find and Replace</a>
             <i class="fa-solid fa-flask text-warning-emphasis ps-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature"></i>
-            <form id="findReplace" name="findReplace" class="my-2">
-                <div id="findCollapse" class="collapse">
+            <div id="findCollapse" class="collapse">
+                <form id="findReplace" name="findReplace" class="my-2">
                     <div class="mb-1">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="reType" id="reNormal" value="normal" checked>
@@ -88,12 +88,34 @@
 
                     <div class="d-flex flex-column flex-sm-row gap-1">
                         <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
+<!--                        <div class="input-group">-->
+<!--                            <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">-->
+<!--                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
+<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 1</a></li>-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 2</a></li>-->
+<!--                                <li><hr class="dropdown-divider my-1"></li>-->
+<!--                                <li><a class="dropdown-item small" href="#">Manage Saved Values</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
                         <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
+<!--                        <div class="input-group">-->
+<!--                            <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">-->
+<!--                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
+<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 1</a></li>-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 2</a></li>-->
+<!--                                <li><hr class="dropdown-divider my-1"></li>-->
+<!--                                <li><a class="dropdown-item small" href="#">Manage Saved Values</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
                         <button class="btn btn-outline-success" type="submit">Execute</button>
                         <button id="reReset" class="btn btn-outline-danger disabled" type="button">Reset</button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
 
         <div class="table-wrapper">

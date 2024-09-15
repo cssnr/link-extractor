@@ -176,10 +176,11 @@ async function initLinks() {
     const collapse = localStorage.getItem('findCollapse')
     console.debug('collapse:', collapse)
     if (collapse === 'shown') {
-        const bsCollapse = new bootstrap.Collapse(findCollapse, {
-            toggle: false,
-        })
-        bsCollapse.show()
+        // const bsCollapse = new bootstrap.Collapse(findCollapse, {
+        //     toggle: false,
+        // })
+        // bsCollapse.show()
+        findCollapse.classList.add('show')
     }
     const type = localStorage.getItem('reType')
     console.debug('type:', type)
