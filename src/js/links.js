@@ -4,7 +4,11 @@ import { openURL, textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
-
+document.getElementById('findReplace').addEventListener('submit', findReplace)
+document.getElementById('reReset').addEventListener('click', reResetClick)
+document
+    .getElementsByName('reType')
+    .forEach((el) => el.addEventListener('change', reTypeChange))
 document
     .querySelectorAll('.copy-links')
     .forEach((el) => el.addEventListener('click', copyLinksClick))
@@ -14,6 +18,19 @@ document
 document
     .querySelectorAll('.open-in-tabs')
     .forEach((el) => el.addEventListener('click', openLinksClick))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
+
+const findCollapse = document.getElementById('findCollapse')
+findCollapse.addEventListener('show.bs.collapse', () => {
+    console.debug('Show Collapse')
+    localStorage.setItem('findCollapse', 'shown')
+})
+findCollapse.addEventListener('hide.bs.collapse', () => {
+    console.debug('Hide Collapse')
+    localStorage.setItem('findCollapse', 'hidden')
+})
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -109,6 +126,7 @@ function genUrl(url) {
     link.text = url
     link.href = url
     link.title = url
+    link.dataset.original = url
     link.target = '_blank'
     link.rel = 'noopener'
     return link
@@ -153,6 +171,21 @@ async function initLinks() {
         console.warn('error:', e)
         alert('Error Processing Results. See Console for More Details...')
         window.close()
+    }
+
+    const collapse = localStorage.getItem('findCollapse')
+    console.debug('collapse:', collapse)
+    if (collapse === 'shown') {
+        // const bsCollapse = new bootstrap.Collapse(findCollapse, {
+        //     toggle: false,
+        // })
+        // bsCollapse.show()
+        findCollapse.classList.add('show')
+    }
+    const type = localStorage.getItem('reType')
+    console.debug('type:', type)
+    if (type) {
+        document.getElementById(type).checked = true
     }
 
     const { patterns } = await chrome.storage.sync.get(['patterns'])
@@ -305,6 +338,98 @@ function dtDraw(event) {
 function dtVisibility(e, settings, column, state) {
     settings.aoColumns[column].bSearchable = state
     linksTable.rows().invalidate().draw()
+}
+
+/**
+ * Find and Replace Submit Callback
+ * @function findReplace
+ * @param {SubmitEvent} event
+ */
+async function findReplace(event) {
+    console.debug('findReplace:', event)
+    event.preventDefault()
+    const find = event.target.elements.reFind.value
+    const replace = event.target.elements.reReplace.value
+    console.debug('find:', find)
+    console.debug('replace:', replace)
+    if (!find) {
+        showToast('You must enter a find value.', 'danger')
+        return
+    }
+    const re = new RegExp(find, 'gm')
+    console.debug('re:', re)
+    // const type = document.querySelector('input[name="reType"]:checked').value
+    const type = event.target.elements.reType.value
+    console.debug('type:', type)
+    const links = document.getElementById('links-body').querySelectorAll('a')
+    let count = 0
+    for (const link of links) {
+        const before = link.href
+        console.debug('before:', before)
+        if (type === 'normal') {
+            const result = link.href.replace(find, replace)
+            console.debug('result:', result)
+            link.href = result
+            link.textContent = result
+        } else if (type === 'regex') {
+            const result = link.href.replace(re, replace)
+            console.debug('result:', result)
+            link.href = result
+            link.textContent = result
+        } else if (type === 'groups') {
+            const matches = link.href.match(re)
+            console.debug('matches:', matches)
+            if (matches) {
+                matches.forEach((match, i) => {
+                    console.debug(`match ${i}:`, match)
+                    const result = replace.replace(`$${i + 1}`, match)
+                    console.debug('result:', result)
+                    link.href = result
+                    link.textContent = result
+                })
+            }
+        }
+        const after = link.getAttribute('href')
+        console.debug('after:', after)
+        if (after !== before) {
+            count++
+        }
+    }
+    const status = count ? 'success' : 'warning'
+    showToast(`Updated ${count} Links.`, status)
+    if (count) {
+        document.getElementById('reReset').classList.remove('disabled')
+    }
+}
+
+/**
+ * Reset Regex Click Callback
+ * @function reResetClick
+ * @param {MouseEvent} event
+ */
+async function reResetClick(event) {
+    console.debug('reResetClick:', event)
+    event.currentTarget.classList.add('disabled')
+    document
+        .getElementById('links-body')
+        .querySelectorAll('a')
+        .forEach((el) => {
+            console.debug('el.dataset.original:', el.dataset.original)
+            el.href = el.dataset.original
+            el.textContent = el.dataset.original
+        })
+    showToast('Links reset to original values.')
+}
+
+/**
+ * Regex Type Change Callback
+ * @function reTypeChange
+ * @param {InputEvent} event
+ */
+async function reTypeChange(event) {
+    // console.debug('reTypeChange:', event)
+    console.debug('reTypeChange id:', event.target.id)
+    localStorage.setItem('reType', event.target.id)
 }
 
 /**

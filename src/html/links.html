@@ -58,6 +58,72 @@
                 </div>
             </div>
         </div> <!-- links-buttons -->
+
+        <div class="my-2">
+            <a class="link-body-emphasis" data-bs-toggle="collapse" href="#findCollapse" aria-expanded="false" aria-controls="findCollapse">
+                <i class="fa-solid fa-magnifying-glass pe-2"></i>Find and Replace</a>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature"></i>
+            <a href="https://link-extractor.cssnr.com/docs/#find-replace" class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener">
+                <i class="fa-regular fa-circle-question ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="View Documentation for Feature"></i></a>
+            <div id="findCollapse" class="collapse">
+                <form id="findReplace" name="findReplace" class="my-2">
+                    <div class="mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="reType" id="reNormal" value="normal" checked>
+                            <label class="form-check-label me-1" for="reNormal">Normal</label>
+                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               data-bs-title="Normal Text Find and Replace"></i>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="reType" id="reRegex" value="regex">
+                            <label class="form-check-label me-1" for="reRegex">Normal w/ Regex</label>
+                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               data-bs-title="Normal Regex Find and Replace"></i>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="reType" id="reGroups" value="groups">
+                            <label class="form-check-label me-1" for="reGroups">Regex w/ Match Groups</label>
+                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               data-bs-title="Regex Find and Replace w/ Match Groups: $1, $2, etc."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-1">
+                        <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">
+<!--                        <div class="input-group">-->
+<!--                            <input id="reFind" name="reFind" type="text" class="form-control" placeholder="Find" aria-label="Find">-->
+<!--                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
+<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 1</a></li>-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 2</a></li>-->
+<!--                                <li><hr class="dropdown-divider my-1"></li>-->
+<!--                                <li><a class="dropdown-item small" href="#">Manage Saved Values</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
+                        <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">
+<!--                        <div class="input-group">-->
+<!--                            <input id="reReplace" name="reReplace" type="text" class="form-control" placeholder="Replace" aria-label="Replace">-->
+<!--                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>-->
+<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 1</a></li>-->
+<!--                                <li><a class="dropdown-item small" role="button">Item 2</a></li>-->
+<!--                                <li><hr class="dropdown-divider my-1"></li>-->
+<!--                                <li><a class="dropdown-item small" href="#">Manage Saved Values</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
+                        <button class="btn btn-outline-success" type="submit">Execute</button>
+                        <button id="reReset" class="btn btn-outline-danger disabled" type="button">Reset</button>
+                    </div>
+                </form>
+                <div class="small">
+                    Note: Updates links do not yet work with Datatables (Copy Table, CSV Export, Filter);
+                    however, do work with Copy Links, Download and Open buttons at the top.
+                </div>
+            </div>
+        </div>
+
         <div class="table-wrapper">
             <table id="links-table" class="table table-sm table-striped table-hover small w-100" data-counter="links-count">
                 <thead class="">
