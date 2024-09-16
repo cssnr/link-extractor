@@ -62,7 +62,9 @@
         <div class="my-2">
             <a class="link-body-emphasis" data-bs-toggle="collapse" href="#findCollapse" aria-expanded="false" aria-controls="findCollapse">
                 <i class="fa-solid fa-magnifying-glass pe-2"></i>Find and Replace</a>
-            <i class="fa-solid fa-flask text-warning-emphasis ps-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature"></i>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature"></i>
+            <a href="https://link-extractor.cssnr.com/docs/#find-replace" class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener">
+                <i class="fa-regular fa-circle-question ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="View Documentation for Feature"></i></a>
             <div id="findCollapse" class="collapse">
                 <form id="findReplace" name="findReplace" class="my-2">
                     <div class="mb-1">
@@ -115,6 +117,10 @@
                         <button id="reReset" class="btn btn-outline-danger disabled" type="button">Reset</button>
                     </div>
                 </form>
+                <div class="small">
+                    Note: Updates links do not yet work with Datatables (Copy Table, CSV Export, Filter);
+                    however, do work with Copy Links, Download and Open buttons at the top.
+                </div>
             </div>
         </div>
 

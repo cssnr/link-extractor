@@ -348,10 +348,7 @@ function dtVisibility(e, settings, column, state) {
 async function findReplace(event) {
     console.debug('findReplace:', event)
     event.preventDefault()
-    const { options } = await chrome.storage.sync.get(['options'])
-    // const find = document.getElementById('reFind').value
     const find = event.target.elements.reFind.value
-    // const replace = document.getElementById('reReplace').value
     const replace = event.target.elements.reReplace.value
     console.debug('find:', find)
     console.debug('replace:', replace)
@@ -359,7 +356,7 @@ async function findReplace(event) {
         showToast('You must enter a find value.', 'danger')
         return
     }
-    const re = new RegExp(find, options.flags)
+    const re = new RegExp(find, 'gm')
     console.debug('re:', re)
     // const type = document.querySelector('input[name="reType"]:checked').value
     const type = event.target.elements.reType.value
@@ -367,22 +364,18 @@ async function findReplace(event) {
     const links = document.getElementById('links-body').querySelectorAll('a')
     let count = 0
     for (const link of links) {
-        console.debug('href:', link.href)
         const before = link.href
+        console.debug('before:', before)
         if (type === 'normal') {
             const result = link.href.replace(find, replace)
             console.debug('result:', result)
             link.href = result
             link.textContent = result
         } else if (type === 'regex') {
-            const matches = link.href.match(re)
-            if (matches) {
-                console.debug(`match:`, matches[0])
-                const result = link.href.replace(matches[0], replace)
-                console.debug('result:', result)
-                link.href = result
-                link.textContent = result
-            }
+            const result = link.href.replace(re, replace)
+            console.debug('result:', result)
+            link.href = result
+            link.textContent = result
         } else if (type === 'groups') {
             const matches = link.href.match(re)
             console.debug('matches:', matches)
@@ -396,7 +389,9 @@ async function findReplace(event) {
                 })
             }
         }
-        if (link.href !== before) {
+        const after = link.getAttribute('href')
+        console.debug('after:', after)
+        if (after !== before) {
             count++
         }
     }
