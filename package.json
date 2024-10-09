@@ -21,19 +21,19 @@
     "bootstrap": "^5.3.3",
     "clipboard": "^2.0.11",
     "datatables.net": "^2.1.5",
-    "datatables.net-bs5": "^2.1.5",
+    "datatables.net-bs5": "^2.1.8",
     "datatables.net-buttons": "^3.1.2",
     "datatables.net-buttons-bs5": "^3.1.2",
     "jquery": "^3.7.1",
-    "pdfjs-dist": "^4.6.82"
+    "pdfjs-dist": "^4.7.76"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.270",
+    "@types/chrome": "^0.0.277",
     "eslint": "^8.57.0",
     "gulp": "^4.0.2",
     "json-merger": "^1.1.10",
     "prettier": "^3.3.3",
     "puppeteer": "^22.15.0",
-    "web-ext": "^8.2.0"
+    "web-ext": "^8.3.0"
   }
 }
