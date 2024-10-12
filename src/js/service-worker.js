@@ -37,6 +37,7 @@ async function onInstalled(details) {
         createContextMenus(patterns)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        // noinspection ES6MissingAwait
         chrome.runtime.openOptionsPage()
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
@@ -49,7 +50,6 @@ async function onInstalled(details) {
             }
         }
     }
-    setUninstallURL()
     checkPerms().then((hasPerms) => {
         if (hasPerms) {
             onAdded()
@@ -57,6 +57,7 @@ async function onInstalled(details) {
             onRemoved()
         }
     })
+    setUninstallURL()
 }
 
 /**
@@ -97,7 +98,7 @@ function setUninstallURL() {
 async function onClicked(ctx, tab) {
     console.log('onClicked:', ctx, tab)
     if (['options', 'filters'].includes(ctx.menuItemId)) {
-        chrome.runtime.openOptionsPage()
+        await chrome.runtime.openOptionsPage()
     } else if (ctx.menuItemId === 'links') {
         console.debug('injectTab: links')
         await injectTab()
@@ -114,16 +115,24 @@ async function onClicked(ctx, tab) {
         console.debug(`filter: ${patterns[i]}`)
         await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
-        console.debug('injectFunction: copy: copyActiveElementText')
+        console.debug('injectFunction: copyActiveElementText: copy', ctx)
         await injectFunction(copyActiveElementText, [ctx])
-    } else if (ctx.menuItemId === 'copyLinks') {
-        console.debug('injectFunction: copyLinks: copySelectionLinks', tab)
+    } else if (ctx.menuItemId === 'copyAllLinks') {
+        console.debug('injectFunction: copyLinks: copyAllLinks', tab)
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },
             files: ['/js/extract.js'],
         })
         const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copySelectionLinks, [options.removeDuplicates])
+        await injectFunction(copyLinks, [options.removeDuplicates])
+    } else if (ctx.menuItemId === 'copySelLinks') {
+        console.debug('injectFunction: copyLinks: copySelLinks', tab)
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['/js/extract.js'],
+        })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -254,13 +263,14 @@ function createContextMenus(patterns) {
     chrome.contextMenus.removeAll()
     const contexts = [
         [['link'], 'copy', 'Copy Link Text to Clipboard'],
-        [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
+        [['all'], 'copyAllLinks', 'Copy All Links to Clipboard'],
+        [['selection'], 'copySelLinks', 'Copy Selected Links to Clipboard'],
         [['selection'], 'selection', 'Extract Links from Selection'],
-        [['selection', 'link'], 'separator'],
+        [['all'], 'separator'],
         [['all'], 'filters', 'Extract with Filter'],
         [['all'], 'links', 'Extract All Links'],
         [['all'], 'domains', 'Extract All Domains'],
-        [['selection', 'link'], 'separator'],
+        [['all'], 'separator'],
         [['all'], 'options', 'Open Options'],
     ]
     contexts.forEach(addContext)
@@ -280,23 +290,25 @@ function createContextMenus(patterns) {
 /**
  * Add Context from Array
  * @function addContext
- * @param {[[ContextType],String,String,String]} context
+ * @param {[chrome.contextMenus.ContextType[],String,String,chrome.contextMenus.ContextItemType?]} context
  */
 function addContext(context) {
+    // console.debug('addContext:', context)
     try {
-        // console.debug('addContext:', context)
         if (context[1] === 'separator') {
-            context[1] = Math.random().toString().substring(2, 7)
+            const id = Math.random().toString().substring(2, 7)
+            context[1] = `${id}`
             context.push('separator', 'separator')
         }
+        // console.debug('menus.create:', context)
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
             title: context[2],
-            type: context[3],
+            type: context[3] || 'normal',
         })
     } catch (e) {
-        console.warn(`Error Adding Context: ${e.message}`, e)
+        console.log('%cError Adding Context:', 'color: Yellow', e)
     }
 }
 
@@ -330,11 +342,17 @@ function copyActiveElementText(ctx) {
  * Copy All Selected Links
  * @function copySelectionLinks
  * @param {Boolean} removeDuplicates
+ * @param {Boolean} selection
  */
-function copySelectionLinks(removeDuplicates) {
-    // console.debug('copySelectionLinks:', removeDuplicates)
-    const links = extractSelection()
-    // console.debug('links:', links)
+function copyLinks(removeDuplicates, selection = false) {
+    console.debug('copyLinks:', removeDuplicates, selection)
+    let links
+    if (selection) {
+        links = extractSelection()
+    } else {
+        links = extractAllLinks()
+    }
+    console.debug('links:', links)
     let results = []
     for (const link of links) {
         results.push(link.href)

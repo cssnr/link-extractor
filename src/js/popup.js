@@ -169,7 +169,7 @@ async function popupLinks(event) {
     console.debug('href:', href)
     let url
     if (href.endsWith('html/options.html')) {
-        chrome.runtime.openOptionsPage()
+        await chrome.runtime.openOptionsPage()
         window.close()
         return
     } else if (href === '#') {

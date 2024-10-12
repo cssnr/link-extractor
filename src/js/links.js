@@ -544,6 +544,7 @@ function handleKeyboard(e) {
         input?.focus()
         input?.select()
     } else if (['KeyT', 'KeyO'].includes(e.code)) {
+        // noinspection JSIgnoredPromiseFromCall
         chrome.runtime.openOptionsPage()
     }
 }
