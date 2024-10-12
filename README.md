@@ -21,20 +21,20 @@ Feature packed with automatic dark/light mode, copy to clipboard, keyboard short
 
 Website: https://link-extractor.cssnr.com/
 
-* [Install](#Install)
-* [Features](#Features)
-    - [Upcoming Features](#Upcoming-Features)
-    - [Known Issues](#Known-Issues)
-* [Configuration](#Configuration)
-* [Support](#Support)
-* [Development](#Development)
-    - [Building](#Building)
-* [Contributing](#Contributing)
+- [Install](#Install)
+- [Features](#Features)
+  - [Upcoming Features](#Upcoming-Features)
+  - [Known Issues](#Known-Issues)
+- [Configuration](#Configuration)
+- [Support](#Support)
+- [Development](#Development)
+  - [Building](#Building)
+- [Contributing](#Contributing)
 
 ## Install
 
-* [Google Chrome Web Store](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-* [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
+- [Google Chrome Web Store](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+- [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/link-extractor)
 
 [![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://addons.mozilla.org/addon/link-extractor)
@@ -57,38 +57,37 @@ Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discus
 new features.  
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
 
-* Extract All Links and Domains from Any Site
-* Extract Links from Selected Text on any Site
-* Extract Links from Clipboard or Any Text
-* Extract Links from All Selected Tabs
-* Extract Links from PDF Documents
-* Copy Selected Links with right-click Menu
-* Display Additional Link Details and Text
-* Open Multiple Links in Tabs from Text
-* Download Links and Domains as a Text File
-* Copy the Text from a Link via Context Menu
-* Quick Filter Links with a Regular Expression
-* Store Regular Expressions for Quick Filtering
-* Import and Export Saved Regular Expressions
-* Automatic Dark/Light Mode based on Browser Setting
-* Activate from Popup, Context Menu, Keyboard Shortcuts or Omnibox
+- Extract All Links and Domains from Any Site
+- Extract Links from Selected Text on any Site
+- Extract Links from Clipboard or Any Text
+- Extract Links from All Selected Tabs
+- Extract Links from PDF Documents
+- Copy Selected Links with right-click Menu
+- Display Additional Link Details and Text
+- Open Multiple Links in Tabs from Text
+- Download Links and Domains as a Text File
+- Copy the Text from a Link via Context Menu
+- Quick Filter Links with a Regular Expression
+- Store Regular Expressions for Quick Filtering
+- Import and Export Saved Regular Expressions
+- Automatic Dark/Light Mode based on Browser Setting
+- Activate from Popup, Context Menu, Keyboard Shortcuts or Omnibox
 
 [![Link Extractor Screenshots](/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
 
 ### Upcoming Features
 
-* Option to Extract Links from All Text Files (PDF Extraction currently in Beta)
-* Option to Set Names/Titles for Saved Filters
-* Option to Extract Using Multiple Filters with AND/OR
+- Option to Extract Links from All Text Files (PDF Extraction currently in Beta)
+- Option to Set Names/Titles for Saved Filters
+- Option to Extract Using Multiple Filters with AND/OR
 
-> [!TIP]
-> **Don't see your feature here?**
+> [!TIP] > **Don't see your feature here?**
 > Request one on
 > the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
 
 ### Known Issues
 
-- Unable to grant host permissions on Kiwi Browser (Kiwi is expected to update before the end of the year). 
+- Unable to grant host permissions on Kiwi Browser (Kiwi is expected to update before the end of the year).
 
 For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
 

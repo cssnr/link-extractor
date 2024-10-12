@@ -1,6 +1,5 @@
 {
   "trailingComma": "es5",
-  "tabWidth": 4,
   "semi": false,
   "singleQuote": true,
   "overrides": [
@@ -11,9 +10,9 @@
       }
     },
     {
-      "files": ["**/*.json", "**/*.yaml", "**/*.yml"],
+      "files": ["**/*.js", "**/*.css", "**/*.scss"],
       "options": {
-        "tabWidth": 2
+        "tabWidth": 4
       }
     }
   ]
