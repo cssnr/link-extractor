@@ -26,17 +26,36 @@
     <div class="clearfix"></div>
     <p class="text-center lead">v<span class="version"></span></p>
 
-    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover d-none">
-        <caption class="visually-hidden">Keyboard Shortcuts</caption>
-        <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-        <tbody></tbody>
-        <tfoot class="d-none">
-        <tr>
-            <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
-            <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
-        </tr>
-        </tfoot>
-    </table>
+    <div id="keyboard-shortcuts" class="d-none">
+        <div class="d-flex flex-row align-items-center justify-content-center">
+            <hr class="w-100 my-0">
+            <span class="text-nowrap mx-2">Keyboard Shortcuts</span>
+            <hr class="w-100 my-0">
+        </div>
+        <table class="table table-sm table-borderless table-hover">
+            <caption class="visually-hidden">Keyboard Shortcuts</caption>
+            <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
+            <tbody></tbody>
+            <tfoot class="d-none">
+            <tr>
+                <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
+                <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
+            </tr>
+            </tfoot>
+        </table>
+        <div class="mb-2">
+            Manage Keyboard Shortcuts:
+            <a class="text-decoration-none d-inline-block d-none firefox" href="https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox" target="_blank" rel="noopener">
+                https://mzl.la/3Qwp5QQ <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+            <a id="chrome-shortcuts" class="d-inline-block d-none chrome" role="button">chrome://extensions/shortcuts</a>
+        </div>
+    </div>
+
+    <div class="d-flex flex-row align-items-center justify-content-center">
+        <hr class="w-100 my-0">
+        <span class="text-nowrap mx-2">General Options</span>
+        <hr class="w-100 my-0">
+    </div>
 
     <form id="options-form">
         <div class="row">
@@ -48,7 +67,7 @@
                     Regex Flags for Filtering.
                     <a class="ms-1 text-decoration-none" target="_blank" rel="noopener"
                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags">
-                        More Info <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        More Info <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
                 </div>
             </div>
         </div>
@@ -115,7 +134,7 @@
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                 data-bs-title="Allow Extracting Links from Multiple Selected Tabs.">
             <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
-        <span class="text-center d-inline-block"><a href="../html/permissions.html">More about Permissions</a></span>
+        <span class="text-center small d-inline-block"><a href="../html/permissions.html">More about Permissions</a></span>
     </div>
     <div class="d-none has-perms my-3">
         <button class="link-danger btn btn-sm btn-link revoke-permissions" type="button"
@@ -124,7 +143,11 @@
             Remove Host Permissions</button>
     </div>
 
-    <hr>
+    <div class="d-flex flex-row align-items-center justify-content-center">
+        <hr class="w-100 my-0">
+        <span class="text-nowrap mx-2">Saved Filters</span>
+        <hr class="w-100 my-0">
+    </div>
 
     <form id="filters-form" class="mb-1">
         <label class="form-label" for="add-filter"><i class="fa-solid fa-filter me-2"></i> Filters</label>

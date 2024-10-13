@@ -10,6 +10,7 @@ import {
     onRemoved,
     revokePerms,
     saveOptions,
+    updateBrowser,
     updateManifest,
     updateOptions,
 } from './exports.js'
@@ -34,14 +35,19 @@ document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', grantPerms))
 document
-    .getElementById('options-form')
-    .addEventListener('submit', (e) => e.preventDefault())
-document
     .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
+    .getElementById('options-form')
+    .addEventListener('submit', (e) => e.preventDefault())
+document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
+document
+    .getElementById('chrome-shortcuts')
+    ?.addEventListener('click', () =>
+        chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
+    )
 
 document.getElementById('export-data').addEventListener('click', exportClick)
 document.getElementById('import-data').addEventListener('click', importClick)
@@ -60,7 +66,15 @@ async function initOptions() {
     // noinspection ES6MissingAwait
     updateManifest()
     // noinspection ES6MissingAwait
-    setShortcuts()
+    updateBrowser()
+    // noinspection ES6MissingAwait
+    setShortcuts([
+        '_execute_action',
+        'extractAll',
+        'extractSelection',
+        'copyAll',
+        'copySelection',
+    ])
     // noinspection ES6MissingAwait
     checkPerms()
     chrome.storage.sync.get(['options', 'patterns']).then((items) => {
@@ -419,24 +433,34 @@ function beginEditing(event, idx) {
 /**
  * Set Keyboard Shortcuts
  * @function setShortcuts
- * @param {String} selector
+ * @param {Array} names
+ * @param {String} [selector]
+ * @return {Promise<void>}
  */
-async function setShortcuts(selector = '#keyboard-shortcuts') {
+async function setShortcuts(names, selector = '#keyboard-shortcuts') {
     if (!chrome.commands) {
         return console.debug('Skipping: chrome.commands')
     }
-    const table = document.querySelector(selector)
-    table.classList.remove('d-none')
+    const parent = document.querySelector(selector)
+    parent.classList.remove('d-none')
+    const table = parent.querySelector('table')
+    console.log('table:', table)
     const tbody = table.querySelector('tbody')
     const source = table.querySelector('tfoot > tr').cloneNode(true)
+    // console.log('source:', source)
     const commands = await chrome.commands.getAll()
-    for (const command of commands) {
-        // console.debug('command:', command)
+    // console.log('commands:', commands)
+    for (const name of names) {
+        const command = commands.find((x) => x.name === name)
+        console.debug('command:', command)
+        if (!command) {
+            console.warn('Command Not Found:', command)
+        }
         const row = source.cloneNode(true)
-        // TODO: Chrome does not parse the description for _execute_action in manifest.json
         let description = command.description
+        // Note: Chrome does not parse the description for _execute_action in manifest.json
         if (!description && command.name === '_execute_action') {
-            description = 'Show Main Popup Action'
+            description = 'Show Popup Action'
         }
         row.querySelector('.description').textContent = description
         row.querySelector('kbd').textContent = command.shortcut || 'Not Set'

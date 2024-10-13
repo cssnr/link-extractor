@@ -394,3 +394,18 @@ export function detectBrowser() {
     }
     return browser
 }
+
+/**
+ * @function updateBrowser
+ * @return {Promise<void>}
+ */
+export function updateBrowser() {
+    let selector = '.chrome'
+    // noinspection JSUnresolvedReference
+    if (typeof browser !== 'undefined') {
+        selector = '.firefox'
+    }
+    document
+        .querySelectorAll(selector)
+        .forEach((el) => el.classList.remove('d-none'))
+}

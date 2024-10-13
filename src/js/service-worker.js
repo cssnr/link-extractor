@@ -142,11 +142,32 @@ async function onClicked(ctx, tab) {
  * On Command Callback
  * @function onCommand
  * @param {String} command
+ * @param {chrome.tabs.Tab} tab
  */
-async function onCommand(command) {
-    console.log('onCommand:', command)
-    if (command === 'extract') {
+async function onCommand(command, tab) {
+    console.log(`onCommand: ${command}:`, tab)
+    if (command === 'extractAll') {
+        console.debug('extractAll')
         await injectTab()
+    } else if (command === 'extractSelection') {
+        console.debug('extractSelection')
+        await injectTab({ selection: true })
+    } else if (command === 'copyAll') {
+        console.debug('copyAll')
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['/js/extract.js'],
+        })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates])
+    } else if (command === 'copySelection') {
+        console.debug('copySelection')
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['/js/extract.js'],
+        })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
         console.error(`Unknown command: ${command}`)
     }
@@ -267,9 +288,9 @@ function createContextMenus(patterns) {
         [['selection'], 'copySelLinks', 'Copy Selected Links to Clipboard'],
         [['selection'], 'selection', 'Extract Links from Selection'],
         [['all'], 'separator'],
-        [['all'], 'filters', 'Extract with Filter'],
         [['all'], 'links', 'Extract All Links'],
-        [['all'], 'domains', 'Extract All Domains'],
+        [['all'], 'filters', 'Extract with Filter'],
+        [['all'], 'domains', 'Extract Domains Only'],
         [['all'], 'separator'],
         [['all'], 'options', 'Open Options'],
     ]
