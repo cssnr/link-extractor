@@ -107,7 +107,7 @@ async function onClicked(ctx, tab) {
         await injectTab({ domains: true })
     } else if (ctx.menuItemId === 'selection') {
         console.debug('injectTab: selection')
-        await injectTab({ selection: true })
+        await injectTab({ tab, selection: true })
     } else if (ctx.menuItemId.startsWith('filter-')) {
         const i = ctx.menuItemId.split('-')[1]
         console.debug(`injectTab: filter-${i}`)
@@ -119,18 +119,14 @@ async function onClicked(ctx, tab) {
         await injectFunction(copyActiveElementText, [ctx])
     } else if (ctx.menuItemId === 'copyAllLinks') {
         console.debug('injectFunction: copyLinks: copyAllLinks', tab)
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/extract.js'],
-        })
+        // await injectCopyLinks(tab)
+        await injectTab({ tab, open: false })
         const { options } = await chrome.storage.sync.get(['options'])
         await injectFunction(copyLinks, [options.removeDuplicates])
     } else if (ctx.menuItemId === 'copySelLinks') {
         console.debug('injectFunction: copyLinks: copySelLinks', tab)
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/extract.js'],
-        })
+        // await injectCopyLinks(tab, true)
+        await injectTab({ tab, open: false })
         const { options } = await chrome.storage.sync.get(['options'])
         await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
@@ -154,18 +150,14 @@ async function onCommand(command, tab) {
         await injectTab({ selection: true })
     } else if (command === 'copyAll') {
         console.debug('copyAll')
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/extract.js'],
-        })
+        // await injectCopyLinks(tab)
+        await injectTab({ open: false })
         const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copyLinks, [options.removeDuplicates])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else if (command === 'copySelection') {
         console.debug('copySelection')
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/extract.js'],
-        })
+        // await injectCopyLinks(tab, true)
+        await injectTab({ open: false })
         const { options } = await chrome.storage.sync.get(['options'])
         await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
@@ -360,7 +352,7 @@ function copyActiveElementText(ctx) {
 }
 
 /**
- * Copy All Selected Links
+ * Copy All Links
  * @function copySelectionLinks
  * @param {Boolean} removeDuplicates
  * @param {Boolean} selection
@@ -392,19 +384,32 @@ function copyLinks(removeDuplicates, selection = false) {
     }
 }
 
+// async function injectCopyLinks(tab, selection = false) {
+//     console.debug('copySelection')
+//     await chrome.scripting.executeScript({
+//         target: { tabId: tab.id },
+//         files: ['/js/extract.js'],
+//     })
+//     const { options } = await chrome.storage.sync.get(['options'])
+//     await injectFunction(copyLinks, [options.removeDuplicates, selection])
+// }
+
 /**
  * Inject Function into Current Tab with args
  * @function injectFunction
  * @param {Function} func
  * @param {Array} args
+ * @return {Promise<*>}
  */
 async function injectFunction(func, args) {
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    await chrome.scripting.executeScript({
+    const results = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: func,
         args: args,
     })
+    console.log('results:', results)
+    return results[0]?.result
 }
 
 /**
@@ -414,7 +419,7 @@ async function injectFunction(func, args) {
  * @return {Promise<Object>}
  */
 async function setDefaultOptions(defaultOptions) {
-    console.log('setDefaultOptions', defaultOptions)
+    console.log('setDefaultOptions:', defaultOptions)
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -441,7 +446,7 @@ async function setDefaultOptions(defaultOptions) {
     }
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.debug('changed:', options)
+        console.debug('changed options:', options)
     }
 
     return { options, patterns }

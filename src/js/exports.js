@@ -4,39 +4,37 @@ export const githubURL = 'https://github.com/cssnr/link-extractor'
 
 /**
  * Inject extract.js to Tab and Open links.html with params
- * @function processLinks
+ * @function injectTab
  * @param {Object} injectOptions Inject Tab Options
  * @param {String} [injectOptions.filter] Regex Filter
  * @param {Boolean} [injectOptions.domains] Only Domains
  * @param {Boolean} [injectOptions.selection] Only Selection
+ * @param {Boolean} [injectOptions.open] Open Links Page
+ * @param {chrome.tabs.Tab} [injectOptions.tab] Open Links Page
  * @return {Promise<void>}
  */
 export async function injectTab({
     filter = null,
     domains = false,
     selection = false,
+    open = true,
+    tab = null,
 } = {}) {
     console.log('injectTab:', filter, domains, selection)
 
     // Extract tabIds from all highlighted tabs
     const tabIds = []
-    const tabs = await chrome.tabs.query({
-        currentWindow: true,
-        highlighted: true,
-    })
-    if (!tabs.length) {
-        const [tab] = await chrome.tabs.query({
-            currentWindow: true,
-            active: true,
-        })
-        console.debug(`tab: ${tab.id}`, tab)
+    if (tab) {
         tabIds.push(tab.id)
     } else {
+        const tabs = await chrome.tabs.query({
+            currentWindow: true,
+            highlighted: true,
+        })
+        console.debug('tabs:', tabs)
         for (const tab of tabs) {
             console.debug(`tab: ${tab.id}`, tab)
-            // tab.url undefined means we do not have permissions on this tab
             if (!tab.url) {
-                // chrome.runtime.openOptionsPage()
                 const url = new URL(
                     chrome.runtime.getURL('/html/permissions.html')
                 )
@@ -49,25 +47,11 @@ export async function injectTab({
             tabIds.push(tab.id)
         }
     }
-    if (!tabIds.length) {
-        console.log('%cNo Tab IDs to Inject', 'color: Yellow')
-        return
-    }
     console.log('tabIds:', tabIds)
-
-    // Create URL to links.html
-    const url = new URL(chrome.runtime.getURL('/html/links.html'))
-
-    // Set URL searchParams
-    url.searchParams.set('tabs', tabIds.join(','))
-    if (filter) {
-        url.searchParams.set('filter', filter)
-    }
-    if (domains) {
-        url.searchParams.set('domains', domains.toString())
-    }
-    if (selection) {
-        url.searchParams.set('selection', selection.toString())
+    if (!tabIds.length) {
+        // TODO: Display Error to User
+        console.error('No Tab IDs to Inject')
+        return
     }
 
     // Inject extract.js which listens for messages
@@ -79,6 +63,23 @@ export async function injectTab({
         })
     }
 
+    // Create URL to links.html if open
+    if (!open) {
+        console.debug('Skipping opening links.html on !open:', open)
+        return
+    }
+    const url = new URL(chrome.runtime.getURL('/html/links.html'))
+    // Set URL searchParams
+    url.searchParams.set('tabs', tabIds.join(','))
+    if (filter) {
+        url.searchParams.set('filter', filter)
+    }
+    if (domains) {
+        url.searchParams.set('domains', domains.toString())
+    }
+    if (selection) {
+        url.searchParams.set('selection', selection.toString())
+    }
     // Open Tab to links.html with desired params
     console.debug(`url: ${url.href}`)
     await chrome.tabs.create({ active: true, url: url.href })
