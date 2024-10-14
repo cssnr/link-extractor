@@ -12,11 +12,23 @@
       },
       "description": "Show Main Popup Action"
     },
-    "extract": {
+    "extractAll": {
       "suggested_key": {
         "default": "Alt+Shift+X"
       },
       "description": "Extract Links from Tab(s)"
+    },
+    "extractSelection": {
+      "description": "Extract Links from Selected Text"
+    },
+    "copyAll": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Copy Links from Tab(s)"
+    },
+    "copySelection": {
+      "description": "Copy Links from Selected Text"
     }
   },
   "omnibox": {

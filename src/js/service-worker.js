@@ -37,6 +37,7 @@ async function onInstalled(details) {
         createContextMenus(patterns)
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        // noinspection ES6MissingAwait
         chrome.runtime.openOptionsPage()
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
@@ -49,7 +50,6 @@ async function onInstalled(details) {
             }
         }
     }
-    setUninstallURL()
     checkPerms().then((hasPerms) => {
         if (hasPerms) {
             onAdded()
@@ -57,6 +57,7 @@ async function onInstalled(details) {
             onRemoved()
         }
     })
+    setUninstallURL()
 }
 
 /**
@@ -97,7 +98,7 @@ function setUninstallURL() {
 async function onClicked(ctx, tab) {
     console.log('onClicked:', ctx, tab)
     if (['options', 'filters'].includes(ctx.menuItemId)) {
-        chrome.runtime.openOptionsPage()
+        await chrome.runtime.openOptionsPage()
     } else if (ctx.menuItemId === 'links') {
         console.debug('injectTab: links')
         await injectTab()
@@ -106,7 +107,7 @@ async function onClicked(ctx, tab) {
         await injectTab({ domains: true })
     } else if (ctx.menuItemId === 'selection') {
         console.debug('injectTab: selection')
-        await injectTab({ selection: true })
+        await injectTab({ tab, selection: true })
     } else if (ctx.menuItemId.startsWith('filter-')) {
         const i = ctx.menuItemId.split('-')[1]
         console.debug(`injectTab: filter-${i}`)
@@ -114,16 +115,20 @@ async function onClicked(ctx, tab) {
         console.debug(`filter: ${patterns[i]}`)
         await injectTab({ filter: patterns[i] })
     } else if (ctx.menuItemId === 'copy') {
-        console.debug('injectFunction: copy: copyActiveElementText')
+        console.debug('injectFunction: copyActiveElementText: copy', ctx)
         await injectFunction(copyActiveElementText, [ctx])
-    } else if (ctx.menuItemId === 'copyLinks') {
-        console.debug('injectFunction: copyLinks: copySelectionLinks', tab)
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/extract.js'],
-        })
+    } else if (ctx.menuItemId === 'copyAllLinks') {
+        console.debug('injectFunction: copyLinks: copyAllLinks', tab)
+        // await injectCopyLinks(tab)
+        await injectTab({ tab, open: false })
         const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copySelectionLinks, [options.removeDuplicates])
+        await injectFunction(copyLinks, [options.removeDuplicates])
+    } else if (ctx.menuItemId === 'copySelLinks') {
+        console.debug('injectFunction: copyLinks: copySelLinks', tab)
+        // await injectCopyLinks(tab, true)
+        await injectTab({ tab, open: false })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
@@ -133,11 +138,28 @@ async function onClicked(ctx, tab) {
  * On Command Callback
  * @function onCommand
  * @param {String} command
+ * @param {chrome.tabs.Tab} tab
  */
-async function onCommand(command) {
-    console.log('onCommand:', command)
-    if (command === 'extract') {
+async function onCommand(command, tab) {
+    console.log(`onCommand: ${command}:`, tab)
+    if (command === 'extractAll') {
+        console.debug('extractAll')
         await injectTab()
+    } else if (command === 'extractSelection') {
+        console.debug('extractSelection')
+        await injectTab({ selection: true })
+    } else if (command === 'copyAll') {
+        console.debug('copyAll')
+        // await injectCopyLinks(tab)
+        await injectTab({ open: false })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
+    } else if (command === 'copySelection') {
+        console.debug('copySelection')
+        // await injectCopyLinks(tab, true)
+        await injectTab({ open: false })
+        const { options } = await chrome.storage.sync.get(['options'])
+        await injectFunction(copyLinks, [options.removeDuplicates, true])
     } else {
         console.error(`Unknown command: ${command}`)
     }
@@ -254,13 +276,14 @@ function createContextMenus(patterns) {
     chrome.contextMenus.removeAll()
     const contexts = [
         [['link'], 'copy', 'Copy Link Text to Clipboard'],
-        [['selection'], 'copyLinks', 'Copy Selected Links to Clipboard'],
+        [['all'], 'copyAllLinks', 'Copy All Links to Clipboard'],
+        [['selection'], 'copySelLinks', 'Copy Selected Links to Clipboard'],
         [['selection'], 'selection', 'Extract Links from Selection'],
-        [['selection', 'link'], 'separator'],
-        [['all'], 'filters', 'Extract with Filter'],
+        [['all'], 'separator'],
         [['all'], 'links', 'Extract All Links'],
-        [['all'], 'domains', 'Extract All Domains'],
-        [['selection', 'link'], 'separator'],
+        [['all'], 'filters', 'Extract with Filter'],
+        [['all'], 'domains', 'Extract Domains Only'],
+        [['all'], 'separator'],
         [['all'], 'options', 'Open Options'],
     ]
     contexts.forEach(addContext)
@@ -280,23 +303,25 @@ function createContextMenus(patterns) {
 /**
  * Add Context from Array
  * @function addContext
- * @param {[[ContextType],String,String,String]} context
+ * @param {[chrome.contextMenus.ContextType[],String,String,chrome.contextMenus.ContextItemType?]} context
  */
 function addContext(context) {
+    // console.debug('addContext:', context)
     try {
-        // console.debug('addContext:', context)
         if (context[1] === 'separator') {
-            context[1] = Math.random().toString().substring(2, 7)
+            const id = Math.random().toString().substring(2, 7)
+            context[1] = `${id}`
             context.push('separator', 'separator')
         }
+        // console.debug('menus.create:', context)
         chrome.contextMenus.create({
             contexts: context[0],
             id: context[1],
             title: context[2],
-            type: context[3],
+            type: context[3] || 'normal',
         })
     } catch (e) {
-        console.warn(`Error Adding Context: ${e.message}`, e)
+        console.log('%cError Adding Context:', 'color: Yellow', e)
     }
 }
 
@@ -327,14 +352,20 @@ function copyActiveElementText(ctx) {
 }
 
 /**
- * Copy All Selected Links
+ * Copy All Links
  * @function copySelectionLinks
  * @param {Boolean} removeDuplicates
+ * @param {Boolean} selection
  */
-function copySelectionLinks(removeDuplicates) {
-    // console.debug('copySelectionLinks:', removeDuplicates)
-    const links = extractSelection()
-    // console.debug('links:', links)
+function copyLinks(removeDuplicates, selection = false) {
+    console.debug('copyLinks:', removeDuplicates, selection)
+    let links
+    if (selection) {
+        links = extractSelection()
+    } else {
+        links = extractAllLinks()
+    }
+    console.debug('links:', links)
     let results = []
     for (const link of links) {
         results.push(link.href)
@@ -353,19 +384,32 @@ function copySelectionLinks(removeDuplicates) {
     }
 }
 
+// async function injectCopyLinks(tab, selection = false) {
+//     console.debug('copySelection')
+//     await chrome.scripting.executeScript({
+//         target: { tabId: tab.id },
+//         files: ['/js/extract.js'],
+//     })
+//     const { options } = await chrome.storage.sync.get(['options'])
+//     await injectFunction(copyLinks, [options.removeDuplicates, selection])
+// }
+
 /**
  * Inject Function into Current Tab with args
  * @function injectFunction
  * @param {Function} func
  * @param {Array} args
+ * @return {Promise<*>}
  */
 async function injectFunction(func, args) {
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    await chrome.scripting.executeScript({
+    const results = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: func,
         args: args,
     })
+    console.log('results:', results)
+    return results[0]?.result
 }
 
 /**
@@ -375,7 +419,7 @@ async function injectFunction(func, args) {
  * @return {Promise<Object>}
  */
 async function setDefaultOptions(defaultOptions) {
-    console.log('setDefaultOptions', defaultOptions)
+    console.log('setDefaultOptions:', defaultOptions)
     let { options, patterns } = await chrome.storage.sync.get([
         'options',
         'patterns',
@@ -402,7 +446,7 @@ async function setDefaultOptions(defaultOptions) {
     }
     if (changed) {
         await chrome.storage.sync.set({ options })
-        console.debug('changed:', options)
+        console.debug('changed options:', options)
     }
 
     return { options, patterns }

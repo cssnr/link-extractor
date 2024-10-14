@@ -95,7 +95,8 @@ function extractSelection() {
         if (ancestor.nodeName === '#text') {
             continue
         }
-        ancestor.querySelectorAll('a, area').forEach((el) => {
+        // console.debug('ancestor:', ancestor)
+        ancestor?.querySelectorAll('a, area')?.forEach((el) => {
             if (selection.containsNode(el, true)) {
                 // console.debug('el:', el)
                 pushElement(links, el)
