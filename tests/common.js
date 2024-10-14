@@ -15,6 +15,7 @@ async function getBrowser() {
         args: [
             `--disable-extensions-except=${pathToExtension}`,
             `--load-extension=${pathToExtension}`,
+            '--no-sandbox',
             // '--disable-blink-features=AutomationControlled',
             // '--disable-features=ChromeUserPermPrompt',
         ],
