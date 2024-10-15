@@ -73,11 +73,52 @@
         </div>
 
         <div class="form-check form-switch">
-            <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad">
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad" data-related="lazyOptions">
             <label class="form-check-label me-1" for="lazyLoad">Lazy Load Opened Tabs</label>
             <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Don't Load Tabs Until Clicked On"></i>
         </div>
+        <div id="lazyOptions" class="ms-3" style="display: none;">
+            <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyFavicon" data-related="lazyIcons">
+                <label class="form-check-label me-1" for="lazyFavicon">Show Favicon on Lazy Tabs</label>
+                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   data-bs-title="Show Favicon on Lazy Tabs"></i>
+            </div>
+            <div id="lazyIcons" class="row ms-4" style="display: none;">
+                <div class="form-check col-auto">
+                    <input id="default" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="default" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <i class="fa-regular fa-circle-question" data-bs-title="Default Icon from Site."
+                           data-bs-toggle="tooltip" data-bs-trigger="hover"></i>
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-white" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-white" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="White" src="/images/lazy/icon-white.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto ">
+                    <input id="icon-black" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-black" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Black" src="/images/lazy/icon-black.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-yellow" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-yellow" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Yellow" src="/images/lazy/icon-yellow.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-red" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-red" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Red" src="/images/lazy/icon-red.png" style="height: 1em;">
+                    </label>
+                </div>
+            </div> <!-- lazyIcons -->
+        </div> <!-- lazyOptions -->
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
             <label class="form-check-label me-1" for="removeDuplicates">Remove Duplicate Links</label>
@@ -154,7 +195,7 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn" required>
             <button class="btn btn-outline-success" type="submit" id="add-filter-btn">
-                Add <i class="fa-solid fa-plus ms-1"></i>
+                Add <i class="fa-solid fa-circle-plus ms-1"></i>
             </button>
         </div>
     </form>

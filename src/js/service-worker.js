@@ -24,6 +24,8 @@ async function onInstalled(details) {
         linksDisplay: -1,
         flags: 'ig',
         lazyLoad: true,
+        lazyFavicon: true,
+        radioFavicon: 'default',
         removeDuplicates: true,
         defaultFilter: true,
         saveState: true,
