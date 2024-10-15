@@ -60,7 +60,8 @@
         <div class="row">
             <div class="col-12 mb-2">
                 <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
-                <a id="reset-default" class="float-end align-bottom small text-decoration-none" role="button">Reset</a>
+                <a id="reset-regex" class="float-end align-bottom small text-decoration-none" role="button"
+                   data-value="ig" data-reset-input="flags">Reset</a>
                 <input id="flags" type="text" class="form-control" autocomplete="off">
                 <div id="flagsHelp" class="form-text">
                     Regex Flags for Filtering.
@@ -128,18 +129,22 @@
 <!--                </div>-->
 <!--            </div>-->
 
+            <label for="lazyTitle" class="">Lazy Tab Title</label>
             <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-sm-2">
-                <div class="">
-                    <label for="lazyTitle" class="col-form-label">Title</label>
-                </div>
+<!--                <div class="">-->
+<!--                    <label for="lazyTitle" class="col-form-label">Title</label>-->
+<!--                </div>-->
                 <div class="flex-fill">
 <!--                    <input type="text" id="lazyTitle" class="form-control form-control-sm" aria-describedby="lazyTitleHelp">-->
                     <div class="input-group input-group-sm">
                         <input id="lazyTitle" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="lazyTitleHelp">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
-                               data-bs-title="Title for Lazy Loaded Tabs."></i>
+                        <span id="reset-title" class="input-group-text text-warning-emphasis" role="button"
+                              data-value="[{host}{pathname}]" data-reset-input="lazyTitle">
+                            <i class="fa-solid fa-rotate-left" data-bs-title="Reset to Default." data-bs-toggle="tooltip"></i>
                         </span>
+<!--                        <span class="input-group-text">-->
+<!--                            <i class="fa-solid fa-circle-info" data-bs-title="Title for Lazy Loaded Tabs." data-bs-toggle="tooltip"></i>-->
+<!--                        </span>-->
                     </div>
                 </div>
                 <div class="">

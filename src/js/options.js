@@ -26,7 +26,8 @@ document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
-document.getElementById('reset-default').addEventListener('click', resetForm)
+// document.getElementById('reset-regex').addEventListener('click', resetRegex)
+// document.getElementById('reset-title').addEventListener('click', resetTitle)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
     .querySelectorAll('.revoke-permissions')
@@ -34,6 +35,9 @@ document
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', grantPerms))
+document
+    .querySelectorAll('[data-reset-input]')
+    .forEach((el) => el.addEventListener('click', resetInput))
 document
     .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -196,19 +200,57 @@ async function deleteFilter(event, index = undefined) {
 }
 
 /**
- * Reset Options Form Click Callback
- * @function resetForm
+ * Reset Title Input Callback
+ * @function resetInput
  * @param {InputEvent} event
  */
-async function resetForm(event) {
-    console.debug('resetForm:', event)
+async function resetInput(event) {
+    console.debug('resetInput:', event)
+    const target = event.currentTarget
     event.preventDefault()
-    const input = document.getElementById('flags')
-    input.value = 'ig'
+    console.debug('target:', target)
+    const id = target.dataset.resetInput
+    console.debug('id:', id)
+    const value = target.dataset.value
+    console.debug('value:', value)
+    const input = document.getElementById(id)
+    console.debug('input:', input)
+    input.value = value
     input.classList.remove('is-invalid')
     input.focus()
-    await saveOptions(event)
+    // event.currentTarget = target
+    await saveOptions(event, target)
 }
+
+// /**
+//  * Reset Regex Input Click Callback
+//  * @function resetRegex
+//  * @param {InputEvent} event
+//  */
+// async function resetRegex(event) {
+//     console.debug('resetRegex:', event)
+//     event.preventDefault()
+//     const input = document.getElementById('flags')
+//     input.value = 'ig'
+//     input.classList.remove('is-invalid')
+//     input.focus()
+//     await saveOptions(event)
+// }
+//
+// /**
+//  * Reset Title Input Click Callback
+//  * @function resetTitle
+//  * @param {InputEvent} event
+//  */
+// async function resetTitle(event) {
+//     console.debug('resetTitle:', event)
+//     event.preventDefault()
+//     const input = document.getElementById('lazyTitle')
+//     input.value = '[{host}{pathname}]'
+//     input.classList.remove('is-invalid')
+//     input.focus()
+//     await saveOptions(event)
+// }
 
 let row
 let last = -1

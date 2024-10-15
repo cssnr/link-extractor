@@ -36,7 +36,7 @@ if (typeof ClipboardJS !== 'undefined') {
     })
 }
 
-$('.form-control').on('focus change input', function () {
+$('.form-control').on('change input', function () {
     $(this).removeClass('is-invalid')
 })
 

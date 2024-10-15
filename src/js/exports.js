@@ -141,14 +141,21 @@ function hideShowElement(selector, show, speed = 'fast') {
  * Save Options Callback
  * @function saveOptions
  * @param {InputEvent} event
+ * @param {HTMLInputElement} [target]
  */
-export async function saveOptions(event) {
+export async function saveOptions(event, target) {
     console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target?.id
+    target = event.currentTarget || target
+    console.debug('target:', target)
+    // const target = event.currentTarget
+    // console.debug('target', target)
+    let key = target?.id || event.target?.id
+    console.debug('key:', key)
     let value
-    if (['flags', 'reset-default'].includes(event.target.id)) {
-        key = 'flags'
+    // if (['flags', 'reset-regex'].includes(event.target.id)) {
+    if (key === 'flags') {
+        // key = 'flags'
         /** @type {HTMLInputElement} */
         const element = document.getElementById(key)
         let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
@@ -164,8 +171,15 @@ export async function saveOptions(event) {
         }
         element.value = flags
         value = flags
-    } else if (event.target.id === 'linksDisplay') {
-        value = parseInt(event.target.value)
+    } else if (key.startsWith('reset-')) {
+        console.debug('event:', event)
+        console.debug('key:', target.dataset.resetInput)
+        key = target.dataset.resetInput
+        /** @type {HTMLInputElement} */
+        const element = document.getElementById(key)
+        console.debug('element:', element)
+        element.value = target.dataset.value
+        value = target.dataset.value
     } else if (event.target.type === 'radio') {
         key = event.target.name
         const radios = document.getElementsByName(key)
