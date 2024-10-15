@@ -13,8 +13,10 @@ document.title = `${url.host}${url.pathname}`
 chrome.storage.sync.get(['options']).then((items) => {
     console.debug('options:', items.options)
     if (items.options.lazyFavicon) {
-        const link = document.createElement('link')
-        link.rel = 'icon'
+        // const link = document.createElement('link')
+        const link = document.querySelector('link[rel="icon"]')
+        console.debug('link:', link)
+        // link.rel = 'icon'
         if (items.options.radioFavicon === 'default') {
             link.href = `${url.origin}/favicon.ico`
         } else {
@@ -22,7 +24,7 @@ chrome.storage.sync.get(['options']).then((items) => {
             link.href = chrome.runtime.getURL(path)
         }
         console.debug('link.href:', link.href)
-        document.head.appendChild(link)
+        // document.head.appendChild(link)
     }
 })
 
