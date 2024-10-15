@@ -25,6 +25,7 @@ async function onInstalled(details) {
         flags: 'ig',
         lazyLoad: true,
         lazyFavicon: true,
+        lazyTitle: '[{host}{pathname}]',
         radioFavicon: 'default',
         removeDuplicates: true,
         defaultFilter: true,
@@ -349,7 +350,7 @@ function copyActiveElementText(ctx) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.log('No Text to Copy.', 'color: Yellow')
+        console.log('%cNo Text to Copy.', 'color: Yellow')
     }
 }
 
@@ -382,7 +383,7 @@ function copyLinks(removeDuplicates, selection = false) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.info('No Links to Copy.')
+        console.log('%cNo Links to Copy.', 'color: Yellow')
     }
 }
 
@@ -430,7 +431,7 @@ async function setDefaultOptions(defaultOptions) {
 
     // patterns
     if (!patterns) {
-        console.info('Set patterns to empty array.')
+        console.log('Init patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }

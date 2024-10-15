@@ -3,7 +3,7 @@
 const searchParams = new URLSearchParams(window.location.search)
 const url = new URL(searchParams.get('url'))
 
-document.title = `${url.host}${url.pathname}`
+// document.title = `${url.host}${url.pathname}`
 
 // const link = document.createElement('link')
 // link.rel = 'icon'
@@ -12,6 +12,14 @@ document.title = `${url.host}${url.pathname}`
 
 chrome.storage.sync.get(['options']).then((items) => {
     console.debug('options:', items.options)
+    // if (items.options.lazyFavicon) {
+    // const urlPath = `${url.host}${url.pathname}`
+    let title = items.options.lazyTitle
+    title = title.replace('{host}', url.host)
+    title = title.replace('{pathname}', url.pathname)
+    console.debug('title:', title)
+    document.title = title
+    // }
     if (items.options.lazyFavicon) {
         // const link = document.createElement('link')
         const link = document.querySelector('link[rel="icon"]')
