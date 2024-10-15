@@ -77,7 +77,7 @@
             <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Don't Load Tabs Until Clicked On"></i>
         </div>
-        <div id="lazyOptions" class="ms-3" style="display: none;">
+        <div id="lazyOptions" class="ms-4 mb-1" style="display: none;">
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyFavicon" data-related="lazyIcons">
                 <label class="form-check-label me-1" for="lazyFavicon">Show Favicon on Lazy Tabs</label>
@@ -132,15 +132,22 @@
                 <div class="">
                     <label for="lazyTitle" class="col-form-label">Title</label>
                 </div>
-                <div class="">
-                    <input type="text" id="lazyTitle" class="form-control form-control-sm" aria-describedby="lazyTitleHelp">
+                <div class="flex-fill">
+<!--                    <input type="text" id="lazyTitle" class="form-control form-control-sm" aria-describedby="lazyTitleHelp">-->
+                    <div class="input-group input-group-sm">
+                        <input id="lazyTitle" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="lazyTitleHelp">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
+                               data-bs-title="Title for Lazy Loaded Tabs."></i>
+                        </span>
+                    </div>
                 </div>
                 <div class="">
-                    <span id="lazyTitleHelp" class="form-text">Variables: <kbd>{host}</kbd> and <kbd>{pathname}</kbd></span>
+                    <span id="lazyTitleHelp" class="form-text">Vars: <kbd>{host}</kbd> and <kbd>{pathname}</kbd></span>
                 </div>
             </div>
-
         </div> <!-- lazyOptions -->
+
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
             <label class="form-check-label me-1" for="removeDuplicates">Remove Duplicate Links</label>

@@ -181,20 +181,19 @@ async function onChanged(changes, namespace) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
                 if (newValue?.contextMenu) {
-                    console.log('Enabled contextMenu...')
-                    const { patterns } = await chrome.storage.sync.get([
-                        'patterns',
-                    ])
-                    createContextMenus(patterns)
+                    console.log('contextMenu: %cEnabling.', 'color: Lime')
+                    chrome.storage.sync
+                        .get(['patterns'])
+                        .then((items) => createContextMenus(items.patterns))
                 } else {
-                    console.log('Disabled contextMenu...')
+                    console.log('contextMenu: %cDisabling.', 'color: OrangeRed')
                     chrome.contextMenus.removeAll()
                 }
             }
         } else if (namespace === 'sync' && key === 'patterns') {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating Context Menu Patterns...')
+                console.log('contextMenu: %cUpdating Patterns.', 'color: Aqua')
                 createContextMenus(newValue)
             }
         }
