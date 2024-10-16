@@ -26,7 +26,8 @@ document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
-document.getElementById('reset-default').addEventListener('click', resetForm)
+// document.getElementById('reset-regex').addEventListener('click', resetRegex)
+// document.getElementById('reset-title').addEventListener('click', resetTitle)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
     .querySelectorAll('.revoke-permissions')
@@ -34,6 +35,12 @@ document
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', grantPerms))
+document
+    .querySelectorAll('[data-reset-input]')
+    .forEach((el) => el.addEventListener('click', resetInput))
+document
+    .querySelectorAll('[data-insert-input]')
+    .forEach((el) => el.addEventListener('click', insertInput))
 document
     .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -54,8 +61,8 @@ document.getElementById('import-data').addEventListener('click', importClick)
 document.getElementById('import-input').addEventListener('change', importChange)
 
 const filtersTbody = document.querySelector('#filters-table tbody')
-const faTrash = document.querySelector('.d-none .fa-trash-can')
-const faGrip = document.querySelector('.d-none .fa-grip')
+const faTrash = document.querySelector('#clone > .fa-trash-can')
+const faGrip = document.querySelector('#clone > .fa-grip')
 
 /**
  * DOMContentLoaded - Initialize Options
@@ -148,7 +155,7 @@ async function addFilter(event) {
     const input = event.target.elements['add-filter']
     const filter = input.value
     if (filter) {
-        console.log(`filter: ${filter}`)
+        console.debug('%cfilter:', 'color: Lime', filter)
         const { patterns } = await chrome.storage.sync.get(['patterns'])
         if (!patterns.includes(filter)) {
             patterns.push(filter)
@@ -174,7 +181,7 @@ async function deleteFilter(event, index = undefined) {
     console.debug('deleteFilter:', index, event)
     event.preventDefault()
     const filter = event.currentTarget?.dataset?.value
-    console.debug('filter:', filter)
+    console.debug('%cfilter:', 'color: Yellow', filter)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
     if (!index) {
@@ -196,17 +203,82 @@ async function deleteFilter(event, index = undefined) {
 }
 
 /**
- * Reset Options Form Click Callback
- * @function resetForm
+ * Reset Title Input Callback
+ * @function resetInput
  * @param {InputEvent} event
  */
-async function resetForm(event) {
-    console.debug('resetForm:', event)
+async function resetInput(event) {
+    console.debug('resetInput:', event)
+    const target = event.currentTarget
+    console.debug('target:', target)
     event.preventDefault()
-    const input = document.getElementById('flags')
-    input.value = 'ig'
+    const id = target.dataset.resetInput
+    console.debug('id:', id)
+    const value = target.dataset.value
+    console.debug('value:', value)
+    const input = document.getElementById(id)
+    console.debug('input:', input)
+    input.value = value
     input.classList.remove('is-invalid')
     input.focus()
+    await saveOptions(event)
+}
+
+// /**
+//  * Reset Regex Input Click Callback
+//  * @function resetRegex
+//  * @param {InputEvent} event
+//  */
+// async function resetRegex(event) {
+//     console.debug('resetRegex:', event)
+//     event.preventDefault()
+//     const input = document.getElementById('flags')
+//     input.value = 'ig'
+//     input.classList.remove('is-invalid')
+//     input.focus()
+//     await saveOptions(event)
+// }
+//
+// /**
+//  * Reset Title Input Click Callback
+//  * @function resetTitle
+//  * @param {InputEvent} event
+//  */
+// async function resetTitle(event) {
+//     console.debug('resetTitle:', event)
+//     event.preventDefault()
+//     const input = document.getElementById('lazyTitle')
+//     input.value = '[{host}{pathname}]'
+//     input.classList.remove('is-invalid')
+//     input.focus()
+//     await saveOptions(event)
+// }
+
+/**
+ * Insert Value into Input Callback
+ * @function insertInput
+ * @param {InputEvent} event
+ */
+async function insertInput(event) {
+    console.debug('insertInput:', event)
+    const target = event.currentTarget
+    event.preventDefault()
+    console.debug('target:', target)
+    const id = target.dataset.target
+    console.debug('id:', id)
+    const value = target.dataset.value
+    console.debug('value:', value)
+    const input = document.getElementById(id)
+    console.debug('input:', input)
+    // input.value += value
+    const pos = input.selectionStart
+    console.debug('pos:', pos)
+    const cur = input.value
+    console.debug('cur:', cur)
+    input.value = [cur.slice(0, pos), value, cur.slice(pos)].join('')
+    const newPos = pos + value.length
+    input.focus()
+    input.setSelectionRange(newPos, newPos)
     await saveOptions(event)
 }
 
@@ -220,7 +292,7 @@ let last = -1
  * @param {MouseEvent} event
  */
 async function dragStart(event) {
-    console.debug('dragStart:', event)
+    console.debug('%cdragStart:', 'color: Aqua', event)
     // editing = false
     await filterClick(event)
     row = event.target.closest('tr')
@@ -258,7 +330,7 @@ function dragEnd() {
 }
 
 async function drop(event) {
-    console.debug('drop:', event)
+    console.debug('%cdrop:', 'color: Lime', event)
     // if (event.target.tagName === 'INPUT') {
     //     return
     // }
@@ -266,14 +338,14 @@ async function drop(event) {
     const tr = event.target.closest('tr')
     if (!row || !tr) {
         row = null
-        return console.debug('row or tr undefined')
+        return console.debug('%crow or tr undefined', 'color: Yellow')
     }
     tr.classList?.remove('table-group-divider')
     last = -1
     // console.debug(`row.id: ${row.id} - tr.id: ${tr.id}`)
     if (row.id === tr.id) {
         row = null
-        return console.debug('return on same row drop')
+        return console.debug('%creturn on same row drop', 'color: Yellow')
     }
     filtersTbody.removeChild(row)
     filtersTbody.insertBefore(row, tr)
@@ -340,7 +412,7 @@ async function filterClick(event) {
     let deleted
     let previous = editing
     if (editing !== false) {
-        console.info(`-- saving: ${editing}`)
+        console.log(`%c-- saving: ${editing}`, 'color: DeepPink')
         deleted = await saveEditing(event, editing)
         editing = false
     }
@@ -351,7 +423,7 @@ async function filterClick(event) {
             if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
                 idx -= 1
             }
-            console.info(`-- editing: ${idx}`)
+            console.log(`%c-- editing: ${idx}`, 'color: DeepPink')
             editing = idx
             beginEditing(event, editing)
         }
@@ -367,9 +439,9 @@ async function filterClick(event) {
 async function saveEditing(event, idx) {
     event.preventDefault() // block dragStart if editing
     const td = document.getElementById(`td-filter-${idx}`)
-    console.debug(`saveEditInput: ${idx}`, event, td)
+    console.debug(`%csaveEditInput: ${idx}`, 'color: SpringGreen', event, td)
     if (!td) {
-        console.info(`TD Not Found: #td-filter-${idx}`)
+        console.log(`%cTD Not Found: #td-filter-${idx}`, 'color: OrangeRed')
         return false
     }
 
@@ -384,13 +456,13 @@ async function saveEditing(event, idx) {
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
     if (value === patterns[idx]) {
-        console.info(`-- unchanged: ${idx}`)
+        console.log(`%c-- unchanged: ${idx}`, 'color: DeepPink')
     } else if (patterns.includes(value)) {
         showToast('Filter Already Exists!', 'warning')
         console.debug('Value Already Exists!')
         value = patterns[idx]
     } else {
-        console.info(
+        console.log(
             `Updated idx "${idx}" from "${patterns[idx]}" to "${value}"`
         )
         patterns[idx] = value
@@ -412,14 +484,14 @@ function beginEditing(event, idx) {
     const td = document.getElementById(`td-filter-${idx}`)
     console.debug(`addEditInput: ${idx}`, event, td)
     if (!td) {
-        return console.info(`TD Not Found: #td-filter-${idx}`)
+        return console.log(`%cNot Found: #td-filter-${idx}`, 'color: Yellow')
     }
 
     const link = td.querySelector('a')
     const value = link.textContent
     console.log('value:', value)
 
-    const input = document.querySelector('.d-none input').cloneNode()
+    const input = document.querySelector('#clone > input').cloneNode()
     input.value = value
     input.dataset.idx = idx
 
@@ -446,8 +518,6 @@ async function setShortcuts(names, selector = '#keyboard-shortcuts') {
     const table = parent.querySelector('table')
     console.log('table:', table)
     const tbody = table.querySelector('tbody')
-    const source = table.querySelector('tfoot > tr').cloneNode(true)
-    // console.log('source:', source)
     const commands = await chrome.commands.getAll()
     // console.log('commands:', commands)
     for (const name of names) {
@@ -456,7 +526,7 @@ async function setShortcuts(names, selector = '#keyboard-shortcuts') {
         if (!command) {
             console.warn('Command Not Found:', command)
         }
-        const row = source.cloneNode(true)
+        const row = table.querySelector('tfoot > tr').cloneNode(true)
         let description = command.description
         // Note: Chrome does not parse the description for _execute_action in manifest.json
         if (!description && command.name === '_execute_action') {

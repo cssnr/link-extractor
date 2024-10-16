@@ -24,6 +24,9 @@ async function onInstalled(details) {
         linksDisplay: -1,
         flags: 'ig',
         lazyLoad: true,
+        lazyFavicon: true,
+        lazyTitle: '[{host}{pathname}]',
+        radioFavicon: 'default',
         removeDuplicates: true,
         defaultFilter: true,
         saveState: true,
@@ -178,20 +181,19 @@ async function onChanged(changes, namespace) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
                 if (newValue?.contextMenu) {
-                    console.log('Enabled contextMenu...')
-                    const { patterns } = await chrome.storage.sync.get([
-                        'patterns',
-                    ])
-                    createContextMenus(patterns)
+                    console.log('contextMenu: %cEnabling.', 'color: Lime')
+                    chrome.storage.sync
+                        .get(['patterns'])
+                        .then((items) => createContextMenus(items.patterns))
                 } else {
-                    console.log('Disabled contextMenu...')
+                    console.log('contextMenu: %cDisabling.', 'color: OrangeRed')
                     chrome.contextMenus.removeAll()
                 }
             }
         } else if (namespace === 'sync' && key === 'patterns') {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating Context Menu Patterns...')
+                console.log('contextMenu: %cUpdating Patterns.', 'color: Aqua')
                 createContextMenus(newValue)
             }
         }
@@ -347,7 +349,7 @@ function copyActiveElementText(ctx) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.log('No Text to Copy.', 'color: Yellow')
+        console.log('%cNo Text to Copy.', 'color: Yellow')
     }
 }
 
@@ -380,7 +382,7 @@ function copyLinks(removeDuplicates, selection = false) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.info('No Links to Copy.')
+        console.log('%cNo Links to Copy.', 'color: Yellow')
     }
 }
 
@@ -428,7 +430,7 @@ async function setDefaultOptions(defaultOptions) {
 
     // patterns
     if (!patterns) {
-        console.info('Set patterns to empty array.')
+        console.log('Init patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }
