@@ -61,7 +61,7 @@
             <div class="col-12 mb-2">
                 <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
                 <a id="reset-regex" class="float-end align-bottom small text-decoration-none" role="button"
-                   data-value="ig" data-reset-input="flags">Reset</a>
+                   data-target="flags" data-value="ig" data-reset-input="flags">Reset</a>
                 <input id="flags" type="text" class="form-control" autocomplete="off">
                 <div id="flagsHelp" class="form-text">
                     Regex Flags for Filtering.
@@ -120,26 +120,14 @@
                 </div>
             </div> <!-- lazyIcons -->
 
-<!--            <div class="col-12 mb-2">-->
-<!--                <label for="lazyTitle" class="form-label"><i class="fa-solid fa-text-width me-2"></i> Lazy Title</label>-->
-<!--                <a id="reset-lazyTitle" class="float-end align-bottom small text-decoration-none" role="button">Reset</a>-->
-<!--                <input id="lazyTitle" type="text" class="form-control form-control-sm" autocomplete="off">-->
-<!--                <div id="lazyTitleHelp" class="form-text">-->
-<!--                    Available variables are <kbd>{host}</kbd> and <kbd>{pathname}</kbd>.-->
-<!--                </div>-->
-<!--            </div>-->
-
             <label for="lazyTitle" class="">Lazy Tab Title</label>
             <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-sm-2">
-<!--                <div class="">-->
-<!--                    <label for="lazyTitle" class="col-form-label">Title</label>-->
-<!--                </div>-->
                 <div class="flex-fill">
 <!--                    <input type="text" id="lazyTitle" class="form-control form-control-sm" aria-describedby="lazyTitleHelp">-->
                     <div class="input-group input-group-sm">
                         <input id="lazyTitle" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="lazyTitleHelp">
                         <span id="reset-title" class="input-group-text text-warning-emphasis" role="button"
-                              data-value="[{host}{pathname}]" data-reset-input="lazyTitle">
+                              data-target="lazyTitle" data-value="[{host}{pathname}]" data-reset-input="lazyTitle">
                             <i class="fa-solid fa-rotate-left" data-bs-title="Reset to Default." data-bs-toggle="tooltip"></i>
                         </span>
 <!--                        <span class="input-group-text">-->
@@ -148,7 +136,10 @@
                     </div>
                 </div>
                 <div class="">
-                    <span id="lazyTitleHelp" class="form-text">Vars: <kbd>{host}</kbd> and <kbd>{pathname}</kbd></span>
+                    <span id="lazyTitleHelp" class="form-text">
+                        Vars: <kbd data-target="lazyTitle" data-value="{host}" data-append-input="yes" role="button">{host}</kbd>
+                        and <kbd data-target="lazyTitle" data-value="{pathname}" data-append-input="yes" role="button">{pathname}</kbd>
+                    </span>
                 </div>
             </div>
         </div> <!-- lazyOptions -->

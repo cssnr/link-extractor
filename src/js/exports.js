@@ -141,19 +141,21 @@ function hideShowElement(selector, show, speed = 'fast') {
  * Save Options Callback
  * @function saveOptions
  * @param {InputEvent} event
- * @param {HTMLInputElement} [target]
  */
-export async function saveOptions(event, target) {
+export async function saveOptions(event) {
     console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    target = event.currentTarget || target
+    // console.debug('%c ----- targets -----', 'color: Yellow')
+    // console.debug('event.currentTarget:', event.currentTarget)
+    // // console.debug('target:', target)
+    // console.debug('event.target:', event.target)
+    // console.debug('%c ----- targets -----', 'color: Yellow')
+    // target = event.currentTarget || target || event.target
+    const target = event.currentTarget || event.target
     console.debug('target:', target)
-    // const target = event.currentTarget
-    // console.debug('target', target)
-    let key = target?.id || event.target?.id
+    const { options } = await chrome.storage.sync.get(['options'])
+    let key = target.id
     console.debug('key:', key)
     let value
-    // if (['flags', 'reset-regex'].includes(event.target.id)) {
     if (key === 'flags') {
         // key = 'flags'
         /** @type {HTMLInputElement} */
@@ -172,16 +174,21 @@ export async function saveOptions(event, target) {
         element.value = flags
         value = flags
     } else if (key.startsWith('reset-')) {
-        console.debug('event:', event)
-        console.debug('key:', target.dataset.resetInput)
-        key = target.dataset.resetInput
+        key = target.dataset.target
+        console.debug('key reset-:', key)
         /** @type {HTMLInputElement} */
         const element = document.getElementById(key)
         console.debug('element:', element)
         element.value = target.dataset.value
         value = target.dataset.value
-    } else if (event.target.type === 'radio') {
-        key = event.target.name
+    } else if (target.dataset.target) {
+        key = target.dataset.target
+        console.debug('key dataset.target:', key)
+        const element = document.getElementById(key)
+        value = element.value
+    } else if (target.type === 'radio') {
+        key = target.name
+        console.debug('key radio:', key)
         const radios = document.getElementsByName(key)
         for (const input of radios) {
             if (input.checked) {
@@ -189,10 +196,10 @@ export async function saveOptions(event, target) {
                 break
             }
         }
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
+    } else if (target.type === 'checkbox') {
+        value = target.checked
     } else {
-        value = event.target.value
+        value = target.value
     }
     if (value !== undefined) {
         options[key] = value

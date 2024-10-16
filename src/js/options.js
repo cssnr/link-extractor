@@ -39,6 +39,9 @@ document
     .querySelectorAll('[data-reset-input]')
     .forEach((el) => el.addEventListener('click', resetInput))
 document
+    .querySelectorAll('[data-append-input]')
+    .forEach((el) => el.addEventListener('click', appendInput))
+document
     .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
@@ -207,8 +210,8 @@ async function deleteFilter(event, index = undefined) {
 async function resetInput(event) {
     console.debug('resetInput:', event)
     const target = event.currentTarget
-    event.preventDefault()
     console.debug('target:', target)
+    event.preventDefault()
     const id = target.dataset.resetInput
     console.debug('id:', id)
     const value = target.dataset.value
@@ -218,8 +221,7 @@ async function resetInput(event) {
     input.value = value
     input.classList.remove('is-invalid')
     input.focus()
-    // event.currentTarget = target
-    await saveOptions(event, target)
+    await saveOptions(event)
 }
 
 // /**
@@ -251,6 +253,28 @@ async function resetInput(event) {
 //     input.focus()
 //     await saveOptions(event)
 // }
+
+/**
+ * Append Value to Input Callback
+ * @function appendInput
+ * @param {InputEvent} event
+ */
+async function appendInput(event) {
+    console.debug('appendInput:', event)
+    const target = event.currentTarget
+    event.preventDefault()
+    console.debug('target:', target)
+    const id = target.dataset.target
+    console.debug('id:', id)
+    const value = target.dataset.value
+    console.debug('value:', value)
+    const input = document.getElementById(id)
+    console.debug('input:', input)
+    input.value += value
+    input.focus()
+    // await saveOptions(event, target)
+    await saveOptions(event)
+}
 
 let row
 let last = -1

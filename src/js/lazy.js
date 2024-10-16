@@ -15,8 +15,8 @@ chrome.storage.sync.get(['options']).then((items) => {
     // if (items.options.lazyFavicon) {
     // const urlPath = `${url.host}${url.pathname}`
     let title = items.options.lazyTitle
-    title = title.replace('{host}', url.host)
-    title = title.replace('{pathname}', url.pathname)
+    title = title.replaceAll('{host}', url.host)
+    title = title.replaceAll('{pathname}', url.pathname)
     console.debug('title:', title)
     document.title = title
     // }
