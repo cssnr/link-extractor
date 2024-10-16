@@ -39,8 +39,8 @@ document
     .querySelectorAll('[data-reset-input]')
     .forEach((el) => el.addEventListener('click', resetInput))
 document
-    .querySelectorAll('[data-append-input]')
-    .forEach((el) => el.addEventListener('click', appendInput))
+    .querySelectorAll('[data-insert-input]')
+    .forEach((el) => el.addEventListener('click', insertInput))
 document
     .querySelectorAll('#options-form input, select')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -255,12 +255,12 @@ async function resetInput(event) {
 // }
 
 /**
- * Append Value to Input Callback
- * @function appendInput
+ * Insert Value into Input Callback
+ * @function insertInput
  * @param {InputEvent} event
  */
-async function appendInput(event) {
-    console.debug('appendInput:', event)
+async function insertInput(event) {
+    console.debug('insertInput:', event)
     const target = event.currentTarget
     event.preventDefault()
     console.debug('target:', target)
@@ -270,9 +270,15 @@ async function appendInput(event) {
     console.debug('value:', value)
     const input = document.getElementById(id)
     console.debug('input:', input)
-    input.value += value
+    // input.value += value
+    const pos = input.selectionStart
+    console.debug('pos:', pos)
+    const cur = input.value
+    console.debug('cur:', cur)
+    input.value = [cur.slice(0, pos), value, cur.slice(pos)].join('')
+    const newPos = pos + value.length
     input.focus()
-    // await saveOptions(event, target)
+    input.setSelectionRange(newPos, newPos)
     await saveOptions(event)
 }
 
