@@ -81,7 +81,7 @@ async function initOptions() {
     // noinspection ES6MissingAwait
     checkPerms()
     chrome.storage.sync.get(['options', 'patterns']).then((items) => {
-        console.debug('options:', items.options)
+        // console.debug('options:', items.options)
         updateOptions(items.options)
         updateTable(items.patterns)
     })
@@ -93,8 +93,8 @@ async function initOptions() {
  * @param {Object} data
  */
 function updateTable(data) {
-    const faTrash = document.querySelector('#clone > .fa-trash-can')
-    const faGrip = document.querySelector('#clone > .fa-grip')
+    const faTrash = document.querySelector('#clones > .fa-trash-can')
+    const faGrip = document.querySelector('#clones > .fa-grip')
     filtersTbody.innerHTML = ''
     data.forEach((value, i) => {
         const row = filtersTbody.insertRow()
@@ -133,7 +133,6 @@ function updateTable(data) {
         grip.title = 'Drag'
         cell3.appendChild(grip)
         cell3.setAttribute('draggable', 'true')
-
         cell3.addEventListener('dragstart', dragStart)
     })
     filtersTbody.addEventListener('dragover', dragOver)
@@ -235,7 +234,6 @@ async function insertInput(event) {
     console.debug('value:', value)
     const input = document.getElementById(id)
     console.debug('input:', input)
-    // input.value += value
     const pos = input.selectionStart
     console.debug('pos:', pos)
     const cur = input.value
@@ -456,7 +454,7 @@ function beginEditing(event, idx) {
     const value = link.textContent
     console.log('value:', value)
 
-    const input = document.querySelector('#clone > input').cloneNode()
+    const input = document.querySelector('#clones > input').cloneNode()
     input.value = value
     input.dataset.idx = idx
 
@@ -487,7 +485,7 @@ async function setShortcuts(names, selector = '#keyboard-shortcuts') {
     // console.log('commands:', commands)
     for (const name of names) {
         const command = commands.find((x) => x.name === name)
-        console.debug('command:', command)
+        // console.debug('command:', command)
         if (!command) {
             console.warn('Command Not Found:', command)
         }

@@ -63,7 +63,7 @@ function onScroll() {
  */
 function showToast(message, type = 'primary') {
     console.debug(`showToast: ${type}: ${message}`)
-    const clone = document.querySelector('.d-none .toast')
+    const clone = document.querySelector('#clones .toast')
     const container = document.getElementById('toast-container')
     if (!clone || !container) {
         return console.warn('Missing clone or container:', clone, container)

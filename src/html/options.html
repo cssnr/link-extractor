@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="container-fluid py-3 px-0 px-sm-3">
+<div class="container-fluid py-0 py-sm-3 px-0 px-sm-3">
 <div class="col-12 col-md-10 col-lg-8 col-xxl-6 mx-auto">
 <div class="card">
 <div class="card-body">
@@ -96,7 +96,7 @@
                 <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Show Favicon on Lazy Tabs"></i>
             </div>
-            <div id="lazyIcons" class="row ms-4" style="display: none;">
+            <div id="lazyIcons" class="row ms-1" style="display: none;">
                 <div class="form-check col-auto">
                     <input id="default" name="radioFavicon" class="form-check-input" type="radio">
                     <label for="default" class="form-check-label fs-5 d-flex align-items-center h-100">
@@ -273,7 +273,7 @@
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
            href="https://link-extractor.cssnr.com/faq/">FAQ</a>
         <span class="mx-2">&bull;</span>
-        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+        <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://github.com/cssnr/link-extractor/issues">Report Issue</a>
     </div>
 </div> <!-- card-body -->
@@ -285,7 +285,7 @@
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div> <!-- toast-container -->
 
-<div id="clone" class="d-none">
+<div id="clones" class="d-none">
     <i class="fa-regular fa-trash-can"></i>
     <i class="fa-solid fa-grip"></i>
     <form id="update-filter" name="update-filter"><button type="submit"></button></form>
@@ -293,7 +293,7 @@
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
-</div> <!-- d-none -->
+</div> <!-- clones -->
 
 <button type="button" class="btn btn-outline-primary" id="back-to-top">
     <i class="fa-regular fa-square-caret-up"></i>
