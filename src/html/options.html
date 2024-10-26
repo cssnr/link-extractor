@@ -16,13 +16,15 @@
 <div class="container-fluid py-0 py-sm-3 px-0 px-sm-3">
 <div class="col-12 col-md-10 col-lg-8 col-xxl-6 mx-auto">
 <div class="rounded rounded-4 border border-1 p-3">
-    <div class="d-flex justify-content-center align-items-center">
-        <img src="../images/logo48.png" class="me-2" height="48" width="48"
-             alt="Link Extractor" title="Link Extractor">
-        <h1>Link Extractor</h1>
-    </div>
-    <div class="clearfix"></div>
-    <p class="text-center lead">v<span class="version"></span></p>
+
+    <div class="text-center mb-2">
+        <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+            <span class="display-6">
+                <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Link Extractor" title="Link Extractor">
+                Link Extractor</span></a>
+        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+            v<span class="version">0.0.0</span></a>
+    </div> <!-- header -->
 
     <div id="keyboard-shortcuts" class="d-none">
         <div class="d-flex flex-row align-items-center justify-content-center">
@@ -47,7 +49,7 @@
                 https://mzl.la/3Qwp5QQ <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
             <a id="chrome-shortcuts" class="d-inline-block d-none chrome" role="button">chrome://extensions/shortcuts</a>
         </div>
-    </div>
+    </div> <!-- keyboard-shortcuts -->
 
     <div class="d-flex flex-row align-items-center justify-content-center">
         <hr class="w-100 my-0">
@@ -80,7 +82,7 @@
                         More Info <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
                 </div>
             </div>
-        </div>
+        </div> <!-- row -->
 
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad" data-related="lazyOptions">
@@ -197,7 +199,7 @@
             <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Show Release Notes on Version Update."></i>
         </div>
-    </form>
+    </form> <!-- options-form -->
 
     <p class="text-muted small my-2">
         More about Options
@@ -257,7 +259,7 @@
             <th scope="col" class="text-center" style="width: 36px;"><i class="fa-solid fa-arrow-down-up-across-line"></i></th>
         </tr></thead>
         <tbody></tbody>
-    </table>
+    </table> <!-- filters-table -->
 
     <p class="fst-italic small mt-3">
         <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.
@@ -279,6 +281,10 @@
 </div> <!-- col -->
 </div> <!-- container -->
 
+<button type="button" class="btn btn-outline-primary" id="back-to-top">
+    <i class="fa-regular fa-square-caret-up"></i>
+</button> <!-- back-to-top -->
+
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div> <!-- toast-container -->
@@ -292,10 +298,6 @@
         <div class="toast-body"></div>
     </div>
 </div> <!-- clones -->
-
-<button type="button" class="btn btn-outline-primary" id="back-to-top">
-    <i class="fa-regular fa-square-caret-up"></i>
-</button> <!-- back-to-top -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

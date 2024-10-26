@@ -54,7 +54,7 @@ async function onInstalled(details) {
         }
     }
     checkPerms().then((hasPerms) => {
-        if (hasPerms) {
+        if (hasPerms /* NOSONAR */) {
             onAdded()
         } else {
             onRemoved()
@@ -156,7 +156,7 @@ async function onCommand(command, tab) {
         // await injectCopyLinks(tab)
         await injectTab({ open: false })
         const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copyLinks, [options.removeDuplicates, true])
+        await injectFunction(copyLinks, [options.removeDuplicates])
     } else if (command === 'copySelection') {
         console.debug('copySelection')
         // await injectCopyLinks(tab, true)
@@ -175,16 +175,20 @@ async function onCommand(command, tab) {
  * @param {Object} changes
  * @param {String} namespace
  */
-async function onChanged(changes, namespace) {
+async function onChanged(changes, namespace) /* NOSONAR */ {
     // console.debug('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
                 if (newValue?.contextMenu) {
                     console.log('contextMenu: %cEnabling.', 'color: Lime')
-                    chrome.storage.sync
-                        .get(['patterns'])
-                        .then((items) => createContextMenus(items.patterns))
+                    // chrome.storage.sync
+                    //     .get(['patterns'])
+                    //     .then((items) => createContextMenus(items.patterns))
+                    const { patterns } = await chrome.storage.sync.get([
+                        'patterns',
+                    ])
+                    createContextMenus(patterns)
                 } else {
                     console.log('contextMenu: %cDisabling.', 'color: OrangeRed')
                     chrome.contextMenus.removeAll()
