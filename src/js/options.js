@@ -26,8 +26,6 @@ document.addEventListener('blur', filterClick)
 document.addEventListener('click', filterClick)
 document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
-// document.getElementById('reset-regex').addEventListener('click', resetRegex)
-// document.getElementById('reset-title').addEventListener('click', resetTitle)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
     .querySelectorAll('.revoke-permissions')
@@ -61,8 +59,6 @@ document.getElementById('import-data').addEventListener('click', importClick)
 document.getElementById('import-input').addEventListener('change', importChange)
 
 const filtersTbody = document.querySelector('#filters-table tbody')
-const faTrash = document.querySelector('#clone > .fa-trash-can')
-const faGrip = document.querySelector('#clone > .fa-grip')
 
 /**
  * DOMContentLoaded - Initialize Options
@@ -97,6 +93,8 @@ async function initOptions() {
  * @param {Object} data
  */
 function updateTable(data) {
+    const faTrash = document.querySelector('#clone > .fa-trash-can')
+    const faGrip = document.querySelector('#clone > .fa-grip')
     filtersTbody.innerHTML = ''
     data.forEach((value, i) => {
         const row = filtersTbody.insertRow()
@@ -221,38 +219,9 @@ async function resetInput(event) {
     input.value = value
     input.classList.remove('is-invalid')
     input.focus()
-    await saveOptions(event)
+    const changeEvent = new Event('change')
+    input.dispatchEvent(changeEvent)
 }
-
-// /**
-//  * Reset Regex Input Click Callback
-//  * @function resetRegex
-//  * @param {InputEvent} event
-//  */
-// async function resetRegex(event) {
-//     console.debug('resetRegex:', event)
-//     event.preventDefault()
-//     const input = document.getElementById('flags')
-//     input.value = 'ig'
-//     input.classList.remove('is-invalid')
-//     input.focus()
-//     await saveOptions(event)
-// }
-//
-// /**
-//  * Reset Title Input Click Callback
-//  * @function resetTitle
-//  * @param {InputEvent} event
-//  */
-// async function resetTitle(event) {
-//     console.debug('resetTitle:', event)
-//     event.preventDefault()
-//     const input = document.getElementById('lazyTitle')
-//     input.value = '[{host}{pathname}]'
-//     input.classList.remove('is-invalid')
-//     input.focus()
-//     await saveOptions(event)
-// }
 
 /**
  * Insert Value into Input Callback

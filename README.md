@@ -11,6 +11,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/link-extractor/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 
 # Link Extractor

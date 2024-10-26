@@ -4,7 +4,6 @@ const searchParams = new URLSearchParams(window.location.search)
 const url = new URL(searchParams.get('url'))
 
 // document.title = `${url.host}${url.pathname}`
-
 // const link = document.createElement('link')
 // link.rel = 'icon'
 // link.href = `${url.origin}/favicon.ico`

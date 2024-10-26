@@ -152,10 +152,10 @@ export async function saveOptions(event) {
     // target = event.currentTarget || target || event.target
     const target = event.currentTarget || event.target
     console.debug('target:', target)
-    const { options } = await chrome.storage.sync.get(['options'])
     let key = target.id
-    console.debug('key:', key)
+    // console.debug('key:', key)
     let value
+    const { options } = await chrome.storage.sync.get(['options'])
     if (key === 'flags') {
         // key = 'flags'
         /** @type {HTMLInputElement} */
@@ -173,14 +173,14 @@ export async function saveOptions(event) {
         }
         element.value = flags
         value = flags
-    } else if (key.startsWith('reset-')) {
-        key = target.dataset.target
-        console.debug('key reset-:', key)
-        /** @type {HTMLInputElement} */
-        const element = document.getElementById(key)
-        console.debug('element:', element)
-        element.value = target.dataset.value
-        value = target.dataset.value
+        // } else if (key.startsWith('reset-')) {
+        //     key = target.dataset.target
+        //     console.debug('key reset-:', key)
+        //     /** @type {HTMLInputElement} */
+        //     const element = document.getElementById(key)
+        //     console.debug('element:', element)
+        //     element.value = target.dataset.value
+        //     value = target.dataset.value
     } else if (target.dataset.target) {
         key = target.dataset.target
         console.debug('key dataset.target:', key)
