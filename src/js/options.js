@@ -210,13 +210,9 @@ async function resetInput(event) {
     const target = event.currentTarget
     console.debug('target:', target)
     event.preventDefault()
-    const id = target.dataset.resetInput
-    console.debug('id:', id)
-    const value = target.dataset.value
-    console.debug('value:', value)
-    const input = document.getElementById(id)
+    const input = document.getElementById(target.dataset.resetInput)
     console.debug('input:', input)
-    input.value = value
+    input.value = target.dataset.value
     input.classList.remove('is-invalid')
     input.focus()
     const changeEvent = new Event('change')
