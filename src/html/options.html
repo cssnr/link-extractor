@@ -13,18 +13,18 @@
 </head>
 <body>
 
-<div class="container-fluid p-3">
-<div class="row">
-<div class="col-xl-6 col-md-8 col-12 m-auto">
-<div class="card" >
-<div class="card-body">
-    <div class="d-flex justify-content-center align-items-center">
-        <img src="../images/logo48.png" class="me-2" height="48" width="48"
-             alt="Link Extractor" title="Link Extractor">
-        <h1>Link Extractor</h1>
-    </div>
-    <div class="clearfix"></div>
-    <p class="text-center lead">v<span class="version"></span></p>
+<div class="container-fluid py-0 py-sm-3 px-0 px-sm-3">
+<div class="col-12 col-md-10 col-lg-8 col-xxl-6 mx-auto">
+<div class="rounded rounded-4 border border-1 p-3">
+
+    <div class="text-center mb-2">
+        <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url" target="_blank" rel="nofollow">
+            <span class="display-6">
+                <img src="../images/logo48.png" class="me-2" height="48" width="48" alt="Link Extractor" title="Link Extractor">
+                Link Extractor</span></a>
+        <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url" target="_blank" rel="nofollow">
+            v<span class="version">0.0.0</span></a>
+    </div> <!-- header -->
 
     <div id="keyboard-shortcuts" class="d-none">
         <div class="d-flex flex-row align-items-center justify-content-center">
@@ -49,7 +49,7 @@
                 https://mzl.la/3Qwp5QQ <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
             <a id="chrome-shortcuts" class="d-inline-block d-none chrome" role="button">chrome://extensions/shortcuts</a>
         </div>
-    </div>
+    </div> <!-- keyboard-shortcuts -->
 
     <div class="d-flex flex-row align-items-center justify-content-center">
         <hr class="w-100 my-0">
@@ -61,8 +61,20 @@
         <div class="row">
             <div class="col-12 mb-2">
                 <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
-                <a id="reset-default" class="float-end align-bottom small text-decoration-none" role="button">Reset</a>
-                <input id="flags" type="text" class="form-control" autocomplete="off">
+<!--                <a id="reset-regex" class="float-end align-bottom small text-decoration-none" role="button"-->
+<!--                   data-target="flags" data-value="ig" data-reset-input="flags">Reset</a>-->
+<!--                <input id="flags" type="text" class="form-control" autocomplete="off">-->
+                <div class="input-group">
+                    <input id="flags" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="flagsHelp">
+                    <span id="reset-regex" class="input-group-text text-warning-emphasis" role="button"
+                          data-bs-title="Reset Regex Flags to Default Value." data-bs-toggle="tooltip"
+                          data-value="ig" data-reset-input="flags">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </span>
+<!--                    <span class="input-group-text">-->
+<!--                        <i class="fa-solid fa-circle-info" data-bs-title="Title for Lazy Loaded Tabs." data-bs-toggle="tooltip"></i>-->
+<!--                    </span>-->
+                </div>
                 <div id="flagsHelp" class="form-text">
                     Regex Flags for Filtering.
                     <a class="ms-1 text-decoration-none" target="_blank" rel="noopener"
@@ -70,58 +82,124 @@
                         More Info <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
                 </div>
             </div>
-        </div>
+        </div> <!-- row -->
 
         <div class="form-check form-switch">
-            <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad">
-            <label class="form-check-label me-1" for="lazyLoad">Lazy Load Opened Tabs</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad" data-related="lazyOptions">
+            <label class="form-check-label" for="lazyLoad">Lazy Load Opened Tabs</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Don't Load Tabs Until Clicked On"></i>
         </div>
+        <div id="lazyOptions" class="ms-4 mb-1" style="display: none;">
+            <div class="form-check form-switch">
+                <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyFavicon" data-related="lazyIcons">
+                <label class="form-check-label" for="lazyFavicon">Show Favicon on Lazy Tabs</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   data-bs-title="Show Favicon on Lazy Tabs"></i>
+            </div>
+            <div id="lazyIcons" class="row ms-1" style="display: none;">
+                <div class="form-check col-auto">
+                    <input id="default" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="default" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <i class="fa-regular fa-circle-question" data-bs-title="Default Icon from Site."
+                           data-bs-toggle="tooltip" data-bs-trigger="hover"></i>
+                        <span class="visually-hidden">Default Site Icon</span>
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-white" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-white" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="White" src="/images/lazy/icon-white.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto ">
+                    <input id="icon-black" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-black" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Black" src="/images/lazy/icon-black.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-yellow" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-yellow" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Yellow" src="/images/lazy/icon-yellow.png" style="height: 1em;">
+                    </label>
+                </div>
+                <div class="form-check col-auto">
+                    <input id="icon-red" name="radioFavicon" class="form-check-input" type="radio">
+                    <label for="icon-red" class="form-check-label fs-5 d-flex align-items-center h-100">
+                        <img alt="Red" src="/images/lazy/icon-red.png" style="height: 1em;">
+                    </label>
+                </div>
+            </div> <!-- lazyIcons -->
+
+            <label for="lazyTitle" class="">Lazy Tab Title</label>
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-sm-2">
+                <div class="flex-fill">
+<!--                    <input type="text" id="lazyTitle" class="form-control form-control-sm" aria-describedby="lazyTitleHelp">-->
+                    <div class="input-group input-group-sm">
+                        <input id="lazyTitle" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="lazyTitleHelp">
+                        <span id="reset-title" class="input-group-text text-warning-emphasis" role="button"
+                              data-bs-title="Reset Lazy Title to Default Value." data-bs-toggle="tooltip"
+                              data-reset-input="lazyTitle" data-value="[{host}{pathname}]">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </span>
+<!--                        <span class="input-group-text">-->
+<!--                            <i class="fa-solid fa-circle-info" data-bs-title="Title for Lazy Loaded Tabs." data-bs-toggle="tooltip"></i>-->
+<!--                        </span>-->
+                    </div>
+                </div>
+                <div class="">
+                    <span id="lazyTitleHelp" class="form-text">
+                        Vars: <kbd data-target="lazyTitle" data-value="{host}" data-insert-input="yes" role="button">{host}</kbd>
+                        and <kbd data-target="lazyTitle" data-value="{pathname}" data-insert-input="yes" role="button">{pathname}</kbd>
+                    </span>
+                </div>
+            </div>
+        </div> <!-- lazyOptions -->
+
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
-            <label class="form-check-label me-1" for="removeDuplicates">Remove Duplicate Links</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="removeDuplicates">Remove Duplicate Links</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Filter Out Links with the same URL"></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="defaultFilter">
-            <label class="form-check-label me-1" for="defaultFilter">Use Default Link Filtering</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="defaultFilter">Use Default Link Filtering</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Filter Out Links Without ://"></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="saveState">
-            <label class="form-check-label me-1" for="saveState">Save Links Page Options</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="saveState">Save Links Page Options</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Remember Links Display, Columns, and Sorting"></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="linksTruncate">
-            <label class="form-check-label me-1" for="linksTruncate">Truncate Long Links</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="linksTruncate">Truncate Long Links</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Truncate Display of Long Links with Ellipsis"></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="linksNoWrap">
-            <label class="form-check-label me-1" for="linksNoWrap">Don't Wrap Long Links</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="linksNoWrap">Don't Wrap Long Links</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Force Long Links to Display on a Single Line"></i>
         </div>
-<!--        <hr class="my-1 me-5">-->
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label me-1" for="contextMenu">Enable Right Click Menu</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="contextMenu">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Enable Right Click Context Menu."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="showUpdate">
-            <label class="form-check-label me-1" for="showUpdate">Show Update Release Notes</label>
-            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+            <label class="form-check-label" for="showUpdate">Show Update Release Notes</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                data-bs-title="Show Release Notes on Version Update."></i>
         </div>
-    </form>
+    </form> <!-- options-form -->
 
     <p class="text-muted small my-2">
         More about Options
@@ -154,7 +232,7 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Add Filter" aria-label="Filter" id="add-filter" aria-describedby="add-filter-btn" required>
             <button class="btn btn-outline-success" type="submit" id="add-filter-btn">
-                Add <i class="fa-solid fa-plus ms-1"></i>
+                Add <i class="fa-solid fa-circle-plus ms-1"></i>
             </button>
         </div>
     </form>
@@ -181,7 +259,7 @@
             <th scope="col" class="text-center" style="width: 36px;"><i class="fa-solid fa-arrow-down-up-across-line"></i></th>
         </tr></thead>
         <tbody></tbody>
-    </table>
+    </table> <!-- filters-table -->
 
     <p class="fst-italic small mt-3">
         <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.
@@ -196,32 +274,30 @@
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
            href="https://link-extractor.cssnr.com/faq/">FAQ</a>
         <span class="mx-2">&bull;</span>
-        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+        <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://github.com/cssnr/link-extractor/issues">Report Issue</a>
     </div>
-</div> <!-- card-body -->
-</div> <!-- card -->
+</div> <!-- rounded -->
 </div> <!-- col -->
-</div> <!-- row -->
 </div> <!-- container -->
-
-<div aria-live="polite" aria-atomic="true" class="">
-    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div> <!-- toast-container -->
-
-<div class="d-none">
-    <form id="update-filter" name="update-filter"><button type="submit"></button></form>
-    <input class="form-control form-control-sm filter-edit" type="text" form="update-filter">
-    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
-        <div class="toast-body"></div>
-    </div>
-    <i class="fa-regular fa-trash-can"></i>
-    <i class="fa-solid fa-grip"></i>
-</div> <!-- d-none -->
 
 <button type="button" class="btn btn-outline-primary" id="back-to-top">
     <i class="fa-regular fa-square-caret-up"></i>
 </button> <!-- back-to-top -->
+
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+</div> <!-- toast -->
+
+<div id="clones" class="d-none">
+    <i class="fa-regular fa-trash-can"></i>
+    <i class="fa-solid fa-grip"></i>
+    <form id="update-filter" name="update-filter"><button type="submit"></button></form>
+    <input class="form-control form-control-sm filter-edit" type="text" form="update-filter">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="6000">
+        <div class="toast-body"></div>
+    </div>
+</div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

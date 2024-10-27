@@ -145,14 +145,14 @@ async function extractPDF(event) {
 function createFilterLink(number, value = '') {
     const ul = document.getElementById('filters-ul')
     const li = document.createElement('li')
-    ul.appendChild(li)
     const a = document.createElement('a')
     a.textContent = value
     a.dataset.pattern = value
-    a.classList.add('dropdown-item', 'small', 'text-break')
+    a.classList.add('dropdown-item', 'small', 'text-ellipsis')
     a.setAttribute('role', 'button')
     a.addEventListener('click', filterForm)
     li.appendChild(a)
+    ul.appendChild(li)
 }
 
 /**
@@ -294,7 +294,7 @@ function extractURLs(text) {
     const urls = []
     let urlmatch
     const regex =
-        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi
+        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi // NOSONAR
     while ((urlmatch = regex.exec(text)) !== null) {
         try {
             let match = urlmatch[0]

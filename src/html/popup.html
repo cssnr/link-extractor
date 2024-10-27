@@ -60,22 +60,28 @@
                 </ul>
             </div>
         </div>
+
         <form id="filter-form" class="my-0">
             <label for="filter-input" class="visually-hidden"></label>
             <input id="filter-input" class="form-control form-control-sm" type="text" placeholder="Quick Filter">
         </form>
+
         <button type="button" class="btn btn-sm btn-primary" data-filter="domains">
             <i class="fa-solid fa-globe me-1"></i> Only Domains</button>
+
         <button id="pdf-btn" type="button" class="btn btn-sm btn-outline-warning d-none"
            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature">
             <i class="fa-solid fa-file-pdf me-1"></i> Extract from PDF
             <i id="pdf-icon" class="fa-solid fa-flask" style="min-width: 22px;"></i></button>
+
         <div id="no-file-access" class="alert alert-warning text-center p-1 my-0 d-none">
             <span>Browser</span> does <b>not</b> allow access to files.
         </div>
+
         <div id="file-access" class="alert alert-warning text-center p-1 my-0 d-none">
             PDF files require <a href="https://link-extractor.cssnr.com/faq/#fileAccess" class="alert-link">file access</a>.
         </div>
+
         <div id="pdf-perms" class="alert alert-warning text-center p-1 my-0 d-none">
             PDF extraction needs <a href="#" class="alert-link grant-permissions">host permissions</a>.
         </div>
@@ -97,38 +103,38 @@
         <form id="options-form">
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="lazyLoad">
-                <label class="form-check-label me-1" for="lazyLoad">Lazy Load Opened Tabs</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="lazyLoad">Lazy Load Opened Tabs</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Don't Load Tabs Until Clicked On"></i>
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
-                <label class="form-check-label me-1" for="removeDuplicates">Remove Duplicate Links</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="removeDuplicates">Remove Duplicate Links</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Filter Out Links with the same URL"></i>
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input me-2" type="checkbox" role="switch" id="defaultFilter">
-                <label class="form-check-label me-1" for="defaultFilter">Use Default Link Filtering</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="defaultFilter">Use Default Link Filtering</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Filter Out Links Without ://"></i>
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="saveState">
-                <label class="form-check-label me-1" for="saveState">Save Links Page Options</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="saveState">Save Links Page Options</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Remember Links Display, Columns, and Sorting"></i>
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="linksTruncate">
-                <label class="form-check-label me-1" for="linksTruncate">Truncate Long Links</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="linksTruncate">Truncate Long Links</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Truncate Display of Long Links with Ellipsis"></i>
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input form-control" type="checkbox" role="switch" id="linksNoWrap">
-                <label class="form-check-label me-1" for="linksNoWrap">Don't Wrap Long Links</label>
-                <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                <label class="form-check-label" for="linksNoWrap">Don't Wrap Long Links</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="Force Long Links to Display on a Single Line"></i>
             </div>
         </form> <!-- options-form -->
@@ -143,23 +149,18 @@
         <a class="btn btn-sm btn-outline-info" role="button" href="../html/options.html">
             <i class="fa-solid fa-sliders me-1"></i> More Options</a>
 
-<!--        <div class="d-flex justify-content-center align-items-center text-center small">-->
-<!--            <img class="" src="../images/logo16.png" width="16" height="16" alt="Link Extractor" title="Link Extractor">-->
-<!--            <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"-->
-<!--               href="homepage_url">Link Extractor</a> v<span class="version"></span>-->
-<!--        </div>-->
     </div> <!-- d-grid -->
 </div> <!-- container-fluid -->
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div> <!-- toast-container -->
+</div> <!-- toast -->
 
-<div class="d-none">
-    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+<div id="clones" class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="6000">
         <div class="toast-body small"></div>
     </div>
-</div> <!-- d-none -->
+</div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

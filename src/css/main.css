@@ -1,9 +1,24 @@
 /* CSS for global */
 
+:root,
+[data-bs-theme='light'] {
+    --bs-emphasis-bg: var(--bs-white);
+    --bs-emphasis-bg-rgb: var(--bs-white-rgb);
+}
+
+[data-bs-theme='dark'] {
+    --bs-emphasis-bg: var(--bs-black);
+    --bs-emphasis-bg-rgb: var(--bs-black-rgb);
+}
+
 svg {
     height: 1em;
     width: 1em;
     margin-bottom: 0.15em;
+}
+
+#toast-container {
+    z-index: 3;
 }
 
 #back-to-top {
@@ -11,9 +26,12 @@ svg {
     bottom: 64px;
     right: 20px;
     display: none;
-    z-index: 6;
+    z-index: 3;
 }
 
-#toast-container {
-    z-index: 5;
+.text-ellipsis {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

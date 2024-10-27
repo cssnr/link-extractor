@@ -8,14 +8,15 @@
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../dist/fontawesome/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/permissions.css">
     <script type="text/javascript" src="../js/theme.js"></script>
 </head>
 <body class="h-100">
 
-<div class="container-fluid p-3 h-100">
+<div class="container-fluid py-0 py-sm-3 px-0 px-sm-3 h-100">
 <div class="d-flex align-items-center h-100">
-<div class="col-xl-6 col-md-8 col-12 m-auto">
-<div class="card p-3 ">
+<div class="col-12 col-md-10 col-lg-8 col-xxl-6 mx-auto">
+<div class="card p-3">
     <div class="d-flex justify-content-center align-items-center mb-2">
         <img src="../images/logo48.png" class="me-2" height="48" width="48"
              alt="Auto Auth" title="Auto Auth">
@@ -53,7 +54,7 @@
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
            href="https://link-extractor.cssnr.com/faq/">FAQ</a>
         <span class="mx-2">&bull;</span>
-        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+        <a class="link-body-emphasis text-decoration-none d-inline-block" target="_blank" rel="noopener"
            href="https://link-extractor.cssnr.com/#support">Get Support</a>
     </div>
 </div> <!-- card -->
@@ -69,11 +70,11 @@
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div> <!-- toast -->
 
-<div class="d-none">
-    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="10000">
+<div id="clones" class="d-none">
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="6000">
         <div class="toast-body"></div>
     </div>
-</div> <!-- d-none -->
+</div> <!-- clones -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

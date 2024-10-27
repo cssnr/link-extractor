@@ -91,32 +91,74 @@ export async function injectTab({
  * @param {Object} options
  */
 export function updateOptions(options) {
-    for (const [key, value] of Object.entries(options)) {
-        // console.debug(`${key}: ${value}`)
+    console.debug('updateOptions:', options)
+    for (let [key, value] of Object.entries(options)) {
+        // console.debug(`%c${key}: %c${value}`)
+        if (typeof value === 'undefined') {
+            console.warn('Value undefined for key:', key)
+            continue
+        }
+        // Option Key should be `radioXXX` and values should be the option IDs
+        if (key.startsWith('radio')) {
+            key = value //NOSONAR
+            value = true //NOSONAR
+        }
         const el = document.getElementById(key)
-        if (el) {
-            if (typeof value === 'boolean') {
-                el.checked = value
-            } else {
-                el.value = value
-            }
-            el.classList.remove('is-invalid')
+        if (!el) {
+            continue
+        }
+        if (el.tagName !== 'INPUT') {
+            el.textContent = value.toString()
+        } else if (typeof value === 'boolean') {
+            el.checked = value
+        } else {
+            el.value = value
+        }
+        if (el.dataset.related) {
+            hideShowElement(`#${el.dataset.related}`, value)
         }
     }
 }
 
 /**
+ * Hide or Show Element with JQuery
+ * @function hideShowElement
+ * @param {String} selector
+ * @param {Boolean} [show]
+ * @param {String} [speed]
+ */
+function hideShowElement(selector, show, speed = 'fast') {
+    const element = $(`${selector}`)
+    // console.debug('hideShowElement:', show, element)
+    if (show) {
+        element.show(speed)
+    } else {
+        element.hide(speed)
+    }
+}
+
+/**
  * Save Options Callback
+ * NOTE: Look into simplifying this function
  * @function saveOptions
  * @param {InputEvent} event
  */
-export async function saveOptions(event) {
+export async function saveOptions(event) /* NOSONAR */ {
     console.debug('saveOptions:', event)
-    const { options } = await chrome.storage.sync.get(['options'])
-    let key = event.target?.id
+    // console.debug('%c ----- targets -----', 'color: Yellow')
+    // console.debug('event.currentTarget:', event.currentTarget)
+    // // console.debug('target:', target)
+    // console.debug('event.target:', event.target)
+    // console.debug('%c ----- targets -----', 'color: Yellow')
+    // target = event.currentTarget || target || event.target
+    const target = event.currentTarget || event.target
+    console.debug('target:', target)
+    let key = target.id
+    // console.debug('key:', key)
     let value
-    if (['flags', 'reset-default'].includes(event.target.id)) {
-        key = 'flags'
+    const { options } = await chrome.storage.sync.get(['options'])
+    if (key === 'flags') {
+        // key = 'flags'
         /** @type {HTMLInputElement} */
         const element = document.getElementById(key)
         let flags = element.value.toLowerCase().replace(/\s+/gm, '').split('')
@@ -132,17 +174,40 @@ export async function saveOptions(event) {
         }
         element.value = flags
         value = flags
-    } else if (event.target.id === 'linksDisplay') {
-        value = parseInt(event.target.value)
-    } else if (event.target.type === 'checkbox') {
-        value = event.target.checked
+        // } else if (key.startsWith('reset-')) {
+        //     key = target.dataset.target
+        //     console.debug('key reset-:', key)
+        //     /** @type {HTMLInputElement} */
+        //     const element = document.getElementById(key)
+        //     console.debug('element:', element)
+        //     element.value = target.dataset.value
+        //     value = target.dataset.value
+    } else if (target.dataset.target) {
+        key = target.dataset.target
+        console.debug('key dataset.target:', key)
+        const element = document.getElementById(key)
+        value = element.value
+    } else if (target.type === 'radio') {
+        key = target.name
+        console.debug('key radio:', key)
+        const radios = document.getElementsByName(key)
+        for (const input of radios) {
+            if (input.checked) {
+                value = input.id
+                break
+            }
+        }
+    } else if (target.type === 'checkbox') {
+        value = target.checked
     } else {
-        value = event.target.value
+        value = target.value
     }
     if (value !== undefined) {
         options[key] = value
         console.log(`Set %c${key}:`, 'color: Khaki', value)
         await chrome.storage.sync.set({ options })
+    } else {
+        console.warn(`No Value for key: ${key}`)
     }
 }
 

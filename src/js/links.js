@@ -210,7 +210,7 @@ async function initLinks() {
 
 /**
  * Process Links
- * TODO: Cleanup this function
+ * NOTE: Look into simplifying this function
  * @function processLinks
  * @param {Array} links
  */

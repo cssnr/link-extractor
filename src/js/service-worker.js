@@ -24,6 +24,9 @@ async function onInstalled(details) {
         linksDisplay: -1,
         flags: 'ig',
         lazyLoad: true,
+        lazyFavicon: true,
+        lazyTitle: '[{host}{pathname}]',
+        radioFavicon: 'default',
         removeDuplicates: true,
         defaultFilter: true,
         saveState: true,
@@ -51,7 +54,7 @@ async function onInstalled(details) {
         }
     }
     checkPerms().then((hasPerms) => {
-        if (hasPerms) {
+        if (hasPerms /* NOSONAR */) {
             onAdded()
         } else {
             onRemoved()
@@ -153,7 +156,7 @@ async function onCommand(command, tab) {
         // await injectCopyLinks(tab)
         await injectTab({ open: false })
         const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copyLinks, [options.removeDuplicates, true])
+        await injectFunction(copyLinks, [options.removeDuplicates])
     } else if (command === 'copySelection') {
         console.debug('copySelection')
         // await injectCopyLinks(tab, true)
@@ -172,26 +175,29 @@ async function onCommand(command, tab) {
  * @param {Object} changes
  * @param {String} namespace
  */
-async function onChanged(changes, namespace) {
+async function onChanged(changes, namespace) /* NOSONAR */ {
     // console.debug('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             if (oldValue?.contextMenu !== newValue?.contextMenu) {
                 if (newValue?.contextMenu) {
-                    console.log('Enabled contextMenu...')
+                    console.log('contextMenu: %cEnabling.', 'color: Lime')
+                    // chrome.storage.sync
+                    //     .get(['patterns'])
+                    //     .then((items) => createContextMenus(items.patterns))
                     const { patterns } = await chrome.storage.sync.get([
                         'patterns',
                     ])
                     createContextMenus(patterns)
                 } else {
-                    console.log('Disabled contextMenu...')
+                    console.log('contextMenu: %cDisabling.', 'color: OrangeRed')
                     chrome.contextMenus.removeAll()
                 }
             }
         } else if (namespace === 'sync' && key === 'patterns') {
             const { options } = await chrome.storage.sync.get(['options'])
             if (options?.contextMenu) {
-                console.log('Updating Context Menu Patterns...')
+                console.log('contextMenu: %cUpdating Patterns.', 'color: Aqua')
                 createContextMenus(newValue)
             }
         }
@@ -347,7 +353,7 @@ function copyActiveElementText(ctx) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.log('No Text to Copy.', 'color: Yellow')
+        console.log('%cNo Text to Copy.', 'color: Yellow')
     }
 }
 
@@ -380,7 +386,7 @@ function copyLinks(removeDuplicates, selection = false) {
         // noinspection JSIgnoredPromiseFromCall
         navigator.clipboard.writeText(text)
     } else {
-        console.info('No Links to Copy.')
+        console.log('%cNo Links to Copy.', 'color: Yellow')
     }
 }
 
@@ -428,7 +434,7 @@ async function setDefaultOptions(defaultOptions) {
 
     // patterns
     if (!patterns) {
-        console.info('Set patterns to empty array.')
+        console.log('Init patterns to empty array.')
         patterns = []
         await chrome.storage.sync.set({ patterns })
     }
