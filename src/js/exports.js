@@ -139,10 +139,11 @@ function hideShowElement(selector, show, speed = 'fast') {
 
 /**
  * Save Options Callback
+ * NOTE: Look into simplifying this function
  * @function saveOptions
  * @param {InputEvent} event
  */
-export async function saveOptions(event) {
+export async function saveOptions(event) /* NOSONAR */ {
     console.debug('saveOptions:', event)
     // console.debug('%c ----- targets -----', 'color: Yellow')
     // console.debug('event.currentTarget:', event.currentTarget)

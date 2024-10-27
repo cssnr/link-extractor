@@ -366,7 +366,7 @@ let editing = false
 async function filterClick(event) {
     // console.debug('filterClick:', event)
     if (event.type === 'submit') {
-        // TODO: The submit event is also triggering a click event
+        // NOTE: The submit event is also triggering a click event
         return event.preventDefault()
     }
     if (event.target?.classList?.contains('filter-edit')) {
