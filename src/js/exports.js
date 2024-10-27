@@ -204,7 +204,7 @@ export async function saveOptions(event) /* NOSONAR */ {
     }
     if (value !== undefined) {
         options[key] = value
-        console.log(`Set %c${key}:`, 'color: Khaki', value)
+        console.log(`Set %c${key}:`, 'color: Aqua', value)
         await chrome.storage.sync.set({ options })
     } else {
         console.warn(`No Value for key: ${key}`)

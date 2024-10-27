@@ -100,45 +100,77 @@ function setUninstallURL() {
  */
 async function onClicked(ctx, tab) {
     console.log('onClicked:', ctx, tab)
-    if (['options', 'filters'].includes(ctx.menuItemId)) {
+    console.log('menuItemId:', ctx.menuItemId)
+    const { options } = await chrome.storage.sync.get(['options'])
+    if (ctx.menuItemId === 'openOptionsPage') {
         await chrome.runtime.openOptionsPage()
-    } else if (ctx.menuItemId === 'links') {
-        console.debug('injectTab: links')
-        await injectTab()
-    } else if (ctx.menuItemId === 'domains') {
-        console.debug('injectTab: domains')
-        await injectTab({ domains: true })
-    } else if (ctx.menuItemId === 'selection') {
-        console.debug('injectTab: selection')
-        await injectTab({ tab, selection: true })
-    } else if (ctx.menuItemId.startsWith('filter-')) {
-        const i = ctx.menuItemId.split('-')[1]
-        console.debug(`injectTab: filter-${i}`)
-        const { patterns } = await chrome.storage.sync.get(['patterns'])
-        console.debug(`filter: ${patterns[i]}`)
-        await injectTab({ filter: patterns[i] })
-    } else if (ctx.menuItemId === 'copy') {
+    } else if (ctx.menuItemId === 'openPopup') {
+        await chrome.action.openPopup()
+    } else if (ctx.menuItemId === 'copyLinkText') {
         console.debug('injectFunction: copyActiveElementText: copy', ctx)
         await injectFunction(copyActiveElementText, [ctx])
-    } else if (ctx.menuItemId === 'copyAllLinks') {
-        console.debug('injectFunction: copyLinks: copyAllLinks', tab)
-        // await injectCopyLinks(tab)
-        await injectTab({ tab, open: false })
-        const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copyLinks, [options.removeDuplicates])
-    } else if (ctx.menuItemId === 'copySelLinks') {
-        console.debug('injectFunction: copyLinks: copySelLinks', tab)
-        // await injectCopyLinks(tab, true)
-        await injectTab({ tab, open: false })
-        const { options } = await chrome.storage.sync.get(['options'])
-        await injectFunction(copyLinks, [options.removeDuplicates, true])
-    } else {
-        console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
+    } else if (ctx.menuItemId.startsWith('copy')) {
+        console.debug('%cCopy:', 'color: Aqua', ctx.menuItemId)
+        if (ctx.menuItemId === 'copyAllLinks') {
+            await injectTab({ tab, open: false })
+            await injectFunction(copyLinks, [options.removeDuplicates])
+        } else if (ctx.menuItemId === 'copyAllDomains') {
+            await injectTab({ tab, open: false })
+            // TODO: Update copyLinks to copy Domains
+            console.log('%cINOP!', 'color: Yellow')
+            // await injectFunction(copyLinks, [options.removeDuplicates])
+        } else if (ctx.menuItemId === 'copySelectedLinks') {
+            await injectTab({ tab, open: false })
+            await injectFunction(copyLinks, [options.removeDuplicates, true])
+        } else if (ctx.menuItemId.includes('-')) {
+            const i = ctx.menuItemId.split('-')[1]
+            console.debug('copy-filter:', i)
+            const { patterns } = await chrome.storage.sync.get(['patterns'])
+            console.debug(`filter: ${patterns[i]}`)
+            // await injectTab({ filter: patterns[i] })
+            // TODO: Update copyLinks to use Filters
+            console.log('%cINOP!', 'color: Yellow')
+            // await injectFunction(copyLinks, [options.removeDuplicates])
+        }
+    } else if (ctx.menuItemId.startsWith('extract')) {
+        console.debug('%cExtract:', 'color: Aqua', ctx.menuItemId)
+        if (ctx.menuItemId === 'extractAllLinks') {
+            await injectTab()
+        } else if (ctx.menuItemId === 'extractAllDomains') {
+            await injectTab({ domains: true })
+        } else if (ctx.menuItemId === 'extractSelectedLinks') {
+            await injectTab({ tab, selection: true })
+        } else if (ctx.menuItemId.includes('-')) {
+            const i = ctx.menuItemId.split('-')[1]
+            console.debug('extract-filter:', i)
+            const { patterns } = await chrome.storage.sync.get(['patterns'])
+            console.debug(`filter: ${patterns[i]}`)
+            await injectTab({ filter: patterns[i] })
+        }
+    } else if (ctx.menuItemId.startsWith('open')) {
+        console.debug('%cOpen:', 'color: Yellow', ctx.menuItemId)
+        // TODO: Create openLinks Function to Inject
+        console.log('%cINOP!', 'color: Yellow')
+        // if (ctx.menuItemId === 'openAllLinks') {
+        //     await injectTab({ tab, open: false })
+        //     await injectFunction(copyLinks, [options.removeDuplicates])
+        // } else if (ctx.menuItemId === 'openAllDomains') {
+        //     await injectTab({ tab, open: false })
+        //     // await injectFunction(copyLinks, [options.removeDuplicates])
+        // } else if (ctx.menuItemId.includes('-')) {
+        //     const i = ctx.menuItemId.split('-')[1]
+        //     console.debug('open-filter:', i)
+        //     const { patterns } = await chrome.storage.sync.get(['patterns'])
+        //     console.debug(`filter: ${patterns[i]}`)
+        //     await injectTab({ filter: patterns[i] })
+        //     // await injectFunction(copyLinks, [options.removeDuplicates])
+        // }
     }
 }
 
 /**
  * On Command Callback
+ * TODO: Sync Command names with CTX onClicked IDs
  * @function onCommand
  * @param {String} command
  * @param {chrome.tabs.Tab} tab
@@ -280,39 +312,70 @@ function createContextMenus(patterns) {
     }
     console.debug('createContextMenus:', patterns)
     chrome.contextMenus.removeAll()
-    const contexts = [
-        [['link'], 'copy', 'Copy Link Text to Clipboard'],
-        [['all'], 'copyAllLinks', 'Copy All Links to Clipboard'],
-        [['selection'], 'copySelLinks', 'Copy Selected Links to Clipboard'],
-        [['selection'], 'selection', 'Extract Links from Selection'],
+    const parents = [
+        [['link'], 'copyLinkText', 'Copy Link Text'],
+        [['link'], 'separator'],
+        [['all'], 'extract', 'Extract'],
+        [['all'], 'copy', 'Copy'],
+        [['all'], 'open', 'Open - INOP'],
         [['all'], 'separator'],
-        [['all'], 'links', 'Extract All Links'],
-        [['all'], 'filters', 'Extract with Filter'],
-        [['all'], 'domains', 'Extract Domains Only'],
-        [['all'], 'separator'],
-        [['all'], 'options', 'Open Options'],
+        [['all'], 'openPopup', 'Show Popup'],
+        [['all'], 'openOptionsPage', 'Open Options'],
     ]
-    contexts.forEach(addContext)
-    if (patterns) {
-        patterns.forEach((pattern, i) => {
-            console.debug(`pattern: ${i}: ${pattern}`)
-            chrome.contextMenus.create({
-                contexts: ['all'],
-                id: `filter-${i}`,
-                title: pattern,
-                parentId: 'filters',
-            })
+    const children = {
+        extract: [
+            [['selection'], 'extractSelectedLinks', 'Extract Selected Links'],
+            [['selection'], 'separator'],
+            [['all'], 'extractAllLinks', 'Extract All Links'],
+            [['all'], 'extractAllDomains', 'Extract All Domains'],
+            [['all'], 'extract-filter', 'Extract w/ Filter'],
+        ],
+        copy: [
+            [['selection'], 'copySelectedLinks', 'Copy Selected Links'],
+            [['selection'], 'separator'],
+            [['all'], 'copyAllLinks', 'Copy All Links'],
+            [['all'], 'copyAllDomains', 'Copy All Domains - INOP'],
+            [['all'], 'copy-filter', 'Copy w/ Filter - INOP'],
+        ],
+        open: [
+            [['selection'], 'openSelectedLinks', 'Open Selected Links'],
+            [['selection'], 'separator'],
+            [['all'], 'openAllLinks', 'Open All Links - INOP'],
+            [['all'], 'openAllDomains', 'Open All Domains - INOP'],
+            [['all'], 'open-filter', 'Open w/ Filter - INOP'],
+        ],
+    }
+    parents.forEach(addContext)
+    for (const [key, values] of Object.entries(children)) {
+        console.debug(`key: ${key}:`, values)
+        values.forEach((value) => {
+            addContext(value, key)
+            addPatterns(patterns, `${key}-filter`, key)
         })
     }
 }
 
+function addPatterns(patterns, parentId, key) {
+    patterns.forEach((pattern, i) => {
+        // console.debug(`pattern: ${i}: ${pattern}`)
+        chrome.contextMenus.create({
+            contexts: ['all'],
+            id: `${key}-${i}`,
+            title: pattern,
+            parentId,
+        })
+    })
+}
+
 /**
  * Add Context from Array
+ * TODO: Cleanup the createProperties Object creation
  * @function addContext
  * @param {[chrome.contextMenus.ContextType[],String,String,chrome.contextMenus.ContextItemType?]} context
+ * @param {String} [parentId]
  */
-function addContext(context) {
-    // console.debug('addContext:', context)
+function addContext(context, parentId) {
+    // console.debug('addContext:', parentId, context)
     try {
         if (context[1] === 'separator') {
             const id = Math.random().toString().substring(2, 7)
@@ -320,12 +383,17 @@ function addContext(context) {
             context.push('separator', 'separator')
         }
         // console.debug('menus.create:', context)
-        chrome.contextMenus.create({
+        const createProperties = {
             contexts: context[0],
             id: context[1],
             title: context[2],
             type: context[3] || 'normal',
-        })
+        }
+        if (typeof parentId === 'string') {
+            createProperties.parentId = parentId
+        }
+        // console.debug('createProperties:', createProperties)
+        chrome.contextMenus.create(createProperties)
     } catch (e) {
         console.log('%cError Adding Context:', 'color: Yellow', e)
     }
@@ -447,7 +515,7 @@ async function setDefaultOptions(defaultOptions) {
         if (options[key] === undefined) {
             changed = true
             options[key] = value
-            console.log(`Set %c${key}:`, 'color: Khaki', value)
+            console.log(`Set %c${key}:`, 'color: Aqua', value)
         }
     }
     if (changed) {
