@@ -311,6 +311,7 @@ function extractURLs(text) {
                 origin: url.origin,
             }
             urls.push(data)
+            // eslint-disable-next-line no-unused-vars
         } catch (e) {
             console.debug('Error Processing match:', urlmatch)
         }
