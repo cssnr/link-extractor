@@ -1,6 +1,6 @@
 // JS for links.html
 
-import { openLinks, textFileDownload } from './exports.js'
+import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
