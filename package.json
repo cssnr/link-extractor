@@ -14,26 +14,28 @@
     "manifest:test": "npx json-merger -p -am concat -o src/manifest.json manifest.json tests/manifest-test.json",
     "build:chrome": "npm run manifest:chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
     "build:firefox": "npm run manifest:firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
-    "build": "npm run build:chrome && npm run build:firefox"
+    "build": "npm run build:chrome && npm run build:firefox",
+    "prettier": "npx prettier --check ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "bootstrap": "^5.3.3",
     "clipboard": "^2.0.11",
     "datatables.net": "^2.1.5",
-    "datatables.net-bs5": "^2.2.1",
+    "datatables.net-bs5": "^2.2.2",
     "datatables.net-buttons": "^3.1.2",
-    "datatables.net-buttons-bs5": "^3.2.0",
+    "datatables.net-buttons-bs5": "^3.2.2",
     "jquery": "^3.7.1",
     "pdfjs-dist": "^4.10.38"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@types/chrome": "^0.0.299",
-    "eslint": "^9.18.0",
+    "eslint": "^9.21.0",
     "gulp": "^5.0.0",
-    "json-merger": "^2.0.0",
-    "prettier": "^3.4.2",
+    "json-merger": "^2.1.0",
+    "prettier": "^3.5.2",
     "puppeteer": "^22.15.0",
-    "web-ext": "^8.3.0"
+    "web-ext": "^8.4.0"
   }
 }

@@ -8,6 +8,7 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/link-extractor/actions/workflows/lint.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/link-extractor/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
@@ -16,8 +17,7 @@
 
 # Link Extractor
 
-Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse, or open all links/domains from a site or
-text with optional filters.
+Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse,or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
 Website: https://link-extractor.cssnr.com/
@@ -28,8 +28,6 @@ Website: https://link-extractor.cssnr.com/
   - [Known Issues](#Known-Issues)
 - [Configuration](#Configuration)
 - [Support](#Support)
-- [Development](#Development)
-  - [Building](#Building)
 - [Contributing](#Contributing)
 
 ## Install
@@ -54,9 +52,8 @@ Mobile browser support available for
 
 ## Features
 
-Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for
-new features.  
-For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
+Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
+for new features. For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
 
 - Extract All Links and Domains from Any Site
 - Extract Links from Selected Text on any Site
@@ -82,13 +79,13 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 - Option to Set Names/Titles for Saved Filters
 - Option to Extract Using Multiple Filters with AND/OR
 
-> [!TIP] > **Don't see your feature here?**
-> Request one on
-> the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
+> [!TIP]
+> Don't see your feature here?
+> Request one on the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
 
 ### Known Issues
 
-- Unable to grant host permissions on Kiwi Browser (Kiwi is expected to update before the end of the year).
+See the [Support](#Support) to let us know about issues...
 
 For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
 
@@ -124,103 +121,25 @@ If you are experiencing an issue/bug or getting unexpected results, you can:
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
 
-To support this project, see the [Contributing](#Contributing) section at the bottom.
-
-# Development
-
-**Quick Start**
-
-First, clone (or download) this repository and change into the directory.
-
-Second, install the dependencies:
-
-```shell
-npm install
-```
-
-Finally, to run Chrome or Firefox with web-ext, run one of the following:
-
-```shell
-npm run chrome
-npm run firefox
-```
-
-Additionally, to Load Unpacked/Temporary Add-on make a `manifest.json` and run from the [src](src) folder, run one of
-the following:
-
-```shell
-npm run manifest:chrome
-npm run manifest:firefox
-```
-
-Chrome: [https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)  
-Firefox: [https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)
-
-For more information on
-web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
-To pass additional arguments to an `npm run` command, use `--`.  
-Example: `npm run chrome -- --chromium-binary=...`
-
-## Building
-
-Install the requirements and copy libraries into the `src/dist` directory by running `npm install`.
-See [gulpfile.js](gulpfile.js) for more information on `postinstall`.
-
-```shell
-npm install
-```
-
-To create a `.zip` archive of the [src](src) directory for the desired browser run one of the following:
-
-```shell
-npm run build
-npm run build:chrome
-npm run build:firefox
-```
-
-For more information on building, see the scripts section in the [package.json](package.json) file.
-
-### Chrome Setup
-
-1. Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
-1. Unzip the archive, place the folder where it must remain and note its location for later.
-1. Open Chrome, click the `3 dots` in the top right, click `Extensions`, click `Manage Extensions`.
-1. In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
-1. Navigate to the folder you extracted in step #3 then click `Select Folder`.
-
-### Firefox Setup
-
-1. Build or Download a [Release](https://github.com/cssnr/link-extractor/releases).
-1. Unzip the archive, place the folder where it must remain and note its location for later.
-1. Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
-1. Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
-1. Optional: open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
-
-If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
-You may also use an Unbranded
-Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)
-
-1. Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
-1. Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
-1. Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
-
 # Contributing
 
-Currently, the best way to contribute to this project is to give a 5-star rating
-on [Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-or [Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+Currently, the best way to contribute to this project is to give a 5-star rating on
+[Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp) or
+[Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+
+For instructions on building, testing and submitting a PR, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Other Web Extensions I have created and published:
 
-- [Link Extractor](https://github.com/cssnr/link-extractor)
-- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
-- [Auto Auth](https://github.com/cssnr/auto-auth)
-- [Cache Cleaner](https://github.com/cssnr/cache-cleaner)
-- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
-- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
-- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
-- [ASN Plus](https://github.com/cssnr/asn-plus)
-- [Aviation Tools](https://github.com/cssnr/aviation-tools)
-- [Text Formatter](https://github.com/cssnr/text-formatter)
+- [Link Extractor](https://github.com/cssnr/link-extractor?tab=readme-ov-file#readme)
+- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab?tab=readme-ov-file#readme)
+- [Auto Auth](https://github.com/cssnr/auto-auth?tab=readme-ov-file#readme)
+- [Cache Cleaner](https://github.com/cssnr/cache-cleaner?tab=readme-ov-file#readme)
+- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader?tab=readme-ov-file#readme)
+- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension?tab=readme-ov-file#readme)
+- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension?tab=readme-ov-file#readme)
+- [ASN Plus](https://github.com/cssnr/asn-plus?tab=readme-ov-file#readme)
+- [Aviation Tools](https://github.com/cssnr/aviation-tools?tab=readme-ov-file#readme)
+- [Text Formatter](https://github.com/cssnr/text-formatter?tab=readme-ov-file#readme)
 
 For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)

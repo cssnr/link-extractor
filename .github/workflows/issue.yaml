@@ -2,8 +2,7 @@ name: "Issue"
 
 on:
   issues:
-    types:
-      - opened
+    types: [opened]
 
 jobs:
   issue:
@@ -21,10 +20,10 @@ jobs:
           echo Issue title: '${{ github.event.issue.title }}'
           echo Issue body: '${{ github.event.issue.body }}'
 
-      - name: "Setup Node"
+      - name: "Setup Node 22"
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: "Parse Issue"
         id: issue
