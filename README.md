@@ -8,6 +8,7 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/link-extractor/actions/workflows/lint.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/link-extractor/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
@@ -16,8 +17,7 @@
 
 # Link Extractor
 
-Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse, or open all links/domains from a site or
-text with optional filters.
+Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse,or open all links/domains from a site or text with optional filters.
 Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
 
 Website: https://link-extractor.cssnr.com/
@@ -81,9 +81,9 @@ for new features. For any issues, bugs or concerns; please [Open an Issue](https
 - Option to Set Names/Titles for Saved Filters
 - Option to Extract Using Multiple Filters with AND/OR
 
-> [!TIP] > **Don't see your feature here?**
-> Request one on
-> the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
+> [!TIP]
+> Don't see your feature here?  
+> Request one on the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
 
 ### Known Issues
 

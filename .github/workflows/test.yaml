@@ -2,10 +2,12 @@ name: "Test"
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "18 18 * * 1,3,5"
   pull_request:
-    branches: ["master"]
+    branches: [master]
   push:
-    branches: ["master"]
+    branches: [master]
     #paths:
     #  - ".github/workflows/test.yaml"
     #  - "src/**"
@@ -37,6 +39,7 @@ jobs:
           npm install
 
       - name: "Test"
+        id: test
         run: |
           npm run test
 
@@ -53,3 +56,9 @@ jobs:
           webhost: "https://artifacts.hosted-domains.com"
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Schedule Failure Notification"
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}

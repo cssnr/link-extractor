@@ -2,8 +2,7 @@ name: "Issue"
 
 on:
   issues:
-    types:
-      - opened
+    types: [opened]
 
 jobs:
   issue:
