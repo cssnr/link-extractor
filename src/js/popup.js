@@ -5,7 +5,6 @@ import {
     detectBrowser,
     grantPerms,
     injectTab,
-    openLinks,
     saveOptions,
     updateManifest,
     updateOptions,
@@ -229,14 +228,24 @@ async function linksForm(event) {
     } else if (event.submitter.id === 'open-parsed') {
         const urls = extractURLs(value)
         // console.debug('urls:', urls)
-        await openLinks(urls)
+        // await openLinks(urls)
+        const response = await chrome.runtime.sendMessage({
+            message: 'openLinks',
+            data: urls,
+        })
+        console.log('response:', response)
         // urls.forEach(function (url) {
         //     openURL(url.href, options.lazyLoad)
         // })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
         // console.debug('text:', text)
-        await openLinks(text)
+        // await openLinks(text)
+        const response = await chrome.runtime.sendMessage({
+            message: 'openLinks',
+            data: text,
+        })
+        console.log('response:', response)
         // text.forEach(function (url) {
         //     // links without a : get prepended the web extension url by default
         //     openURL(url, options.lazyLoad)
