@@ -59,28 +59,34 @@
 
     <form id="options-form">
         <div class="row">
-            <div class="col-12 mb-2">
-                <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
-<!--                <a id="reset-regex" class="float-end align-bottom small text-decoration-none" role="button"-->
-<!--                   data-target="flags" data-value="ig" data-reset-input="flags">Reset</a>-->
-<!--                <input id="flags" type="text" class="form-control" autocomplete="off">-->
+            <div class="col-sm-6  col-12 mb-2">
+                <label for="flags" class="form-label"><i class="fa-solid fa-code me-1"></i> Regex Flags</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Regular expression flags used when matching links."></i>
                 <div class="input-group">
                     <input id="flags" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="flagsHelp">
                     <span id="reset-regex" class="input-group-text text-warning-emphasis" role="button"
                           data-bs-title="Reset Regex Flags to Default Value." data-bs-toggle="tooltip"
                           data-value="ig" data-reset-input="flags">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </span>
-<!--                    <span class="input-group-text">-->
-<!--                        <i class="fa-solid fa-circle-info" data-bs-title="Title for Lazy Loaded Tabs." data-bs-toggle="tooltip"></i>-->
-<!--                    </span>-->
+                    <i class="fa-solid fa-rotate-left"></i>
+                </span>
                 </div>
                 <div id="flagsHelp" class="form-text">
-                    Regex Flags for Filtering.
+                    Regex Flags Used.
                     <a class="ms-1 text-decoration-none" target="_blank" rel="noopener"
                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags">
                         More Info <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
                 </div>
+            </div>
+
+            <div class="col-sm-6  col-12 mb-2">
+                <label for="tabsRate" class="form-label"><i class="fa-solid fa-clock-rotate-left me-1"></i> Tab Rate Limit</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="When opening multiple tabs, this delay will be applied between each one."></i>
+                <div class="input-group">
+                    <input id="tabsRate" aria-describedby="tabsRateHelp" type="number" class="form-control" autocomplete="off"
+                       step="10" min="0" max="5000">
+                    <span class="input-group-text">ms</span>
+                </div>
+                <div class="form-text" id="tabsRateHelp">Time Between Opening Tabs.</div>
             </div>
         </div> <!-- row -->
 

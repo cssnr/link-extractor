@@ -199,6 +199,17 @@ export async function saveOptions(event) /* NOSONAR */ {
         }
     } else if (target.type === 'checkbox') {
         value = target.checked
+    } else if (event.target.type === 'number') {
+        const number = parseFloat(event.target.value)
+        let min = parseFloat(event.target.min)
+        let max = parseFloat(event.target.max)
+        if (!isNaN(number) && number >= min && number <= max) {
+            event.target.value = number.toString()
+            value = number
+        } else {
+            event.target.value = options[event.target.id]
+            return
+        }
     } else {
         value = target.value
     }
@@ -208,6 +219,23 @@ export async function saveOptions(event) /* NOSONAR */ {
         await chrome.storage.sync.set({ options })
     } else {
         console.warn(`No Value for key: ${key}`)
+    }
+}
+
+/**
+ * Open URL
+ * @function openLinks
+ * @param {String[]} links
+ */
+export async function openLinks(links) {
+    console.debug('openLinks:', links)
+    const { options } = await chrome.storage.sync.get(['options'])
+    console.debug('options:', options)
+    for (const link of links) {
+        openURL(link, options.lazyLoad)
+        if (options.tabsRate) {
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+        }
     }
 }
 

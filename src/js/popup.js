@@ -5,7 +5,7 @@ import {
     detectBrowser,
     grantPerms,
     injectTab,
-    openURL,
+    openLinks,
     saveOptions,
     updateManifest,
     updateOptions,
@@ -220,7 +220,6 @@ async function linksForm(event) {
     event.preventDefault()
     const value = event.target.elements['links-text'].value
     // console.debug('value:', value)
-    const { options } = await chrome.storage.sync.get(['options'])
     if (event.submitter.id === 'parse-links') {
         const urls = extractURLs(value)
         // console.debug('urls:', urls)
@@ -230,16 +229,18 @@ async function linksForm(event) {
     } else if (event.submitter.id === 'open-parsed') {
         const urls = extractURLs(value)
         // console.debug('urls:', urls)
-        urls.forEach(function (url) {
-            openURL(url.href, options.lazyLoad)
-        })
+        await openLinks(urls)
+        // urls.forEach(function (url) {
+        //     openURL(url.href, options.lazyLoad)
+        // })
     } else if (event.submitter.id === 'open-text') {
         let text = value.split(/\s+/).filter((s) => s !== '')
         // console.debug('text:', text)
-        text.forEach(function (url) {
-            // links without a : get prepended the web extension url by default
-            openURL(url, options.lazyLoad)
-        })
+        await openLinks(text)
+        // text.forEach(function (url) {
+        //     // links without a : get prepended the web extension url by default
+        //     openURL(url, options.lazyLoad)
+        // })
     } else {
         console.error('Unknown event.submitter:', event.submitter)
     }
