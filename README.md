@@ -28,8 +28,6 @@ Website: https://link-extractor.cssnr.com/
   - [Known Issues](#Known-Issues)
 - [Configuration](#Configuration)
 - [Support](#Support)
-- [Development](#Development)
-  - [Building](#Building)
 - [Contributing](#Contributing)
 
 ## Install
@@ -82,12 +80,12 @@ for new features. For any issues, bugs or concerns; please [Open an Issue](https
 - Option to Extract Using Multiple Filters with AND/OR
 
 > [!TIP]
-> Don't see your feature here?  
+> Don't see your feature here?
 > Request one on the [Feature Request Discussion](https://github.com/cssnr/link-extractor/discussions/categories/feature-requests).
 
 ### Known Issues
 
-- Unable to grant host permissions on Kiwi Browser (Kiwi is expected to update before the end of the year).
+See the [Support](#Support) to let us know about issues...
 
 For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
 
@@ -203,9 +201,11 @@ You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension
 
 # Contributing
 
-Currently, the best way to contribute to this project is to give a 5-star rating
-on [Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
-or [Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+Currently, the best way to contribute to this project is to give a 5-star rating on
+[Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp) or
+[Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+
+For instructions on building, testing and submitting a PR, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Other Web Extensions I have created and published:
 
