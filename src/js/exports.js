@@ -225,14 +225,19 @@ export async function saveOptions(event) /* NOSONAR */ {
 /**
  * Open URL
  * @function openLinks
- * @param {String[]} links
+ * @param {String[]|Object} links
+ * @param {String} [key]
  */
-export async function openLinks(links) {
+export async function openLinks(links, key = 'href') {
     console.debug('openLinks:', links)
     const { options } = await chrome.storage.sync.get(['options'])
-    console.debug('options:', options)
+    // console.debug('options:', options)
     for (const link of links) {
-        openURL(link, options.lazyLoad)
+        if (typeof link === 'object') {
+            openURL(link[key], options.lazyLoad)
+        } else {
+            openURL(link, options.lazyLoad)
+        }
         if (options.tabsRate) {
             await new Promise((resolve) => setTimeout(resolve, 1000))
         }
