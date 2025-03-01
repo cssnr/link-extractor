@@ -14,7 +14,8 @@
     "manifest:test": "npx json-merger -p -am concat -o src/manifest.json manifest.json tests/manifest-test.json",
     "build:chrome": "npm run manifest:chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
     "build:firefox": "npm run manifest:firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
-    "build": "npm run build:chrome && npm run build:firefox"
+    "build": "npm run build:chrome && npm run build:firefox",
+    "prettier": "npx prettier --check ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",

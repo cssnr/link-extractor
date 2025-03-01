@@ -1,17 +1,19 @@
 name: "Test"
 
 on:
-  push:
-    branches: ["master"]
-    paths:
-      - "src/**"
-      - "tests/**"
+  workflow_dispatch:
   pull_request:
     branches: ["master"]
+  push:
+    branches: ["master"]
     #paths:
+    #  - ".github/workflows/test.yaml"
     #  - "src/**"
     #  - "tests/**"
-  workflow_dispatch:
+    #  - "gulpfile.js"
+    #  - "manifest.json"
+    #  - "package.json"
+    #  - "package-lock.json"
 
 jobs:
   test:
@@ -28,14 +30,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          #cache: npm
 
       - name: "Install"
         run: |
           npm install
-
-      - name: "Lint"
-        run: |
-          npm run lint
 
       - name: "Test"
         run: |
