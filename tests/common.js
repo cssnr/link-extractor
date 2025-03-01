@@ -6,7 +6,7 @@ const timeout = 10000
 
 /**
  * @function getBrowser
- * @return {Promise<puppeteer.Browser>}
+ * @return {puppeteer.Browser}
  */
 async function getBrowser() {
     const pathToExtension = path.join(process.cwd(), sourceDir)

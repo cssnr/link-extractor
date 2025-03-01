@@ -54,9 +54,8 @@ Mobile browser support available for
 
 ## Features
 
-Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests) for
-new features.  
-For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
+Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
+for new features. For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/link-extractor/issues/new).
 
 - Extract All Links and Domains from Any Site
 - Extract Links from Selected Text on any Site
@@ -156,8 +155,7 @@ npm run manifest:firefox
 Chrome: [https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)  
 Firefox: [https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)
 
-For more information on
-web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
+For more information on web-ext, [read this documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/).  
 To pass additional arguments to an `npm run` command, use `--`.  
 Example: `npm run chrome -- --chromium-binary=...`
 
@@ -197,8 +195,7 @@ For more information on building, see the scripts section in the [package.json](
 1. Optional: open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
-You may also use an Unbranded
-Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)
+You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)
 
 1. Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1. Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
@@ -212,15 +209,15 @@ or [Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this p
 
 Other Web Extensions I have created and published:
 
-- [Link Extractor](https://github.com/cssnr/link-extractor)
-- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
-- [Auto Auth](https://github.com/cssnr/auto-auth)
-- [Cache Cleaner](https://github.com/cssnr/cache-cleaner)
-- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
-- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
-- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
-- [ASN Plus](https://github.com/cssnr/asn-plus)
-- [Aviation Tools](https://github.com/cssnr/aviation-tools)
-- [Text Formatter](https://github.com/cssnr/text-formatter)
+- [Link Extractor](https://github.com/cssnr/link-extractor?tab=readme-ov-file#readme)
+- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab?tab=readme-ov-file#readme)
+- [Auto Auth](https://github.com/cssnr/auto-auth?tab=readme-ov-file#readme)
+- [Cache Cleaner](https://github.com/cssnr/cache-cleaner?tab=readme-ov-file#readme)
+- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader?tab=readme-ov-file#readme)
+- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension?tab=readme-ov-file#readme)
+- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension?tab=readme-ov-file#readme)
+- [ASN Plus](https://github.com/cssnr/asn-plus?tab=readme-ov-file#readme)
+- [Aviation Tools](https://github.com/cssnr/aviation-tools?tab=readme-ov-file#readme)
+- [Text Formatter](https://github.com/cssnr/text-formatter?tab=readme-ov-file#readme)
 
 For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)
