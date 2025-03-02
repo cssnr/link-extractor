@@ -241,7 +241,9 @@ export async function openLinks(links, key = 'href') {
         }
         count += 1
         if (options.tabsRate && options.tabsAfter <= count) {
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            await new Promise((resolve) =>
+                setTimeout(resolve, options.tabsRate)
+            )
         }
     }
 }
