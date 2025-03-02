@@ -59,7 +59,7 @@ jobs:
           port: ${{ secrets.RSYNC_PORT }}
           webhost: "https://artifacts.hosted-domains.com"
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Schedule Failure Notification"
         uses: sarisia/actions-status-discord@v1
