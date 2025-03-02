@@ -46,7 +46,7 @@ jobs:
           npm run test
 
       - name: "Push Artifacts"
-        uses: cssnr/push-artifacts-action@comment
+        uses: cssnr/push-artifacts-action@delete
         if: ${{ github.event_name == 'pull_request' }}
         continue-on-error: true
         with:
