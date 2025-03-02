@@ -482,15 +482,11 @@ async function openLinksClick(event) {
     const links = getTableLinks(closest?.dataset?.target)
     // console.debug('links:', links)
     if (links) {
-        // await openLinks(links.split('\n'))
         const response = await chrome.runtime.sendMessage({
             message: 'openLinks',
             data: links.split('\n'),
         })
         console.log('response:', response)
-        // links.split('\n').forEach(function (url) {
-        //     openURL(url, options.lazyLoad)
-        // })
     } else {
         showToast('No Links to Open.', 'warning')
     }

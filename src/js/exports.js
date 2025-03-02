@@ -232,13 +232,15 @@ export async function openLinks(links, key = 'href') {
     console.debug('openLinks:', links)
     const { options } = await chrome.storage.sync.get(['options'])
     // console.debug('options:', options)
+    let count = 0
     for (const link of links) {
         if (typeof link === 'object') {
             openURL(link[key], options.lazyLoad)
         } else {
             openURL(link, options.lazyLoad)
         }
-        if (options.tabsRate) {
+        count += 1
+        if (options.tabsRate && options.tabsAfter <= count) {
             await new Promise((resolve) => setTimeout(resolve, 1000))
         }
     }

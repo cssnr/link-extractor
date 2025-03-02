@@ -24,7 +24,9 @@ async function onInstalled(details) {
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
         flags: 'ig',
-        tabsRate: 0,
+        tabsLimit: false,
+        tabsRate: 250,
+        tabsAfter: 10,
         lazyLoad: true,
         lazyFavicon: true,
         lazyTitle: '[{host}{pathname}]',
