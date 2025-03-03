@@ -1,6 +1,15 @@
+# IDE
 .idea/
 .vscode/
+
+# Tools
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Build
 dist/
 node_modules/
-package-lock.json
+
+# Files
 *.html

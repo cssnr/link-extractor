@@ -1,6 +1,6 @@
 // JS for links.html
 
-import { openURL, textFileDownload } from './exports.js'
+import { textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
@@ -481,11 +481,12 @@ async function openLinksClick(event) {
     const closest = event.target?.closest('button')
     const links = getTableLinks(closest?.dataset?.target)
     // console.debug('links:', links)
-    const { options } = await chrome.storage.sync.get(['options'])
     if (links) {
-        links.split('\n').forEach(function (url) {
-            openURL(url, options.lazyLoad)
+        const response = await chrome.runtime.sendMessage({
+            message: 'openLinks',
+            data: links.split('\n'),
         })
+        console.log('response:', response)
     } else {
         showToast('No Links to Open.', 'warning')
     }
