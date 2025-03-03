@@ -85,7 +85,7 @@ for new features. For any issues, bugs or concerns; please [Open an Issue](https
 
 ### Known Issues
 
-See the [Support](#Support) to let us know about issues...
+See the [Support](#Support) section for ways to inform us about issues...
 
 For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
 
