@@ -240,7 +240,7 @@ export async function openLinks(links, key = 'href') {
             openURL(link, options.lazyLoad)
         }
         count += 1
-        if (options.tabsRate && options.tabsAfter <= count) {
+        if (options.tabsLimit && options.tabsAfter <= count) {
             await new Promise((resolve) =>
                 setTimeout(resolve, options.tabsRate)
             )
