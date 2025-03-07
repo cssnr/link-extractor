@@ -30,6 +30,7 @@ async function screenshot(name) {
 
     // Popup
     console.log('Activate Popup')
+    await new Promise((resolve) => setTimeout(resolve, 500))
     await worker.evaluate('chrome.action.openPopup();')
     page = await getPage(browser, 'popup.html', true)
     console.log('page:', page)
