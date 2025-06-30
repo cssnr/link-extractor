@@ -1,0 +1,33 @@
+name: "Draft Release"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  draft:
+    name: "Draft Release"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Draft Release Action"
+        id: draft
+        uses: cssnr/draft-release-action@master
+        with:
+          semver: patch
+          prerelease: false
+
+      - name: "Process Release Draft URL"
+        run: |
+          echo "url: ${{ steps.draft.outputs.url }}"

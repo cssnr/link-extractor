@@ -48,3 +48,21 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+      - name: "Update Release Notes Action"
+        if: ${{ github.event_name == 'release' }}
+        continue-on-error: true
+        uses: smashedr/update-release-notes-action@master
+        with:
+          type: generic
+
+      - name: "Package Changelog Action"
+        if: ${{ github.event_name == 'release' }}
+        continue-on-error: true
+        uses: cssnr/package-changelog-action@v1
+
+      - name: "Send Failure Notification"
+        if: ${{ failure() && github.event_name == 'release' }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
