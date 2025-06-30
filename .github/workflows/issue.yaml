@@ -15,10 +15,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Debug Issue"
+        env:
+          NUMBER: ${{ github.event.issue.number }}
+          TITLE: ${{ github.event.issue.title }}
+          BODY: ${{ github.event.issue.body }}
         run: |
-          echo Issue number: '${{ github.event.issue.number }}'
-          echo Issue title: '${{ github.event.issue.title }}'
-          echo Issue body: '${{ github.event.issue.body }}'
+          echo Issue number: '${{ env.NUMBER }}'
+          echo Issue title: '${{ env.TITLE }}'
+          echo Issue body: '${{ env.BODY }}'
 
       - name: "Setup Node 22"
         uses: actions/setup-node@v4
