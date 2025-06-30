@@ -79,7 +79,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           BODY: |
-            Link Extractor Results for: [${{ steps.issue.outputs.site_link }}](${{ steps.issue.outputs.site_link }})  
+            Link Extractor Results for: [${{ steps.issue.outputs.site_link }}](${{ steps.issue.outputs.site_link }})
 
             ![0](${{steps.image.outputs.url}})
 
