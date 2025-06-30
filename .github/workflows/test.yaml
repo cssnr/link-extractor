@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: "Checkout"
@@ -55,8 +58,8 @@ jobs:
           pass: ${{ secrets.RSYNC_PASS }}
           port: ${{ secrets.RSYNC_PORT }}
           webhost: "https://artifacts.hosted-domains.com"
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          #webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          #token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Schedule Failure Notification"
         uses: sarisia/actions-status-discord@v1

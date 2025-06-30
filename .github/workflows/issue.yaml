@@ -25,6 +25,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: "Install"
+        run: |
+          npm install
+
       - name: "Parse Issue"
         id: issue
         uses: cssnr/parse-issue-form-action@master
@@ -36,10 +40,6 @@ jobs:
           echo Site Link: '${{ steps.issue.outputs.site_link }}'
           echo Details: '${{ steps.issue.outputs.details }}'
           echo Support Information: '${{ steps.issue.outputs.support_information }}'
-
-      - name: "Install"
-        run: |
-          npm install
 
       - name: "Process Issue"
         env:

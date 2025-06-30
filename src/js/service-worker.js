@@ -1,11 +1,12 @@
 // JS Background Service Worker
 
-import { checkPerms, injectTab, githubURL } from './exports.js'
+import { checkPerms, injectTab, githubURL, openLinks } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.runtime.onStartup.addListener(onStartup)
 chrome.contextMenus?.onClicked.addListener(onClicked)
 chrome.commands?.onCommand.addListener(onCommand)
+chrome.runtime.onMessage.addListener(onMessage)
 chrome.storage.onChanged.addListener(onChanged)
 chrome.omnibox?.onInputChanged.addListener(onInputChanged)
 chrome.omnibox?.onInputEntered.addListener(onInputEntered)
@@ -23,6 +24,9 @@ async function onInstalled(details) {
     const { options, patterns } = await setDefaultOptions({
         linksDisplay: -1,
         flags: 'ig',
+        tabsLimit: false,
+        tabsRate: 250,
+        tabsAfter: 10,
         lazyLoad: true,
         lazyFavicon: true,
         lazyTitle: '[{host}{pathname}]',
@@ -166,6 +170,24 @@ async function onCommand(command, tab) {
     } else {
         console.error(`Unknown command: ${command}`)
     }
+}
+
+/**
+ * On Message Callback
+ * @function onMessage
+ * @param {Object} message
+ * @param {MessageSender} sender
+ * @param {Function} sendResponse
+ */
+function onMessage(message, sender, sendResponse) {
+    console.debug('onMessage:', message, sender)
+    const tabId = message.tabId || sender.tab?.id
+    console.debug('tabId:', tabId)
+    if (message.message === 'openLinks') {
+        // noinspection JSIgnoredPromiseFromCall
+        openLinks(message.data)
+    }
+    sendResponse('Success.')
 }
 
 /**

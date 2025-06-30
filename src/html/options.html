@@ -60,10 +60,8 @@
     <form id="options-form">
         <div class="row">
             <div class="col-12 mb-2">
-                <label for="flags" class="form-label"><i class="fa-solid fa-code me-2"></i> Regex Flags</label>
-<!--                <a id="reset-regex" class="float-end align-bottom small text-decoration-none" role="button"-->
-<!--                   data-target="flags" data-value="ig" data-reset-input="flags">Reset</a>-->
-<!--                <input id="flags" type="text" class="form-control" autocomplete="off">-->
+                <label for="flags" class="form-label"><i class="fa-solid fa-code me-1"></i> Regex Flags</label>
+                <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="Regular expression flags used when matching links."></i>
                 <div class="input-group">
                     <input id="flags" placeholder="Lazy Tab Title" type="text" class="form-control" aria-describedby="flagsHelp">
                     <span id="reset-regex" class="input-group-text text-warning-emphasis" role="button"
@@ -71,9 +69,6 @@
                           data-value="ig" data-reset-input="flags">
                         <i class="fa-solid fa-rotate-left"></i>
                     </span>
-<!--                    <span class="input-group-text">-->
-<!--                        <i class="fa-solid fa-circle-info" data-bs-title="Title for Lazy Loaded Tabs." data-bs-toggle="tooltip"></i>-->
-<!--                    </span>-->
                 </div>
                 <div id="flagsHelp" class="form-text">
                     Regex Flags for Filtering.
@@ -156,6 +151,38 @@
                 </div>
             </div>
         </div> <!-- lazyOptions -->
+
+        <div class="form-check form-switch">
+            <input class="form-check-input form-control" type="checkbox" role="switch" id="tabsLimit" data-related="tabsLimitOptions">
+            <label class="form-check-label" for="tabsLimit">Rate Limit Opened Tabs</label>
+            <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="Limit the Time Between Opening Tabs."></i>
+        </div>
+        <div id="tabsLimitOptions" class="ms-4 mb-1" style="display: none;">
+            <div class="row">
+                <div class="col-sm-6  col-12 mb-2">
+                    <label for="tabsRate" class="form-label"><i class="fa-solid fa-clock-rotate-left me-1"></i> Tab Rate Limit</label>
+                    <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="When opening multiple tabs, this delay will be applied between each one."></i>
+                    <div class="input-group">
+                        <input id="tabsRate" aria-describedby="tabsRateHelp" type="number" class="form-control" autocomplete="off"
+                               step="50" min="0" max="5000">
+                        <span class="input-group-text">ms</span>
+                    </div>
+                    <div class="form-text" id="tabsRateHelp">Time Between Opening each Tab.</div>
+                </div>
+
+                <div class="col-sm-6  col-12 mb-2">
+                    <label for="tabsAfter" class="form-label"><i class="fa-solid fa-hashtag me-1"></i> Tab Limit After</label>
+                    <i class="fa-solid fa-circle-info p-1" data-bs-toggle="tooltip" data-bs-title="When opening multiple tabs, this delay will be applied between each one."></i>
+                    <div class="input-group">
+                        <input id="tabsAfter" aria-describedby="tabsAfterHelp" type="number" class="form-control" autocomplete="off"
+                               step="1" min="0" max="1000">
+                        <span class="input-group-text">tabs</span>
+                    </div>
+                    <div class="form-text" id="tabsAfterHelp">Limit After This Many Tabs Opened.</div>
+                </div>
+            </div> <!-- row -->
+        </div> <!-- tabsLimitOptions -->
 
         <div class="form-check form-switch">
             <input class="form-check-input form-control" type="checkbox" role="switch" id="removeDuplicates">
