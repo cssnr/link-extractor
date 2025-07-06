@@ -14,6 +14,7 @@
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
+[![Support](https://img.shields.io/badge/Ko--fi-579fbf?logo=kofi&label=Support)](https://ko-fi.com/cssnr)
 
 # Link Extractor
 
@@ -71,7 +72,7 @@ for new features. For any issues, bugs or concerns; please [Open an Issue](https
 - Automatic Dark/Light Mode based on Browser Setting
 - Activate from Popup, Context Menu, Keyboard Shortcuts or Omnibox
 
-[![Link Extractor Screenshots](/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
+[![Link Extractor Screenshots](.github/assets/banner.jpg)](https://link-extractor.cssnr.com/screenshots/)
 
 ### Upcoming Features
 
@@ -123,11 +124,16 @@ Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
 
 # Contributing
 
-Currently, the best way to contribute to this project is to give a 5-star rating on
-[Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp) or
-[Mozilla](https://addons.mozilla.org/addon/link-extractor) and to star this project on GitHub.
+Please consider making a donation to support the development of this project
+and [additional](https://cssnr.com/) open source projects.
+
+[![Support](https://img.shields.io/badge/Ko--fi-579fbf?style=for-the-badge&logo=kofi&label=Support)](https://ko-fi.com/cssnr)
 
 For instructions on building, testing and submitting a PR, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Additionally, you can give a 5-star rating
+on [Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
+or [Mozilla](https://addons.mozilla.org/addon/link-extractor) and star this project on GitHub.
 
 Other Web Extensions I have created and published:
 
