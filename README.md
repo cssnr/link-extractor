@@ -51,6 +51,8 @@ Mobile browser support available for
 [Firefox](https://addons.mozilla.org/addon/link-extractor) and
 [Yandex](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp).
 
+[![QR Code Firefox](https://raw.githubusercontent.com/smashedr/repo-images/refs/heads/master/link-extractor/qr-code-firefox.png)](https://addons.mozilla.org/addon/link-extractor)
+
 ## Features
 
 Please submit a [Feature Request](https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests)
