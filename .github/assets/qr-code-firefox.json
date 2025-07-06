@@ -1,0 +1,27 @@
+{
+  "props": {
+    "data": "https://addons.mozilla.org/addon/link-extractor",
+    "image": "",
+    "width": 200,
+    "height": 200,
+    "margin": "",
+    "dotsOptions": { "color": "#58beec", "type": "dots" },
+    "cornersSquareOptions": { "color": "#ee8424", "type": "dot" },
+    "cornersDotOptions": { "color": "#ffe513", "type": "dot" },
+    "imageOptions": { "margin": 1 },
+    "qrOptions": { "errorCorrectionLevel": "Q" }
+  },
+  "style": { "borderRadius": "0px", "background": "transparent" },
+  "frame": {
+    "text": "Firefox Android",
+    "position": "top",
+    "style": {
+      "textColor": "#ededed",
+      "backgroundColor": "#0d1117",
+      "borderColor": "#ababab",
+      "borderWidth": "2px",
+      "borderRadius": "16px",
+      "padding": "4px"
+    }
+  }
+}
