@@ -10,7 +10,7 @@ export const githubURL = 'https://github.com/cssnr/link-extractor'
  * @param {Boolean} [injectOptions.domains] Only Domains
  * @param {Boolean} [injectOptions.selection] Only Selection
  * @param {Boolean} [injectOptions.open] Open Links Page
- * @param {chrome.tabs.Tab} [injectOptions.tab] Open Links Page
+ * @param {chrome.tabs.Tab} [injectOptions.tab] Tabs to Extract
  * @return {Promise<void>}
  */
 export async function injectTab({
@@ -290,6 +290,63 @@ export async function updateManifest() {
     document.querySelectorAll('[href="version_url"]').forEach((el) => {
         el.href = `${githubURL}/releases/tag/${manifest.version}`
     })
+}
+
+/**
+ * Link Click Callback
+ * Note: Firefox popup requires a call to window.close()
+ * @function linkClick
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function linkClick(event, close = false) {
+    console.debug('linkClick:', close, event)
+    const target = event.currentTarget
+    const href = target.getAttribute('href').replace(/^\.+/g, '')
+    console.debug('href:', href)
+    let url
+    if (href.startsWith('#')) {
+        console.debug('return on anchor link')
+        return
+    }
+    event.preventDefault()
+    if (href.endsWith('html/options.html')) {
+        await chrome.runtime.openOptionsPage()
+        if (close) window.close()
+        return
+    } else if (href.startsWith('http')) {
+        url = href
+    } else {
+        url = chrome.runtime.getURL(href)
+    }
+    console.debug('url:', url)
+    await activateOrOpen(url)
+    if (close) window.close()
+}
+
+/**
+ * Activate or Open Tab from URL
+ * @function activateOrOpen
+ * @param {String} url
+ * @param {Boolean} [open]
+ * @return {Promise<chrome.tabs.Tab>}
+ */
+export async function activateOrOpen(url, open = true) {
+    console.debug('activateOrOpen:', url, open)
+    // Note: To Get Tab from Tabs (requires host permissions or tabs)
+    const tabs = await chrome.tabs.query({ currentWindow: true })
+    console.debug('tabs:', tabs)
+    for (const tab of tabs) {
+        if (tab.url === url) {
+            console.debug('%c tab found, activating:', 'color: Lime', tab)
+            return await chrome.tabs.update(tab.id, { active: true })
+        }
+    }
+    if (open) {
+        console.debug('%c tab not found, opening url:', 'color: Yellow', url)
+        return await chrome.tabs.create({ active: true, url })
+    }
+    console.warn('tab not found and open not set!')
 }
 
 /**

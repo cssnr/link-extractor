@@ -36,6 +36,7 @@ async function onInstalled(details) {
         saveState: true,
         linksTruncate: true,
         linksNoWrap: false,
+        activateLinks: true,
         contextMenu: true,
         showUpdate: false,
     })
@@ -180,9 +181,9 @@ async function onCommand(command, tab) {
  * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.debug('onMessage:', message, sender)
-    const tabId = message.tabId || sender.tab?.id
-    console.debug('tabId:', tabId)
+    console.debug('onMessage:', message)
+    // const tabId = message.tabId || sender.tab?.id
+    // console.debug('tabId:', tabId)
     if (message.message === 'openLinks') {
         // noinspection JSIgnoredPromiseFromCall
         openLinks(message.data)

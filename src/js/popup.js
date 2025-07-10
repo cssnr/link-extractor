@@ -5,6 +5,7 @@ import {
     detectBrowser,
     grantPerms,
     injectTab,
+    linkClick,
     saveOptions,
     updateManifest,
     updateOptions,
@@ -18,12 +19,12 @@ document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
 // noinspection JSCheckFunctionSignatures
 document
+    .querySelectorAll('a[href]')
+    .forEach((el) => el.addEventListener('click', (e) => linkClick(e, true)))
+// noinspection JSCheckFunctionSignatures
+document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
-
-document
-    .querySelectorAll('a[href]')
-    .forEach((el) => el.addEventListener('click', popupLinks))
 document
     .querySelectorAll('[data-filter]')
     .forEach((el) => el.addEventListener('click', filterForm))
@@ -152,35 +153,6 @@ function createFilterLink(number, value = '') {
     a.addEventListener('click', filterForm)
     li.appendChild(a)
     ul.appendChild(li)
-}
-
-/**
- * Popup Links Click Callback
- * Firefox requires a call to window.close()
- * @function popupLinks
- * @param {MouseEvent} event
- */
-async function popupLinks(event) {
-    console.debug('popupLinks:', event)
-    event.preventDefault()
-    // const anchor = event.target.closest('a')
-    const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
-    console.debug('href:', href)
-    let url
-    if (href.endsWith('html/options.html')) {
-        await chrome.runtime.openOptionsPage()
-        window.close()
-        return
-    } else if (href === '#') {
-        return
-    } else if (href.startsWith('http')) {
-        url = href
-    } else {
-        url = chrome.runtime.getURL(href)
-    }
-    console.log('url:', url)
-    await chrome.tabs.create({ active: true, url })
-    window.close()
 }
 
 /**
@@ -314,7 +286,7 @@ function extractURLs(text) {
             urls.push(data)
             // eslint-disable-next-line no-unused-vars
         } catch (e) {
-            console.debug('Error Processing match:', urlmatch)
+            console.debug('Error Processing match:', urlmatch, e)
         }
     }
     // return [...new Set(urls)]

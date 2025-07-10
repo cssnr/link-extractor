@@ -1,11 +1,14 @@
 // JS for links.html
 
-import { textFileDownload } from './exports.js'
+import { linkClick, textFileDownload } from './exports.js'
 
 window.addEventListener('keydown', handleKeyboard)
 document.addEventListener('DOMContentLoaded', initLinks)
 document.getElementById('findReplace').addEventListener('submit', findReplace)
 document.getElementById('reReset').addEventListener('click', reResetClick)
+document
+    .querySelectorAll('a[href]')
+    .forEach((el) => el.addEventListener('click', linkClick))
 document
     .getElementsByName('reType')
     .forEach((el) => el.addEventListener('change', reTypeChange))
@@ -118,6 +121,7 @@ const linksOptions = {
     },
 }
 
+let options
 let linksTable
 let domainsTable
 
@@ -129,6 +133,9 @@ function genUrl(url) {
     link.dataset.original = url
     link.target = '_blank'
     link.rel = 'noopener'
+    if (options.activateLinks) {
+        link.addEventListener('click', linkClick)
+    }
     return link
 }
 
@@ -146,6 +153,11 @@ html.setAttribute('data-bs-theme', prefers)
  */
 async function initLinks() {
     console.debug('initLinks:', urlParams)
+
+    const items = await chrome.storage.sync.get(['options'])
+    // console.debug('items:', items)
+    options = items.options
+
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
@@ -218,7 +230,6 @@ async function processLinks(links) {
     console.debug('processLinks:', links)
     const urlFilter = urlParams.get('filter')
     const onlyDomains = urlParams.has('domains')
-    const { options } = await chrome.storage.sync.get(['options'])
     // console.debug('options:', options)
 
     // Set Table Options
