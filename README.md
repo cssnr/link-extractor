@@ -18,7 +18,7 @@
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/link-extractor?logo=bookstack&logoColor=white&label=repo%20size)](https://github.com/cssnr/link-extractor)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-73a4f1?logo=kofi&label=Support)](https://ko-fi.com/cssnr)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-72a5f2?logo=kofi&label=support)](https://ko-fi.com/cssnr)
 
 # Link Extractor
 

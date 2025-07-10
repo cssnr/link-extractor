@@ -6,6 +6,7 @@ import {
     grantPerms,
     importChange,
     importClick,
+    linkClick,
     onAdded,
     onRemoved,
     revokePerms,
@@ -28,11 +29,14 @@ document.getElementById('update-filter').addEventListener('submit', filterClick)
 document.getElementById('filters-form').addEventListener('submit', addFilter)
 document.getElementById('copy-support').addEventListener('click', copySupport)
 document
-    .querySelectorAll('.revoke-permissions')
-    .forEach((el) => el.addEventListener('click', revokePerms))
+    .querySelectorAll('a[href]')
+    .forEach((el) => el.addEventListener('click', linkClick))
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', grantPerms))
+document
+    .querySelectorAll('.revoke-permissions')
+    .forEach((el) => el.addEventListener('click', revokePerms))
 document
     .querySelectorAll('[data-reset-input]')
     .forEach((el) => el.addEventListener('click', resetInput))
