@@ -14,7 +14,7 @@ if (!window.injected) {
  * @param {Function} sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-    console.debug(`onMessage: message: ${message}`)
+    console.debug('onMessage:', message)
     if (message === 'all') {
         sendResponse(extractAllLinks())
     } else if (message === 'selection') {
