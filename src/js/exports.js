@@ -54,14 +54,36 @@ export async function injectTab({
         return
     }
 
-    // Inject extract.js which listens for messages
+    // // Inject extract.js which listens for messages
+    // for (const tab of tabIds) {
+    //     console.debug(`injecting tab.id: ${tab}`)
+    //     await chrome.scripting.executeScript({
+    //         target: { tabId: tab, allFrames: true },
+    //         files: ['/js/extract.js'],
+    //     })
+    // }
+
+    // TODO: The only way to support frames without extra permissions is to either:
+    //  Extract the frame data at injection time, or
+    //  Extract the links at injection time (requires refactoring)...
+    const tabs = []
     for (const tab of tabIds) {
         console.debug(`injecting tab.id: ${tab}`)
-        await chrome.scripting.executeScript({
-            target: { tabId: tab },
+        const results = await chrome.scripting.executeScript({
+            target: { tabId: tab, allFrames: true },
             files: ['/js/extract.js'],
         })
+        console.debug('results:', results)
+        const frameIds = results.map((item) => item.frameId)
+        console.debug('frameIds:', frameIds)
+        frameIds.shift()
+        if (frameIds.length) {
+            tabs.push(`${tab}-${frameIds.join('-')}`)
+        } else {
+            tabs.push(tab)
+        }
     }
+    console.debug('tabs:', tabs)
 
     // Create URL to links.html if open
     if (!open) {
@@ -70,7 +92,7 @@ export async function injectTab({
     }
     const url = new URL(chrome.runtime.getURL('/html/links.html'))
     // Set URL searchParams
-    url.searchParams.set('tabs', tabIds.join(','))
+    url.searchParams.set('tabs', tabs.join(','))
     if (filter) {
         url.searchParams.set('filter', filter)
     }
