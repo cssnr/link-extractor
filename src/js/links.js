@@ -195,8 +195,17 @@ async function initLinks() {
         await processLinks(allLinks)
     } catch (e) {
         console.warn('error:', e)
-        alert('Error Processing Results. See Console for More Details...')
-        window.close()
+        // document.getElementById('loading-spinner')?.classList?.add('d-none')
+        document.getElementById('loading-spinner')?.remove()
+
+        // TODO: Consider showing a custom alert here since alert is blocking...
+        setTimeout(() => {
+            alert('Error Processing Results. See Console for More Details...')
+            window.close()
+        }, 0)
+
+        // alert('Error Processing Results. See Console for More Details...')
+        // window.close()
     }
 
     const collapse = localStorage.getItem('findCollapse')
@@ -296,8 +305,22 @@ async function processLinks(links) {
 
     // If no items, alert and return
     if (!links.length) {
-        alert('No Results')
-        return window.close()
+        //document.getElementById('loading-spinner')?.classList?.add('d-none')
+        document.getElementById('loading-spinner')?.remove()
+
+        // TODO: Consider showing a custom alert here since alert is blocking...
+        setTimeout(() => {
+            alert('No Results')
+            window.close()
+        }, 0)
+
+        // requestAnimationFrame(() => {
+        //     alert('No Results')
+        //     window.close()
+        // })
+
+        // alert('No Results')
+        // return window.close()
     }
 
     // Update links if onlyDomains is not set
@@ -333,7 +356,9 @@ async function processLinks(links) {
     }
 
     // Hide Loading message
-    document.getElementById('loading-message').classList.add('d-none')
+    // document.getElementById('loading-message').classList.add('d-none')
+    // document.getElementById('loading-spinner')?.classList?.add('d-none')
+    document.getElementById('loading-spinner')?.remove()
 
     // Modifications for Android
     const platform = await chrome.runtime.getPlatformInfo()
