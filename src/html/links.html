@@ -15,6 +15,11 @@
 </head>
 <body>
 
+<div id="loading-spinner" class="text-center position-absolute end-50 mt-4">
+    <i class="fa-solid fa-sync fa-spin fa-3x"></i>
+    <h3 class="fa-fade mt-2">Processing</h3>
+</div>
+
 <div id="floating-links" class="position-fixed top-0 end-0 mt-1 me-2 user-select-none">
     <div class="row g-1 links d-none">
         <div class="col">
@@ -37,7 +42,6 @@
 </div> <!-- floating-links -->
 
 <div class="container-fluid p-3">
-    <h2 id="loading-message" class="user-select-none d-none">Loading...</h2>
     <div class="links d-none">
         <div class="user-select-none">
             <h2 id="links">Links <span class="badge bg-success-subtle"><span id="links-count">0</span>/<span id="links-total"></span></span></h2>

@@ -161,18 +161,32 @@ async function initLinks() {
     try {
         const tabIds = urlParams.get('tabs')
         const tabs = tabIds?.split(',')
-        const selection = urlParams.has('selection')
+        const action = urlParams.has('selection') ? 'selection' : 'all'
 
+        // TODO: See the TODO in export.js for injectTab()
+        //  This is a temporary fix being tested...
         const allLinks = []
         if (tabs?.length) {
             console.debug('tabs:', tabs)
-            for (const tabId of tabs) {
-                const action = selection ? 'selection' : 'all'
+            for (const tab of tabs) {
+                const frames = tab.split('-')
+                const tabId = frames.shift()
+                console.debug('tabId:', tabId)
                 const links = await chrome.tabs.sendMessage(
                     parseInt(tabId),
-                    action
+                    action,
+                    { frameId: 0 }
                 )
                 allLinks.push(...links)
+                for (const frame of frames) {
+                    console.debug('frame:', frame)
+                    const links = await chrome.tabs.sendMessage(
+                        parseInt(tabId),
+                        action,
+                        { frameId: parseInt(frame) }
+                    )
+                    allLinks.push(...links)
+                }
             }
         } else {
             const { links } = await chrome.storage.local.get(['links'])
@@ -181,8 +195,17 @@ async function initLinks() {
         await processLinks(allLinks)
     } catch (e) {
         console.warn('error:', e)
-        alert('Error Processing Results. See Console for More Details...')
-        window.close()
+        // document.getElementById('loading-spinner')?.classList?.add('d-none')
+        document.getElementById('loading-spinner')?.remove()
+
+        // TODO: Consider showing a custom alert here since alert is blocking...
+        setTimeout(() => {
+            alert('Error Processing Results. See Console for More Details...')
+            window.close()
+        }, 0)
+
+        // alert('Error Processing Results. See Console for More Details...')
+        // window.close()
     }
 
     const collapse = localStorage.getItem('findCollapse')
@@ -282,8 +305,22 @@ async function processLinks(links) {
 
     // If no items, alert and return
     if (!links.length) {
-        alert('No Results')
-        return window.close()
+        //document.getElementById('loading-spinner')?.classList?.add('d-none')
+        document.getElementById('loading-spinner')?.remove()
+
+        // TODO: Consider showing a custom alert here since alert is blocking...
+        setTimeout(() => {
+            alert('No Results')
+            window.close()
+        }, 0)
+
+        // requestAnimationFrame(() => {
+        //     alert('No Results')
+        //     window.close()
+        // })
+
+        // alert('No Results')
+        // return window.close()
     }
 
     // Update links if onlyDomains is not set
@@ -319,7 +356,9 @@ async function processLinks(links) {
     }
 
     // Hide Loading message
-    document.getElementById('loading-message').classList.add('d-none')
+    // document.getElementById('loading-message').classList.add('d-none')
+    // document.getElementById('loading-spinner')?.classList?.add('d-none')
+    document.getElementById('loading-spinner')?.remove()
 
     // Modifications for Android
     const platform = await chrome.runtime.getPlatformInfo()
