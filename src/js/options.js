@@ -70,20 +70,16 @@ const filtersTbody = document.querySelector('#filters-table tbody')
  */
 async function initOptions() {
     console.debug('initOptions')
-    // noinspection ES6MissingAwait
-    updateManifest()
-    // noinspection ES6MissingAwait
-    updateBrowser()
-    // noinspection ES6MissingAwait
+    updateManifest().catch((e) => console.log(e))
+    updateBrowser().catch((e) => console.log(e))
     setShortcuts([
         '_execute_action',
         'extractAll',
         'extractSelection',
         'copyAll',
         'copySelection',
-    ])
-    // noinspection ES6MissingAwait
-    checkPerms()
+    ]).catch((e) => console.log(e))
+    checkPerms().catch((e) => console.log(e))
     chrome.storage.sync.get(['options', 'patterns']).then((items) => {
         // console.debug('options:', items.options)
         updateOptions(items.options)
@@ -93,6 +89,7 @@ async function initOptions() {
 
 /**
  * Update Filters Table with data
+ * NOTE: Consider making async
  * @function updateTable
  * @param {Object} data
  */
@@ -318,8 +315,8 @@ async function drop(event) {
     filtersTbody.insertBefore(row, tr)
     const { patterns } = await chrome.storage.sync.get(['patterns'])
     // console.debug('patterns:', patterns)
-    let source = parseInt(row.id)
-    let target = parseInt(tr.id)
+    let source = Number.parseInt(row.id)
+    let target = Number.parseInt(tr.id)
     if (source < target) {
         target -= 1
     }
@@ -387,7 +384,10 @@ async function filterClick(event) {
         const td = event.target?.closest('td')
         if (td?.dataset?.idx !== undefined) {
             let idx = td.dataset.idx
-            if (deleted && parseInt(td.dataset.idx) > parseInt(previous)) {
+            if (
+                deleted &&
+                Number.parseInt(td.dataset.idx) > Number.parseInt(previous)
+            ) {
                 idx -= 1
             }
             console.log(`%c-- editing: ${idx}`, 'color: DeepPink')

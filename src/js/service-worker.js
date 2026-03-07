@@ -1,6 +1,12 @@
 // JS Background Service Worker
 
-import { checkPerms, injectTab, githubURL, openLinks } from './exports.js'
+import {
+    checkPerms,
+    injectTab,
+    openLinks,
+    githubURL,
+    isFirefox,
+} from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.runtime.onStartup.addListener(onStartup)
@@ -74,8 +80,7 @@ async function onInstalled(details) {
  */
 async function onStartup() {
     console.log('onStartup')
-    // noinspection JSUnresolvedReference
-    if (typeof browser !== 'undefined') {
+    if (isFirefox) {
         console.log('Firefox Startup Workarounds')
         const { options, patterns } = await chrome.storage.sync.get([
             'options',
@@ -281,8 +286,7 @@ export async function onAdded(permissions) {
  */
 export async function onRemoved(permissions) {
     console.debug('onRemoved:', permissions)
-    // noinspection JSUnresolvedReference
-    if (typeof browser !== 'undefined') {
+    if (isFirefox) {
         chrome.omnibox?.setDefaultSuggestion({
             description:
                 'Link Extractor - Omnibox Requires Host Permissions. See Popup/Options.',

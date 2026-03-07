@@ -1,31 +1,33 @@
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white&label=users)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/link-extractor?logo=mozilla&label=users)](https://addons.mozilla.org/addon/link-extractor)
-[![Edge Add-on Users](https://img.shields.io/badge/dynamic/json?label=users&logo=gmail&logoColor=white&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fnmndaimimedljcfgnnoahempcajdamej)](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
+[![Edge Add-on Users](https://img.shields.io/badge/dynamic/json?label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fnmndaimimedljcfgnnoahempcajdamej&logo=data:image/svg%2bxml;base64,PHN2ZyBmaWxsPSIjZmZmZmZmIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgaWQ9Imljb25zIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0zMS44NywzMC41OEgyNDQuN1YyNDMuMzlIMzEuODdaIi8+PHBhdGggZD0iTTI2Ni44OSwzMC41OEg0NzkuN1YyNDMuMzlIMjY2Ljg5WiIvPjxwYXRoIGQ9Ik0zMS44NywyNjUuNjFIMjQ0Ljd2MjEyLjhIMzEuODdaIi8+PHBhdGggZD0iTTI2Ni44OSwyNjUuNjFINDc5Ljd2MjEyLjhIMjY2Ljg5WiIvPjwvc3ZnPg==)](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/ifefifghpkllfibejafbakmflidjcjfp?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Rating](https://img.shields.io/amo/rating/link-extractor?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/link-extractor)
-[![Edge Add-on Rating](https://img.shields.io/badge/dynamic/json?label=rating&logo=gmail&logoColor=white&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fnmndaimimedljcfgnnoahempcajdamej)](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
-[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/link-extractor?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/link-extractor/stargazers)
+[![Edge Add-on Rating](https://img.shields.io/badge/dynamic/json?label=rating&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fnmndaimimedljcfgnnoahempcajdamej&logo=data:image/svg%2bxml;base64,PHN2ZyBmaWxsPSIjZmZmZmZmIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgaWQ9Imljb25zIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0zMS44NywzMC41OEgyNDQuN1YyNDMuMzlIMzEuODdaIi8+PHBhdGggZD0iTTI2Ni44OSwzMC41OEg0NzkuN1YyNDMuMzlIMjY2Ljg5WiIvPjxwYXRoIGQ9Ik0zMS44NywyNjUuNjFIMjQ0Ljd2MjEyLjhIMzEuODdaIi8+PHBhdGggZD0iTTI2Ni44OSwyNjUuNjFINDc5Ljd2MjEyLjhIMjY2Ljg5WiIvPjwvc3ZnPg==)](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/ifefifghpkllfibejafbakmflidjcjfp?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/link-extractor?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/link-extractor)
 [![Edge Add-on Version](https://img.shields.io/badge/dynamic/json?label=microsoft&logo=leptos&logoColor=2bc3d2&&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fnmndaimimedljcfgnnoahempcajdamej)](https://microsoftedge.microsoft.com/addons/detail/link-extractor/nmndaimimedljcfgnnoahempcajdamej)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/link-extractor?logo=github)](https://github.com/cssnr/link-extractor/releases/latest)
-[![Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
-[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
-[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/link-extractor/actions/workflows/lint.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_link-extractor&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_link-extractor)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/link-extractor/graphs/commit-activity)
-[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=htmx&logoColor=white)](https://github.com/cssnr/link-extractor)
-[![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/link-extractor?logo=bookstack&logoColor=white&label=repo%20size)](https://github.com/cssnr/link-extractor)
-[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
+[![Workflow Build](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/build.yaml?logo=norton&logoColor=white&label=build)](https://github.com/cssnr/link-extractor/actions/workflows/build.yaml)
+[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/test.yaml?logo=norton&logoColor=white&label=test)](https://github.com/cssnr/link-extractor/actions/workflows/test.yaml)
+[![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/link-extractor/lint.yaml?logo=norton&logoColor=white&label=lint)](https://github.com/cssnr/link-extractor/actions/workflows/lint.yaml)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/link-extractor?logo=listenhub&label=updated)](https://github.com/cssnr/link-extractor/pulse)
+[![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/link-extractor?logo=buffer&label=repo%20size)](https://github.com/cssnr/link-extractor?tab=readme-ov-file#readme)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/link-extractor?logo=devbox)](https://github.com/cssnr/link-extractor?tab=readme-ov-file#readme)
+[![GitHub Contributors](https://img.shields.io/github/contributors-anon/cssnr/link-extractor?logo=southwestairlines)](https://github.com/cssnr/link-extractor/graphs/contributors)
+[![GitHub Issues](https://img.shields.io/github/issues/cssnr/link-extractor?logo=codeforces&logoColor=white)](https://github.com/cssnr/link-extractor/issues)
+[![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/link-extractor?logo=theconversation)](https://github.com/cssnr/link-extractor/discussions)
+[![GitHub Forks](https://img.shields.io/github/forks/cssnr/link-extractor?style=flat&logo=forgejo&logoColor=white)](https://github.com/cssnr/link-extractor/forks)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/link-extractor?style=flat&logo=gleam&logoColor=white)](https://github.com/cssnr/link-extractor/stargazers)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=apachespark&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-72a5f2?logo=kofi&label=support)](https://ko-fi.com/cssnr)
 
 # Link Extractor
 
-Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse,or open all links/domains from a site or text with optional filters.
-Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
-
-Website: https://link-extractor.cssnr.com/
+<a title="Link Extractor" href="https://link-extractor.cssnr.com/" target="_blank">
+<img alt="Link Extractor" align="right" width="128" height="auto" src="https://raw.githubusercontent.com/cssnr/link-extractor/refs/heads/master/src/images/logo128.png"></a>
 
 - [Install](#Install)
 - [Features](#Features)
@@ -34,6 +36,11 @@ Website: https://link-extractor.cssnr.com/
 - [Configuration](#Configuration)
 - [Support](#Support)
 - [Contributing](#Contributing)
+
+Modern Chrome Web Extension and Firefox Browser Addon to easily extract, parse,or open all links/domains from a site or text with optional filters.
+Feature packed with automatic dark/light mode, copy to clipboard, keyboard shortcuts, custom options, and much more...
+
+[![View Documentation](https://img.shields.io/badge/view_documentation-blue?style=for-the-badge&logo=quicklook)](https://link-extractor.cssnr.com/)
 
 ## Install
 
@@ -95,11 +102,9 @@ for new features. For any issues, bugs or concerns; please [Open an Issue](https
 
 See the [Support](#Support) section for ways to inform us about issues...
 
-For more information see the [FAQ](https://link-extractor.cssnr.com/faq/).
+[![View FAQ](https://img.shields.io/badge/view_faq-blue?style=for-the-badge&logo=quicklook)](https://link-extractor.cssnr.com/faq/)
 
 ## Configuration
-
-- [View Configuration Documentation on Website](https://link-extractor.cssnr.com/docs/#configure)
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Link Extractor icon, then;  
 **Chrome,** click the `Pin` icon.  
@@ -112,31 +117,35 @@ Make sure to click`Save Options` when finished.
 
 For more information on regex, see: https://regex101.com/
 
+[![View Setup Guide](https://img.shields.io/badge/view_setup_guide-blue?style=for-the-badge&logo=quicklook)](https://link-extractor.cssnr.com/docs/#configure)
+
 ## Support
-
-For help using the web extension or to request features, see:
-
-- Documentation: https://link-extractor.cssnr.com/docs/
-- Q&A Discussion: https://github.com/cssnr/link-extractor/discussions/categories/q-a
-- Request a Feature: https://github.com/cssnr/link-extractor/discussions/categories/feature-requests
-
-If you are experiencing an issue/bug or getting unexpected results, you can:
-
-- Report an Issue: https://github.com/cssnr/link-extractor/issues
-- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Link%20Extractor)
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
 
+If you run into any issues or need help getting started, please do one of the following:
+
+- Report an Issue: <https://github.com/cssnr/link-extractor/issues>
+- Q&A Discussion: <https://github.com/cssnr/link-extractor/discussions/categories/q-a>
+- Request a Feature: <https://github.com/cssnr/link-extractor/issues/new?template=1-feature.yaml>
+- Chat with us on Discord: <https://discord.gg/wXy6m2X8wY>
+
+[![Features](https://img.shields.io/badge/features-brightgreen?style=for-the-badge&logo=rocket&logoColor=white)](https://github.com/cssnr/link-extractor/issues/new?template=1-feature.yaml)
+[![Issues](https://img.shields.io/badge/issues-red?style=for-the-badge&logo=southwestairlines&logoColor=white)](https://github.com/cssnr/link-extractor/issues)
+[![Discussions](https://img.shields.io/badge/discussions-blue?style=for-the-badge&logo=livechat&logoColor=white)](https://github.com/cssnr/link-extractor/discussions)
+[![Discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/wXy6m2X8wY)
+
+To support this project, see the [Contributing](#Contributing) section at the bottom.
+
 # Contributing
+
+For instructions on building, testing and submitting a PR, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Please consider making a donation to support the development of this project
 and [additional](https://cssnr.com/) open source projects.
 
 [![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/cssnr)
-
-For instructions on building, testing and submitting a PR, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Additionally, you can give a 5-star rating
 on [Google](https://chromewebstore.google.com/detail/link-extractor/ifefifghpkllfibejafbakmflidjcjfp)
@@ -149,6 +158,8 @@ Other Web Extensions I have created and published:
 - [Auto Auth](https://github.com/cssnr/auto-auth?tab=readme-ov-file#readme)
 - [Cache Cleaner](https://github.com/cssnr/cache-cleaner?tab=readme-ov-file#readme)
 - [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader?tab=readme-ov-file#readme)
+- [Zipline Extension](https://github.com/cssnr/zipline-extension?tab=readme-ov-file#readme)
+- [Obtainium Extension](https://github.com/cssnr/obtainium-extension?tab=readme-ov-file#readme)
 - [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension?tab=readme-ov-file#readme)
 - [PlayDrift Extension](https://github.com/cssnr/playdrift-extension?tab=readme-ov-file#readme)
 - [ASN Plus](https://github.com/cssnr/asn-plus?tab=readme-ov-file#readme)
@@ -156,3 +167,11 @@ Other Web Extensions I have created and published:
 - [Text Formatter](https://github.com/cssnr/text-formatter?tab=readme-ov-file#readme)
 
 For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)
+
+<a href="https://github.com/cssnr/link-extractor/stargazers">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=cssnr/link-extractor&type=date&legend=bottom-right&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=cssnr/link-extractor&type=date&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=cssnr/link-extractor&type=date&legend=bottom-right" />
+ </picture>
+</a>

@@ -16,51 +16,40 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: "Setup Node 22"
-        uses: actions/setup-node@v4
+      - name: "Setup Node 24"
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
-          #cache: npm
+          node-version: 24
 
       - name: "Install"
         id: install
         run: |
-          npm install
+          npm ci
 
-      - name: "ESLint"
+      - name: "eslint"
         if: ${{ !cancelled() }}
         run: |
           npm run lint
 
-      - name: "Prettier"
+      - name: "prettier"
         if: ${{ !cancelled() }}
         run: |
-          npm run prettier
+          npm run prettier:check
 
-      - name: "Yamllint"
+      - name: "yamllint"
         if: ${{ !cancelled() }}
         env:
-          CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
+          CONFIG: .github/yamllint.yaml
         run: |
           echo "::group::List Files"
-          yamllint -d '${{ env.CONFIG }}' --list-files .
+          yamllint -c "${{ env.CONFIG }}" --list-files .
           echo "::endgroup::"
-          yamllint -d '${{ env.CONFIG }}' .
+          yamllint -c "${{ env.CONFIG }}" .
 
-      - name: "Actionlint"
+      - name: "actionlint"
         if: ${{ !cancelled() }}
-        run: |
-          echo "::group::Download"
-          loc=$(curl -sI https://github.com/rhysd/actionlint/releases/latest | grep -i '^location:')
-          echo "loc: ${loc}"
-          tag=$(echo "${loc}" | sed -E 's|.*/tag/v?(.*)|\1|' | tr -d '\t\r\n')
-          echo "tag: ${tag}"
-          url="https://github.com/rhysd/actionlint/releases/latest/download/actionlint_${tag}_linux_amd64.tar.gz"
-          echo "url: ${url}"
-          curl -sL "${url}" | tar xz -C "${RUNNER_TEMP}" actionlint
-          file "${RUNNER_TEMP}/actionlint"
-          "${RUNNER_TEMP}/actionlint" --version
-          echo "::endgroup::"
-          "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
+        uses: cssnr/actionlint-action@v1
+        with:
+          shellcheck_opts: -e SC2129

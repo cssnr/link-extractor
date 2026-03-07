@@ -11,23 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
+    permissions:
+      contents: write
+
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: "Setup Node 22"
-        uses: actions/setup-node@v4
+      - name: "Setup Node 24"
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: npm
+          node-version: 24
 
       - name: "Install"
         run: |
-          npm install
+          npm ci
 
       - name: "Update Manifest Version"
         if: ${{ github.event_name == 'release' }}
-        uses: cssnr/update-json-value-action@v1
+        uses: cssnr/update-json-value-action@v2
 
       - name: "Build"
         run: |
@@ -35,19 +37,16 @@ jobs:
 
       - name: "Upload to Actions"
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: artifacts
           path: web-ext-artifacts/
 
       - name: "Upload to Release"
         if: ${{ github.event_name == 'release' }}
-        uses: svenstaro/upload-release-action@v2
+        uses: cssnr/upload-release-action@v1
         with:
-          file: web-ext-artifacts/*
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
+          globs: web-ext-artifacts/*
 
       - name: "Update Release Notes Action"
         if: ${{ github.event_name == 'release' }}
@@ -59,10 +58,11 @@ jobs:
       - name: "Package Changelog Action"
         if: ${{ github.event_name == 'release' }}
         continue-on-error: true
-        uses: cssnr/package-changelog-action@v1
+        uses: cssnr/package-changelog-action@v2
 
       - name: "Send Failure Notification"
         if: ${{ failure() && github.event_name == 'release' }}
-        uses: sarisia/actions-status-discord@v1
+        uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708 # v1.16.0
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          description: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

@@ -1,17 +1,17 @@
 blank_issues_enabled: true
 contact_links:
-  - name: "💡 Request a Feature"
-    about: Request a New Feature or Enhancement in the Discussions.
-    url: https://github.com/cssnr/link-extractor/discussions/new?category=feature-requests
-
-  - name: "❔ Ask a Question"
-    about: Ask a General Question or start a Discussions.
-    url: https://github.com/cssnr/link-extractor/discussions/new?category=q-a
+  - name: "❔ Start a Discussion"
+    about: Ask a general question or start a discussion
+    url: https://github.com/cssnr/link-extractor/discussions
 
   - name: "💬 Join Discord"
-    about: Chat with us about Issues, Features, Questions and More.
+    about: Chat with us about anything
     url: https://discord.gg/wXy6m2X8wY
 
-  - name: "📝 Submit Feedback"
-    about: Send General Feedback.
-    url: https://cssnr.github.io/feedback/?app=Link%20Extractor
+  - name: "📖 View the Documentation"
+    about: View the documentation site
+    url: https://cssnr.github.io/
+
+  - name: "🌐 View Developer Site"
+    about: Visit the developers website
+    url: https://cssnr.github.io/

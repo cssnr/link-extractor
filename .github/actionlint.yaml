@@ -1,0 +1,6 @@
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - '"inputs" section is alias node but mapping node is expected'
+      - '"paths" section must be sequence node but got alias node with "" tag'
+      - '"paths-ignore" section must be sequence node but got alias node with "" tag'

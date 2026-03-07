@@ -17,11 +17,9 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('filter-form').addEventListener('submit', filterForm)
 document.getElementById('links-form').addEventListener('submit', linksForm)
 document.getElementById('links-text').addEventListener('input', updateLinks)
-// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', (e) => linkClick(e, true)))
-// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
@@ -46,8 +44,7 @@ const pdfIcon = document.getElementById('pdf-icon')
 async function initPopup() {
     console.debug('initPopup')
     filterInput.focus()
-    // noinspection ES6MissingAwait
-    updateManifest()
+    updateManifest().catch((e) => console.log(e))
     chrome.storage.sync.get(['options', 'patterns']).then((items) => {
         console.debug('options:', items.options)
         updateOptions(items.options)
