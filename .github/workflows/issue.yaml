@@ -57,7 +57,7 @@ jobs:
 
       - name: "Upload Image"
         id: image
-        uses: McCzarny/upload-image@v1.0.0
+        uses: McCzarny/upload-image@d8661ab463e1a50a9296b683c59af469f2e5f776 # v2.0.4
         with:
           path: tests/screenshots/links.png
           uploadMethod: imgbb
@@ -65,7 +65,7 @@ jobs:
 
       - name: "Read Logs"
         id: logs
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # v1.1.7
         with:
           path: tests/screenshots/logs.txt
 

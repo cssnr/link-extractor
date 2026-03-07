@@ -63,7 +63,7 @@ async function getPage(browser, name, log, size) {
     ])
     newPage.setDefaultTimeout(timeout)
     if (size) {
-        const [width, height] = size.split('x').map((x) => parseInt(x))
+        const [width, height] = size.split('x').map((x) => Number.parseInt(x))
         await newPage.setViewport({ width, height })
     }
     if (log) {

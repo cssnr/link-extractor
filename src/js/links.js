@@ -169,7 +169,7 @@ async function initLinks() {
             for (const tabId of tabs) {
                 const action = selection ? 'selection' : 'all'
                 const links = await chrome.tabs.sendMessage(
-                    parseInt(tabId),
+                    Number.parseInt(tabId),
                     action
                 )
                 allLinks.push(...links)

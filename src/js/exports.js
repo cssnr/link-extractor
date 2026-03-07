@@ -2,6 +2,11 @@
 
 export const githubURL = 'https://github.com/cssnr/link-extractor'
 
+// noinspection JSUnresolvedReference
+export const isFirefox =
+    typeof browser !== 'undefined' &&
+    typeof browser?.runtime?.getBrowserInfo === 'function'
+
 /**
  * Inject extract.js to Tab and Open links.html with params
  * @function injectTab
@@ -87,6 +92,7 @@ export async function injectTab({
 
 /**
  * Update Options
+ * NOTE: Consider making async
  * @function initOptions
  * @param {Object} options
  */
@@ -200,10 +206,10 @@ export async function saveOptions(event) /* NOSONAR */ {
     } else if (target.type === 'checkbox') {
         value = target.checked
     } else if (event.target.type === 'number') {
-        const number = parseFloat(event.target.value)
-        let min = parseFloat(event.target.min)
-        let max = parseFloat(event.target.max)
-        if (!isNaN(number) && number >= min && number <= max) {
+        const number = Number.parseFloat(event.target.value)
+        let min = Number.parseFloat(event.target.min)
+        let max = Number.parseFloat(event.target.max)
+        if (!Number.isNaN(number) && number >= min && number <= max) {
             event.target.value = number.toString()
             value = number
         } else {
@@ -213,12 +219,15 @@ export async function saveOptions(event) /* NOSONAR */ {
     } else {
         value = target.value
     }
-    if (value !== undefined) {
+
+    if (value === undefined) {
+        console.warn(`No value for key: ${key}`)
+    } else if (value === options[key]) {
+        console.log(`No value change for key: ${key}:`, value)
+    } else {
         options[key] = value
         console.log(`Set %c${key}:`, 'color: Khaki', value)
         await chrome.storage.sync.set({ options })
-    } else {
-        console.warn(`No Value for key: ${key}`)
     }
 }
 
@@ -296,13 +305,13 @@ export async function updateManifest() {
  * Link Click Callback
  * Note: Firefox popup requires a call to window.close()
  * @function linkClick
- * @param {MouseEvent} event
+ * @param {Event|MouseEvent} event
  * @param {Boolean} [close]
  */
 export async function linkClick(event, close = false) {
     console.debug('linkClick:', close, event)
     const target = event.currentTarget
-    const href = target.getAttribute('href').replace(/^\.+/g, '')
+    const href = target.getAttribute('href').replace(/^\.+/, '')
     console.debug('href:', href)
     let url
     if (href.startsWith('#')) {
@@ -356,10 +365,12 @@ export async function activateOrOpen(url, open = true) {
  */
 export async function exportClick(event) {
     console.debug('exportClick:', event)
+    const target = event.currentTarget
     event.preventDefault()
-    const name = event.target.dataset.importName
+    const name = target.dataset.importName
     console.debug('name:', name)
-    const display = event.target.dataset.importDisplay || name
+    const display = target.dataset.importDisplay || name
+    console.debug('display:', display)
     const data = await chrome.storage.sync.get()
     // console.debug('data:', data[name])
     if (!data[name].length) {
@@ -438,16 +449,14 @@ export function textFileDownload(filename, text) {
 /**
  * Grant Permissions Click Callback
  * @function grantPerms
- * @param {MouseEvent} event
+ * @param {Event} event
  * @param {Boolean} [close]
  */
 export async function grantPerms(event, close = false) {
     console.debug('grantPerms:', event)
     // noinspection ES6MissingAwait
     requestPerms()
-    if (close) {
-        window.close()
-    }
+    if (close) window.close()
 }
 
 /**
@@ -564,11 +573,7 @@ export function detectBrowser() {
  * @return {Promise<void>}
  */
 export function updateBrowser() {
-    let selector = '.chrome'
-    // noinspection JSUnresolvedReference
-    if (typeof browser !== 'undefined') {
-        selector = '.firefox'
-    }
+    const selector = isFirefox ? '.firefox' : '.chrome'
     document
         .querySelectorAll(selector)
         .forEach((el) => el.classList.remove('d-none'))

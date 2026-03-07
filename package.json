@@ -1,5 +1,6 @@
 {
   "name": "link-extractor",
+  "private": true,
   "scripts": {
     "postinstall": "npx gulp",
     "lint:eslint": "npx eslint src/js tests",
@@ -15,27 +16,29 @@
     "build:chrome": "npm run manifest:chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
     "build:firefox": "npm run manifest:firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
     "build": "npm run build:chrome && npm run build:firefox",
-    "prettier": "npx prettier --check ."
+    "prettier:check": "npx prettier --check .",
+    "prettier:write": "npx prettier --write .",
+    "yamllint": "yamllint -c .github/yamllint.yaml ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.7.2",
-    "bootstrap": "^5.3.7",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "bootstrap": "^5.3.8",
     "clipboard": "^2.0.11",
-    "datatables.net": "^2.3.2",
-    "datatables.net-bs5": "^2.3.2",
-    "datatables.net-buttons": "^3.2.3",
-    "datatables.net-buttons-bs5": "^3.2.3",
-    "jquery": "^3.7.1",
-    "pdfjs-dist": "^5.3.31"
+    "datatables.net": "^2.3.7",
+    "datatables.net-bs5": "^2.3.7",
+    "datatables.net-buttons": "^3.2.6",
+    "datatables.net-buttons-bs5": "^3.2.6",
+    "jquery": "^4.0.0",
+    "pdfjs-dist": "^5.5.207"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.0",
-    "@types/chrome": "^0.0.328",
-    "eslint": "^9.30.0",
+    "@eslint/js": "^10.0.1",
+    "@types/chrome": "^0.1.37",
+    "eslint": "^10.0.3",
     "gulp": "^5.0.1",
     "json-merger": "^3.0.0",
-    "prettier": "^3.6.2",
-    "puppeteer": "^24.11.1",
-    "web-ext": "^8.8.0"
+    "prettier": "^3.8.1",
+    "puppeteer": "^24.38.0",
+    "web-ext": "^9.4.0"
   }
 }
